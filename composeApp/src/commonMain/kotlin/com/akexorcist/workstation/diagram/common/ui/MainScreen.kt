@@ -17,12 +17,8 @@ import androidx.compose.ui.unit.dp
 import com.akexorcist.workstation.diagram.common.data.MyWorkStation
 import com.akexorcist.workstation.diagram.common.data.SizeDp
 import com.akexorcist.workstation.diagram.common.data.SizePx
-import com.akexorcist.workstation.diagram.common.ui.state.Config
-import com.akexorcist.workstation.diagram.common.ui.state.DefaultConfig
-import com.akexorcist.workstation.diagram.common.ui.state.WorkstationCoordinateHostState
-import com.akexorcist.workstation.diagram.common.ui.state.rememberWorkstationCoordinateHostState
-import com.akexorcist.workstation.diagram.common.utility.onWorkspaceCoordinated
-import com.akexorcist.workstation.diagram.common.utility.px
+import com.akexorcist.workstation.diagram.common.ui.state.*
+import com.akexorcist.workstation.diagram.common.utility.*
 
 
 private val workspaceWidth = 2800.dp
@@ -135,7 +131,7 @@ fun WorkspaceArea(
             onToggleShowConnectorArea = {
                 config = config.copy(showConnectorArea = it)
             },
-            onToggleShowConnectionLine = {
+            onToggleShowAllConnectionLines = {
                 config = config.copy(showAllConnectionLines = it)
             },
             onToggleLineConnectionPoint = {
@@ -150,7 +146,22 @@ private fun WorkspaceContent(
     state: WorkstationCoordinateHostState,
     config: Config,
 ) {
-    var lineConnectionPoints = mutableStateListOf<Offset>()
+    val lineConnectionPoints = mutableStateListOf<Offset>()
+    val connectionInfo = state.currentWorkstationCoordinates.let { coordinates ->
+        val deviceAreas = coordinates.getSortedDeviceConnectorsByLeft()
+            .mapToMinimumBound(
+                horizontalBoundDistance = MinimumHorizontalDistanceToDevice.px(),
+                verticalBoundDistance = MinimumVerticalDistanceToDevice.px(),
+            )
+        val connectors = coordinates.getSortedConnectorByBottom()
+        val connectorAreas = connectors.map { it.rect }
+        ConnectionInfo(
+            coordinates = state.currentWorkstationCoordinates,
+            deviceAreas = deviceAreas,
+            connectors = connectors,
+            connectorAreas = connectorAreas,
+        )
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -163,7 +174,7 @@ private fun WorkspaceContent(
             state = state,
         )
         ConnectionContent(
-            coordinates = state.currentWorkstationCoordinates,
+            connectionInfo = connectionInfo,
             config = config,
             onAddDebugPoint = { lineConnectionPoints += it }
         )

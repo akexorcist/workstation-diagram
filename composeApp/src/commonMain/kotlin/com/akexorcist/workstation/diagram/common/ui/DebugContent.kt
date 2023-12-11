@@ -24,8 +24,6 @@ import androidx.compose.ui.unit.toSize
 import com.akexorcist.workstation.diagram.common.data.DeviceCoordinate
 import com.akexorcist.workstation.diagram.common.data.WorkstationCoordinates
 import com.akexorcist.workstation.diagram.common.ui.state.Config
-import com.akexorcist.workstation.diagram.common.utility.px
-import kotlin.math.round
 
 
 @Composable
@@ -37,7 +35,7 @@ fun DebugPanel(
     onToggleShowDeviceArea: (Boolean) -> Unit,
     onToggleShowOverlapBoundArea: (Boolean) -> Unit,
     onToggleShowConnectorArea: (Boolean) -> Unit,
-    onToggleShowConnectionLine: (Boolean) -> Unit,
+    onToggleShowAllConnectionLines: (Boolean) -> Unit,
     onToggleLineConnectionPoint: (Boolean) -> Unit,
 ) {
     Column(
@@ -87,9 +85,9 @@ fun DebugPanel(
             onCheckedChange = onToggleShowConnectorArea,
         )
         ToggleDebugMenu(
-            label = "Show connection line",
+            label = "Show all connection lines",
             isChecked = config.showAllConnectionLines,
-            onCheckedChange = onToggleShowConnectionLine,
+            onCheckedChange = onToggleShowAllConnectionLines,
         )
         ToggleDebugMenu(
             label = "Show line connection point",

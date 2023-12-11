@@ -40,23 +40,23 @@ data class WorkstationCoordinates(
             digitalCamera.isAvailable() &&
             hdmiToWebcam.isAvailable() &&
             streamDeck.isAvailable() &&
-            externalSsd.isAvailable()
-//            usbCSwitcher.isAvailable() &&
-//            usbHub.isAvailable() &&
-//            usbPowerAdapter.isAvailable() &&
-//            secondaryMonitor.isAvailable() &&
-//            primaryMonitor.isAvailable() &&
-//            usbDac.isAvailable() &&
-//            usbDongle1.isAvailable() &&
-//            usbDongle2.isAvailable() &&
-//            ledLamp.isAvailable() &&
-//            speaker.isAvailable() &&
-//            microphone1.isAvailable() &&
-//            microphone2.isAvailable() &&
-//            hdmiCapture.isAvailable() &&
-//            androidDevice.isAvailable() &&
-//            gameController.isAvailable() &&
-//            headphone.isAvailable()
+            externalSsd.isAvailable() &&
+            usbCSwitcher.isAvailable() &&
+            usbHub.isAvailable() &&
+            usbPowerAdapter.isAvailable() &&
+            secondaryMonitor.isAvailable() &&
+            primaryMonitor.isAvailable() &&
+            usbDac.isAvailable() &&
+            usbDongle1.isAvailable() &&
+            usbDongle2.isAvailable() &&
+            ledLamp.isAvailable() &&
+            speaker.isAvailable() &&
+            microphone1.isAvailable() &&
+            microphone2.isAvailable() &&
+            hdmiCapture.isAvailable() &&
+            androidDevice.isAvailable() &&
+            gameController.isAvailable() &&
+            headphone.isAvailable()
 }
 
 

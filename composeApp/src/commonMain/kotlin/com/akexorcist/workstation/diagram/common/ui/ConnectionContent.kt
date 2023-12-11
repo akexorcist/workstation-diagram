@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.akexorcist.workstation.diagram.common.data.*
 import com.akexorcist.workstation.diagram.common.ui.state.Config
+import com.akexorcist.workstation.diagram.common.ui.state.ConnectionInfo
 import com.akexorcist.workstation.diagram.common.utility.px
 import kotlin.math.*
 
@@ -22,61 +23,35 @@ val MinimumVerticalDistanceToDevice = 30.dp
 val MinimumDistanceBetweenLine = 40.dp
 val MinimumStartLineDistance = MinimumHorizontalDistanceToDevice
 
-private fun List<Pair<Rect, Device.Type>>.mapToMinimumBound(
-    horizontalBoundDistance: Float,
-    verticalBoundDistance: Float,
-) = this.map {
-    it.first.copy(
-        left = it.first.left - horizontalBoundDistance,
-        top = it.first.top - verticalBoundDistance,
-        right = it.first.right + horizontalBoundDistance,
-        bottom = it.first.bottom + verticalBoundDistance,
-    ) to it.second
-}
-
 @Composable
 internal fun ConnectionContent(
-    coordinates: WorkstationCoordinates,
+    connectionInfo: ConnectionInfo,
     config: Config,
     onAddDebugPoint: (Offset) -> Unit,
 ) {
-    if (!coordinates.areAvailable()) return
+    if (!connectionInfo.areDevicesAndConnectorsAvailable()) return
     println("############ Recomposition ############")
-    val devices = getSortedDeviceConnectorsByLeft(coordinates = coordinates)
-        .mapToMinimumBound(
-            horizontalBoundDistance = MinimumHorizontalDistanceToDevice.px(),
-            verticalBoundDistance = MinimumVerticalDistanceToDevice.px(),
-        )
-//        .map {
-//
-//            left = (it.first.left + startRect.left) - (minimumDistanceToDevice / 2f),
-//            top = (it.first.top + startRect.top) - (minimumDistanceToDevice / 2f),
-//            right = (it.first.right - startRect.right) + (minimumDistanceToDevice / 2f),
-//            bottom = (it.first.bottom - startRect.bottom) + (minimumDistanceToDevice / 2f),
-//        }
-    val connectors = getSortedConnectorByBottom(coordinates = coordinates)
-    val allConnectorAreas = connectors.map { it.rect }
     val paths: List<Path> =
         if (config.showAllConnectionLines) {
-            connectors.map { connector ->
+            connectionInfo.connectors.map { connector ->
                 getConnectorPath(
                     startConnector = connector,
-                    devices = devices,
-                    connectors = allConnectorAreas,
-                    coordinates = coordinates,
+                    devices = connectionInfo.deviceAreas,
+                    connectors = connectionInfo.connectorAreas,
+                    coordinates = connectionInfo.coordinates,
                     minimumDistanceBetweenLine = MinimumDistanceBetweenLine.px(),
                     minimumStartLineDistance = MinimumStartLineDistance.px(),
                     onAddDebugPoint = onAddDebugPoint,
                 )
             }
         } else {
-            connectors.getOrNull(config.lineIndex)?.let { connector ->
+            connectionInfo.connectors.getOrNull(config.lineIndex)?.let { connector ->
                 listOf(
                     getConnectorPath(
                         startConnector = connector,
-                        devices = devices,
-                        connectors = allConnectorAreas,
-                        coordinates = coordinates,
+                        devices = connectionInfo.deviceAreas,
+                        connectors = connectionInfo.connectorAreas,
+                        coordinates = connectionInfo.coordinates,
                         minimumDistanceBetweenLine = MinimumDistanceBetweenLine.px(),
                         minimumStartLineDistance = MinimumStartLineDistance.px(),
                         onAddDebugPoint = onAddDebugPoint,
@@ -86,15 +61,29 @@ internal fun ConnectionContent(
         }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            paths.forEach { path ->
-                drawPath(
-                    path = path,
-                    color = Color.Green,
-                    style = Stroke(2.dp.toPx()),
-                )
-            }
+        paths.forEach { path ->
+            ConnectionLine(path = path)
         }
+//        Canvas(modifier = Modifier.fillMaxSize()) {
+//            paths.forEach { path ->
+//                drawPath(
+//                    path = path,
+//                    color = Color.Green,
+//                    style = Stroke(2.dp.toPx()),
+//                )
+//            }
+//        }
+    }
+}
+
+@Composable
+private fun ConnectionLine(path: Path) {
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        drawPath(
+            path = path,
+            color = Color.Green,
+            style = Stroke(2.dp.toPx()),
+        )
     }
 }
 
@@ -768,42 +757,6 @@ private fun getAllConnectorsByBottom(
     )
         .flatMap { it ?: listOf() }
 }
-
-private fun getSortedDeviceConnectorsByLeft(
-    coordinates: WorkstationCoordinates,
-): List<Pair<Rect, Device.Type>> = listOfNotNull(
-    coordinates.officeLaptop.device,
-    coordinates.personalLaptop.device,
-    coordinates.pcDesktop.device,
-    coordinates.usbDockingStation.device,
-    coordinates.digitalCamera.device,
-    coordinates.hdmiToWebcam.device,
-    coordinates.streamDeck.device,
-    coordinates.externalSsd.device,
-    coordinates.usbCSwitcher.device,
-    coordinates.usbHub.device,
-    coordinates.usbPowerAdapter.device,
-    coordinates.secondaryMonitor.device,
-    coordinates.primaryMonitor.device,
-    coordinates.usbDac.device,
-    coordinates.usbDongle1.device,
-    coordinates.usbDongle2.device,
-    coordinates.ledLamp.device,
-    coordinates.speaker.device,
-    coordinates.microphone1.device,
-    coordinates.microphone2.device,
-    coordinates.hdmiCapture.device,
-    coordinates.androidDevice.device,
-    coordinates.gameController.device,
-    coordinates.headphone.device,
-)
-    .sortedBy { it.offset.x }
-    .map {
-        Rect(
-            offset = it.offset,
-            size = it.size.toSize(),
-        ) to it.device
-    }
 
 private fun List<Pair<Rect, String>>.getClosest(joint: Offset): Pair<Rect, String> =
     minBy {
