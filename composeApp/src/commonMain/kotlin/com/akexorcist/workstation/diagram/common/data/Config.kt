@@ -29,7 +29,7 @@ data class DebugConfig(
 )
 
 val DefaultDebugConfig = DebugConfig(
-    lineIndex = 17,
+    lineIndex = 29,
     zoomScale = 1f,
     showWorkspaceArea = false,
     showDeviceArea = false,

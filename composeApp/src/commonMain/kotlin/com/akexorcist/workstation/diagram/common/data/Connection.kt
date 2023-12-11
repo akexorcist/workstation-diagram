@@ -4,5 +4,5 @@ import androidx.compose.ui.graphics.Path
 
 data class Connection(
     val path: Path,
-    val connector: DeviceCoordinate.Connector,
+    val line: ConnectionLine,
 )

@@ -30,7 +30,7 @@ fun Modifier.onConnectorCoordinated(
     onCoordinated(
         DeviceCoordinate.Connector(
             device = device,
-            sourceConnector = connector,
+            connector = connector,
             offset = coordinates.positionInRoot(),
             size = coordinates.size,
             side = side,

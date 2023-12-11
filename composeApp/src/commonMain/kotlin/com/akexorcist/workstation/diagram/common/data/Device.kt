@@ -398,11 +398,6 @@ sealed class Device(
     }
 }
 
-data class ConnectorLine(
-    val source: Connector,
-    val target: Connector,
-)
-
 data class Connector(
     val type: ConnectorType,
     val direction: ConnectorDirection,

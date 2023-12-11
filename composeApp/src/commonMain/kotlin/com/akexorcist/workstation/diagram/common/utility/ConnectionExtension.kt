@@ -4,14 +4,42 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.toSize
-import com.akexorcist.workstation.diagram.common.data.Device
-import com.akexorcist.workstation.diagram.common.data.DeviceCoordinate
-import com.akexorcist.workstation.diagram.common.data.WorkstationCoordinates
-import com.akexorcist.workstation.diagram.common.data.getJoint
+import com.akexorcist.workstation.diagram.common.data.*
 import kotlin.math.*
 
+fun getTargetConnector(
+    coordinates: WorkstationCoordinates,
+    connectionLine: ConnectionLine,
+): DeviceCoordinate.Connector? = when (connectionLine.target?.owner) {
+    Device.Type.OfficeLaptop -> coordinates.officeLaptop.connectors
+    Device.Type.PersonalLaptop -> coordinates.personalLaptop.connectors
+    Device.Type.PcDesktop -> coordinates.pcDesktop.connectors
+    Device.Type.UsbDockingStation -> coordinates.usbDockingStation.connectors
+    Device.Type.DigitalCamera -> coordinates.digitalCamera.connectors
+    Device.Type.HdmiToWebcam -> coordinates.hdmiToWebcam.connectors
+    Device.Type.StreamDeck -> coordinates.streamDeck.connectors
+    Device.Type.ExternalSsd -> coordinates.externalSsd.connectors
+    Device.Type.UsbCSwitcher -> coordinates.usbCSwitcher.connectors
+    Device.Type.UsbHub -> coordinates.usbHub.connectors
+    Device.Type.UsbPowerAdapter -> coordinates.usbPowerAdapter.connectors
+    Device.Type.SecondaryMonitor -> coordinates.secondaryMonitor.connectors
+    Device.Type.PrimaryMonitor -> coordinates.primaryMonitor.connectors
+    Device.Type.UsbDac -> coordinates.usbDac.connectors
+    Device.Type.UsbDongle1 -> coordinates.usbDongle1.connectors
+    Device.Type.UsbDongle2 -> coordinates.usbDongle2.connectors
+    Device.Type.LedLamp -> coordinates.ledLamp.connectors
+    Device.Type.Speaker -> coordinates.speaker.connectors
+    Device.Type.Microphone1 -> coordinates.microphone1.connectors
+    Device.Type.Microphone2 -> coordinates.microphone2.connectors
+    Device.Type.HdmiCapture -> coordinates.hdmiCapture.connectors
+    Device.Type.AndroidDevice -> coordinates.androidDevice.connectors
+    Device.Type.GameController -> coordinates.gameController.connectors
+    Device.Type.Headphone -> coordinates.headphone.connectors
+    else -> null
+}?.find { it.connector.target == connectionLine.source.owner }
+
 fun getConnectorPath(
-    startConnector: DeviceCoordinate.Connector,
+    connectionLine: ConnectionLine,
     coordinates: WorkstationCoordinates,
     devices: List<Pair<Rect, Device.Type>>,
     connectors: List<Rect>,
@@ -20,9 +48,9 @@ fun getConnectorPath(
     onAddDebugPoint: (Offset) -> Unit,
     debugLog: Boolean = false,
 ): Path {
-    val endConnector = getTargetConnector(coordinates, startConnector) ?: return Path()
-    val startRect = startConnector.let { Rect(it.offset, it.size.toSize()) }
-    val startJoint = startConnector.getJoint()
+    val endConnector = getTargetConnector(coordinates, connectionLine) ?: return Path()
+    val startRect = connectionLine.let { Rect(it.offset, it.size.toSize()) }
+    val startJoint = connectionLine.getJoint()
     val endRect = endConnector.let { Rect(it.offset, it.size.toSize()) }
     val endJoint = endConnector.getJoint()
     val lineRect = Rect(
@@ -31,7 +59,7 @@ fun getConnectorPath(
         right = max(startJoint.x, endJoint.x),
         bottom = max(startJoint.y, endJoint.y),
     )
-    if (debugLog) println("${startConnector.device} ${startConnector.sourceConnector.type} => ${startConnector.sourceConnector.target}")
+    if (debugLog) println("${connectionLine.source} (${connectionLine.source.type}) => ${connectionLine.target} (${connectionLine.target?.type})")
     return findPath(
         path = Path(),
         devices = devices,
@@ -40,7 +68,7 @@ fun getConnectorPath(
         startJoint = startJoint,
         endRect = endRect,
         endJoint = endJoint,
-        endDeviceType = startConnector.sourceConnector.target,
+        endDeviceType = connectionLine.target?.owner,
         lineRect = lineRect,
         minimumDistanceBetweenLine = minimumDistanceBetweenLine,
         minimumStartLineDistance = minimumStartLineDistance,
@@ -52,7 +80,7 @@ fun getConnectorPath(
 private fun Rect.getOverlapDevices(
     startRect: Rect?,
     devices: List<Pair<Rect, Device.Type>>,
-    exclude: Device.Type,
+    exclude: Device.Type?,
 ): List<Pair<Rect, Device.Type>> = devices.filter {
     if (exclude == it.second) return@filter false
     this.overlaps(
@@ -86,7 +114,7 @@ private fun findPath(
     startJoint: Offset,
     endRect: Rect,
     endJoint: Offset,
-    endDeviceType: Device.Type,
+    endDeviceType: Device.Type?,
     lineRect: Rect,
     minimumDistanceBetweenLine: Float,
     minimumStartLineDistance: Float,

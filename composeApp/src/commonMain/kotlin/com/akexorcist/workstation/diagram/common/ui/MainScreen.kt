@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -148,7 +147,7 @@ private fun WorkspaceContent(
     config: Config,
     debugConfig: DebugConfig,
 ) {
-    val lineConnectionPoints = remember { mutableStateListOf<Offset>() }
+    val lineConnectionPoints = mutableStateListOf<Offset>()
     var currentHoveredConnector: Connector? by remember { mutableStateOf(null) }
     var currentHoveredDevice: Device? by remember { mutableStateOf(null) }
 
@@ -173,7 +172,7 @@ private fun WorkspaceContent(
             }.map { connector ->
                 Connection(
                     path = getConnectorPath(
-                        startConnector = connector,
+                        connectionLine = connector,
                         devices = deviceAreas,
                         connectors = connectorAreas,
                         coordinates = coordinates,
@@ -181,7 +180,7 @@ private fun WorkspaceContent(
                         minimumStartLineDistance = config.minimumStartLineDistance.px(),
                         onAddDebugPoint = { lineConnectionPoints += it },
                     ),
-                    connector = connector,
+                    line = connector,
                 )
             }
         } ?: listOf()

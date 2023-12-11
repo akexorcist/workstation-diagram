@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.akexorcist.workstation.diagram.common.data.Connection
 import com.akexorcist.workstation.diagram.common.data.Connector
 import com.akexorcist.workstation.diagram.common.data.Device
+import com.akexorcist.workstation.diagram.common.data.toConnection
 import com.akexorcist.workstation.diagram.common.theme.ConnectionLineComponentTheme
 
 @Composable
@@ -20,16 +21,14 @@ internal fun ConnectionContent(
     currentHoveredConnector: Connector?,
 ) {
 //    println("############ Recomposition ############")
-    println("currentHoveredConnector $currentHoveredConnector")
     Box(modifier = Modifier.fillMaxSize()) {
         connections.forEach { connection ->
             ConnectionLine(
                 path = connection.path,
                 isActive = when {
                     currentHoveredConnector == null -> true
-                    currentHoveredConnector == connection.connector.sourceConnector -> true
-//                    currentHoveredConnector == connection.connector. -> true
-
+                    currentHoveredConnector.toConnection() == connection.line.source && currentHoveredConnector.target == connection.line.target?.owner -> true
+                    currentHoveredConnector.toConnection() == connection.line.target && currentHoveredConnector.target == connection.line.source.owner -> true
                     else -> false
                 }
             )

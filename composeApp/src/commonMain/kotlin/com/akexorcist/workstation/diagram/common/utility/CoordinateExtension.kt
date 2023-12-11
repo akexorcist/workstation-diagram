@@ -2,10 +2,7 @@ package com.akexorcist.workstation.diagram.common.utility
 
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.unit.toSize
-import com.akexorcist.workstation.diagram.common.data.ConnectorSide
-import com.akexorcist.workstation.diagram.common.data.Device
-import com.akexorcist.workstation.diagram.common.data.DeviceCoordinate
-import com.akexorcist.workstation.diagram.common.data.WorkstationCoordinates
+import com.akexorcist.workstation.diagram.common.data.*
 
 fun WorkstationCoordinates.getSortedDeviceConnectorsByLeft(): List<Pair<Rect, Device.Type>> = listOfNotNull(
     this.officeLaptop.device,
@@ -41,13 +38,28 @@ fun WorkstationCoordinates.getSortedDeviceConnectorsByLeft(): List<Pair<Rect, De
         ) to it.device
     }
 
-fun WorkstationCoordinates.getSortedConnectorByBottom(): List<DeviceCoordinate.Connector> {
-    return this.getAllConnectorsByBottom()
+fun WorkstationCoordinates.getSortedConnectorByBottom(): List<ConnectionLine> {
+    return this.getAllConnectors()
         .filter { connector -> connector.side == ConnectorSide.Left }
         .sortedByDescending { it.offset.y }
+        .map {
+            ConnectionLine(
+                source = it.connector.toConnection(),
+                target = getConnectorByTarget(it.connector)?.toConnection(),
+                offset = it.offset,
+                size = it.size,
+                side = it.side,
+            )
+        }
 }
 
-private fun WorkstationCoordinates.getAllConnectorsByBottom(): List<DeviceCoordinate.Connector> {
+private fun WorkstationCoordinates.getConnectorByTarget(target: Connector): Connector? {
+    return this.getAllConnectors()
+        .find { it.connector.owner == target.target && it.connector.target == target.owner }
+        ?.connector
+}
+
+private fun WorkstationCoordinates.getAllConnectors(): List<DeviceCoordinate.Connector> {
     return listOf(
         this.officeLaptop.connectors,
         this.personalLaptop.connectors,
@@ -89,34 +101,3 @@ fun List<Pair<Rect, Device.Type>>.mapToMinimumBound(
     ) to it.second
 }
 
-fun getTargetConnector(
-    coordinates: WorkstationCoordinates,
-    connector: DeviceCoordinate.Connector,
-): DeviceCoordinate.Connector? {
-    return when (connector.sourceConnector.target) {
-        Device.Type.OfficeLaptop -> coordinates.officeLaptop.connectors
-        Device.Type.PersonalLaptop -> coordinates.personalLaptop.connectors
-        Device.Type.PcDesktop -> coordinates.pcDesktop.connectors
-        Device.Type.UsbDockingStation -> coordinates.usbDockingStation.connectors
-        Device.Type.DigitalCamera -> coordinates.digitalCamera.connectors
-        Device.Type.HdmiToWebcam -> coordinates.hdmiToWebcam.connectors
-        Device.Type.StreamDeck -> coordinates.streamDeck.connectors
-        Device.Type.ExternalSsd -> coordinates.externalSsd.connectors
-        Device.Type.UsbCSwitcher -> coordinates.usbCSwitcher.connectors
-        Device.Type.UsbHub -> coordinates.usbHub.connectors
-        Device.Type.UsbPowerAdapter -> coordinates.usbPowerAdapter.connectors
-        Device.Type.SecondaryMonitor -> coordinates.secondaryMonitor.connectors
-        Device.Type.PrimaryMonitor -> coordinates.primaryMonitor.connectors
-        Device.Type.UsbDac -> coordinates.usbDac.connectors
-        Device.Type.UsbDongle1 -> coordinates.usbDongle1.connectors
-        Device.Type.UsbDongle2 -> coordinates.usbDongle2.connectors
-        Device.Type.LedLamp -> coordinates.ledLamp.connectors
-        Device.Type.Speaker -> coordinates.speaker.connectors
-        Device.Type.Microphone1 -> coordinates.microphone1.connectors
-        Device.Type.Microphone2 -> coordinates.microphone2.connectors
-        Device.Type.HdmiCapture -> coordinates.hdmiCapture.connectors
-        Device.Type.AndroidDevice -> coordinates.androidDevice.connectors
-        Device.Type.GameController -> coordinates.gameController.connectors
-        Device.Type.Headphone -> coordinates.headphone.connectors
-    }?.find { it.sourceConnector.target == connector.device }
-}

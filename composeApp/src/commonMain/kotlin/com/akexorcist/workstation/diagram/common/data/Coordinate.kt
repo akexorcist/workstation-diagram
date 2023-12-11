@@ -79,8 +79,7 @@ data class DeviceCoordinate(
 
     data class Connector(
         val device: com.akexorcist.workstation.diagram.common.data.Device.Type,
-        val sourceConnector: com.akexorcist.workstation.diagram.common.data.Connector,
-//        val targetConnector: com.akexorcist.workstation.diagram.common.data.Connector,
+        val connector: com.akexorcist.workstation.diagram.common.data.Connector,
         val offset: Offset,
         val size: IntSize,
         val side: ConnectorSide,
@@ -92,9 +91,44 @@ data class DeviceCoordinate(
     }
 }
 
+data class ConnectionLine(
+    val source: Connection,
+    val target: Connection?,
+    val offset: Offset,
+    val size: IntSize,
+    val side: ConnectorSide,
+) {
+    val rect = Rect(
+        offset = offset,
+        size = size.toSize(),
+    )
+
+    data class Connection(
+        val type: ConnectorType,
+        val direction: ConnectorDirection,
+        val owner: Device.Type,
+    )
+}
+
+fun Connector.toConnection() = ConnectionLine.Connection(
+    type = type,
+    direction = direction,
+    owner = owner,
+)
+
 fun DeviceCoordinate?.isAvailable() = this?.device != null && this.connectors != null
 
 fun DeviceCoordinate.Connector.getJoint(): Offset {
+    return when (this.side) {
+        ConnectorSide.Left ->
+            Offset(this.offset.x, this.offset.y + this.size.height / 2)
+
+        ConnectorSide.Right ->
+            Offset(this.offset.x + this.size.width, this.offset.y + this.size.height / 2)
+    }
+}
+
+fun ConnectionLine.getJoint(): Offset {
     return when (this.side) {
         ConnectorSide.Left ->
             Offset(this.offset.x, this.offset.y + this.size.height / 2)
