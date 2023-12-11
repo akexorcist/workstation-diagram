@@ -17,10 +17,10 @@ import com.akexorcist.workstation.diagram.common.ui.component.EndDeviceComponent
 import com.akexorcist.workstation.diagram.common.ui.component.HubDeviceComponent
 import com.akexorcist.workstation.diagram.common.ui.state.WorkstationCoordinateHostState
 
-private val FirstRowSpacing = 100.dp
-private val SecondRowSpacing = 160.dp
-private val ThirdRowSpacing = 160.dp
-private val ForthRowSpacing = 140.dp
+private val FirstRowSpacing = 140.dp
+private val SecondRowSpacing = 180.dp
+private val ThirdRowSpacing = 180.dp
+private val ForthRowSpacing = 160.dp
 
 @Composable
 internal fun DeviceContent(

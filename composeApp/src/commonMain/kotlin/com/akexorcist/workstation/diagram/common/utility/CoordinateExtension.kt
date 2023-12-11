@@ -88,3 +88,35 @@ fun List<Pair<Rect, Device.Type>>.mapToMinimumBound(
         bottom = it.first.bottom + verticalBoundDistance,
     ) to it.second
 }
+
+fun getTargetConnector(
+    coordinates: WorkstationCoordinates,
+    connector: DeviceCoordinate.Connector,
+): DeviceCoordinate.Connector? {
+    return when (connector.connector.target) {
+        Device.Type.OfficeLaptop -> coordinates.officeLaptop.connectors
+        Device.Type.PersonalLaptop -> coordinates.personalLaptop.connectors
+        Device.Type.PcDesktop -> coordinates.pcDesktop.connectors
+        Device.Type.UsbDockingStation -> coordinates.usbDockingStation.connectors
+        Device.Type.DigitalCamera -> coordinates.digitalCamera.connectors
+        Device.Type.HdmiToWebcam -> coordinates.hdmiToWebcam.connectors
+        Device.Type.StreamDeck -> coordinates.streamDeck.connectors
+        Device.Type.ExternalSsd -> coordinates.externalSsd.connectors
+        Device.Type.UsbCSwitcher -> coordinates.usbCSwitcher.connectors
+        Device.Type.UsbHub -> coordinates.usbHub.connectors
+        Device.Type.UsbPowerAdapter -> coordinates.usbPowerAdapter.connectors
+        Device.Type.SecondaryMonitor -> coordinates.secondaryMonitor.connectors
+        Device.Type.PrimaryMonitor -> coordinates.primaryMonitor.connectors
+        Device.Type.UsbDac -> coordinates.usbDac.connectors
+        Device.Type.UsbDongle1 -> coordinates.usbDongle1.connectors
+        Device.Type.UsbDongle2 -> coordinates.usbDongle2.connectors
+        Device.Type.LedLamp -> coordinates.ledLamp.connectors
+        Device.Type.Speaker -> coordinates.speaker.connectors
+        Device.Type.Microphone1 -> coordinates.microphone1.connectors
+        Device.Type.Microphone2 -> coordinates.microphone2.connectors
+        Device.Type.HdmiCapture -> coordinates.hdmiCapture.connectors
+        Device.Type.AndroidDevice -> coordinates.androidDevice.connectors
+        Device.Type.GameController -> coordinates.gameController.connectors
+        Device.Type.Headphone -> coordinates.headphone.connectors
+    }?.find { it.connector.target == connector.device }
+}

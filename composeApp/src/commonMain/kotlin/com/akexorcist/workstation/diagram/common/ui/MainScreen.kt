@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -63,7 +64,8 @@ fun WorkspaceArea(
     workspaceInPx: SizePx,
     boundOffset: Offset,
 ) {
-    var config by remember { mutableStateOf(DefaultConfig) }
+    val config by remember { mutableStateOf(DefaultConfig) }
+    var debugConfig by remember { mutableStateOf(DefaultDebugConfig) }
     val deviceCoordinateHostState = rememberWorkstationCoordinateHostState()
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -109,33 +111,34 @@ fun WorkspaceArea(
             WorkspaceContent(
                 state = deviceCoordinateHostState,
                 config = config,
+                debugConfig = debugConfig,
             )
         }
         DebugPanel(
-            config = config,
-            onNextIndex = { config = config.copy(lineIndex = it + 1) },
+            debugConfig = debugConfig,
+            onNextIndex = { debugConfig = debugConfig.copy(lineIndex = it + 1) },
             onPreviousIndex = {
-                if (config.lineIndex > 0) {
-                    config = config.copy(lineIndex = it - 1)
+                if (debugConfig.lineIndex > 0) {
+                    debugConfig = debugConfig.copy(lineIndex = it - 1)
                 }
             },
             onToggleShowWorkspaceArea = {
-                config = config.copy(showWorkspaceArea = it)
+                debugConfig = debugConfig.copy(showWorkspaceArea = it)
             },
             onToggleShowDeviceArea = {
-                config = config.copy(showDeviceArea = it)
+                debugConfig = debugConfig.copy(showDeviceArea = it)
             },
             onToggleShowOverlapBoundArea = {
-                config = config.copy(showOverlapBoundArea = it)
+                debugConfig = debugConfig.copy(showOverlapBoundArea = it)
             },
             onToggleShowConnectorArea = {
-                config = config.copy(showConnectorArea = it)
+                debugConfig = debugConfig.copy(showConnectorArea = it)
             },
             onToggleShowAllConnectionLines = {
-                config = config.copy(showAllConnectionLines = it)
+                debugConfig = debugConfig.copy(showAllConnectionLines = it)
             },
             onToggleLineConnectionPoint = {
-                config = config.copy(showLineConnectionPoint = it)
+                debugConfig = debugConfig.copy(showLineConnectionPoint = it)
             }
         )
     }
@@ -145,23 +148,39 @@ fun WorkspaceArea(
 private fun WorkspaceContent(
     state: WorkstationCoordinateHostState,
     config: Config,
+    debugConfig: DebugConfig,
 ) {
     val lineConnectionPoints = mutableStateListOf<Offset>()
-    val connectionInfo = state.currentWorkstationCoordinates.let { coordinates ->
-        val deviceAreas = coordinates.getSortedDeviceConnectorsByLeft()
-            .mapToMinimumBound(
-                horizontalBoundDistance = MinimumHorizontalDistanceToDevice.px(),
-                verticalBoundDistance = MinimumVerticalDistanceToDevice.px(),
-            )
-        val connectors = coordinates.getSortedConnectorByBottom()
-        val connectorAreas = connectors.map { it.rect }
-        ConnectionInfo(
-            coordinates = state.currentWorkstationCoordinates,
-            deviceAreas = deviceAreas,
-            connectors = connectors,
-            connectorAreas = connectorAreas,
-        )
-    }
+    val connectionPaths: List<Path> = state.currentWorkstationCoordinates
+        .takeIf { it.areAvailable() }
+        ?.let { coordinates ->
+            val deviceAreas = coordinates.getSortedDeviceConnectorsByLeft()
+                .mapToMinimumBound(
+                    horizontalBoundDistance = config.minimumHorizontalDistanceToDevice.px(),
+                    verticalBoundDistance = config.minimumVerticalDistanceToDevice.px(),
+                )
+            val connectors = coordinates.getSortedConnectorByBottom()
+            val connectorAreas = connectors.map { it.rect }
+
+            connectors.run {
+                if (debugConfig.showAllConnectionLines) {
+                    this
+                } else {
+                    filterIndexed { index, _ -> index == debugConfig.lineIndex }
+//            filterIndexed { index, _ -> index == 6 || index == 1 }
+                }
+            }.map { connector ->
+                getConnectorPath(
+                    startConnector = connector,
+                    devices = deviceAreas,
+                    connectors = connectorAreas,
+                    coordinates = coordinates,
+                    minimumDistanceBetweenLine = config.minimumDistanceBetweenLine.px(),
+                    minimumStartLineDistance = config.minimumStartLineDistance.px(),
+                    onAddDebugPoint = { lineConnectionPoints += it },
+                )
+            }
+        } ?: listOf()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -174,13 +193,12 @@ private fun WorkspaceContent(
             state = state,
         )
         ConnectionContent(
-            connectionInfo = connectionInfo,
-            config = config,
-            onAddDebugPoint = { lineConnectionPoints += it }
+            paths = connectionPaths
         )
         DebugContent(
             coordinates = state.currentWorkstationCoordinates,
             config = config,
+            debugConfig = debugConfig,
             lineConnectionPoints = lineConnectionPoints,
         )
     }

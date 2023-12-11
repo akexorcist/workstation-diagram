@@ -1,6 +1,23 @@
 package com.akexorcist.workstation.diagram.common.ui.state
 
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+
 data class Config(
+    val minimumHorizontalDistanceToDevice: Dp,
+    val minimumVerticalDistanceToDevice: Dp,
+    val minimumDistanceBetweenLine: Dp,
+    val minimumStartLineDistance: Dp,
+)
+
+val DefaultConfig = Config(
+    minimumHorizontalDistanceToDevice = 140.dp,
+    minimumVerticalDistanceToDevice = 30.dp,
+    minimumDistanceBetweenLine = 60.dp,
+    minimumStartLineDistance = 140.dp,
+)
+
+data class DebugConfig(
     val lineIndex: Int,
     val zoomScale: Float,
     val showWorkspaceArea: Boolean,
@@ -11,8 +28,8 @@ data class Config(
     val showLineConnectionPoint: Boolean,
 )
 
-val DefaultConfig = Config(
-    lineIndex = 26,//27
+val DefaultDebugConfig = DebugConfig(
+    lineIndex = 17,
     zoomScale = 1f,
     showWorkspaceArea = false,
     showDeviceArea = false,

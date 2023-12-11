@@ -24,11 +24,12 @@ import androidx.compose.ui.unit.toSize
 import com.akexorcist.workstation.diagram.common.data.DeviceCoordinate
 import com.akexorcist.workstation.diagram.common.data.WorkstationCoordinates
 import com.akexorcist.workstation.diagram.common.ui.state.Config
+import com.akexorcist.workstation.diagram.common.ui.state.DebugConfig
 
 
 @Composable
 fun DebugPanel(
-    config: Config,
+    debugConfig: DebugConfig,
     onNextIndex: (Int) -> Unit,
     onPreviousIndex: (Int) -> Unit,
     onToggleShowWorkspaceArea: (Boolean) -> Unit,
@@ -53,45 +54,45 @@ fun DebugPanel(
             .padding(32.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Button(onClick = { onPreviousIndex(config.lineIndex) }) {
+            Button(onClick = { onPreviousIndex(debugConfig.lineIndex) }) {
                 Text(text = "<")
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "Line ${config.lineIndex}")
+            Text(text = "Line ${debugConfig.lineIndex}")
             Spacer(modifier = Modifier.width(8.dp))
-            Button(onClick = { onNextIndex(config.lineIndex) }) {
+            Button(onClick = { onNextIndex(debugConfig.lineIndex) }) {
                 Text(text = ">")
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
         ToggleDebugMenu(
             label = "Show workspace area",
-            isChecked = config.showWorkspaceArea,
+            isChecked = debugConfig.showWorkspaceArea,
             onCheckedChange = onToggleShowWorkspaceArea,
         )
         ToggleDebugMenu(
             label = "Show device area",
-            isChecked = config.showDeviceArea,
+            isChecked = debugConfig.showDeviceArea,
             onCheckedChange = onToggleShowDeviceArea,
         )
         ToggleDebugMenu(
             label = "Show overlap bound area",
-            isChecked = config.showOverlapBoundArea,
+            isChecked = debugConfig.showOverlapBoundArea,
             onCheckedChange = onToggleShowOverlapBoundArea,
         )
         ToggleDebugMenu(
             label = "Show connector area",
-            isChecked = config.showConnectorArea,
+            isChecked = debugConfig.showConnectorArea,
             onCheckedChange = onToggleShowConnectorArea,
         )
         ToggleDebugMenu(
             label = "Show all connection lines",
-            isChecked = config.showAllConnectionLines,
+            isChecked = debugConfig.showAllConnectionLines,
             onCheckedChange = onToggleShowAllConnectionLines,
         )
         ToggleDebugMenu(
             label = "Show line connection point",
-            isChecked = config.showLineConnectionPoint,
+            isChecked = debugConfig.showLineConnectionPoint,
             onCheckedChange = onToggleLineConnectionPoint,
         )
     }
@@ -119,6 +120,7 @@ private fun ToggleDebugMenu(
 fun DebugContent(
     coordinates: WorkstationCoordinates,
     config: Config,
+    debugConfig: DebugConfig,
     lineConnectionPoints: List<Offset>,
 ) {
     if (!coordinates.areAvailable()) return
@@ -126,7 +128,7 @@ fun DebugContent(
     val textMeasure = rememberTextMeasurer()
     Box(modifier = Modifier.fillMaxSize()) {
         Canvas(modifier = Modifier.fillMaxSize()) {
-            if (config.showWorkspaceArea) {
+            if (debugConfig.showWorkspaceArea) {
                 drawRect(
                     color = Color.Blue,
                     topLeft = workspace.offset,
@@ -137,25 +139,25 @@ fun DebugContent(
                 )
             }
 
-            if (config.showDeviceArea) {
+            if (debugConfig.showDeviceArea) {
                 // Draw all device area with blue line
                 getAllDevices(coordinates)
                     .forEach { device ->
                         drawRect(
                             color = Color.Blue,
-                            topLeft = if (config.showOverlapBoundArea) {
+                            topLeft = if (debugConfig.showOverlapBoundArea) {
                                 Offset(
-                                    x = device.offset.x - MinimumHorizontalDistanceToDevice.toPx(),
-                                    y = device.offset.y - MinimumVerticalDistanceToDevice.toPx(),
+                                    x = device.offset.x - config.minimumHorizontalDistanceToDevice.toPx(),
+                                    y = device.offset.y - config.minimumVerticalDistanceToDevice.toPx(),
                                 )
                             } else {
                                 device.offset
                             },
-                            size = if (config.showOverlapBoundArea) {
+                            size = if (debugConfig.showOverlapBoundArea) {
                                 device.size.toSize().let { size ->
                                     size.copy(
-                                        width = size.width + (MinimumHorizontalDistanceToDevice.toPx() * 2),
-                                        height = size.height + (MinimumVerticalDistanceToDevice.toPx() * 2),
+                                        width = size.width + (config.minimumHorizontalDistanceToDevice.toPx() * 2),
+                                        height = size.height + (config.minimumVerticalDistanceToDevice.toPx() * 2),
                                     )
                                 }
                             } else {
@@ -165,7 +167,7 @@ fun DebugContent(
                         )
                     }
             }
-            if (config.showConnectorArea) {
+            if (debugConfig.showConnectorArea) {
                 // Draw all connector area with blue line
                 getAllConnectorsByBottom(coordinates).forEach {
                     drawRect(
@@ -176,7 +178,7 @@ fun DebugContent(
                     )
                 }
             }
-            if (config.showLineConnectionPoint) {
+            if (debugConfig.showLineConnectionPoint) {
                 lineConnectionPoints.forEachIndexed { index, point ->
                     drawCircle(
                         color = Color.Blue,
