@@ -1,22 +1,28 @@
 package com.akexorcist.workstation.diagram.common.ui.component
 
+import androidx.compose.foundation.interaction.HoverInteraction
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.akexorcist.workstation.diagram.common.data.Connector
 import com.akexorcist.workstation.diagram.common.data.ConnectorSide
 import com.akexorcist.workstation.diagram.common.data.Device
 import com.akexorcist.workstation.diagram.common.data.DeviceCoordinate
@@ -29,6 +35,11 @@ internal fun ComputerDeviceComponent(
     height: Dp? = null,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: () -> Unit,
+    onEnterHoveDeviceInteraction: () -> Unit,
+    onExitHoverDeviceInteraction: () -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         ConnectorRenderer(
@@ -36,6 +47,8 @@ internal fun ComputerDeviceComponent(
             side = ConnectorSide.Left,
             connectors = device.leftConnections,
             onConnectorCoordinated = onConnectorCoordinated,
+            onEnterHoverInteraction = onEnterHoveConnectorInteraction,
+            onExitHoverInteraction = onExitHoverConnectorInteraction,
         )
         ComputerDeviceContent(
             modifier = Modifier.onDeviceCoordinated(
@@ -45,12 +58,17 @@ internal fun ComputerDeviceComponent(
             title = device.title,
             subtitle = device.subtitle,
             height = height,
+            onClick = onDeviceClick,
+            onEnterHoverInteraction = onEnterHoveDeviceInteraction,
+            onExitHoverInteraction = onExitHoverDeviceInteraction,
         )
         ConnectorRenderer(
             device = device.type,
             side = ConnectorSide.Right,
             connectors = device.rightConnections,
             onConnectorCoordinated = onConnectorCoordinated,
+            onEnterHoverInteraction = onEnterHoveConnectorInteraction,
+            onExitHoverInteraction = onExitHoverConnectorInteraction,
         )
     }
 }
@@ -61,16 +79,21 @@ private fun ComputerDeviceContent(
     title: String,
     subtitle: String? = null,
     height: Dp? = null,
+    onClick: () -> Unit,
+    onEnterHoverInteraction: () -> Unit,
+    onExitHoverInteraction: () -> Unit,
 ) {
     DeviceComponent(
         modifier = modifier,
         width = 190.dp,
         height = height ?: 80.dp,
         colors = DeviceComponentTheme.Computer.buttonColors(),
-        shape = DeviceComponentTheme.Computer.shape,
-        onClick = { /*TODO*/ },
+        shape = RoundedCornerShape(DeviceComponentTheme.End.cornerRadius),
+        onClick = onClick,
         title = title,
         subtitle = subtitle,
+        onEnterHoverInteraction = onEnterHoverInteraction,
+        onExitHoverInteraction = onExitHoverInteraction,
     )
 }
 
@@ -81,6 +104,11 @@ internal fun HubDeviceComponent(
     height: Dp? = null,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: () -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         ConnectorRenderer(
@@ -88,6 +116,8 @@ internal fun HubDeviceComponent(
             side = ConnectorSide.Left,
             connectors = device.leftConnections,
             onConnectorCoordinated = onConnectorCoordinated,
+            onEnterHoverInteraction = onEnterHoveConnectorInteraction,
+            onExitHoverInteraction = onExitHoverConnectorInteraction,
         )
 
         HubDeviceContent(
@@ -99,6 +129,9 @@ internal fun HubDeviceComponent(
             subtitle = device.subtitle,
             width = width,
             height = height,
+            onClick = onDeviceClick,
+            onEnterHoverInteraction = { onEnterHoveDeviceInteraction(device) },
+            onExitHoverInteraction = { onExitHoverDeviceInteraction(device) },
         )
 
         ConnectorRenderer(
@@ -106,6 +139,8 @@ internal fun HubDeviceComponent(
             side = ConnectorSide.Right,
             connectors = device.rightConnections,
             onConnectorCoordinated = onConnectorCoordinated,
+            onEnterHoverInteraction = onEnterHoveConnectorInteraction,
+            onExitHoverInteraction = onExitHoverConnectorInteraction,
         )
     }
 }
@@ -117,17 +152,23 @@ private fun HubDeviceContent(
     subtitle: String? = null,
     width: Dp? = null,
     height: Dp? = null,
+    onClick: () -> Unit,
+    onEnterHoverInteraction: () -> Unit,
+    onExitHoverInteraction: () -> Unit,
 ) {
     DeviceComponent(
         modifier = modifier,
         width = width ?: 140.dp,
         height = height ?: 220.dp,
         colors = DeviceComponentTheme.Hub.buttonColors(),
-        shape = DeviceComponentTheme.Hub.shape,
-        onClick = { /*TODO*/ },
+        shape = RoundedCornerShape(DeviceComponentTheme.End.cornerRadius),
         title = title,
         subtitle = subtitle,
-    )
+        onClick = onClick,
+        onEnterHoverInteraction = onEnterHoverInteraction,
+        onExitHoverInteraction = onExitHoverInteraction,
+
+        )
 }
 
 @Composable
@@ -137,6 +178,11 @@ internal fun EndDeviceComponent(
     height: Dp? = null,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: () -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         ConnectorRenderer(
@@ -144,6 +190,8 @@ internal fun EndDeviceComponent(
             side = ConnectorSide.Left,
             connectors = device.leftConnections,
             onConnectorCoordinated = onConnectorCoordinated,
+            onEnterHoverInteraction = onEnterHoveConnectorInteraction,
+            onExitHoverInteraction = onExitHoverConnectorInteraction,
         )
 
         EndDeviceContent(
@@ -155,6 +203,9 @@ internal fun EndDeviceComponent(
             subtitle = device.subtitle,
             width = width,
             height = height,
+            onClick = onDeviceClick,
+            onEnterHoverInteraction = { onEnterHoveDeviceInteraction(device) },
+            onExitHoverInteraction = { onExitHoverDeviceInteraction(device) },
         )
 
         ConnectorRenderer(
@@ -162,6 +213,8 @@ internal fun EndDeviceComponent(
             side = ConnectorSide.Right,
             connectors = device.rightConnections,
             onConnectorCoordinated = onConnectorCoordinated,
+            onEnterHoverInteraction = onEnterHoveConnectorInteraction,
+            onExitHoverInteraction = onExitHoverConnectorInteraction,
         )
     }
 }
@@ -173,16 +226,21 @@ private fun EndDeviceContent(
     subtitle: String? = null,
     width: Dp? = null,
     height: Dp? = null,
+    onClick: () -> Unit,
+    onEnterHoverInteraction: () -> Unit,
+    onExitHoverInteraction: () -> Unit,
 ) {
     DeviceComponent(
         modifier = modifier,
         width = width ?: 200.dp,
         height = height ?: 80.dp,
         colors = DeviceComponentTheme.End.buttonColors(),
-        shape = DeviceComponentTheme.End.shape,
-        onClick = { /*TODO*/ },
+        shape = RoundedCornerShape(DeviceComponentTheme.End.cornerRadius),
         title = title,
         subtitle = subtitle,
+        onClick = onClick,
+        onEnterHoverInteraction = onEnterHoverInteraction,
+        onExitHoverInteraction = onExitHoverInteraction,
     )
 }
 
@@ -196,12 +254,25 @@ private fun DeviceComponent(
     colors: ButtonColors,
     shape: Shape,
     onClick: () -> Unit,
+    onEnterHoverInteraction: () -> Unit,
+    onExitHoverInteraction: () -> Unit,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect { interaction ->
+            when (interaction) {
+                is HoverInteraction.Enter -> onEnterHoverInteraction()
+
+                is HoverInteraction.Exit -> onExitHoverInteraction()
+            }
+        }
+    }
     Button(
         modifier = Modifier
             .requiredWidth(width)
             .requiredHeight(height)
             .then(modifier),
+        interactionSource = interactionSource,
         colors = colors,
         shape = shape,
         onClick = onClick,

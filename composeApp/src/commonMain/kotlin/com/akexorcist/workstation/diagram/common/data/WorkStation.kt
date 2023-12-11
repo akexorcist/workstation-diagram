@@ -148,7 +148,6 @@ val MyWorkStation = WorkStation(
                 type = ConnectorType.UsbA3,
                 direction = ConnectorDirection.Output,
                 target = Device.Type.UsbCSwitcher,
-                bias = 70.dp,
             ),
         ),
         rightConnections = listOf(),
@@ -210,7 +209,6 @@ val MyWorkStation = WorkStation(
                 type = ConnectorType.UsbA3,
                 direction = ConnectorDirection.Output,
                 target = Device.Type.PcDesktop,
-                bias = (-32).dp
             ),
         ),
         rightConnections = listOf(
@@ -268,13 +266,11 @@ val MyWorkStation = WorkStation(
                 type = ConnectorType.UsbC,
                 direction = ConnectorDirection.Input,
                 target = Device.Type.UsbDockingStation,
-                bias = 170.dp,
             ),
             Connector(
                 type = ConnectorType.MiniHdmi,
                 direction = ConnectorDirection.Input,
                 target = Device.Type.PcDesktop,
-                bias = 408.dp,
             ),
         ),
         rightConnections = listOf(),
@@ -285,19 +281,16 @@ val MyWorkStation = WorkStation(
                 type = ConnectorType.DisplayPort,
                 direction = ConnectorDirection.Input,
                 target = Device.Type.UsbDockingStation,
-                bias = 264.dp,
             ),
             Connector(
                 type = ConnectorType.Hdmi,
                 direction = ConnectorDirection.Input,
                 target = Device.Type.PcDesktop,
-                bias = 430.dp,
             ),
             Connector(
                 type = ConnectorType.UsbC32Gen2,
                 direction = ConnectorDirection.Output,
                 target = Device.Type.UsbCSwitcher,
-                bias = 60.dp,
             ),
             Connector(
                 type = ConnectorType.Aux,
@@ -339,7 +332,6 @@ val MyWorkStation = WorkStation(
                 type = ConnectorType.UsbC,
                 direction = ConnectorDirection.Input,
                 target = Device.Type.UsbDockingStation,
-                bias = (-310).dp,
             ),
             Connector(
                 type = ConnectorType.UsbC,
@@ -401,7 +393,6 @@ val MyWorkStation = WorkStation(
                 type = ConnectorType.Aux,
                 direction = ConnectorDirection.Input,
                 target = Device.Type.UsbDac,
-                bias = (-40).dp,
             ),
         ),
         rightConnections = listOf(),
@@ -412,7 +403,6 @@ val MyWorkStation = WorkStation(
                 type = ConnectorType.UsbC,
                 direction = ConnectorDirection.Output,
                 target = Device.Type.PrimaryMonitor,
-                bias = (-24).dp
             ),
         ),
         rightConnections = listOf(),
@@ -423,7 +413,6 @@ val MyWorkStation = WorkStation(
                 type = ConnectorType.MicroUsb,
                 direction = ConnectorDirection.Output,
                 target = Device.Type.UsbCSwitcher,
-                bias = (-140).dp
             ),
         ),
         rightConnections = listOf(),
@@ -454,7 +443,6 @@ val MyWorkStation = WorkStation(
                 type = ConnectorType.UsbA3,
                 direction = ConnectorDirection.Output,
                 target = Device.Type.PrimaryMonitor,
-                bias = (-16).dp,
             ),
         ),
         rightConnections = listOf(),

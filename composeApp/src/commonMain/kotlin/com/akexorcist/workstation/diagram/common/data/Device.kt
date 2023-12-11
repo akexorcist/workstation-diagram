@@ -306,5 +306,4 @@ data class Connector(
     val type: ConnectorType,
     val direction: ConnectorDirection,
     val target: Device.Type,
-    val bias: Dp = 0.dp,
 )

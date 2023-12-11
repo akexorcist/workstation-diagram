@@ -1,11 +1,10 @@
 package com.akexorcist.workstation.diagram.common.theme
 
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -38,23 +37,38 @@ object ThemeColor {
 }
 
 data class DeviceComponent(
-    val shape: Shape,
+    val cornerRadius: Dp,
     val buttonColors: @Composable () -> ButtonColors,
-) {
-}
+)
 
 object DeviceComponentTheme {
     val Computer = DeviceComponent(
-        shape = RoundedCornerShape(8.dp),
+        cornerRadius = 8.dp,
         buttonColors = { DeviceColor.computer() }
     )
     val Hub = DeviceComponent(
-        shape = RoundedCornerShape(8.dp),
+        cornerRadius = 8.dp,
         buttonColors = { DeviceColor.hub() }
     )
     val End = DeviceComponent(
-        shape = RoundedCornerShape(8.dp),
+        cornerRadius = 8.dp,
         buttonColors = { DeviceColor.end() }
+    )
+}
+
+data class ConnectorComponent(
+    val cornerRadius: Dp,
+    val color: Color,
+)
+
+object ConnectorComponentTheme {
+    val Input = ConnectorComponent(
+        cornerRadius = 8.dp,
+        color = ThemeColor.Purple50
+    )
+    val Output = ConnectorComponent(
+        cornerRadius = 8.dp,
+        color = ThemeColor.Pink50
     )
 }
 

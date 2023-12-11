@@ -192,6 +192,21 @@ private fun WorkspaceContent(
         DeviceContent(
             workStation = MyWorkStation,
             state = state,
+            onDeviceClick = {
+                println("onDeviceClick ${it.title}")
+            },
+            onEnterHoveDeviceInteraction = {
+                println("onEnterHoveDeviceInteraction ${it.title}")
+            },
+            onExitHoverDeviceInteraction = {
+                println("onExitHoverDeviceInteraction ${it.title}")
+            },
+            onEnterHoveConnectorInteraction = {
+                println("onEnterHoveConnectorInteraction $it")
+            },
+            onExitHoverConnectorInteraction = {
+                println("onExitHoverConnectorInteraction $it")
+            },
         )
         ConnectionContent(
             connections = connections

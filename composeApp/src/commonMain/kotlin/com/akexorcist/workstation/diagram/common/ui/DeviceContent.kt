@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.akexorcist.workstation.diagram.common.data.Connector
 import com.akexorcist.workstation.diagram.common.data.Device
 import com.akexorcist.workstation.diagram.common.data.DeviceCoordinate
 import com.akexorcist.workstation.diagram.common.data.WorkStation
@@ -26,6 +27,11 @@ private val ForthRowSpacing = 160.dp
 internal fun DeviceContent(
     workStation: WorkStation,
     state: WorkstationCoordinateState,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     Row(modifier = Modifier.fillMaxSize()) {
         Column {
@@ -34,18 +40,33 @@ internal fun DeviceContent(
                 device = workStation.officeLaptop,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(32.dp))
             PersonalLaptop(
                 device = workStation.personalLaptop,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(80.dp))
             PcDesktop(
                 device = workStation.pcDesktop,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
         }
         Spacer(modifier = Modifier.width(FirstRowSpacing))
@@ -55,6 +76,11 @@ internal fun DeviceContent(
                 device = workStation.usbDockingStation,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(16.dp))
             Spacer(modifier = Modifier.height(160.dp))
@@ -66,36 +92,66 @@ internal fun DeviceContent(
                 device = workStation.digitalCamera,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(32.dp))
             HdmiToWebcam(
                 device = workStation.hdmiToWebCam,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(32.dp))
             StreamDeck(
                 device = workStation.streamDeck,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(130.dp))
             ExternalSsd(
                 device = workStation.externalSsd,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(180.dp))
             UsbCSwitcher(
                 device = workStation.usbCSwitcher,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(80.dp))
             UsbHub(
                 device = workStation.usbHub,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
         }
         Spacer(modifier = Modifier.width(ThirdRowSpacing))
@@ -105,36 +161,66 @@ internal fun DeviceContent(
                 device = workStation.usbPowerAdapter,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(16.dp))
             SecondaryMonitor(
                 device = workStation.secondaryMonitor,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(16.dp))
             PrimaryMonitor(
                 device = workStation.primaryMonitor,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(120.dp))
             UsbDac(
                 device = workStation.usbDac,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(23.5.dp))
             UsbDongle1(
                 device = workStation.usbDongle1,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(8.dp))
             UsbDongle2(
                 device = workStation.usbDongle2,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
         }
         Spacer(modifier = Modifier.width(ForthRowSpacing))
@@ -144,48 +230,88 @@ internal fun DeviceContent(
                 device = workStation.ledLamp,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(80.dp))
             Speaker(
                 device = workStation.speaker,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(32.dp))
             Microphone1(
                 device = workStation.microphone1,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(16.dp))
             HdmiCapture(
                 device = workStation.hdmiCapture,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(16.dp))
             AndroidDevice(
                 device = workStation.androidDevice,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(16.dp))
             GameController(
                 device = workStation.gameController,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(16.dp))
             Microphone2(
                 device = workStation.microphone2,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(35.dp))
             Headphone(
                 device = workStation.headphone,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
         }
     }
@@ -196,11 +322,21 @@ private fun OfficeLaptop(
     device: Device.OfficeLapTop,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     ComputerDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -209,11 +345,21 @@ private fun PersonalLaptop(
     device: Device.PersonalLapTop,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     ComputerDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -222,12 +368,22 @@ private fun PcDesktop(
     device: Device.PcDesktop,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     ComputerDeviceComponent(
         device = device,
         height = 200.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -236,12 +392,22 @@ private fun UsbDockingStation(
     device: Device.UsbDockingStation,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     HubDeviceComponent(
         device = device,
         height = 280.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -250,11 +416,21 @@ private fun DigitalCamera(
     device: Device.DigitalCamera,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     EndDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -263,11 +439,21 @@ private fun HdmiToWebcam(
     device: Device.HdmiToWebcam,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     EndDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -276,11 +462,21 @@ private fun StreamDeck(
     device: Device.StreamDeck,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     EndDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -289,11 +485,21 @@ private fun ExternalSsd(
     device: Device.ExternalSsd,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     EndDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -302,12 +508,22 @@ private fun UsbCSwitcher(
     device: Device.UsbCSwitcher,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     HubDeviceComponent(
         device = device,
         height = 160.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -316,12 +532,22 @@ private fun UsbHub(
     device: Device.UsbHub,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     HubDeviceComponent(
         device = device,
         height = 160.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -330,12 +556,22 @@ private fun UsbPowerAdapter(
     device: Device.UsbPowerAdapter,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     HubDeviceComponent(
         device = device,
         height = 120.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -344,12 +580,22 @@ private fun SecondaryMonitor(
     device: Device.SecondaryMonitor,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     HubDeviceComponent(
         device = device,
         height = 150.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -358,12 +604,22 @@ private fun PrimaryMonitor(
     device: Device.PrimaryMonitor,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     HubDeviceComponent(
         device = device,
         height = 320.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -372,12 +628,22 @@ private fun UsbDac(
     device: Device.UsbDac,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     HubDeviceComponent(
         device = device,
         height = 160.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -386,11 +652,21 @@ private fun UsbDongle1(
     device: Device.UsbDongle1,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     EndDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -399,11 +675,21 @@ private fun UsbDongle2(
     device: Device.UsbDongle2,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     EndDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -412,11 +698,21 @@ private fun LedLamp(
     device: Device.LedLamp,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     EndDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -425,11 +721,21 @@ private fun Speaker(
     device: Device.Speaker,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     EndDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -438,11 +744,21 @@ private fun Microphone1(
     device: Device.Microphone1,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     EndDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -451,11 +767,21 @@ private fun Microphone2(
     device: Device.Microphone2,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     EndDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -464,11 +790,21 @@ private fun HdmiCapture(
     device: Device.HdmiCapture,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     EndDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -477,11 +813,21 @@ private fun AndroidDevice(
     device: Device.AndroidDevice,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     EndDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -490,11 +836,21 @@ private fun GameController(
     device: Device.GameController,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     EndDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
@@ -503,11 +859,21 @@ private fun Headphone(
     device: Device.Headphone,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
     EndDeviceComponent(
         device = device,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
 
