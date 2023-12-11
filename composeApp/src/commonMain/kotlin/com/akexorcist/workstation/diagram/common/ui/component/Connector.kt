@@ -1,5 +1,6 @@
 package com.akexorcist.workstation.diagram.common.ui.component
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.indication
@@ -12,9 +13,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -31,6 +34,7 @@ internal fun InputConnectorComponent(
     device: Device.Type,
     connector: Connector,
     side: ConnectorSide,
+    isActive: Boolean,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onEnterHoverInteraction: (Connector) -> Unit,
     onExitHoverInteraction: (Connector) -> Unit,
@@ -56,6 +60,7 @@ internal fun InputConnectorComponent(
             indication = rememberRipple(),
         ),
         label = connector.type.value,
+        isActive = isActive,
         color = ConnectorComponentTheme.Input.color,
         cornerRadius = ConnectorComponentTheme.Input.cornerRadius,
         direction = side,
@@ -69,6 +74,7 @@ internal fun OutputConnectorComponent(
     device: Device.Type,
     connector: Connector,
     side: ConnectorSide,
+    isActive: Boolean,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onEnterHoverInteraction: (Connector) -> Unit,
     onExitHoverInteraction: (Connector) -> Unit,
@@ -81,6 +87,7 @@ internal fun OutputConnectorComponent(
             side = side,
         ),
         label = connector.type.value,
+        isActive = isActive,
         color = ConnectorComponentTheme.Output.color,
         cornerRadius = ConnectorComponentTheme.Output.cornerRadius,
         direction = side,
@@ -93,12 +100,16 @@ internal fun OutputConnectorComponent(
 private fun ConnectorComponent(
     modifier: Modifier,
     label: String,
+    isActive: Boolean,
     color: Color,
     cornerRadius: Dp,
     direction: ConnectorSide,
     onEnterHoverInteraction: () -> Unit,
     onExitHoverInteraction: () -> Unit,
 ) {
+    val alpha by animateFloatAsState(
+        targetValue = if (isActive) 1f else 0.25f
+    )
     val interactionSource = remember { MutableInteractionSource() }
     LaunchedEffect(interactionSource) {
         interactionSource.interactions.collect { interaction ->
@@ -112,6 +123,7 @@ private fun ConnectorComponent(
     Box(
         modifier = modifier
             .hoverable(interactionSource = interactionSource)
+            .alpha(alpha)
             .background(
                 color = color,
                 shape = when (direction) {
@@ -142,6 +154,8 @@ internal fun ConnectorRenderer(
     device: Device.Type,
     side: ConnectorSide,
     connectors: List<Connector>,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onEnterHoverInteraction: (Connector) -> Unit,
     onExitHoverInteraction: (Connector) -> Unit,
@@ -155,11 +169,20 @@ internal fun ConnectorRenderer(
         verticalArrangement = Arrangement.Center,
     ) {
         connectors.forEachIndexed { index, connector ->
+            val isActive = when {
+                currentHoveredDevice == null && currentHoveredConnector == null -> true
+                currentHoveredDevice != null && currentHoveredDevice.type == connector.owner -> true
+                currentHoveredDevice != null && currentHoveredDevice.hasConnection(connector) -> true
+                currentHoveredConnector != null && currentHoveredConnector == connector -> true
+                currentHoveredConnector != null && currentHoveredConnector.target == connector.owner && currentHoveredConnector.owner == connector.target -> true
+                else -> false
+            }
             when (connector.direction) {
                 ConnectorDirection.Input -> InputConnectorComponent(
                     device = device,
                     connector = connector,
                     side = side,
+                    isActive = isActive,
                     onConnectorCoordinated = onConnectorCoordinated,
                     onEnterHoverInteraction = onEnterHoverInteraction,
                     onExitHoverInteraction = onExitHoverInteraction,
@@ -169,6 +192,7 @@ internal fun ConnectorRenderer(
                     device = device,
                     connector = connector,
                     side = side,
+                    isActive = isActive,
                     onConnectorCoordinated = onConnectorCoordinated,
                     onEnterHoverInteraction = onEnterHoverInteraction,
                     onExitHoverInteraction = onExitHoverInteraction,

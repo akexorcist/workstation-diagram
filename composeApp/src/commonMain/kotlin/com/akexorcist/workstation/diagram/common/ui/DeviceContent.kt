@@ -27,6 +27,8 @@ private val ForthRowSpacing = 160.dp
 internal fun DeviceContent(
     workStation: WorkStation,
     state: WorkstationCoordinateState,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceClick: (Device) -> Unit,
     onEnterHoveDeviceInteraction: (Device) -> Unit,
     onExitHoverDeviceInteraction: (Device) -> Unit,
@@ -38,6 +40,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(302.5.dp))
             OfficeLaptop(
                 device = workStation.officeLaptop,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -49,6 +53,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(32.dp))
             PersonalLaptop(
                 device = workStation.personalLaptop,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -60,6 +66,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(80.dp))
             PcDesktop(
                 device = workStation.pcDesktop,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -74,6 +82,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(257.5.dp))
             UsbDockingStation(
                 device = workStation.usbDockingStation,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -90,6 +100,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(64.dp))
             DigitalCamera(
                 device = workStation.digitalCamera,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -101,6 +113,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(22.dp))
             HdmiToWebcam(
                 device = workStation.hdmiToWebCam,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -112,6 +126,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(22.dp))
             StreamDeck(
                 device = workStation.streamDeck,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -123,6 +139,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(130.dp))
             ExternalSsd(
                 device = workStation.externalSsd,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -134,6 +152,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(180.dp))
             UsbCSwitcher(
                 device = workStation.usbCSwitcher,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -145,6 +165,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(80.dp))
             UsbHub(
                 device = workStation.usbHub,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -159,6 +181,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(65.5.dp))
             UsbPowerAdapter(
                 device = workStation.usbPowerAdapter,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -170,6 +194,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(16.dp))
             SecondaryMonitor(
                 device = workStation.secondaryMonitor,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -181,6 +207,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(16.dp))
             PrimaryMonitor(
                 device = workStation.primaryMonitor,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -192,6 +220,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(120.dp))
             UsbDac(
                 device = workStation.usbDac,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -203,6 +233,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(22.5.dp))
             UsbDongle1(
                 device = workStation.usbDongle1,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -214,6 +246,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(8.dp))
             UsbDongle2(
                 device = workStation.usbDongle2,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -228,6 +262,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(65.dp))
             LedLamp(
                 device = workStation.ledLamp,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -239,6 +275,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(60.dp))
             Speaker(
                 device = workStation.speaker,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -250,6 +288,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(66.dp))
             Microphone1(
                 device = workStation.microphone1,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -261,6 +301,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(16.dp))
             HdmiCapture(
                 device = workStation.hdmiCapture,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -272,6 +314,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(16.dp))
             AndroidDevice(
                 device = workStation.androidDevice,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -283,6 +327,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(16.dp))
             GameController(
                 device = workStation.gameController,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -294,6 +340,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(16.dp))
             Microphone2(
                 device = workStation.microphone2,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -305,6 +353,8 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(33.dp))
             Headphone(
                 device = workStation.headphone,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
                 onDeviceClick = onDeviceClick,
@@ -320,6 +370,8 @@ internal fun DeviceContent(
 @Composable
 private fun OfficeLaptop(
     device: Device.OfficeLapTop,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -330,6 +382,8 @@ private fun OfficeLaptop(
 ) {
     ComputerDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
@@ -343,6 +397,8 @@ private fun OfficeLaptop(
 @Composable
 private fun PersonalLaptop(
     device: Device.PersonalLapTop,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -353,6 +409,8 @@ private fun PersonalLaptop(
 ) {
     ComputerDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
@@ -366,6 +424,8 @@ private fun PersonalLaptop(
 @Composable
 private fun PcDesktop(
     device: Device.PcDesktop,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -376,6 +436,8 @@ private fun PcDesktop(
 ) {
     ComputerDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         height = 200.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
@@ -390,6 +452,8 @@ private fun PcDesktop(
 @Composable
 private fun UsbDockingStation(
     device: Device.UsbDockingStation,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -400,6 +464,8 @@ private fun UsbDockingStation(
 ) {
     HubDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         height = 280.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
@@ -414,6 +480,8 @@ private fun UsbDockingStation(
 @Composable
 private fun DigitalCamera(
     device: Device.DigitalCamera,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -424,6 +492,8 @@ private fun DigitalCamera(
 ) {
     EndDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
@@ -437,6 +507,8 @@ private fun DigitalCamera(
 @Composable
 private fun HdmiToWebcam(
     device: Device.HdmiToWebcam,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -447,6 +519,8 @@ private fun HdmiToWebcam(
 ) {
     EndDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         height = 100.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
@@ -461,6 +535,8 @@ private fun HdmiToWebcam(
 @Composable
 private fun StreamDeck(
     device: Device.StreamDeck,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -471,6 +547,8 @@ private fun StreamDeck(
 ) {
     EndDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
@@ -484,6 +562,8 @@ private fun StreamDeck(
 @Composable
 private fun ExternalSsd(
     device: Device.ExternalSsd,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -494,6 +574,8 @@ private fun ExternalSsd(
 ) {
     EndDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
@@ -507,6 +589,8 @@ private fun ExternalSsd(
 @Composable
 private fun UsbCSwitcher(
     device: Device.UsbCSwitcher,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -517,6 +601,8 @@ private fun UsbCSwitcher(
 ) {
     HubDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         height = 160.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
@@ -531,6 +617,8 @@ private fun UsbCSwitcher(
 @Composable
 private fun UsbHub(
     device: Device.UsbHub,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -541,6 +629,8 @@ private fun UsbHub(
 ) {
     HubDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         height = 160.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
@@ -555,6 +645,8 @@ private fun UsbHub(
 @Composable
 private fun UsbPowerAdapter(
     device: Device.UsbPowerAdapter,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -565,6 +657,8 @@ private fun UsbPowerAdapter(
 ) {
     HubDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         height = 120.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
@@ -579,6 +673,8 @@ private fun UsbPowerAdapter(
 @Composable
 private fun SecondaryMonitor(
     device: Device.SecondaryMonitor,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -589,6 +685,8 @@ private fun SecondaryMonitor(
 ) {
     HubDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         height = 150.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
@@ -603,6 +701,8 @@ private fun SecondaryMonitor(
 @Composable
 private fun PrimaryMonitor(
     device: Device.PrimaryMonitor,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -613,6 +713,8 @@ private fun PrimaryMonitor(
 ) {
     HubDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         height = 320.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
@@ -627,6 +729,8 @@ private fun PrimaryMonitor(
 @Composable
 private fun UsbDac(
     device: Device.UsbDac,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -637,6 +741,8 @@ private fun UsbDac(
 ) {
     HubDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         height = 160.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
@@ -651,6 +757,8 @@ private fun UsbDac(
 @Composable
 private fun UsbDongle1(
     device: Device.UsbDongle1,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -661,6 +769,8 @@ private fun UsbDongle1(
 ) {
     EndDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
@@ -674,6 +784,8 @@ private fun UsbDongle1(
 @Composable
 private fun UsbDongle2(
     device: Device.UsbDongle2,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -684,6 +796,8 @@ private fun UsbDongle2(
 ) {
     EndDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
@@ -697,6 +811,8 @@ private fun UsbDongle2(
 @Composable
 private fun LedLamp(
     device: Device.LedLamp,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -707,6 +823,8 @@ private fun LedLamp(
 ) {
     EndDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
@@ -720,6 +838,8 @@ private fun LedLamp(
 @Composable
 private fun Speaker(
     device: Device.Speaker,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -730,6 +850,8 @@ private fun Speaker(
 ) {
     EndDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         height = 100.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
@@ -744,6 +866,8 @@ private fun Speaker(
 @Composable
 private fun Microphone1(
     device: Device.Microphone1,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -754,6 +878,8 @@ private fun Microphone1(
 ) {
     EndDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
@@ -767,6 +893,8 @@ private fun Microphone1(
 @Composable
 private fun Microphone2(
     device: Device.Microphone2,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -777,6 +905,8 @@ private fun Microphone2(
 ) {
     EndDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
@@ -790,6 +920,8 @@ private fun Microphone2(
 @Composable
 private fun HdmiCapture(
     device: Device.HdmiCapture,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -800,6 +932,8 @@ private fun HdmiCapture(
 ) {
     EndDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
@@ -813,6 +947,8 @@ private fun HdmiCapture(
 @Composable
 private fun AndroidDevice(
     device: Device.AndroidDevice,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -823,6 +959,8 @@ private fun AndroidDevice(
 ) {
     EndDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
@@ -836,6 +974,8 @@ private fun AndroidDevice(
 @Composable
 private fun GameController(
     device: Device.GameController,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -846,6 +986,8 @@ private fun GameController(
 ) {
     EndDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
@@ -859,6 +1001,8 @@ private fun GameController(
 @Composable
 private fun Headphone(
     device: Device.Headphone,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: (Device) -> Unit,
@@ -869,6 +1013,8 @@ private fun Headphone(
 ) {
     EndDeviceComponent(
         device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },

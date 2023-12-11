@@ -1,5 +1,6 @@
 package com.akexorcist.workstation.diagram.common.ui.component
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.interaction.HoverInteraction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -15,9 +16,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -32,7 +35,9 @@ import com.akexorcist.workstation.diagram.common.utility.onDeviceCoordinated
 @Composable
 internal fun ComputerDeviceComponent(
     device: Device,
-    height: Dp? = null,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
+    height: Dp = 80.dp,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
     onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
     onDeviceClick: () -> Unit,
@@ -46,6 +51,8 @@ internal fun ComputerDeviceComponent(
             device = device.type,
             side = ConnectorSide.Left,
             connectors = device.leftConnections,
+            currentHoveredDevice = currentHoveredDevice,
+            currentHoveredConnector = currentHoveredConnector,
             onConnectorCoordinated = onConnectorCoordinated,
             onEnterHoverInteraction = onEnterHoveConnectorInteraction,
             onExitHoverInteraction = onExitHoverConnectorInteraction,
@@ -57,6 +64,14 @@ internal fun ComputerDeviceComponent(
             ),
             title = device.title,
             subtitle = device.subtitle,
+            isActive = when {
+                currentHoveredDevice == null && currentHoveredConnector == null -> true
+                currentHoveredDevice != null && currentHoveredDevice == device -> true
+                currentHoveredDevice != null && currentHoveredDevice.hasConnection(device.type) -> true
+                currentHoveredConnector != null && currentHoveredConnector.owner == device.type -> true
+                currentHoveredConnector != null && currentHoveredConnector.target == device.type -> true
+                else -> false
+            },
             height = height,
             onClick = onDeviceClick,
             onEnterHoverInteraction = onEnterHoveDeviceInteraction,
@@ -66,6 +81,8 @@ internal fun ComputerDeviceComponent(
             device = device.type,
             side = ConnectorSide.Right,
             connectors = device.rightConnections,
+            currentHoveredDevice = currentHoveredDevice,
+            currentHoveredConnector = currentHoveredConnector,
             onConnectorCoordinated = onConnectorCoordinated,
             onEnterHoverInteraction = onEnterHoveConnectorInteraction,
             onExitHoverInteraction = onExitHoverConnectorInteraction,
@@ -78,7 +95,8 @@ private fun ComputerDeviceContent(
     modifier: Modifier,
     title: String,
     subtitle: String? = null,
-    height: Dp? = null,
+    isActive: Boolean,
+    height: Dp = 80.dp,
     onClick: () -> Unit,
     onEnterHoverInteraction: () -> Unit,
     onExitHoverInteraction: () -> Unit,
@@ -86,12 +104,13 @@ private fun ComputerDeviceContent(
     DeviceComponent(
         modifier = modifier,
         width = 190.dp,
-        height = height ?: 80.dp,
+        height = height,
         colors = DeviceComponentTheme.Computer.buttonColors(),
         shape = RoundedCornerShape(DeviceComponentTheme.End.cornerRadius),
         onClick = onClick,
         title = title,
         subtitle = subtitle,
+        isActive = isActive,
         onEnterHoverInteraction = onEnterHoverInteraction,
         onExitHoverInteraction = onExitHoverInteraction,
     )
@@ -100,6 +119,8 @@ private fun ComputerDeviceContent(
 @Composable
 internal fun HubDeviceComponent(
     device: Device,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     width: Dp? = null,
     height: Dp? = null,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
@@ -115,6 +136,8 @@ internal fun HubDeviceComponent(
             device = device.type,
             side = ConnectorSide.Left,
             connectors = device.leftConnections,
+            currentHoveredDevice = currentHoveredDevice,
+            currentHoveredConnector = currentHoveredConnector,
             onConnectorCoordinated = onConnectorCoordinated,
             onEnterHoverInteraction = onEnterHoveConnectorInteraction,
             onExitHoverInteraction = onExitHoverConnectorInteraction,
@@ -127,6 +150,14 @@ internal fun HubDeviceComponent(
             ),
             title = device.title,
             subtitle = device.subtitle,
+            isActive = when {
+                currentHoveredDevice == null && currentHoveredConnector == null -> true
+                currentHoveredDevice != null && currentHoveredDevice == device -> true
+                currentHoveredDevice != null && currentHoveredDevice.hasConnection(device.type) -> true
+                currentHoveredConnector != null && currentHoveredConnector.owner == device.type -> true
+                currentHoveredConnector != null && currentHoveredConnector.target == device.type -> true
+                else -> false
+            },
             width = width,
             height = height,
             onClick = onDeviceClick,
@@ -138,6 +169,8 @@ internal fun HubDeviceComponent(
             device = device.type,
             side = ConnectorSide.Right,
             connectors = device.rightConnections,
+            currentHoveredDevice = currentHoveredDevice,
+            currentHoveredConnector = currentHoveredConnector,
             onConnectorCoordinated = onConnectorCoordinated,
             onEnterHoverInteraction = onEnterHoveConnectorInteraction,
             onExitHoverInteraction = onExitHoverConnectorInteraction,
@@ -150,6 +183,7 @@ private fun HubDeviceContent(
     modifier: Modifier,
     title: String,
     subtitle: String? = null,
+    isActive: Boolean,
     width: Dp? = null,
     height: Dp? = null,
     onClick: () -> Unit,
@@ -164,16 +198,18 @@ private fun HubDeviceContent(
         shape = RoundedCornerShape(DeviceComponentTheme.End.cornerRadius),
         title = title,
         subtitle = subtitle,
+        isActive = isActive,
         onClick = onClick,
         onEnterHoverInteraction = onEnterHoverInteraction,
         onExitHoverInteraction = onExitHoverInteraction,
-
-        )
+    )
 }
 
 @Composable
 internal fun EndDeviceComponent(
     device: Device,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
     width: Dp? = null,
     height: Dp? = null,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
@@ -189,6 +225,8 @@ internal fun EndDeviceComponent(
             device = device.type,
             side = ConnectorSide.Left,
             connectors = device.leftConnections,
+            currentHoveredDevice = currentHoveredDevice,
+            currentHoveredConnector = currentHoveredConnector,
             onConnectorCoordinated = onConnectorCoordinated,
             onEnterHoverInteraction = onEnterHoveConnectorInteraction,
             onExitHoverInteraction = onExitHoverConnectorInteraction,
@@ -201,6 +239,14 @@ internal fun EndDeviceComponent(
             ),
             title = device.title,
             subtitle = device.subtitle,
+            isActive = when {
+                currentHoveredDevice == null && currentHoveredConnector == null -> true
+                currentHoveredDevice != null && currentHoveredDevice == device -> true
+                currentHoveredDevice != null && currentHoveredDevice.hasConnection(device.type) -> true
+                currentHoveredConnector != null && currentHoveredConnector.owner == device.type -> true
+                currentHoveredConnector != null && currentHoveredConnector.target == device.type -> true
+                else -> false
+            },
             width = width,
             height = height,
             onClick = onDeviceClick,
@@ -212,6 +258,8 @@ internal fun EndDeviceComponent(
             device = device.type,
             side = ConnectorSide.Right,
             connectors = device.rightConnections,
+            currentHoveredDevice = currentHoveredDevice,
+            currentHoveredConnector = currentHoveredConnector,
             onConnectorCoordinated = onConnectorCoordinated,
             onEnterHoverInteraction = onEnterHoveConnectorInteraction,
             onExitHoverInteraction = onExitHoverConnectorInteraction,
@@ -224,6 +272,7 @@ private fun EndDeviceContent(
     modifier: Modifier,
     title: String,
     subtitle: String? = null,
+    isActive: Boolean,
     width: Dp? = null,
     height: Dp? = null,
     onClick: () -> Unit,
@@ -238,6 +287,7 @@ private fun EndDeviceContent(
         shape = RoundedCornerShape(DeviceComponentTheme.End.cornerRadius),
         title = title,
         subtitle = subtitle,
+        isActive = isActive,
         onClick = onClick,
         onEnterHoverInteraction = onEnterHoverInteraction,
         onExitHoverInteraction = onExitHoverInteraction,
@@ -251,12 +301,16 @@ private fun DeviceComponent(
     height: Dp,
     title: String,
     subtitle: String? = null,
+    isActive: Boolean,
     colors: ButtonColors,
     shape: Shape,
     onClick: () -> Unit,
     onEnterHoverInteraction: () -> Unit,
     onExitHoverInteraction: () -> Unit,
 ) {
+    val alpha by animateFloatAsState(
+        targetValue = if (isActive) 1f else 0.25f
+    )
     val interactionSource = remember { MutableInteractionSource() }
     LaunchedEffect(interactionSource) {
         interactionSource.interactions.collect { interaction ->
@@ -271,7 +325,8 @@ private fun DeviceComponent(
         modifier = Modifier
             .requiredWidth(width)
             .requiredHeight(height)
-            .then(modifier),
+            .then(modifier)
+            .alpha(alpha),
         interactionSource = interactionSource,
         colors = colors,
         shape = shape,

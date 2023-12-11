@@ -194,6 +194,8 @@ private fun WorkspaceContent(
         DeviceContent(
             workStation = MyWorkStation,
             state = state,
+            currentHoveredDevice = currentHoveredDevice,
+            currentHoveredConnector = currentHoveredConnector,
             onDeviceClick = {
                 println("onDeviceClick ${it.title}")
             },

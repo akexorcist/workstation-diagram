@@ -367,6 +367,13 @@ sealed class Device(
         }
     }
 
+    fun hasConnection(device: Type) =
+        leftConnections.any { it.target == device } || rightConnections.any { it.target == device }
+
+    fun hasConnection(connector: Connector) =
+        leftConnections.any { it.target == connector.owner && it.owner == connector.target } ||
+                rightConnections.any { it.target == connector.owner && it.owner == connector.target }
+
     enum class Type {
         OfficeLaptop,
         PersonalLaptop,
