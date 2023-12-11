@@ -19,9 +19,13 @@ object ThemeColor {
     val Red100 = Color(0xFFFFCDD2)
     val Red200 = Color(0xFFEF9A9A)
     val Red300 = Color(0xFFE57373)
+    val Teal50 = Color(0xFFE0F2F1)
     val Teal100 = Color(0xFFB2DFDB)
     val Teal200 = Color(0xFF80CBC4)
     val Teal300 = Color(0xFF4DB6AC)
+    val Teal500 = Color(0xFF009688)
+    val Green50 = Color(0xFFE8F5E9)
+    val Green300 = Color(0xFF81C784)
     val Amber100 = Color(0xFFFFECB3)
     val Amber200 = Color(0xFFFFE082)
     val Amber300 = Color(0xFFFFD54F)
@@ -44,15 +48,15 @@ data class DeviceComponent(
 object DeviceComponentTheme {
     val Computer = DeviceComponent(
         cornerRadius = 8.dp,
-        buttonColors = { DeviceColor.computer() }
+        buttonColors = { DeviceColor.computer() },
     )
     val Hub = DeviceComponent(
         cornerRadius = 8.dp,
-        buttonColors = { DeviceColor.hub() }
+        buttonColors = { DeviceColor.hub() },
     )
     val End = DeviceComponent(
         cornerRadius = 8.dp,
-        buttonColors = { DeviceColor.end() }
+        buttonColors = { DeviceColor.end() },
     )
 }
 
@@ -64,11 +68,23 @@ data class ConnectorComponent(
 object ConnectorComponentTheme {
     val Input = ConnectorComponent(
         cornerRadius = 8.dp,
-        color = ThemeColor.Purple50
+        color = ThemeColor.Purple50,
     )
     val Output = ConnectorComponent(
         cornerRadius = 8.dp,
-        color = ThemeColor.Pink50
+        color = ThemeColor.Pink50,
+    )
+}
+
+data class ConnectionLineComponent(
+    val activeColor: Color,
+    val inactiveColor: Color,
+)
+
+object ConnectionLineComponentTheme {
+    val default = ConnectionLineComponent(
+        activeColor = ThemeColor.Green300,
+        inactiveColor = ThemeColor.Green50,
     )
 }
 

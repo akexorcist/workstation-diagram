@@ -19,7 +19,11 @@ sealed class Device(
         subtitle = "MacBook Pro",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> OfficeLapTop) = block(Type.OfficeLaptop)
+        }
+    }
 
     data class PersonalLapTop(
         override val leftConnections: List<Connector>,
@@ -30,7 +34,11 @@ sealed class Device(
         subtitle = "MacBook Pro",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> PersonalLapTop) = block(Type.PersonalLaptop)
+        }
+    }
 
     data class PcDesktop(
         override val leftConnections: List<Connector>,
@@ -41,7 +49,11 @@ sealed class Device(
         subtitle = null,
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> PcDesktop) = block(Type.PcDesktop)
+        }
+    }
 
     data class UsbDockingStation(
         override val leftConnections: List<Connector>,
@@ -52,7 +64,11 @@ sealed class Device(
         subtitle = "Dell WD19TBS",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> UsbDockingStation) = block(Type.UsbDockingStation)
+        }
+    }
 
     data class DigitalCamera(
         override val leftConnections: List<Connector>,
@@ -63,7 +79,11 @@ sealed class Device(
         subtitle = "Sony α6000",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> DigitalCamera) = block(Type.DigitalCamera)
+        }
+    }
 
     data class HdmiToWebcam(
         override val leftConnections: List<Connector>,
@@ -74,7 +94,11 @@ sealed class Device(
         subtitle = "Elgato Cam Link 4K",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> HdmiToWebcam) = block(Type.HdmiToWebcam)
+        }
+    }
 
     data class StreamDeck(
         override val leftConnections: List<Connector>,
@@ -85,7 +109,11 @@ sealed class Device(
         subtitle = "Elgato Stream Deck MK.2",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> StreamDeck) = block(Type.StreamDeck)
+        }
+    }
 
     data class ExternalSsd(
         override val leftConnections: List<Connector>,
@@ -96,7 +124,11 @@ sealed class Device(
         subtitle = "Seagate Fast SSD 512GB",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> ExternalSsd) = block(Type.ExternalSsd)
+        }
+    }
 
     data class UsbCSwitcher(
         override val leftConnections: List<Connector>,
@@ -107,7 +139,11 @@ sealed class Device(
         subtitle = "ATEN US3342",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> UsbCSwitcher) = block(Type.UsbCSwitcher)
+        }
+    }
 
     data class UsbHub(
         override val leftConnections: List<Connector>,
@@ -118,7 +154,11 @@ sealed class Device(
         subtitle = "ORICO MINI-U32",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> UsbHub) = block(Type.UsbHub)
+        }
+    }
 
     data class UsbPowerAdapter(
         override val leftConnections: List<Connector>,
@@ -129,7 +169,11 @@ sealed class Device(
         subtitle = "Aukey PA-T11",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> UsbPowerAdapter) = block(Type.UsbPowerAdapter)
+        }
+    }
 
     data class SecondaryMonitor(
         override val leftConnections: List<Connector>,
@@ -140,7 +184,11 @@ sealed class Device(
         subtitle = "Arzopa A1",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> SecondaryMonitor) = block(Type.SecondaryMonitor)
+        }
+    }
 
     data class PrimaryMonitor(
         override val leftConnections: List<Connector>,
@@ -151,7 +199,11 @@ sealed class Device(
         subtitle = "Dell U2722D",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> PrimaryMonitor) = block(Type.PrimaryMonitor)
+        }
+    }
 
     data class UsbDac(
         override val leftConnections: List<Connector>,
@@ -162,7 +214,11 @@ sealed class Device(
         subtitle = "GameDAC Gen2",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> UsbDac) = block(Type.UsbDac)
+        }
+    }
 
     data class UsbDongle1(
         override val leftConnections: List<Connector>,
@@ -173,7 +229,11 @@ sealed class Device(
         subtitle = "Logitech G Pro X Superlight",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> UsbDongle1) = block(Type.UsbDongle1)
+        }
+    }
 
     data class UsbDongle2(
         override val leftConnections: List<Connector>,
@@ -184,7 +244,11 @@ sealed class Device(
         subtitle = "Logi Bolt",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> UsbDongle2) = block(Type.UsbDongle2)
+        }
+    }
 
     data class LedLamp(
         override val leftConnections: List<Connector>,
@@ -195,7 +259,11 @@ sealed class Device(
         subtitle = "Baseus Monitor Handing Lamp",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> LedLamp) = block(Type.LedLamp)
+        }
+    }
 
     data class Speaker(
         override val leftConnections: List<Connector>,
@@ -206,7 +274,11 @@ sealed class Device(
         subtitle = "Bose SoundLink Mini II",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> Speaker) = block(Type.Speaker)
+        }
+    }
 
     data class Microphone1(
         override val leftConnections: List<Connector>,
@@ -217,7 +289,11 @@ sealed class Device(
         subtitle = "Audio-Technica ATR2500x-USB",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> Microphone1) = block(Type.Microphone1)
+        }
+    }
 
     data class HdmiCapture(
         override val leftConnections: List<Connector>,
@@ -228,7 +304,11 @@ sealed class Device(
         subtitle = "Elgato HD60 X",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> HdmiCapture) = block(Type.HdmiCapture)
+        }
+    }
 
     data class AndroidDevice(
         override val leftConnections: List<Connector>,
@@ -239,7 +319,11 @@ sealed class Device(
         subtitle = "Google Pixel 4",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> AndroidDevice) = block(Type.AndroidDevice)
+        }
+    }
 
     data class GameController(
         override val leftConnections: List<Connector>,
@@ -250,7 +334,11 @@ sealed class Device(
         subtitle = "Nintendo Switch Pro Controller",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> GameController) = block(Type.GameController)
+        }
+    }
 
     data class Microphone2(
         override val leftConnections: List<Connector>,
@@ -261,7 +349,11 @@ sealed class Device(
         subtitle = "Shure MV7",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> Microphone2) = block(Type.Microphone2)
+        }
+    }
 
     data class Headphone(
         override val leftConnections: List<Connector>,
@@ -272,7 +364,11 @@ sealed class Device(
         subtitle = "SteelSeries Arctis Nova Pro",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
-    )
+    ) {
+        companion object {
+            fun builder(block: Type.() -> Headphone) = block(Type.Headphone)
+        }
+    }
 
     enum class Type {
         OfficeLaptop,
@@ -302,8 +398,14 @@ sealed class Device(
     }
 }
 
+data class ConnectorLine(
+    val source: Connector,
+    val target: Connector,
+)
+
 data class Connector(
     val type: ConnectorType,
     val direction: ConnectorDirection,
+    val owner: Device.Type,
     val target: Device.Type,
 )

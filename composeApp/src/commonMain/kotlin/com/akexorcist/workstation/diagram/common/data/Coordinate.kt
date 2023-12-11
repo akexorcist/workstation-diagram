@@ -79,7 +79,8 @@ data class DeviceCoordinate(
 
     data class Connector(
         val device: com.akexorcist.workstation.diagram.common.data.Device.Type,
-        val connector: com.akexorcist.workstation.diagram.common.data.Connector,
+        val sourceConnector: com.akexorcist.workstation.diagram.common.data.Connector,
+//        val targetConnector: com.akexorcist.workstation.diagram.common.data.Connector,
         val offset: Offset,
         val size: IntSize,
         val side: ConnectorSide,

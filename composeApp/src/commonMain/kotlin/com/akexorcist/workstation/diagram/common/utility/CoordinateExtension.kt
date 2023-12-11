@@ -93,7 +93,7 @@ fun getTargetConnector(
     coordinates: WorkstationCoordinates,
     connector: DeviceCoordinate.Connector,
 ): DeviceCoordinate.Connector? {
-    return when (connector.connector.target) {
+    return when (connector.sourceConnector.target) {
         Device.Type.OfficeLaptop -> coordinates.officeLaptop.connectors
         Device.Type.PersonalLaptop -> coordinates.personalLaptop.connectors
         Device.Type.PcDesktop -> coordinates.pcDesktop.connectors
@@ -118,5 +118,5 @@ fun getTargetConnector(
         Device.Type.AndroidDevice -> coordinates.androidDevice.connectors
         Device.Type.GameController -> coordinates.gameController.connectors
         Device.Type.Headphone -> coordinates.headphone.connectors
-    }?.find { it.connector.target == connector.device }
+    }?.find { it.sourceConnector.target == connector.device }
 }

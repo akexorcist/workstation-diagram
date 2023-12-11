@@ -6,7 +6,6 @@ enum class ConnectorSide {
 
 enum class ConnectorType(val value: String) {
     None(""),
-    Empty(""),
     Thunderbolt3("Thunderbolt 3"),
     DisplayPort("Display Port"),
     UsbA2("USB-A 2.0"),

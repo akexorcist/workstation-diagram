@@ -18,6 +18,7 @@ fun getConnectorPath(
     minimumDistanceBetweenLine: Float,
     minimumStartLineDistance: Float,
     onAddDebugPoint: (Offset) -> Unit,
+    debugLog: Boolean = false,
 ): Path {
     val endConnector = getTargetConnector(coordinates, startConnector) ?: return Path()
     val startRect = startConnector.let { Rect(it.offset, it.size.toSize()) }
@@ -30,7 +31,7 @@ fun getConnectorPath(
         right = max(startJoint.x, endJoint.x),
         bottom = max(startJoint.y, endJoint.y),
     )
-    println("${startConnector.device} ${startConnector.connector.type} => ${startConnector.connector.target}")
+    if (debugLog) println("${startConnector.device} ${startConnector.sourceConnector.type} => ${startConnector.sourceConnector.target}")
     return findPath(
         path = Path(),
         devices = devices,
@@ -39,11 +40,12 @@ fun getConnectorPath(
         startJoint = startJoint,
         endRect = endRect,
         endJoint = endJoint,
-        endDeviceType = startConnector.connector.target,
+        endDeviceType = startConnector.sourceConnector.target,
         lineRect = lineRect,
         minimumDistanceBetweenLine = minimumDistanceBetweenLine,
         minimumStartLineDistance = minimumStartLineDistance,
         onAddDebugPoint = onAddDebugPoint,
+        debugLog = debugLog,
     )
 }
 
@@ -89,8 +91,8 @@ private fun findPath(
     minimumDistanceBetweenLine: Float,
     minimumStartLineDistance: Float,
     onAddDebugPoint: (Offset) -> Unit,
+    debugLog: Boolean,
 ): Path {
-    println("##########################")
     val overlapDevices = lineRect.getOverlapDevices(
         startRect = startRect,
         devices = devices,
@@ -99,13 +101,16 @@ private fun findPath(
     val overlapConnectors = lineRect.getOverlapConnectors(
         connectors = connectors,
     )
-    overlapDevices.forEach {
-        println("Overlap devices: ${it.second}, ${it.first}")
+    if (debugLog) {
+        println("##########################")
+        overlapDevices.forEach {
+            println("Overlap devices: ${it.second}, ${it.first}")
+        }
+        overlapConnectors.forEach {
+            println("Overlap connectors: $it")
+        }
+        println("lineRect: $lineRect")
     }
-//    overlapConnectors.forEach {
-//        println("Overlap connectors: $it")
-//    }
-    println("lineRect: $lineRect")
 
     val nextPosition: Offset = when {
         startRect != null -> {
@@ -128,14 +133,16 @@ private fun findPath(
             val anyOverlapDeviceAtSameY = overlapDevices.any {
                 (it.first.top..it.first.bottom).contains(startJoint.y)
             }
-//            println("closestOverlapDeviceByX: $closestOverlapDeviceByX")
-//            println("isEndConnectorSameX: $isEndConnectorSameX")
-//            println("closestByLeftDeviceAtSameY: $closestByLeftDeviceAtSameY")
-//            println("closestByRightDeviceAtSameY: $closestByRightDeviceAtSameY")
-//            println("anyOverlapDeviceAtSameY: $anyOverlapDeviceAtSameY")
+            if (debugLog) {
+                println("closestOverlapDeviceByX: $closestOverlapDeviceByX")
+                println("isEndConnectorSameX: $isEndConnectorSameX")
+                println("closestByLeftDeviceAtSameY: $closestByLeftDeviceAtSameY")
+                println("closestByRightDeviceAtSameY: $closestByRightDeviceAtSameY")
+                println("anyOverlapDeviceAtSameY: $anyOverlapDeviceAtSameY")
+            }
             when {
                 isEndConnectorSameX && startRect.left == startJoint.x -> {
-                    println("Start with go left with start line distance")
+                    if (debugLog) println("Start with go left with start line distance")
                     val newX = startJoint.x - abs(minimumStartLineDistance - startRect.width)
                     Offset(
                         x = newX,
@@ -144,7 +151,7 @@ private fun findPath(
                 }
 
                 isEndConnectorSameX && startRect.right == startJoint.x -> {
-                    println("Start with go right with start line distance")
+                    if (debugLog) println("Start with go right with start line distance")
                     val newX = startJoint.x + abs(minimumStartLineDistance - startRect.width)
                     Offset(
                         x = newX,
@@ -156,17 +163,17 @@ private fun findPath(
                     // Go left
                     val newX = when {
                         closestByLeftDeviceAtSameY != null -> {
-                            println("Start with go left to right of closest device on the left")
+                            if (debugLog) println("Start with go left to right of closest device on the left")
                             closestByLeftDeviceAtSameY.first.right
                         }
 
                         startRect.right < endRect.left -> {
-                            println("Start with go left with start line distance")
+                            if (debugLog) println("Start with go left with start line distance")
                             startJoint.x - abs(minimumStartLineDistance - startRect.width)
                         }
 
                         else -> {
-                            println("Start with go left (1)")
+                            if (debugLog) println("Start with go left (1)")
                             startJoint.x - (abs(startJoint.x - endJoint.x) / 2f)
                         }
                     }
@@ -180,17 +187,17 @@ private fun findPath(
                     // Go right
                     val newX = when {
                         closestByRightDeviceAtSameY != null -> {
-                            println("Start with go right to left of closest device on the right")
+                            if (debugLog) println("Start with go right to left of closest device on the right")
                             closestByRightDeviceAtSameY.first.left
                         }
 
                         startRect.left < endRect.right -> {
-                            println("Start with go right with start line distance")
+                            if (debugLog) println("Start with go right with start line distance")
                             startJoint.x + minimumStartLineDistance
                         }
 
                         else -> {
-                            println("Start with go right (1)")
+                            if (debugLog) println("Start with go right (1)")
                             startJoint.x + (abs(startJoint.x - endJoint.x) / 2f)
                         }
                     }
@@ -202,7 +209,7 @@ private fun findPath(
 
                 closestOverlapDeviceByX != null && startJoint.x > endJoint.x -> {
                     // Go left
-                    println("Start with go left with overlap device on the left")
+                    if (debugLog) println("Start with go left with overlap device on the left")
                     Offset(
                         x = ((startJoint.x - minimumStartLineDistance) + closestOverlapDeviceByX.first.right) / 2f,
                         y = startJoint.y,
@@ -211,7 +218,7 @@ private fun findPath(
 
                 closestOverlapDeviceByX != null && startJoint.x < endJoint.x -> {
                     // Go right
-                    println("Start with go right with overlap device on the right")
+                    if (debugLog) println("Start with go right with overlap device on the right")
                     Offset(
                         x = ((startJoint.x + minimumStartLineDistance) + closestOverlapDeviceByX.first.left) / 2f,
                         y = startJoint.y,
@@ -220,7 +227,7 @@ private fun findPath(
 
                 overlapDevices.isEmpty() && startJoint.x > endJoint.x -> {
                     // Go left
-                    println("Start with go left (2)")
+                    if (debugLog) println("Start with go left (2)")
                     Offset(
                         x = startJoint.x - (abs(startJoint.x - endJoint.x) / 2f),
                         y = startJoint.y,
@@ -229,7 +236,7 @@ private fun findPath(
 
                 overlapDevices.isEmpty() && startJoint.x < endJoint.x -> {
                     // Go right
-                    println("Start with go right (2)")
+                    if (debugLog) println("Start with go right (2)")
                     Offset(
                         x = startJoint.x + (abs(startJoint.x - endJoint.x) / 2f),
                         y = startJoint.y,
@@ -237,23 +244,25 @@ private fun findPath(
                 }
 
                 else -> {
-                    println("Where to go? (1)")
+                    if (debugLog) println("Where to go? (1)")
                     return path
                 }
             }
         }
 
         else -> {
-            println("startJoint $startJoint")
-            println("endJoint $endJoint")
-            println("lineRect $lineRect")
+            if (debugLog) {
+                println("startJoint $startJoint")
+                println("endJoint $endJoint")
+                println("lineRect $lineRect")
+            }
             val closestDevice = overlapDevices.minByOrNull {
                 min(
                     min(abs(startJoint.x - it.first.left), abs(startJoint.x - it.first.right)),
                     min(abs(startJoint.y - it.first.top), abs(startJoint.y - it.first.bottom)),
                 )
             }
-            println("closestDevice $closestDevice")
+            if (debugLog) println("closestDevice $closestDevice")
             val canGoToSameYWithEnd = startJoint.y != endJoint.y &&
                     Rect(
                         left = min(startJoint.x, endJoint.x),
@@ -277,14 +286,14 @@ private fun findPath(
                 }
             }
             val anyConnectorAtSameX = overlapConnectors.any { connector ->
-                println("Overlap connector $connector")
+                if (debugLog) println("Overlap connector $connector")
                 (connector.left < startJoint.x && startJoint.x < connector.right)
             }
-            println("anyConnectorAtSameX $anyConnectorAtSameX")
+            if (debugLog) println("anyConnectorAtSameX $anyConnectorAtSameX")
             when {
                 anyConnectorAtSameX && endRect.left < endJoint.x -> {
                     // Go right
-                    println("Go right to the same X of connector")
+                    if (debugLog) println("Go right to the same X of connector")
                     Offset(
                         x = startJoint.x,
                         y = endJoint.y,
@@ -293,7 +302,7 @@ private fun findPath(
 
                 anyConnectorAtSameX && endRect.right > endJoint.x -> {
                     // Go left
-                    println("Go left to the same X of connector")
+                    if (debugLog) println("Go left to the same X of connector")
                     Offset(
                         x = endRect.right - minimumStartLineDistance,
                         y = startJoint.y,
@@ -302,7 +311,7 @@ private fun findPath(
 
                 canGoToSameYWithEnd && startJoint.y < endJoint.y -> {
                     // Go down to same Y with end
-                    println("Go down to same Y with end")
+                    if (debugLog) println("Go down to same Y with end")
                     Offset(
                         x = startJoint.x,
                         y = endJoint.y,
@@ -311,7 +320,7 @@ private fun findPath(
 
                 canGoToSameYWithEnd && startJoint.x < endJoint.x -> {
                     // Go up to same Y with end
-                    println("Go up to same Y with end")
+                    if (debugLog) println("Go up to same Y with end")
                     Offset(
                         x = startJoint.x,
                         y = endJoint.y,
@@ -320,7 +329,7 @@ private fun findPath(
 
                 overlapDevices.isEmpty() && startJoint.y == endJoint.y && startJoint.x > endJoint.x -> {
                     // Left to end
-                    println("Go left to end")
+                    if (debugLog) println("Go left to end")
                     Offset(
                         x = endJoint.x,
                         y = endJoint.y,
@@ -329,7 +338,7 @@ private fun findPath(
 
                 overlapDevices.isEmpty() && startJoint.y == endJoint.y && startJoint.x > endJoint.x -> {
                     // Right to end
-                    println("Go right to end")
+                    if (debugLog) println("Go right to end")
                     Offset(
                         x = endJoint.x,
                         y = endJoint.y,
@@ -342,7 +351,7 @@ private fun findPath(
                         closestDevice.first.left < endJoint.x &&
                         abs(closestDevice.first.left - endJoint.x) > abs(closestDevice.first.right - endJoint.x) &&
                         (startJoint.y < closestDevice.first.top || startJoint.y >= closestDevice.first.bottom) -> {
-                    println("Go right across the device")
+                    if (debugLog) println("Go right across the device")
                     Offset(
                         x = closestDevice.first.right,
                         y = startJoint.y,
@@ -355,7 +364,7 @@ private fun findPath(
                         closestDevice.first.right > endJoint.x &&
                         abs(closestDevice.first.left - endJoint.x) < abs(closestDevice.first.right - endJoint.x) &&
                         (startJoint.y <= closestDevice.first.top || startJoint.y >= closestDevice.first.bottom) -> {
-                    println("Go left across the device")
+                    if (debugLog) println("Go left across the device")
                     Offset(
                         x = closestDevice.first.left,
                         y = startJoint.y,
@@ -366,8 +375,7 @@ private fun findPath(
                         abs(mostClosestDeviceAtSameY.first.bottom - endJoint.y) < abs(mostClosestDeviceAtSameY.first.top - endJoint.y) -> {
                     // Down to bottom of device
                     val newY = mostClosestDeviceAtSameY.first.bottom
-                    println("Go down - prevent from left or right (${startJoint.y} => $newY)")
-                    println("endDeviceType $endDeviceType")
+                    if (debugLog) println("Go down - prevent from left or right (${startJoint.y} => $newY)")
                     Offset(
                         x = startJoint.x,
                         y = newY,
@@ -378,8 +386,7 @@ private fun findPath(
                         abs(mostClosestDeviceAtSameY.first.top - endJoint.y) < abs(mostClosestDeviceAtSameY.first.bottom - endJoint.y) -> {
                     // Up to top of device
                     val newY = mostClosestDeviceAtSameY.first.top
-                    println("Go up - prevent from left or right (${startJoint.y} => $newY)")
-                    println("endDeviceType $endDeviceType")
+                    if (debugLog) println("Go up - prevent from left or right (${startJoint.y} => $newY)")
                     Offset(
                         x = startJoint.x,
                         y = newY,
@@ -388,8 +395,6 @@ private fun findPath(
 
                 startJoint.y < endJoint.y && mostClosestDeviceAtSameY == null -> {
                     // Down to top of device
-                    println("Go down")
-                    println("endDeviceType $endDeviceType")
                     val closestByBottomDeviceAtSameX = overlapDevices.filter {
                         it.first.left < startJoint.x && startJoint.x < it.first.right && it.first.top > startJoint.y
                     }.minByOrNull {
@@ -398,17 +403,17 @@ private fun findPath(
 
                     val newY = when {
                         closestByBottomDeviceAtSameX != null -> {
-                            println("Go down - Before bottom device (${startJoint.y} => ${closestByBottomDeviceAtSameX.first.top})")
+                            if (debugLog) println("Go down - Before bottom device (${startJoint.y} => ${closestByBottomDeviceAtSameX.first.top})")
                             closestByBottomDeviceAtSameX.first.top
                         }
 
                         closestDevice != null -> {
-                            println("Go down to bottom of closest device")
+                            if (debugLog) println("Go down to bottom of closest device")
                             closestDevice.first.bottom
                         }
 
                         else -> {
-                            println("Go down - to end (${startJoint.y} => ${startJoint.y + (abs(startJoint.y - endJoint.y) / 2f)})")
+                            if (debugLog) println("Go down - to end (${startJoint.y} => ${startJoint.y + (abs(startJoint.y - endJoint.y) / 2f)})")
                             endJoint.y
                         }
                     }
@@ -420,8 +425,6 @@ private fun findPath(
 
                 startJoint.y > endJoint.y && mostClosestDeviceAtSameY == null -> {
                     // Up to bottom of device
-                    println("Go up")
-                    println("endDeviceType $endDeviceType")
                     val mostClosestByTopDeviceAtSameX = overlapDevices.filter {
                         it.first.left < startJoint.x && startJoint.x < it.first.right && it.first.bottom < startJoint.y
                     }.minByOrNull {
@@ -430,17 +433,17 @@ private fun findPath(
 
                     val newY = when {
                         mostClosestByTopDeviceAtSameX != null -> {
-                            println("Go up - Before top device (${startJoint.y} => ${mostClosestByTopDeviceAtSameX.first.bottom})")
+                            if (debugLog) println("Go up - Before top device (${startJoint.y} => ${mostClosestByTopDeviceAtSameX.first.bottom})")
                             mostClosestByTopDeviceAtSameX.first.bottom
                         }
 
                         closestDevice != null -> {
-                            println("Go up to top of closest device")
+                            if (debugLog) println("Go up to top of closest device")
                             closestDevice.first.top
                         }
 
                         else -> {
-                            println("Go up - to end (${startJoint.y} => ${startJoint.y - (abs(startJoint.y - endJoint.y) / 2f)})")
+                            if (debugLog) println("Go up - to end (${startJoint.y} => ${startJoint.y - (abs(startJoint.y - endJoint.y) / 2f)})")
                             endJoint.y
                         }
                     }
@@ -454,7 +457,7 @@ private fun findPath(
                         overlapConnectors.isEmpty() &&
                         startJoint.y == endJoint.y &&
                         startJoint.x > endJoint.x -> {
-                    println("Go left to destination")
+                    if (debugLog) println("Go left to destination")
                     Offset(
                         x = endJoint.x,
                         y = endJoint.y,
@@ -465,7 +468,7 @@ private fun findPath(
                         overlapConnectors.isEmpty() &&
                         startJoint.y == endJoint.y &&
                         startJoint.x < endJoint.x -> {
-                    println("Go right to destination")
+                    if (debugLog) println("Go right to destination")
                     Offset(
                         x = endJoint.x,
                         y = endJoint.y,
@@ -473,7 +476,7 @@ private fun findPath(
                 }
 
                 else -> {
-                    println("Where to go? (2)")
+                    if (debugLog) println("Where to go? (2)")
                     return path
                 }
             }
@@ -499,10 +502,10 @@ private fun findPath(
     }
 
     onAddDebugPoint(nextPosition)
-    println("Moving : ${startJoint.x}, ${startJoint.y} => ${nextPosition.x}, ${nextPosition.y}")
+    if (debugLog) println("Moving : ${startJoint.x}, ${startJoint.y} => ${nextPosition.x}, ${nextPosition.y}")
 
     if (nextPosition.x != endJoint.x || nextPosition.y != endJoint.y) {
-        println("Do find path again")
+        if (debugLog) println("Do find path again")
         return findPath(
             path = path,
             devices = devices,
@@ -521,9 +524,10 @@ private fun findPath(
             minimumDistanceBetweenLine = minimumDistanceBetweenLine,
             minimumStartLineDistance = minimumStartLineDistance,
             onAddDebugPoint = onAddDebugPoint,
+            debugLog = debugLog,
         )
     } else {
-        println("Return path")
+        if (debugLog) println("Return path")
         return path
     }
 }

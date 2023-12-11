@@ -148,7 +148,10 @@ private fun WorkspaceContent(
     config: Config,
     debugConfig: DebugConfig,
 ) {
-    val lineConnectionPoints = mutableStateListOf<Offset>()
+    val lineConnectionPoints = remember { mutableStateListOf<Offset>() }
+    var currentHoveredConnector: Connector? by remember { mutableStateOf(null) }
+    var currentHoveredDevice: Device? by remember { mutableStateOf(null) }
+
     val connections: List<Connection> = state.currentWorkstationCoordinates
         .takeIf { it.areAvailable() }
         ?.let { coordinates ->
@@ -196,20 +199,22 @@ private fun WorkspaceContent(
                 println("onDeviceClick ${it.title}")
             },
             onEnterHoveDeviceInteraction = {
-                println("onEnterHoveDeviceInteraction ${it.title}")
+                currentHoveredDevice = it
             },
             onExitHoverDeviceInteraction = {
-                println("onExitHoverDeviceInteraction ${it.title}")
+                currentHoveredDevice = null
             },
             onEnterHoveConnectorInteraction = {
-                println("onEnterHoveConnectorInteraction $it")
+                currentHoveredConnector = it
             },
             onExitHoverConnectorInteraction = {
-                println("onExitHoverConnectorInteraction $it")
+                currentHoveredConnector = null
             },
         )
         ConnectionContent(
-            connections = connections
+            connections = connections,
+            currentHoveredDevice = currentHoveredDevice,
+            currentHoveredConnector = currentHoveredConnector,
         )
         DebugContent(
             coordinates = state.currentWorkstationCoordinates,
