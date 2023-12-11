@@ -180,20 +180,20 @@ fun DebugContent(
                 lineConnectionPoints.forEachIndexed { index, point ->
                     drawCircle(
                         color = Color.Blue,
-                        radius = 10.dp.toPx(),
+                        radius = 6.dp.toPx(),
                         center = point,
                         style = Stroke(2.dp.toPx()),
                     )
                     drawCircle(
                         color = Color.White,
-                        radius = 10.dp.toPx(),
+                        radius = 6.dp.toPx(),
                         center = point,
                         style = Fill,
                     )
                     val size = textMeasure.measure(
                         text = "$index",
                         style = TextStyle(
-                            fontSize = 12.sp,
+                            fontSize = 10.sp,
                             color = Color.Blue,
                         ),
                     ).size
@@ -201,7 +201,7 @@ fun DebugContent(
                         textMeasurer = textMeasure,
                         text = "$index",
                         style = TextStyle(
-                            fontSize = 12.sp,
+                            fontSize = 10.sp,
                             color = Color.Blue,
                         ),
                         topLeft = Offset(

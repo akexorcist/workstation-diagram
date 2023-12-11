@@ -79,7 +79,7 @@ internal fun DeviceContent(
                 onDeviceCoordinated = { state.update(it) },
                 onConnectorCoordinated = { state.update(it) },
             )
-            Spacer(modifier = Modifier.height(121.5.dp))
+            Spacer(modifier = Modifier.height(130.dp))
             ExternalSsd(
                 device = workStation.externalSsd,
                 onDeviceCoordinated = { state.update(it) },
@@ -347,7 +347,6 @@ private fun SecondaryMonitor(
 ) {
     HubDeviceComponent(
         device = device,
-        width = 160.dp,
         height = 150.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,

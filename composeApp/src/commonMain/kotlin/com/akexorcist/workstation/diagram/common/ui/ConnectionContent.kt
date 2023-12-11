@@ -31,48 +31,29 @@ internal fun ConnectionContent(
 ) {
     if (!connectionInfo.areDevicesAndConnectorsAvailable()) return
     println("############ Recomposition ############")
-    val paths: List<Path> =
+    val paths: List<Path> = connectionInfo.connectors.run {
         if (config.showAllConnectionLines) {
-            connectionInfo.connectors.map { connector ->
-                getConnectorPath(
-                    startConnector = connector,
-                    devices = connectionInfo.deviceAreas,
-                    connectors = connectionInfo.connectorAreas,
-                    coordinates = connectionInfo.coordinates,
-                    minimumDistanceBetweenLine = MinimumDistanceBetweenLine.px(),
-                    minimumStartLineDistance = MinimumStartLineDistance.px(),
-                    onAddDebugPoint = onAddDebugPoint,
-                )
-            }
+            this
         } else {
-            connectionInfo.connectors.getOrNull(config.lineIndex)?.let { connector ->
-                listOf(
-                    getConnectorPath(
-                        startConnector = connector,
-                        devices = connectionInfo.deviceAreas,
-                        connectors = connectionInfo.connectorAreas,
-                        coordinates = connectionInfo.coordinates,
-                        minimumDistanceBetweenLine = MinimumDistanceBetweenLine.px(),
-                        minimumStartLineDistance = MinimumStartLineDistance.px(),
-                        onAddDebugPoint = onAddDebugPoint,
-                    )
-                )
-            } ?: listOf()
+            filterIndexed { index, _ -> index == config.lineIndex }
+//            filterIndexed { index, _ -> index == 6 || index == 1 }
         }
+    }.map { connector ->
+        getConnectorPath(
+            startConnector = connector,
+            devices = connectionInfo.deviceAreas,
+            connectors = connectionInfo.connectorAreas,
+            coordinates = connectionInfo.coordinates,
+            minimumDistanceBetweenLine = MinimumDistanceBetweenLine.px(),
+            minimumStartLineDistance = MinimumStartLineDistance.px(),
+            onAddDebugPoint = onAddDebugPoint,
+        )
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         paths.forEach { path ->
             ConnectionLine(path = path)
         }
-//        Canvas(modifier = Modifier.fillMaxSize()) {
-//            paths.forEach { path ->
-//                drawPath(
-//                    path = path,
-//                    color = Color.Green,
-//                    style = Stroke(2.dp.toPx()),
-//                )
-//            }
-//        }
     }
 }
 
@@ -151,9 +132,9 @@ private fun Rect.getOverlapDevices(
     this.overlaps(
         it.first.copy(
             left = it.first.left + (startRect?.width ?: 0f),
-            top = it.first.top + (startRect?.height ?: 0f),
+            top = it.first.top,
             right = it.first.right - (startRect?.width ?: 0f),
-            bottom = it.first.bottom - (startRect?.height ?: 0f),
+            bottom = it.first.bottom,
         )
     )
 }
@@ -195,10 +176,14 @@ private fun findPath(
         connectors = connectors,
     )
     overlapDevices.forEach {
-        println("Overlap devices ${it.second}, ${it.first}")
+        println("Overlap devices: ${it.second}, ${it.first}")
     }
+//    overlapConnectors.forEach {
+//        println("Overlap connectors: $it")
+//    }
+    println("lineRect: $lineRect")
 
-    val direction = when {
+    val nextPosition: Offset = when {
         startRect != null -> {
             val closestOverlapDeviceByX = overlapDevices.minByOrNull {
                 val x = abs(min(it.first.left, it.first.right) - startJoint.x)
@@ -206,125 +191,124 @@ private fun findPath(
                 sqrt(x.pow(2) + y.pow(2))
             }
             val isEndConnectorSameX = startRect.left == endRect.left || startRect.right == endRect.right
-            println("isEndConnectorSameX $isEndConnectorSameX")
+            val closestByLeftDeviceAtSameY = overlapDevices.filter {
+                (it.first.top..it.first.bottom).contains(startJoint.y) && it.first.right < startJoint.x
+            }.minByOrNull {
+                startJoint.x - it.first.right
+            }
+            val closestByRightDeviceAtSameY = overlapDevices.filter {
+                (it.first.top..it.first.bottom).contains(startJoint.y) && it.first.left > startJoint.x
+            }.minByOrNull {
+                it.first.left - startJoint.x
+            }
+            val anyOverlapDeviceAtSameY = overlapDevices.any {
+                (it.first.top..it.first.bottom).contains(startJoint.y)
+            }
+//            println("closestOverlapDeviceByX: $closestOverlapDeviceByX")
+//            println("isEndConnectorSameX: $isEndConnectorSameX")
+//            println("closestByLeftDeviceAtSameY: $closestByLeftDeviceAtSameY")
+//            println("closestByRightDeviceAtSameY: $closestByRightDeviceAtSameY")
+//            println("anyOverlapDeviceAtSameY: $anyOverlapDeviceAtSameY")
             when {
-                // Left
-                startRect.left == startJoint.x &&
-                        (startRect.top..startRect.bottom).contains(startJoint.y) &&
-                        overlapDevices.any {
-                            (it.first.top..it.first.bottom).contains(startJoint.y) &&
-                                    startJoint.x != it.first.right
-                        }
-                -> {
+                isEndConnectorSameX && startRect.left == startJoint.x -> {
+                    println("Start with go left with start line distance")
+                    val newX = startJoint.x - abs(minimumStartLineDistance - startRect.width)
+                    Offset(
+                        x = newX,
+                        y = startJoint.y,
+                    )
+                }
+
+                isEndConnectorSameX && startRect.right == startJoint.x -> {
+                    println("Start with go right with start line distance")
+                    val newX = startJoint.x + abs(minimumStartLineDistance - startRect.width)
+                    Offset(
+                        x = newX,
+                        y = startJoint.y,
+                    )
+                }
+
+                startRect.left == startJoint.x && anyOverlapDeviceAtSameY -> {
                     // Go left
-                    val closestByLeftDeviceAtSameY = overlapDevices.filter {
-                        (it.first.top..it.first.bottom).contains(startJoint.y) && it.first.right < startJoint.x
-                    }.minByOrNull {
-                        startJoint.x - it.first.right
-                    }
                     val newX = when {
                         closestByLeftDeviceAtSameY != null -> {
                             println("Start with go left to right of closest device on the left")
                             closestByLeftDeviceAtSameY.first.right
                         }
 
-                        isEndConnectorSameX || startRect.right < endRect.left -> {
+                        startRect.right < endRect.left -> {
                             println("Start with go left with start line distance")
                             startJoint.x - abs(minimumStartLineDistance - startRect.width)
                         }
 
                         else -> {
-                            println("Start with go left")
+                            println("Start with go left (1)")
                             startJoint.x - (abs(startJoint.x - endJoint.x) / 2f)
                         }
                     }
-                    LineDirection.Left(
-                        target = Offset(
-                            x = newX,
-                            y = startJoint.y,
-                        )
+                    Offset(
+                        x = newX,
+                        y = startJoint.y,
                     )
                 }
 
-                // Right
-                startRect.right == startJoint.x &&
-                        startRect.top < startJoint.y && startJoint.y < startRect.bottom &&
-                        overlapDevices.any {
-                            (it.first.top..it.first.bottom).contains(startJoint.y) &&
-                                    startJoint.x != it.first.left
-                        }
-                -> {
+                startRect.right == startJoint.x && anyOverlapDeviceAtSameY -> {
                     // Go right
-                    val mostClosestByRightDeviceAtSameY = overlapDevices.filter {
-                        (it.first.top..it.first.bottom).contains(startJoint.y) && it.first.left > startJoint.x
-                    }.minByOrNull {
-                        it.first.left - startJoint.x
-                    }
                     val newX = when {
-                        mostClosestByRightDeviceAtSameY != null -> {
+                        closestByRightDeviceAtSameY != null -> {
                             println("Start with go right to left of closest device on the right")
-                            mostClosestByRightDeviceAtSameY.first.left
+                            closestByRightDeviceAtSameY.first.left
                         }
 
-                        isEndConnectorSameX || startRect.left < endRect.right -> {
+                        startRect.left < endRect.right -> {
                             println("Start with go right with start line distance")
                             startJoint.x + minimumStartLineDistance
                         }
 
                         else -> {
-                            println("Start with go right")
+                            println("Start with go right (1)")
                             startJoint.x + (abs(startJoint.x - endJoint.x) / 2f)
                         }
                     }
-                    LineDirection.Right(
-                        target = Offset(
-                            x = newX,
-                            y = startJoint.y,
-                        )
+                    Offset(
+                        x = newX,
+                        y = startJoint.y,
                     )
                 }
 
                 closestOverlapDeviceByX != null && startJoint.x > endJoint.x -> {
                     // Go left
                     println("Start with go left with overlap device on the left")
-                    LineDirection.Left(
-                        target = Offset(
-                            x = ((startJoint.x - minimumStartLineDistance) + closestOverlapDeviceByX.first.right) / 2f,
-                            y = startJoint.y,
-                        )
+                    Offset(
+                        x = ((startJoint.x - minimumStartLineDistance) + closestOverlapDeviceByX.first.right) / 2f,
+                        y = startJoint.y,
                     )
                 }
 
                 closestOverlapDeviceByX != null && startJoint.x < endJoint.x -> {
                     // Go right
                     println("Start with go right with overlap device on the right")
-                    LineDirection.Right(
-                        target = Offset(
-                            x = ((startJoint.x + minimumStartLineDistance) + closestOverlapDeviceByX.first.left) / 2f,
-                            y = startJoint.y,
-                        )
+                    Offset(
+                        x = ((startJoint.x + minimumStartLineDistance) + closestOverlapDeviceByX.first.left) / 2f,
+                        y = startJoint.y,
                     )
                 }
 
                 overlapDevices.isEmpty() && startJoint.x > endJoint.x -> {
                     // Go left
-                    println("Start with go left")
-                    LineDirection.Left(
-                        target = Offset(
-                            x = startJoint.x - (abs(startJoint.x - endJoint.x) / 2f),
-                            y = startJoint.y,
-                        )
+                    println("Start with go left (2)")
+                    Offset(
+                        x = startJoint.x - (abs(startJoint.x - endJoint.x) / 2f),
+                        y = startJoint.y,
                     )
                 }
 
                 overlapDevices.isEmpty() && startJoint.x < endJoint.x -> {
-                    // Go left
-                    println("Start with go right")
-                    LineDirection.Right(
-                        target = Offset(
-                            x = startJoint.x + (abs(startJoint.x - endJoint.x) / 2f),
-                            y = startJoint.y,
-                        )
+                    // Go right
+                    println("Start with go right (2)")
+                    Offset(
+                        x = startJoint.x + (abs(startJoint.x - endJoint.x) / 2f),
+                        y = startJoint.y,
                     )
                 }
 
@@ -377,66 +361,54 @@ private fun findPath(
                 anyConnectorAtSameX && endRect.left < endJoint.x -> {
                     // Go right
                     println("Go right to the same X of connector")
-                    LineDirection.Right(
-                        target = Offset(
-                            x = startJoint.x,
-                            y = endJoint.y,
-                        )
+                    Offset(
+                        x = startJoint.x,
+                        y = endJoint.y,
                     )
                 }
 
                 anyConnectorAtSameX && endRect.right > endJoint.x -> {
                     // Go left
                     println("Go left to the same X of connector")
-                    LineDirection.Left(
-                        target = Offset(
-                            x = endRect.right - minimumStartLineDistance,
-                            y = startJoint.y,
-                        )
+                    Offset(
+                        x = endRect.right - minimumStartLineDistance,
+                        y = startJoint.y,
                     )
                 }
 
                 canGoToSameYWithEnd && startJoint.y < endJoint.y -> {
                     // Go down to same Y with end
                     println("Go down to same Y with end")
-                    LineDirection.Down(
-                        target = Offset(
-                            x = startJoint.x,
-                            y = endJoint.y,
-                        )
+                    Offset(
+                        x = startJoint.x,
+                        y = endJoint.y,
                     )
                 }
 
                 canGoToSameYWithEnd && startJoint.x < endJoint.x -> {
                     // Go up to same Y with end
                     println("Go up to same Y with end")
-                    LineDirection.Up(
-                        target = Offset(
-                            x = startJoint.x,
-                            y = endJoint.y,
-                        )
+                    Offset(
+                        x = startJoint.x,
+                        y = endJoint.y,
                     )
                 }
 
                 overlapDevices.isEmpty() && startJoint.y == endJoint.y && startJoint.x > endJoint.x -> {
                     // Left to end
                     println("Go left to end")
-                    LineDirection.Left(
-                        target = Offset(
-                            x = endJoint.x,
-                            y = endJoint.y,
-                        )
+                    Offset(
+                        x = endJoint.x,
+                        y = endJoint.y,
                     )
                 }
 
                 overlapDevices.isEmpty() && startJoint.y == endJoint.y && startJoint.x > endJoint.x -> {
                     // Right to end
                     println("Go right to end")
-                    LineDirection.Right(
-                        target = Offset(
-                            x = endJoint.x,
-                            y = endJoint.y,
-                        )
+                    Offset(
+                        x = endJoint.x,
+                        y = endJoint.y,
                     )
                 }
 
@@ -447,11 +419,9 @@ private fun findPath(
                         abs(closestDevice.first.left - endJoint.x) > abs(closestDevice.first.right - endJoint.x) &&
                         (startJoint.y < closestDevice.first.top || startJoint.y >= closestDevice.first.bottom) -> {
                     println("Go right across the device")
-                    LineDirection.Right(
-                        target = Offset(
-                            x = closestDevice.first.right,
-                            y = startJoint.y,
-                        )
+                    Offset(
+                        x = closestDevice.first.right,
+                        y = startJoint.y,
                     )
                 }
 
@@ -462,11 +432,9 @@ private fun findPath(
                         abs(closestDevice.first.left - endJoint.x) < abs(closestDevice.first.right - endJoint.x) &&
                         (startJoint.y <= closestDevice.first.top || startJoint.y >= closestDevice.first.bottom) -> {
                     println("Go left across the device")
-                    LineDirection.Left(
-                        target = Offset(
-                            x = closestDevice.first.left,
-                            y = startJoint.y,
-                        )
+                    Offset(
+                        x = closestDevice.first.left,
+                        y = startJoint.y,
                     )
                 }
 
@@ -476,11 +444,9 @@ private fun findPath(
                     val newY = mostClosestDeviceAtSameY.first.bottom
                     println("Go down - prevent from left or right (${startJoint.y} => $newY)")
                     println("endDeviceType $endDeviceType")
-                    LineDirection.Down(
-                        target = Offset(
-                            x = startJoint.x,
-                            y = newY,
-                        )
+                    Offset(
+                        x = startJoint.x,
+                        y = newY,
                     )
                 }
 
@@ -490,11 +456,9 @@ private fun findPath(
                     val newY = mostClosestDeviceAtSameY.first.top
                     println("Go up - prevent from left or right (${startJoint.y} => $newY)")
                     println("endDeviceType $endDeviceType")
-                    LineDirection.Up(
-                        target = Offset(
-                            x = startJoint.x,
-                            y = newY,
-                        )
+                    Offset(
+                        x = startJoint.x,
+                        y = newY,
                     )
                 }
 
@@ -524,11 +488,9 @@ private fun findPath(
                             endJoint.y
                         }
                     }
-                    LineDirection.Down(
-                        target = Offset(
-                            x = startJoint.x,
-                            y = newY,
-                        )
+                    Offset(
+                        x = startJoint.x,
+                        y = newY,
                     )
                 }
 
@@ -558,11 +520,9 @@ private fun findPath(
                             endJoint.y
                         }
                     }
-                    LineDirection.Up(
-                        target = Offset(
-                            x = startJoint.x,
-                            y = newY,
-                        )
+                    Offset(
+                        x = startJoint.x,
+                        y = newY,
                     )
                 }
 
@@ -571,11 +531,9 @@ private fun findPath(
                         startJoint.y == endJoint.y &&
                         startJoint.x > endJoint.x -> {
                     println("Go left to destination")
-                    LineDirection.Left(
-                        target = Offset(
-                            x = endJoint.x,
-                            y = endJoint.y,
-                        )
+                    Offset(
+                        x = endJoint.x,
+                        y = endJoint.y,
                     )
                 }
 
@@ -584,11 +542,9 @@ private fun findPath(
                         startJoint.y == endJoint.y &&
                         startJoint.x < endJoint.x -> {
                     println("Go right to destination")
-                    LineDirection.Right(
-                        target = Offset(
-                            x = endJoint.x,
-                            y = endJoint.y,
-                        )
+                    Offset(
+                        x = endJoint.x,
+                        y = endJoint.y,
                     )
                 }
 
@@ -600,7 +556,7 @@ private fun findPath(
         }
     }
 
-    val lastPosition: Offset = path.run {
+    path.run {
         if (this.isEmpty) {
             moveTo(
                 x = startJoint.x,
@@ -612,69 +568,31 @@ private fun findPath(
                 y = startJoint.y,
             )
         }
-        when (direction) {
-            is LineDirection.Left -> {
-                lineTo(
-                    x = direction.target.x,
-                    y = direction.target.y,
-                )
-                onAddDebugPoint(direction.target)
-                println("From x: ${startJoint.x} => ${direction.target.x}")
-                println("From y: ${startJoint.y} => ${direction.target.y}")
-                direction.target
-            }
-
-            is LineDirection.Right -> {
-                lineTo(
-                    x = direction.target.x,
-                    y = direction.target.y,
-                )
-                onAddDebugPoint(direction.target)
-                println("From x: ${startJoint.x} => ${direction.target.x}")
-                println("From y: ${startJoint.y} => ${direction.target.y}")
-                direction.target
-            }
-
-            is LineDirection.Down -> {
-                lineTo(
-                    x = direction.target.x,
-                    y = direction.target.y,
-                )
-                onAddDebugPoint(direction.target)
-                println("From x: ${startJoint.x} => ${direction.target.x}")
-                println("From y: ${startJoint.y} => ${direction.target.y}")
-                direction.target
-            }
-
-            is LineDirection.Up -> {
-                lineTo(
-                    x = direction.target.x,
-                    y = direction.target.y,
-                )
-                onAddDebugPoint(direction.target)
-                println("From x: ${startJoint.x} => ${direction.target.x}")
-                println("From y: ${startJoint.y} => ${direction.target.y}")
-                direction.target
-            }
-        }
+        lineTo(
+            x = nextPosition.x,
+            y = nextPosition.y,
+        )
     }
 
-    if (lastPosition.x != endJoint.x || lastPosition.y != endJoint.y) {
+    onAddDebugPoint(nextPosition)
+    println("Moving : ${startJoint.x}, ${startJoint.y} => ${nextPosition.x}, ${nextPosition.y}")
+
+    if (nextPosition.x != endJoint.x || nextPosition.y != endJoint.y) {
         println("Do find path again")
         return findPath(
             path = path,
             devices = devices,
             connectors = connectors,
             startRect = null,
-            startJoint = lastPosition,
+            startJoint = nextPosition,
             endRect = endRect,
             endJoint = endJoint,
             endDeviceType = endDeviceType,
             lineRect = Rect(
-                left = min(lastPosition.x, endJoint.x),
-                top = min(lastPosition.y, endJoint.y),
-                right = max(lastPosition.x, endJoint.x),
-                bottom = max(lastPosition.y, endJoint.y),
+                left = min(nextPosition.x, endJoint.x),
+                top = min(nextPosition.y, endJoint.y),
+                right = max(nextPosition.x, endJoint.x),
+                bottom = max(nextPosition.y, endJoint.y),
             ),
             minimumDistanceBetweenLine = minimumDistanceBetweenLine,
             minimumStartLineDistance = minimumStartLineDistance,
