@@ -98,7 +98,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(22.dp))
             HdmiToWebcam(
                 device = workStation.hdmiToWebCam,
                 onDeviceCoordinated = { state.update(it) },
@@ -109,7 +109,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(22.dp))
             StreamDeck(
                 device = workStation.streamDeck,
                 onDeviceCoordinated = { state.update(it) },
@@ -200,7 +200,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(23.5.dp))
+            Spacer(modifier = Modifier.height(22.5.dp))
             UsbDongle1(
                 device = workStation.usbDongle1,
                 onDeviceCoordinated = { state.update(it) },
@@ -225,7 +225,7 @@ internal fun DeviceContent(
         }
         Spacer(modifier = Modifier.width(ForthRowSpacing))
         Column {
-            Spacer(modifier = Modifier.height(64.dp))
+            Spacer(modifier = Modifier.height(65.dp))
             LedLamp(
                 device = workStation.ledLamp,
                 onDeviceCoordinated = { state.update(it) },
@@ -236,7 +236,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(80.dp))
+            Spacer(modifier = Modifier.height(60.dp))
             Speaker(
                 device = workStation.speaker,
                 onDeviceCoordinated = { state.update(it) },
@@ -247,7 +247,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(66.dp))
             Microphone1(
                 device = workStation.microphone1,
                 onDeviceCoordinated = { state.update(it) },
@@ -302,7 +302,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(35.dp))
+            Spacer(modifier = Modifier.height(33.dp))
             Headphone(
                 device = workStation.headphone,
                 onDeviceCoordinated = { state.update(it) },
@@ -447,6 +447,7 @@ private fun HdmiToWebcam(
 ) {
     EndDeviceComponent(
         device = device,
+        height = 100.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
@@ -729,6 +730,7 @@ private fun Speaker(
 ) {
     EndDeviceComponent(
         device = device,
+        height = 100.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
