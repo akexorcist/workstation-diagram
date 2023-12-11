@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import com.akexorcist.workstation.diagram.common.data.DeviceCoordinate
 import com.akexorcist.workstation.diagram.common.data.WorkstationCoordinates
-import com.akexorcist.workstation.diagram.common.ui.state.Config
-import com.akexorcist.workstation.diagram.common.ui.state.DebugConfig
+import com.akexorcist.workstation.diagram.common.data.Config
+import com.akexorcist.workstation.diagram.common.data.DebugConfig
 
 
 @Composable

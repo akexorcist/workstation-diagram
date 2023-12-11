@@ -9,15 +9,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
+import com.akexorcist.workstation.diagram.common.data.Connection
 
 @Composable
 internal fun ConnectionContent(
-    paths: List<Path>,
+    connections: List<Connection>,
 ) {
     println("############ Recomposition ############")
     Box(modifier = Modifier.fillMaxSize()) {
-        paths.forEach { path ->
-            ConnectionLine(path = path)
+        connections.forEach { connection ->
+            ConnectionLine(path = connection.path)
         }
     }
 }

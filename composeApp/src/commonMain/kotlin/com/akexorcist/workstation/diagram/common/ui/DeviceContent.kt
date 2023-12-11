@@ -15,7 +15,7 @@ import com.akexorcist.workstation.diagram.common.data.WorkStation
 import com.akexorcist.workstation.diagram.common.ui.component.ComputerDeviceComponent
 import com.akexorcist.workstation.diagram.common.ui.component.EndDeviceComponent
 import com.akexorcist.workstation.diagram.common.ui.component.HubDeviceComponent
-import com.akexorcist.workstation.diagram.common.ui.state.WorkstationCoordinateHostState
+import com.akexorcist.workstation.diagram.common.ui.state.WorkstationCoordinateState
 
 private val FirstRowSpacing = 140.dp
 private val SecondRowSpacing = 180.dp
@@ -25,7 +25,7 @@ private val ForthRowSpacing = 160.dp
 @Composable
 internal fun DeviceContent(
     workStation: WorkStation,
-    state: WorkstationCoordinateHostState,
+    state: WorkstationCoordinateState,
 ) {
     Row(modifier = Modifier.fillMaxSize()) {
         Column {

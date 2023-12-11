@@ -15,9 +15,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import com.akexorcist.workstation.diagram.common.data.MyWorkStation
-import com.akexorcist.workstation.diagram.common.data.SizeDp
-import com.akexorcist.workstation.diagram.common.data.SizePx
+import com.akexorcist.workstation.diagram.common.data.*
 import com.akexorcist.workstation.diagram.common.ui.state.*
 import com.akexorcist.workstation.diagram.common.utility.*
 
@@ -66,7 +64,7 @@ fun WorkspaceArea(
 ) {
     val config by remember { mutableStateOf(DefaultConfig) }
     var debugConfig by remember { mutableStateOf(DefaultDebugConfig) }
-    val deviceCoordinateHostState = rememberWorkstationCoordinateHostState()
+    val deviceCoordinateHostState = rememberWorkstationCoordinateState()
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
     val transformableState = rememberTransformableState { zoomChange, offsetChange, _ ->
@@ -146,12 +144,12 @@ fun WorkspaceArea(
 
 @Composable
 private fun WorkspaceContent(
-    state: WorkstationCoordinateHostState,
+    state: WorkstationCoordinateState,
     config: Config,
     debugConfig: DebugConfig,
 ) {
     val lineConnectionPoints = mutableStateListOf<Offset>()
-    val connectionPaths: List<Path> = state.currentWorkstationCoordinates
+    val connections: List<Connection> = state.currentWorkstationCoordinates
         .takeIf { it.areAvailable() }
         ?.let { coordinates ->
             val deviceAreas = coordinates.getSortedDeviceConnectorsByLeft()
@@ -170,14 +168,17 @@ private fun WorkspaceContent(
 //            filterIndexed { index, _ -> index == 6 || index == 1 }
                 }
             }.map { connector ->
-                getConnectorPath(
-                    startConnector = connector,
-                    devices = deviceAreas,
-                    connectors = connectorAreas,
-                    coordinates = coordinates,
-                    minimumDistanceBetweenLine = config.minimumDistanceBetweenLine.px(),
-                    minimumStartLineDistance = config.minimumStartLineDistance.px(),
-                    onAddDebugPoint = { lineConnectionPoints += it },
+                Connection(
+                    path = getConnectorPath(
+                        startConnector = connector,
+                        devices = deviceAreas,
+                        connectors = connectorAreas,
+                        coordinates = coordinates,
+                        minimumDistanceBetweenLine = config.minimumDistanceBetweenLine.px(),
+                        minimumStartLineDistance = config.minimumStartLineDistance.px(),
+                        onAddDebugPoint = { lineConnectionPoints += it },
+                    ),
+                    connector = connector,
                 )
             }
         } ?: listOf()
@@ -193,7 +194,7 @@ private fun WorkspaceContent(
             state = state,
         )
         ConnectionContent(
-            paths = connectionPaths
+            connections = connections
         )
         DebugContent(
             coordinates = state.currentWorkstationCoordinates,

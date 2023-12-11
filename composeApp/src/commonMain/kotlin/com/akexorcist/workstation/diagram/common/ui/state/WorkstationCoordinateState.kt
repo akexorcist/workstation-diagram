@@ -13,7 +13,7 @@ import com.akexorcist.workstation.diagram.common.data.WorkspaceCoordinate
 import com.akexorcist.workstation.diagram.common.data.WorkstationCoordinates
 
 @Stable
-class WorkstationCoordinateHostState {
+class WorkstationCoordinateState {
     var currentWorkstationCoordinates by mutableStateOf(WorkstationCoordinates())
         private set
 
@@ -604,4 +604,4 @@ class WorkstationCoordinateHostState {
 }
 
 @Composable
-fun rememberWorkstationCoordinateHostState() = remember { WorkstationCoordinateHostState() }
+fun rememberWorkstationCoordinateState() = remember { WorkstationCoordinateState() }

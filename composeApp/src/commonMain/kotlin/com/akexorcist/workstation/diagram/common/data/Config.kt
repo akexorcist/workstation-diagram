@@ -1,4 +1,4 @@
-package com.akexorcist.workstation.diagram.common.ui.state
+package com.akexorcist.workstation.diagram.common.data
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -35,6 +35,6 @@ val DefaultDebugConfig = DebugConfig(
     showDeviceArea = false,
     showOverlapBoundArea = false,
     showConnectorArea = false,
-    showAllConnectionLines = false,
-    showLineConnectionPoint = true,
+    showAllConnectionLines = true,
+    showLineConnectionPoint = false,
 )
