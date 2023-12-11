@@ -1,8 +1,5 @@
 package com.akexorcist.workstation.diagram.common.data
 
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-
 sealed class Device(
     open val type: Type,
     open val title: String,

@@ -26,9 +26,28 @@ internal fun ConnectionContent(
             ConnectionLine(
                 path = connection.path,
                 isActive = when {
-                    currentHoveredConnector == null -> true
-                    currentHoveredConnector.toConnection() == connection.line.source && currentHoveredConnector.target == connection.line.target?.owner -> true
-                    currentHoveredConnector.toConnection() == connection.line.target && currentHoveredConnector.target == connection.line.source.owner -> true
+                    currentHoveredConnector == null &&
+                            currentHoveredDevice == null
+                    -> true
+
+                    currentHoveredConnector != null &&
+                            currentHoveredConnector.toConnection() == connection.line.source &&
+                            currentHoveredConnector.target == connection.line.target?.owner
+                    -> true
+
+                    currentHoveredConnector != null &&
+                            currentHoveredConnector.toConnection() == connection.line.target &&
+                            currentHoveredConnector.target == connection.line.source.owner
+                    -> true
+
+                    currentHoveredDevice != null &&
+                            currentHoveredDevice.type == connection.line.source.owner
+                    -> true
+
+                    currentHoveredDevice != null &&
+                            currentHoveredDevice.type == connection.line.target?.owner
+                    -> true
+
                     else -> false
                 }
             )
