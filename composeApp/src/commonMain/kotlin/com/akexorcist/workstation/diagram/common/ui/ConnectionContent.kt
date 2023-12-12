@@ -7,14 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.akexorcist.workstation.diagram.common.data.Connection
-import com.akexorcist.workstation.diagram.common.data.Connector
-import com.akexorcist.workstation.diagram.common.data.Device
-import com.akexorcist.workstation.diagram.common.data.toConnection
+import com.akexorcist.workstation.diagram.common.data.*
 import com.akexorcist.workstation.diagram.common.theme.ConnectionLineComponentTheme
 
 @Composable
@@ -60,7 +58,7 @@ internal fun ConnectionContent(
 
 @Composable
 private fun ConnectionLine(
-    path: Path,
+    path: ConnectionPath,
     isActive: Boolean,
 ) {
     val color by animateColorAsState(
@@ -74,9 +72,14 @@ private fun ConnectionLine(
             .zIndex(if (isActive) 1f else 0f),
     ) {
         drawPath(
-            path = path,
+            path = path.toPath(),
+            color = Color.White,
+            style = Stroke(12.dp.toPx()),
+        )
+        drawPath(
+            path = path.toPath(),
             color = color,
-            style = Stroke(2.dp.toPx()),
+            style = Stroke(3.dp.toPx()),
         )
     }
 }

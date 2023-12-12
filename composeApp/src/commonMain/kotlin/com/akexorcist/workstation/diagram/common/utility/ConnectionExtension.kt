@@ -51,13 +51,13 @@ fun getConnectorPath(
     onRecordVerticalPath: (VerticalLine) -> Unit,
     debugConfig: DebugConfig,
     debugLog: Boolean = false,
-): Path {
-    println("########## getConnectorPath ################")
+): ConnectionPath {
+    if (debugLog) println("########## getConnectorPath ################")
     val endConnector = getTargetConnector(
         coordinates = coordinates,
         connectionLine = connectionLine,
         debugConfig = debugConfig,
-    ) ?: return Path()
+    ) ?: return ConnectionPath()
     val startRect = connectionLine.let { Rect(it.offset, it.size.toSize()) }
     val startJoint = connectionLine.getJoint()
     val endRect = endConnector.let { Rect(it.offset, it.size.toSize()) }
@@ -70,7 +70,7 @@ fun getConnectorPath(
     )
     if (debugLog) println("${connectionLine.source} (${connectionLine.source.type}) => ${connectionLine.target} (${connectionLine.target?.type})")
     return findPath(
-        path = Path(),
+        path = ConnectionPath(),
         devices = devices,
         connectionLine = connectionLine,
         connectors = connectors,
@@ -120,7 +120,7 @@ private fun Rect.getOverlapConnectors(
 }
 
 private fun findPath(
-    path: Path,
+    path: ConnectionPath,
     devices: List<Pair<Rect, Device.Type>>,
     connectionLine: ConnectionLine,
     connectors: List<Rect>,
@@ -137,7 +137,7 @@ private fun findPath(
     onRecordVerticalPath: (VerticalLine) -> Unit,
     debugConfig: DebugConfig,
     debugLog: Boolean,
-): Path {
+): ConnectionPath {
     val overlapDevices = lineRect.getOverlapDevices(
         startRect = startRect,
         devices = devices,
@@ -546,31 +546,20 @@ private fun findPath(
         else -> nextPosition
     }
 
-    path.run {
-        if (this.isEmpty) {
-            moveTo(
-                x = startJoint.x,
-                y = startJoint.y,
-            )
-        } else {
-            lineTo(
-                x = startJoint.x,
-                y = startJoint.y,
-            )
-        }
-        lineTo(
-            x = optimizedPosition.x,
-            y = optimizedPosition.y,
+    path.add(
+        ConnectionPath.Line(
+            start = startJoint,
+            end = optimizedPosition,
         )
-        if (startJoint.y != optimizedPosition.y) {
-            onRecordVerticalPath(
-                VerticalLine(
-                    start = Offset(startJoint.x, startJoint.y),
-                    end = Offset(optimizedPosition.x, optimizedPosition.y),
-                    owner = connectionLine,
-                )
+    )
+    if (startJoint.y != optimizedPosition.y) {
+        onRecordVerticalPath(
+            VerticalLine(
+                start = Offset(startJoint.x, startJoint.y),
+                end = Offset(optimizedPosition.x, optimizedPosition.y),
+                owner = connectionLine,
             )
-        }
+        )
     }
 
     onAddDebugPoint(optimizedPosition)
