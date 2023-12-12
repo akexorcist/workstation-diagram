@@ -10,6 +10,7 @@ import kotlin.math.*
 fun getTargetConnector(
     coordinates: WorkstationCoordinates,
     connectionLine: ConnectionLine,
+    debugConfig: DebugConfig,
 ): DeviceCoordinate.Connector? = when (connectionLine.target?.owner) {
     Device.Type.OfficeLaptop -> coordinates.officeLaptop.connectors
     Device.Type.PersonalLaptop -> coordinates.personalLaptop.connectors
@@ -45,10 +46,18 @@ fun getConnectorPath(
     connectors: List<Rect>,
     minimumDistanceBetweenLine: Float,
     minimumStartLineDistance: Float,
+    recordedVerticalLine: List<VerticalLine>,
     onAddDebugPoint: (Offset) -> Unit,
+    onRecordVerticalPath: (VerticalLine) -> Unit,
+    debugConfig: DebugConfig,
     debugLog: Boolean = false,
 ): Path {
-    val endConnector = getTargetConnector(coordinates, connectionLine) ?: return Path()
+    println("########## getConnectorPath ################")
+    val endConnector = getTargetConnector(
+        coordinates = coordinates,
+        connectionLine = connectionLine,
+        debugConfig = debugConfig,
+    ) ?: return Path()
     val startRect = connectionLine.let { Rect(it.offset, it.size.toSize()) }
     val startJoint = connectionLine.getJoint()
     val endRect = endConnector.let { Rect(it.offset, it.size.toSize()) }
@@ -63,6 +72,7 @@ fun getConnectorPath(
     return findPath(
         path = Path(),
         devices = devices,
+        connectionLine = connectionLine,
         connectors = connectors,
         startRect = startRect,
         startJoint = startJoint,
@@ -72,7 +82,10 @@ fun getConnectorPath(
         lineRect = lineRect,
         minimumDistanceBetweenLine = minimumDistanceBetweenLine,
         minimumStartLineDistance = minimumStartLineDistance,
+        recordedVerticalLine = recordedVerticalLine,
         onAddDebugPoint = onAddDebugPoint,
+        onRecordVerticalPath = onRecordVerticalPath,
+        debugConfig = debugConfig,
         debugLog = debugLog,
     )
 }
@@ -109,6 +122,7 @@ private fun Rect.getOverlapConnectors(
 private fun findPath(
     path: Path,
     devices: List<Pair<Rect, Device.Type>>,
+    connectionLine: ConnectionLine,
     connectors: List<Rect>,
     startRect: Rect?,
     startJoint: Offset,
@@ -118,7 +132,10 @@ private fun findPath(
     lineRect: Rect,
     minimumDistanceBetweenLine: Float,
     minimumStartLineDistance: Float,
+    recordedVerticalLine: List<VerticalLine>,
     onAddDebugPoint: (Offset) -> Unit,
+    onRecordVerticalPath: (VerticalLine) -> Unit,
+    debugConfig: DebugConfig,
     debugLog: Boolean,
 ): Path {
     val overlapDevices = lineRect.getOverlapDevices(
@@ -171,9 +188,8 @@ private fun findPath(
             when {
                 isEndConnectorSameX && startRect.left == startJoint.x -> {
                     if (debugLog) println("Start with go left with start line distance")
-                    val newX = startJoint.x - abs(minimumStartLineDistance - startRect.width)
                     Offset(
-                        x = newX,
+                        x = startJoint.x - abs(minimumStartLineDistance - startRect.width),
                         y = startJoint.y,
                     )
                 }
@@ -379,6 +395,7 @@ private fun findPath(
                         closestDevice.first.left < endJoint.x &&
                         abs(closestDevice.first.left - endJoint.x) > abs(closestDevice.first.right - endJoint.x) &&
                         (startJoint.y < closestDevice.first.top || startJoint.y >= closestDevice.first.bottom) -> {
+                    // Go right across the device
                     if (debugLog) println("Go right across the device")
                     Offset(
                         x = closestDevice.first.right,
@@ -392,6 +409,7 @@ private fun findPath(
                         closestDevice.first.right > endJoint.x &&
                         abs(closestDevice.first.left - endJoint.x) < abs(closestDevice.first.right - endJoint.x) &&
                         (startJoint.y <= closestDevice.first.top || startJoint.y >= closestDevice.first.bottom) -> {
+                    // Go left across the device
                     if (debugLog) println("Go left across the device")
                     Offset(
                         x = closestDevice.first.left,
@@ -485,6 +503,7 @@ private fun findPath(
                         overlapConnectors.isEmpty() &&
                         startJoint.y == endJoint.y &&
                         startJoint.x > endJoint.x -> {
+                    // Go left to destination
                     if (debugLog) println("Go left to destination")
                     Offset(
                         x = endJoint.x,
@@ -496,6 +515,7 @@ private fun findPath(
                         overlapConnectors.isEmpty() &&
                         startJoint.y == endJoint.y &&
                         startJoint.x < endJoint.x -> {
+                    // Go right to destination
                     if (debugLog) println("Go right to destination")
                     Offset(
                         x = endJoint.x,
@@ -511,6 +531,21 @@ private fun findPath(
         }
     }
 
+    val optimizedPosition = when {
+        debugConfig.disableLineOptimization -> nextPosition
+        startJoint.x != nextPosition.x -> nextPosition.getOptimizedOffset(
+            connectionLine = connectionLine,
+            endJoint = endJoint,
+            recordedVerticalLine = recordedVerticalLine,
+            distanceBetweenLine = minimumDistanceBetweenLine,
+            minimumStartLineDistance = minimumStartLineDistance,
+            isStartLine = startRect != null,
+            debugLog = debugLog,
+        )
+
+        else -> nextPosition
+    }
+
     path.run {
         if (this.isEmpty) {
             moveTo(
@@ -524,34 +559,42 @@ private fun findPath(
             )
         }
         lineTo(
-            x = nextPosition.x,
-            y = nextPosition.y,
+            x = optimizedPosition.x,
+            y = optimizedPosition.y,
         )
+        if (startJoint.y != optimizedPosition.y) {
+            onRecordVerticalPath(
+                VerticalLine(
+                    start = Offset(startJoint.x, startJoint.y),
+                    end = Offset(optimizedPosition.x, optimizedPosition.y),
+                    owner = connectionLine,
+                )
+            )
+        }
     }
 
-    onAddDebugPoint(nextPosition)
-    if (debugLog) println("Moving : ${startJoint.x}, ${startJoint.y} => ${nextPosition.x}, ${nextPosition.y}")
+    onAddDebugPoint(optimizedPosition)
+    if (debugLog) println("Moving : ${startJoint.x}, ${startJoint.y} => ${optimizedPosition.x}, ${optimizedPosition.y}")
 
-    if (nextPosition.x != endJoint.x || nextPosition.y != endJoint.y) {
+    if (optimizedPosition.x != endJoint.x || optimizedPosition.y != endJoint.y) {
         if (debugLog) println("Do find path again")
         return findPath(
             path = path,
             devices = devices,
+            connectionLine = connectionLine,
             connectors = connectors,
             startRect = null,
-            startJoint = nextPosition,
+            startJoint = optimizedPosition,
             endRect = endRect,
             endJoint = endJoint,
             endDeviceType = endDeviceType,
-            lineRect = Rect(
-                left = min(nextPosition.x, endJoint.x),
-                top = min(nextPosition.y, endJoint.y),
-                right = max(nextPosition.x, endJoint.x),
-                bottom = max(nextPosition.y, endJoint.y),
-            ),
+            lineRect = Rect.from(optimizedPosition, endJoint),
             minimumDistanceBetweenLine = minimumDistanceBetweenLine,
             minimumStartLineDistance = minimumStartLineDistance,
+            recordedVerticalLine = recordedVerticalLine,
             onAddDebugPoint = onAddDebugPoint,
+            onRecordVerticalPath = onRecordVerticalPath,
+            debugConfig = debugConfig,
             debugLog = debugLog,
         )
     } else {
@@ -559,3 +602,119 @@ private fun findPath(
         return path
     }
 }
+
+private fun Offset.getOptimizedOffset(
+    connectionLine: ConnectionLine,
+    endJoint: Offset,
+    recordedVerticalLine: List<VerticalLine>,
+    distanceBetweenLine: Float,
+    minimumStartLineDistance: Float,
+    isStartLine: Boolean,
+    debugLog: Boolean,
+): Offset {
+    println("${connectionLine.source.owner} (${connectionLine.source.type}) => ${connectionLine.target?.owner} (${connectionLine.target?.type})")
+    val startLineArea =
+        if (isStartLine)
+            Rect.from(this, connectionLine.offset)
+                .getBoundRect(
+                    top = when {
+                        endJoint.y < this.y -> this.y - endJoint.y
+                        else -> 0f
+                    },
+                    bottom = when {
+                        this.y < endJoint.y -> endJoint.y - this.y
+                        else -> 0f
+                    },
+                )
+        else null
+
+    val endLineArea = Rect.from(this, endJoint)
+        .getBoundRect(
+            top = when {
+                endJoint.y < this.y -> this.y - endJoint.y
+                else -> 0f
+            },
+            bottom = when {
+                this.y < endJoint.y -> endJoint.y - this.y
+                else -> 0f
+            },
+        )
+
+    val verticalLine = recordedVerticalLine
+        .filterNot { it.owner == connectionLine }
+        .map { it.getBoundRect(horizontal = distanceBetweenLine) }
+
+    val combineMultipleRect = { acc: Rect?, rect: Rect -> Rect.from(acc, rect) }
+
+    val startOverlapVerticalLine: Rect? = startLineArea?.let {
+        verticalLine
+            .filter { it.overlaps(startLineArea) }
+            .takeIf { it.isNotEmpty() }
+            ?.fold(null as Rect?, combineMultipleRect)
+    }
+
+    val endOverlapVerticalLine: Rect? = verticalLine
+        .filter { it.overlaps(endLineArea) }
+        .takeIf { it.isNotEmpty() }
+        ?.fold(null as Rect?, combineMultipleRect)
+
+    val newX = when {
+        connectionLine.offset.x < endJoint.x && endOverlapVerticalLine != null && this.x > endJoint.x -> {
+            if (debugLog) println("Keep distance at left of end overlap vertical line")
+            endOverlapVerticalLine.left
+        }
+
+        endOverlapVerticalLine != null && endJoint.x < this.x -> {
+            if (debugLog) println("Keep distance at right of end overlap vertical line")
+            endOverlapVerticalLine.right
+        }
+
+        endOverlapVerticalLine != null && this.x <= endJoint.x -> {
+            if (debugLog) println("Keep distance at left of end overlap vertical line")
+            endOverlapVerticalLine.left
+        }
+
+        startOverlapVerticalLine != null && connectionLine.offset.x < this.x -> {
+            if (debugLog) println("Keep distance at right of start overlap vertical line")
+            startOverlapVerticalLine.right
+        }
+
+        startOverlapVerticalLine != null && this.x <= connectionLine.offset.x -> {
+            if (debugLog) println("Keep distance at left of start overlap vertical line")
+            startOverlapVerticalLine.left
+        }
+
+        else -> {
+            if (debugLog) println("No overlap vertical line")
+            this.x
+        }
+    }
+    return this.copy(x = newX)
+}
+
+private fun Rect.Companion.from(offset1: Offset, offset2: Offset): Rect = Rect(
+    topLeft = Offset(
+        x = min(offset1.x, offset2.x),
+        y = min(offset1.y, offset2.y),
+    ),
+    bottomRight = Offset(
+        x = max(offset1.x, offset2.x),
+        y = max(offset1.y, offset2.y),
+    ),
+)
+
+private fun Rect.Companion.from(rect1: Rect?, rect2: Rect): Rect = Rect(
+    topLeft = Offset(
+        x = min((rect1?.left ?: Float.MAX_VALUE), rect2.left),
+        y = min((rect1?.top ?: Float.MAX_VALUE), rect2.top),
+    ),
+    bottomRight = Offset(
+        x = max((rect1?.right ?: Float.MIN_VALUE), rect2.right),
+        y = max((rect1?.bottom ?: Float.MIN_VALUE), rect2.bottom),
+    ),
+)
+
+private fun Rect.getBoundRect(top: Float, bottom: Float) = this.copy(
+    top = this.top - top,
+    bottom = this.bottom + bottom,
+)

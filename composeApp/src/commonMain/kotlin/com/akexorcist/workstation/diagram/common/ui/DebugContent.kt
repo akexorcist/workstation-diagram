@@ -38,6 +38,7 @@ fun DebugPanel(
     onToggleShowConnectorArea: (Boolean) -> Unit,
     onToggleShowAllConnectionLines: (Boolean) -> Unit,
     onToggleLineConnectionPoint: (Boolean) -> Unit,
+    onToggleLineOptimization: (Boolean) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -94,6 +95,11 @@ fun DebugPanel(
             label = "Show line connection point",
             isChecked = debugConfig.showLineConnectionPoint,
             onCheckedChange = onToggleLineConnectionPoint,
+        )
+        ToggleDebugMenu(
+            label = "Disable line optimization",
+            isChecked = debugConfig.disableLineOptimization,
+            onCheckedChange = onToggleLineOptimization,
         )
     }
 }

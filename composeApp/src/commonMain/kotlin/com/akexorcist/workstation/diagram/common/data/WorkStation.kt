@@ -94,6 +94,9 @@ val MyWorkStation = WorkStation(
                     owner = this,
                     target = Device.Type.OfficeLaptop,
                 ),
+                Connector.spacing(device = this),
+                Connector.spacing(device = this),
+                Connector.spacing(device = this),
                 Connector(
                     type = ConnectorType.None,
                     direction = ConnectorDirection.Output,
@@ -102,12 +105,6 @@ val MyWorkStation = WorkStation(
                 ),
             ),
             rightConnections = listOf(
-                Connector(
-                    type = ConnectorType.UsbA2,
-                    direction = ConnectorDirection.Input,
-                    owner = this,
-                    target = Device.Type.StreamDeck,
-                ),
                 Connector(
                     type = ConnectorType.DisplayPort,
                     direction = ConnectorDirection.Output,
@@ -120,12 +117,17 @@ val MyWorkStation = WorkStation(
                     owner = this,
                     target = Device.Type.PrimaryMonitor,
                 ),
+                Connector.spacing(device = this),
+                Connector.spacing(device = this),
                 Connector(
-                    type = ConnectorType.UsbC32Gen2,
+                    type = ConnectorType.UsbA2,
                     direction = ConnectorDirection.Input,
                     owner = this,
-                    target = Device.Type.UsbCSwitcher,
+                    target = Device.Type.StreamDeck,
                 ),
+                Connector.spacing(device = this),
+                Connector.spacing(device = this),
+                Connector.spacing(device = this),
                 Connector(
                     type = ConnectorType.UsbA3,
                     direction = ConnectorDirection.Input,
@@ -137,6 +139,12 @@ val MyWorkStation = WorkStation(
                     direction = ConnectorDirection.Output,
                     owner = this,
                     target = Device.Type.UsbDac,
+                ),
+                Connector(
+                    type = ConnectorType.UsbC32Gen2,
+                    direction = ConnectorDirection.Input,
+                    owner = this,
+                    target = Device.Type.UsbCSwitcher,
                 ),
             ),
         )
@@ -224,16 +232,16 @@ val MyWorkStation = WorkStation(
             ),
             rightConnections = listOf(
                 Connector(
-                    type = ConnectorType.UsbC32Gen2,
-                    direction = ConnectorDirection.Input,
-                    owner = this,
-                    target = Device.Type.PrimaryMonitor,
-                ),
-                Connector(
                     type = ConnectorType.UsbA3,
                     direction = ConnectorDirection.Input,
                     owner = this,
                     target = Device.Type.HdmiToWebcam,
+                ),
+                Connector(
+                    type = ConnectorType.UsbC32Gen2,
+                    direction = ConnectorDirection.Input,
+                    owner = this,
+                    target = Device.Type.PrimaryMonitor,
                 ),
                 Connector(
                     type = ConnectorType.UsbA2,
@@ -261,12 +269,17 @@ val MyWorkStation = WorkStation(
                     owner = this,
                     target = Device.Type.UsbDac,
                 ),
+                Connector.spacing(device = this),
+                Connector.spacing(device = this),
                 Connector(
                     type = ConnectorType.UsbA2,
                     direction = ConnectorDirection.Input,
                     owner = this,
                     target = Device.Type.UsbDongle1,
                 ),
+                Connector.spacing(device = this),
+                Connector.spacing(device = this),
+                Connector.spacing(device = this),
                 Connector(
                     type = ConnectorType.UsbA2,
                     direction = ConnectorDirection.Input,
@@ -323,6 +336,8 @@ val MyWorkStation = WorkStation(
                     owner = this,
                     target = Device.Type.UsbDockingStation,
                 ),
+                Connector.spacing(device = this),
+                Connector.spacing(device = this),
                 Connector(
                     type = ConnectorType.MiniHdmi,
                     direction = ConnectorDirection.Input,
@@ -348,6 +363,9 @@ val MyWorkStation = WorkStation(
                     owner = this,
                     target = Device.Type.PcDesktop,
                 ),
+                Connector.spacing(device = this),
+                Connector.spacing(device = this),
+                Connector.spacing(device = this),
                 Connector(
                     type = ConnectorType.UsbC32Gen2,
                     direction = ConnectorDirection.Output,
@@ -392,6 +410,7 @@ val MyWorkStation = WorkStation(
     usbDac = Device.UsbDac.builder {
         Device.UsbDac(
             leftConnections = listOf(
+                Connector.spacing(device = this),
                 Connector(
                     type = ConnectorType.Aux,
                     direction = ConnectorDirection.Input,

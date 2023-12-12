@@ -407,4 +407,13 @@ data class Connector(
     val direction: ConnectorDirection,
     val owner: Device.Type,
     val target: Device.Type,
-)
+) {
+    companion object {
+        fun spacing(device: Device.Type) = Connector(
+            type = ConnectorType.Spacing,
+            direction = ConnectorDirection.None,
+            owner = device,
+            target = device,
+        )
+    }
+}

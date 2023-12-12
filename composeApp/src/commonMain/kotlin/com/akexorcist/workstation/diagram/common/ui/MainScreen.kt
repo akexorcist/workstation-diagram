@@ -19,8 +19,8 @@ import com.akexorcist.workstation.diagram.common.ui.state.*
 import com.akexorcist.workstation.diagram.common.utility.*
 
 
-private val workspaceWidth = 2800.dp
-private val workspaceHeight = 1400.dp
+private val workspaceWidth = 2850.dp
+private val workspaceHeight = 1350.dp
 private const val boundOffsetRatio = 0.8f
 private const val maxZoomScale = 3f
 private const val minZoomScale = 0.5f
@@ -136,7 +136,10 @@ fun WorkspaceArea(
             },
             onToggleLineConnectionPoint = {
                 debugConfig = debugConfig.copy(showLineConnectionPoint = it)
-            }
+            },
+            onToggleLineOptimization = {
+                debugConfig = debugConfig.copy(disableLineOptimization = it)
+            },
         )
     }
 }
@@ -162,12 +165,14 @@ private fun WorkspaceContent(
             val connectors = coordinates.getSortedConnectorByBottom()
             val connectorAreas = connectors.map { it.rect }
 
+            val recordedVerticalLine: MutableList<VerticalLine> = mutableListOf()
             connectors.run {
                 if (debugConfig.showAllConnectionLines) {
                     this
                 } else {
-                    filterIndexed { index, _ -> index == debugConfig.lineIndex }
-//            filterIndexed { index, _ -> index == 6 || index == 1 }
+//                    filterIndexed { index, _ -> index == debugConfig.lineIndex }
+                    filterIndexed { index, _ -> listOf(17, 25, 26, 27).contains(index) }
+//                    filterIndexed { index, _ -> (0..12).contains(index) || (15..30).contains(index) }
                 }
             }.map { connector ->
                 Connection(
@@ -178,7 +183,10 @@ private fun WorkspaceContent(
                         coordinates = coordinates,
                         minimumDistanceBetweenLine = config.minimumDistanceBetweenLine.px(),
                         minimumStartLineDistance = config.minimumStartLineDistance.px(),
+                        recordedVerticalLine = recordedVerticalLine,
                         onAddDebugPoint = { lineConnectionPoints += it },
+                        onRecordVerticalPath = { recordedVerticalLine += it },
+                        debugConfig = debugConfig,
                     ),
                     line = connector,
                 )

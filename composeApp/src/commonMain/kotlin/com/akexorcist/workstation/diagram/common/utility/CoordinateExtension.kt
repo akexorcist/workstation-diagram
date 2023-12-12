@@ -30,6 +30,7 @@ fun WorkstationCoordinates.getSortedDeviceConnectorsByLeft(): List<Pair<Rect, De
     this.gameController.device,
     this.headphone.device,
 )
+//    .sortedWith(compareBy({ -it.offset.x }, { -it.offset.y }))
     .sortedBy { it.offset.x }
     .map {
         Rect(
@@ -39,9 +40,20 @@ fun WorkstationCoordinates.getSortedDeviceConnectorsByLeft(): List<Pair<Rect, De
     }
 
 fun WorkstationCoordinates.getSortedConnectorByBottom(): List<ConnectionLine> {
-    return this.getAllConnectors()
-        .filter { connector -> connector.side == ConnectorSide.Left }
-        .sortedByDescending { it.offset.y }
+    val allLeftConnectors = this.getAllConnectors()
+        .filter { connector -> connector.side == ConnectorSide.Left && connector.connector.type != ConnectorType.Spacing }
+    val uniqueLeftConnectors: MutableList<DeviceCoordinate.Connector> = mutableListOf()
+    for (connector in allLeftConnectors) {
+        val notExist = uniqueLeftConnectors.find {
+            (it.connector.owner == connector.connector.owner && it.connector.target == connector.connector.target) ||
+                    (it.connector.owner == connector.connector.target && it.connector.target == connector.connector.owner)
+        } == null
+        if (notExist) {
+            uniqueLeftConnectors.add(connector)
+        }
+    }
+    return uniqueLeftConnectors
+        .sortedWith(compareBy({ -it.rect.right }, { it.rect.top }))
         .map {
             ConnectionLine(
                 source = it.connector.toConnection(),

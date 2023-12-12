@@ -13,7 +13,7 @@ data class Config(
 val DefaultConfig = Config(
     minimumHorizontalDistanceToDevice = 140.dp,
     minimumVerticalDistanceToDevice = 30.dp,
-    minimumDistanceBetweenLine = 60.dp,
+    minimumDistanceBetweenLine = 50.dp,
     minimumStartLineDistance = 140.dp,
 )
 
@@ -26,10 +26,11 @@ data class DebugConfig(
     val showConnectorArea: Boolean,
     val showAllConnectionLines: Boolean,
     val showLineConnectionPoint: Boolean,
+    val disableLineOptimization: Boolean,
 )
 
 val DefaultDebugConfig = DebugConfig(
-    lineIndex = 29,
+    lineIndex = 9,
     zoomScale = 1f,
     showWorkspaceArea = false,
     showDeviceArea = false,
@@ -37,4 +38,5 @@ val DefaultDebugConfig = DebugConfig(
     showConnectorArea = false,
     showAllConnectionLines = true,
     showLineConnectionPoint = false,
+    disableLineOptimization = false,
 )

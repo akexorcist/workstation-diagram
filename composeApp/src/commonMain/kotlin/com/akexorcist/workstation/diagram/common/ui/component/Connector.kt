@@ -197,6 +197,8 @@ internal fun ConnectorRenderer(
                     onEnterHoverInteraction = onEnterHoverInteraction,
                     onExitHoverInteraction = onExitHoverInteraction,
                 )
+
+                ConnectorDirection.None -> {}
             }
 
             if (index < connectors.size - 1) {
