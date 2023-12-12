@@ -21,10 +21,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
-import com.akexorcist.workstation.diagram.common.data.DeviceCoordinate
-import com.akexorcist.workstation.diagram.common.data.WorkstationCoordinates
-import com.akexorcist.workstation.diagram.common.data.Config
-import com.akexorcist.workstation.diagram.common.data.DebugConfig
+import com.akexorcist.workstation.diagram.common.data.*
 
 
 @Composable
@@ -127,11 +124,15 @@ fun DebugContent(
     coordinates: WorkstationCoordinates,
     config: Config,
     debugConfig: DebugConfig,
-    lineConnectionPoints: List<Offset>,
+    connections: List<Connection>,
 ) {
     if (!coordinates.areAvailable()) return
     val workspace = coordinates.workspace ?: return
     val textMeasure = rememberTextMeasurer()
+    val debugPoint: List<Offset> = connections.flatMap { connection ->
+        connection.path.lines.map { line -> line.end }
+    }
+    println("Debug Point ${debugPoint.size}")
     Box(modifier = Modifier.fillMaxSize()) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             if (debugConfig.showWorkspaceArea) {
@@ -185,7 +186,7 @@ fun DebugContent(
                 }
             }
             if (debugConfig.showLineConnectionPoint) {
-                lineConnectionPoints.forEachIndexed { index, point ->
+                debugPoint.forEachIndexed { index, point ->
                     drawCircle(
                         color = Color.Blue,
                         radius = 10.dp.toPx(),

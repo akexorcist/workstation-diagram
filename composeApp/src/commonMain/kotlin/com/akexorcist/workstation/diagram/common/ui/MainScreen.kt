@@ -150,7 +150,6 @@ private fun WorkspaceContent(
     config: Config,
     debugConfig: DebugConfig,
 ) {
-    val lineConnectionPoints = mutableStateListOf<Offset>()
     var currentHoveredConnector: Connector? by remember { mutableStateOf(null) }
     var currentHoveredDevice: Device? by remember { mutableStateOf(null) }
 
@@ -170,8 +169,8 @@ private fun WorkspaceContent(
                 if (debugConfig.showAllConnectionLines) {
                     this
                 } else {
-//                    filterIndexed { index, _ -> index == debugConfig.lineIndex }
-                    filterIndexed { index, _ -> listOf(17, 25, 26, 27).contains(index) }
+                    filterIndexed { index, _ -> index == debugConfig.lineIndex }
+//                    filterIndexed { index, _ -> listOf(17, 25, 26, 27).contains(index) }
 //                    filterIndexed { index, _ -> (0..12).contains(index) || (15..30).contains(index) }
                 }
             }.map { connector ->
@@ -184,7 +183,6 @@ private fun WorkspaceContent(
                         minimumDistanceBetweenLine = config.minimumDistanceBetweenLine.px(),
                         minimumStartLineDistance = config.minimumStartLineDistance.px(),
                         recordedVerticalLine = recordedVerticalLine,
-                        onAddDebugPoint = { lineConnectionPoints += it },
                         onRecordVerticalPath = { recordedVerticalLine += it },
                         debugConfig = debugConfig,
                     ),
@@ -229,7 +227,7 @@ private fun WorkspaceContent(
             coordinates = state.currentWorkstationCoordinates,
             config = config,
             debugConfig = debugConfig,
-            lineConnectionPoints = lineConnectionPoints,
+            connections = connections,
         )
     }
 }

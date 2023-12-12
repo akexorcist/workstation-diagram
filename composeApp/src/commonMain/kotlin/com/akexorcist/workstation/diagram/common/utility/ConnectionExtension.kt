@@ -2,7 +2,6 @@ package com.akexorcist.workstation.diagram.common.utility
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.toSize
 import com.akexorcist.workstation.diagram.common.data.*
 import kotlin.math.*
@@ -10,7 +9,6 @@ import kotlin.math.*
 fun getTargetConnector(
     coordinates: WorkstationCoordinates,
     connectionLine: ConnectionLine,
-    debugConfig: DebugConfig,
 ): DeviceCoordinate.Connector? = when (connectionLine.target?.owner) {
     Device.Type.OfficeLaptop -> coordinates.officeLaptop.connectors
     Device.Type.PersonalLaptop -> coordinates.personalLaptop.connectors
@@ -47,7 +45,6 @@ fun getConnectorPath(
     minimumDistanceBetweenLine: Float,
     minimumStartLineDistance: Float,
     recordedVerticalLine: List<VerticalLine>,
-    onAddDebugPoint: (Offset) -> Unit,
     onRecordVerticalPath: (VerticalLine) -> Unit,
     debugConfig: DebugConfig,
     debugLog: Boolean = false,
@@ -56,7 +53,6 @@ fun getConnectorPath(
     val endConnector = getTargetConnector(
         coordinates = coordinates,
         connectionLine = connectionLine,
-        debugConfig = debugConfig,
     ) ?: return ConnectionPath()
     val startRect = connectionLine.let { Rect(it.offset, it.size.toSize()) }
     val startJoint = connectionLine.getJoint()
@@ -83,11 +79,10 @@ fun getConnectorPath(
         minimumDistanceBetweenLine = minimumDistanceBetweenLine,
         minimumStartLineDistance = minimumStartLineDistance,
         recordedVerticalLine = recordedVerticalLine,
-        onAddDebugPoint = onAddDebugPoint,
         onRecordVerticalPath = onRecordVerticalPath,
         debugConfig = debugConfig,
         debugLog = debugLog,
-    )
+    ).simplified()
 }
 
 private fun Rect.getOverlapDevices(
@@ -133,7 +128,6 @@ private fun findPath(
     minimumDistanceBetweenLine: Float,
     minimumStartLineDistance: Float,
     recordedVerticalLine: List<VerticalLine>,
-    onAddDebugPoint: (Offset) -> Unit,
     onRecordVerticalPath: (VerticalLine) -> Unit,
     debugConfig: DebugConfig,
     debugLog: Boolean,
@@ -538,7 +532,6 @@ private fun findPath(
             endJoint = endJoint,
             recordedVerticalLine = recordedVerticalLine,
             distanceBetweenLine = minimumDistanceBetweenLine,
-            minimumStartLineDistance = minimumStartLineDistance,
             isStartLine = startRect != null,
             debugLog = debugLog,
         )
@@ -562,7 +555,6 @@ private fun findPath(
         )
     }
 
-    onAddDebugPoint(optimizedPosition)
     if (debugLog) println("Moving : ${startJoint.x}, ${startJoint.y} => ${optimizedPosition.x}, ${optimizedPosition.y}")
 
     if (optimizedPosition.x != endJoint.x || optimizedPosition.y != endJoint.y) {
@@ -581,7 +573,6 @@ private fun findPath(
             minimumDistanceBetweenLine = minimumDistanceBetweenLine,
             minimumStartLineDistance = minimumStartLineDistance,
             recordedVerticalLine = recordedVerticalLine,
-            onAddDebugPoint = onAddDebugPoint,
             onRecordVerticalPath = onRecordVerticalPath,
             debugConfig = debugConfig,
             debugLog = debugLog,
@@ -597,7 +588,6 @@ private fun Offset.getOptimizedOffset(
     endJoint: Offset,
     recordedVerticalLine: List<VerticalLine>,
     distanceBetweenLine: Float,
-    minimumStartLineDistance: Float,
     isStartLine: Boolean,
     debugLog: Boolean,
 ): Offset {
@@ -707,3 +697,31 @@ private fun Rect.getBoundRect(top: Float, bottom: Float) = this.copy(
     top = this.top - top,
     bottom = this.bottom + bottom,
 )
+
+private fun ConnectionPath.simplified(): ConnectionPath {
+    val simplifiedLines = mutableListOf<ConnectionPath.Line>()
+    var currentLine: ConnectionPath.Line? = null
+    this.lines.forEachIndexed { index, line ->
+        if (index == 0) {
+            currentLine = line
+        } else if (isSameVerticalDirection(currentLine, line)) {
+            currentLine = currentLine?.let {
+                ConnectionPath.Line(it.start, line.end)
+            } ?: line
+        } else {
+            currentLine?.let { simplifiedLines.add(it) }
+            currentLine = line
+        }
+        if (index == this.lines.size - 1) {
+            currentLine?.let { simplifiedLines.add(it) }
+            simplifiedLines.add(line)
+        }
+    }
+    return ConnectionPath(simplifiedLines)
+}
+
+private fun isSameVerticalDirection(line1: ConnectionPath.Line?, line2: ConnectionPath.Line): Boolean {
+    line1 ?: return false
+    return (line1.start.x == line2.end.x && line1.start.y != line2.end.y) ||
+            (line1.start.x != line2.end.x && line1.start.y == line2.end.y)
+}

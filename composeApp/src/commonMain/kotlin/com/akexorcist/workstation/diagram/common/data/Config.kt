@@ -30,13 +30,13 @@ data class DebugConfig(
 )
 
 val DefaultDebugConfig = DebugConfig(
-    lineIndex = 9,
+    lineIndex = 11,
     zoomScale = 1f,
     showWorkspaceArea = false,
     showDeviceArea = false,
     showOverlapBoundArea = false,
     showConnectorArea = false,
-    showAllConnectionLines = true,
-    showLineConnectionPoint = false,
+    showAllConnectionLines = false,
+    showLineConnectionPoint = true,
     disableLineOptimization = false,
 )
