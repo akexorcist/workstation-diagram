@@ -5,11 +5,8 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -17,11 +14,9 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.akexorcist.workstation.diagram.common.data.*
 import com.akexorcist.workstation.diagram.common.theme.ConnectionLineComponentTheme
-import com.akexorcist.workstation.diagram.common.theme.ThemeColor
 import com.akexorcist.workstation.diagram.common.utility.px
 
 private val LineCornerRadius = 15.dp
@@ -62,6 +57,7 @@ internal fun ConnectionContent(
 
                     else -> false
                 },
+                isReverseDirection = connection.line.source.direction == ConnectorDirection.Input,
                 lineCornerRadius = LineCornerRadius.px(),
             )
         }
@@ -72,6 +68,7 @@ internal fun ConnectionContent(
 private fun ConnectionLine(
     path: ConnectionPath,
     isActive: Boolean,
+    isReverseDirection: Boolean,
     lineCornerRadius: Float,
 ) {
     val drawPath = path.toPath()
@@ -111,8 +108,8 @@ private fun ConnectionLine(
 
     val infiniteTransition = rememberInfiniteTransition()
     val phase by infiniteTransition.animateFloat(
-        initialValue = 100f,
-        targetValue = 0f,
+        initialValue = if (isReverseDirection) 0f else 100f,
+        targetValue = if (isReverseDirection) 100f else 0f,
         animationSpec = infiniteRepeatable(
             animation = tween(
                 durationMillis = 5000,
