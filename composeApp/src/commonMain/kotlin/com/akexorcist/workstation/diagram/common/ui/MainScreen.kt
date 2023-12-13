@@ -197,6 +197,11 @@ private fun WorkspaceContent(
                 onWorkspaceCoordinated = { state.update(it) },
             ),
     ) {
+        ConnectionContent(
+            connections = connections,
+            currentHoveredDevice = currentHoveredDevice,
+            currentHoveredConnector = currentHoveredConnector,
+        )
         DeviceContent(
             workStation = MyWorkStation,
             state = state,
@@ -217,11 +222,6 @@ private fun WorkspaceContent(
             onExitHoverConnectorInteraction = {
                 currentHoveredConnector = null
             },
-        )
-        ConnectionContent(
-            connections = connections,
-            currentHoveredDevice = currentHoveredDevice,
-            currentHoveredConnector = currentHoveredConnector,
         )
         DebugContent(
             coordinates = state.currentWorkstationCoordinates,

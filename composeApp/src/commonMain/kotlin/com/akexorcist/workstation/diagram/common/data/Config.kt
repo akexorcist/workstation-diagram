@@ -36,7 +36,7 @@ val DefaultDebugConfig = DebugConfig(
     showDeviceArea = false,
     showOverlapBoundArea = false,
     showConnectorArea = false,
-    showAllConnectionLines = false,
-    showLineConnectionPoint = true,
+    showAllConnectionLines = true,
+    showLineConnectionPoint = false,
     disableLineOptimization = false,
 )

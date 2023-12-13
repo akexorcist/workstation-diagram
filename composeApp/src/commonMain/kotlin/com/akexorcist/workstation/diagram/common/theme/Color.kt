@@ -25,6 +25,7 @@ object ThemeColor {
     val Teal300 = Color(0xFF4DB6AC)
     val Teal500 = Color(0xFF009688)
     val Green50 = Color(0xFFE8F5E9)
+    val Green100 = Color(0xFFC8E6C9)
     val Green300 = Color(0xFF81C784)
     val Amber100 = Color(0xFFFFECB3)
     val Amber200 = Color(0xFFFFE082)
@@ -79,12 +80,16 @@ object ConnectorComponentTheme {
 data class ConnectionLineComponent(
     val activeColor: Color,
     val inactiveColor: Color,
+    val backgroundActiveColor: Color,
+    val backgroundInactiveColor: Color,
 )
 
 object ConnectionLineComponentTheme {
     val default = ConnectionLineComponent(
         activeColor = ThemeColor.Green300,
-        inactiveColor = ThemeColor.Green50,
+        inactiveColor = ThemeColor.Green100,
+        backgroundActiveColor = ThemeColor.Green50,
+        backgroundInactiveColor = ThemeColor.Green50.copy(alpha = 0.5f),
     )
 }
 

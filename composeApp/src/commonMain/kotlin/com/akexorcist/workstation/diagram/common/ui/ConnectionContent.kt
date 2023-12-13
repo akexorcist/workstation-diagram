@@ -1,19 +1,30 @@
 package com.akexorcist.workstation.diagram.common.ui
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.akexorcist.workstation.diagram.common.data.*
 import com.akexorcist.workstation.diagram.common.theme.ConnectionLineComponentTheme
+import com.akexorcist.workstation.diagram.common.theme.ThemeColor
+import com.akexorcist.workstation.diagram.common.utility.px
+
+private val LineCornerRadius = 15.dp
 
 @Composable
 internal fun ConnectionContent(
@@ -50,7 +61,8 @@ internal fun ConnectionContent(
                     -> true
 
                     else -> false
-                }
+                },
+                lineCornerRadius = LineCornerRadius.px(),
             )
         }
     }
@@ -60,26 +72,108 @@ internal fun ConnectionContent(
 private fun ConnectionLine(
     path: ConnectionPath,
     isActive: Boolean,
+    lineCornerRadius: Float,
 ) {
+    val drawPath = path.toPath()
+    val whiteBackgroundColor = Color.White
+    val whiteBackgroundStrokeWidth by animateFloatAsState(
+        when (isActive) {
+            true -> 24.dp.px()
+            false -> 16.dp.px()
+        }
+    )
+    val backgroundColor by animateColorAsState(
+        when (isActive) {
+            true -> ConnectionLineComponentTheme.default.backgroundActiveColor
+            false -> ConnectionLineComponentTheme.default.backgroundInactiveColor
+        }
+    )
     val color by animateColorAsState(
         when (isActive) {
             true -> ConnectionLineComponentTheme.default.activeColor
             false -> ConnectionLineComponentTheme.default.inactiveColor
         }
     )
+    val lineBackgroundStrokeWidth by animateFloatAsState(
+        when (isActive) {
+            true -> 12.dp.px()
+            false -> 8.dp.px()
+        }
+    )
+    val lineStrokeWidth by animateFloatAsState(
+        when (isActive) {
+            true -> 6.dp.px()
+            false -> 4.dp.px()
+        }
+    )
+
+    val ovalPath = createOvalPath(lineStrokeWidth)
+
+    val infiniteTransition = rememberInfiniteTransition()
+    val phase by infiniteTransition.animateFloat(
+        initialValue = 100f,
+        targetValue = 0f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 5000,
+                easing = LinearEasing,
+            ),
+            repeatMode = RepeatMode.Restart
+        ),
+    )
+    val stampSpacing = 20.dp.px()
+
     Canvas(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .zIndex(if (isActive) 1f else 0f),
     ) {
         drawPath(
-            path = path.toRoundedCornerPath(15.dp.toPx()),
-            color = Color.White,
-            style = Stroke(12.dp.toPx()),
+            path = drawPath,
+            color = whiteBackgroundColor,
+            style = Stroke(
+                width = whiteBackgroundStrokeWidth,
+                pathEffect = PathEffect.cornerPathEffect(lineCornerRadius),
+            ),
         )
         drawPath(
-            path = path.toRoundedCornerPath(15.dp.toPx()),
+            path = drawPath,
+            color = backgroundColor,
+            style = Stroke(
+                width = lineBackgroundStrokeWidth,
+                pathEffect = PathEffect.cornerPathEffect(lineCornerRadius),
+            ),
+        )
+        drawPath(
+            path = drawPath,
             color = color,
-            style = Stroke(3.dp.toPx()),
+            style = Stroke(
+                width = lineStrokeWidth,
+                pathEffect = PathEffect.chainPathEffect(
+                    outer = PathEffect.stampedPathEffect(
+                        shape = ovalPath,
+                        style = StampedPathEffectStyle.Translate,
+                        phase = phase,
+                        advance = stampSpacing,
+                    ),
+                    inner = PathEffect.cornerPathEffect(lineCornerRadius),
+                ),
+            ),
         )
     }
+}
+
+private fun createOvalPath(size: Float): Path = Path().apply {
+    addOval(
+        Rect(
+            offset = Offset(
+                x = -size * 0.5f,
+                y = -size * 0.5f,
+            ),
+            size = Size(
+                width = size,
+                height = size,
+            ),
+        )
+    )
 }

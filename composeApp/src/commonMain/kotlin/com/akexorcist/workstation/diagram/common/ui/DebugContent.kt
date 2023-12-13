@@ -132,7 +132,6 @@ fun DebugContent(
     val debugPoint: List<Offset> = connections.flatMap { connection ->
         connection.path.lines.map { line -> line.end }
     }
-    println("Debug Point ${debugPoint.size}")
     Box(modifier = Modifier.fillMaxSize()) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             if (debugConfig.showWorkspaceArea) {
