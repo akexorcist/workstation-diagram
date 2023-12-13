@@ -72,12 +72,12 @@ private fun ConnectionLine(
             .zIndex(if (isActive) 1f else 0f),
     ) {
         drawPath(
-            path = path.toPath(),
+            path = path.toRoundedCornerPath(15.dp.toPx()),
             color = Color.White,
             style = Stroke(12.dp.toPx()),
         )
         drawPath(
-            path = path.toPath(),
+            path = path.toRoundedCornerPath(15.dp.toPx()),
             color = color,
             style = Stroke(3.dp.toPx()),
         )
