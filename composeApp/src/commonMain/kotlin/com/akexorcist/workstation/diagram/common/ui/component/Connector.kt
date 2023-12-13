@@ -201,7 +201,7 @@ internal fun ConnectorRenderer(
                 ConnectorDirection.None -> {}
             }
 
-            if (index < connectors.size - 1) {
+            if (index < connectors.lastIndex) {
                 Spacer(modifier = Modifier.height(ConnectorSpacing))
             }
         }

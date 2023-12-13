@@ -704,23 +704,25 @@ private fun ConnectionPath.simplified(): ConnectionPath {
     this.lines.forEachIndexed { index, line ->
         if (index == 0) {
             currentLine = line
-        } else if (isSameVerticalDirection(currentLine, line)) {
-            currentLine = currentLine?.let {
-                ConnectionPath.Line(it.start, line.end)
-            } ?: line
+        } else if (index == this.lines.lastIndex && isSameDirection(currentLine, line)) {
+            currentLine?.let { simplifiedLines.add(ConnectionPath.Line(it.start, line.end)) }
+        } else if (index == this.lines.lastIndex) {
+            currentLine?.let { simplifiedLines.add(it) }
+            simplifiedLines.add(line)
+        } else if (isSameDirection(currentLine, line)) {
+            currentLine = currentLine
+                ?.let { ConnectionPath.Line(it.start, line.end) }
+                ?: line
         } else {
             currentLine?.let { simplifiedLines.add(it) }
             currentLine = line
         }
-        if (index == this.lines.size - 1) {
-            currentLine?.let { simplifiedLines.add(it) }
-            simplifiedLines.add(line)
-        }
+
     }
     return ConnectionPath(simplifiedLines)
 }
 
-private fun isSameVerticalDirection(line1: ConnectionPath.Line?, line2: ConnectionPath.Line): Boolean {
+private fun isSameDirection(line1: ConnectionPath.Line?, line2: ConnectionPath.Line): Boolean {
     line1 ?: return false
     return (line1.start.x == line2.end.x && line1.start.y != line2.end.y) ||
             (line1.start.x != line2.end.x && line1.start.y == line2.end.y)
