@@ -35,7 +35,14 @@ object ThemeColor {
     val Gray500 = Color(0xFF9E9E9E)
     val Gray900 = Color(0xFF212121)
     val Pink50 = Color(0xFFFCE4EC)
+    val Pink100 = Color(0xFFF8BBD0)
+    val Pink200 = Color(0xFFF48FB1)
     val Purple50 = Color(0xFFEDE7F6)
+    val Purple100 = Color(0xFFD1C4E9)
+    val Purple200 = Color(0xFFB39DDB)
+    val Indigo50 = Color(0xFFE8EAF6)
+    val Indigo100 = Color(0xFFC5CAE9)
+    val Indigo200 = Color(0xFF9FA8DA)
     val White = Color.White
     val Black = Color.Black
     val Transparent = Color.Transparent
@@ -69,7 +76,7 @@ data class ConnectorComponent(
 object ConnectorComponentTheme {
     val Input = ConnectorComponent(
         cornerRadius = 8.dp,
-        color = ThemeColor.Purple50,
+        color = ThemeColor.Indigo50,
     )
     val Output = ConnectorComponent(
         cornerRadius = 8.dp,
@@ -78,18 +85,28 @@ object ConnectorComponentTheme {
 }
 
 data class ConnectionLineComponent(
-    val activeColor: Color,
-    val inactiveColor: Color,
-    val backgroundActiveColor: Color,
-    val backgroundInactiveColor: Color,
+    val inputActiveColor: Color,
+    val inputInactiveColor: Color,
+    val outputActiveColor: Color,
+    val outputInactiveColor: Color,
+    val inputBackgroundActiveColor: Color,
+    val inputBackgroundInactiveColor: Color,
+    val outputBackgroundActiveColor: Color,
+    val outputBackgroundInactiveColor: Color,
+    val spacingColor: Color,
 )
 
 object ConnectionLineComponentTheme {
     val default = ConnectionLineComponent(
-        activeColor = ThemeColor.Green300,
-        inactiveColor = ThemeColor.Green100,
-        backgroundActiveColor = ThemeColor.Green50,
-        backgroundInactiveColor = ThemeColor.Green50.copy(alpha = 0.5f),
+        inputActiveColor = ThemeColor.Indigo100,
+        inputInactiveColor = ThemeColor.Indigo100.copy(alpha = 0.25f),
+        outputActiveColor = ThemeColor.Pink100,
+        outputInactiveColor = ThemeColor.Pink100.copy(alpha = 0.25f),
+        inputBackgroundActiveColor = ThemeColor.Indigo50.copy(alpha = 0.5f),
+        inputBackgroundInactiveColor = ThemeColor.Indigo50.copy(alpha = 0.2f),
+        outputBackgroundActiveColor = ThemeColor.Pink50.copy(alpha = 0.5f),
+        outputBackgroundInactiveColor = ThemeColor.Pink50.copy(alpha = 0.2f),
+        spacingColor = ThemeColor.White,
     )
 }
 

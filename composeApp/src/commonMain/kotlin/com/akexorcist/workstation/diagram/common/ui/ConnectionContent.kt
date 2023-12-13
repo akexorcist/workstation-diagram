@@ -72,35 +72,47 @@ private fun ConnectionLine(
     lineCornerRadius: Float,
 ) {
     val drawPath = path.toPath()
-    val whiteBackgroundColor = Color.White
-    val whiteBackgroundStrokeWidth by animateFloatAsState(
+    val spacingBackgroundColor = ConnectionLineComponentTheme.default.spacingColor
+    val spacingBackgroundStrokeWidth by animateFloatAsState(
         when (isActive) {
-            true -> 24.dp.px()
-            false -> 16.dp.px()
+            true -> 16.dp.px()
+            false -> 12.dp.px()
         }
     )
-    val backgroundColor by animateColorAsState(
+    val inputBackgroundColor by animateColorAsState(
         when (isActive) {
-            true -> ConnectionLineComponentTheme.default.backgroundActiveColor
-            false -> ConnectionLineComponentTheme.default.backgroundInactiveColor
+            true -> ConnectionLineComponentTheme.default.inputBackgroundActiveColor
+            false -> ConnectionLineComponentTheme.default.inputBackgroundInactiveColor
         }
     )
-    val color by animateColorAsState(
+    val outputBackgroundColor by animateColorAsState(
         when (isActive) {
-            true -> ConnectionLineComponentTheme.default.activeColor
-            false -> ConnectionLineComponentTheme.default.inactiveColor
+            true -> ConnectionLineComponentTheme.default.outputBackgroundActiveColor
+            false -> ConnectionLineComponentTheme.default.outputBackgroundInactiveColor
+        }
+    )
+    val inputColor by animateColorAsState(
+        when (isActive) {
+            true -> ConnectionLineComponentTheme.default.inputActiveColor
+            false -> ConnectionLineComponentTheme.default.inputInactiveColor
+        }
+    )
+    val outputColor by animateColorAsState(
+        when (isActive) {
+            true -> ConnectionLineComponentTheme.default.outputActiveColor
+            false -> ConnectionLineComponentTheme.default.outputInactiveColor
         }
     )
     val lineBackgroundStrokeWidth by animateFloatAsState(
         when (isActive) {
-            true -> 12.dp.px()
-            false -> 8.dp.px()
+            true -> 8.dp.px()
+            false -> 6.dp.px()
         }
     )
     val lineStrokeWidth by animateFloatAsState(
         when (isActive) {
-            true -> 6.dp.px()
-            false -> 4.dp.px()
+            true -> 4.dp.px()
+            false -> 3.dp.px()
         }
     )
 
@@ -127,15 +139,22 @@ private fun ConnectionLine(
     ) {
         drawPath(
             path = drawPath,
-            color = whiteBackgroundColor,
+            color = spacingBackgroundColor,
             style = Stroke(
-                width = whiteBackgroundStrokeWidth,
+                width = spacingBackgroundStrokeWidth,
                 pathEffect = PathEffect.cornerPathEffect(lineCornerRadius),
             ),
         )
         drawPath(
             path = drawPath,
-            color = backgroundColor,
+            brush = Brush.linearGradient(
+                colors = when (isReverseDirection) {
+                    true -> listOf(inputBackgroundColor, outputBackgroundColor)
+                    false -> listOf(outputBackgroundColor, inputBackgroundColor)
+                },
+                start = path.lines.first().start,
+                end = path.lines.last().end,
+            ),
             style = Stroke(
                 width = lineBackgroundStrokeWidth,
                 pathEffect = PathEffect.cornerPathEffect(lineCornerRadius),
@@ -143,7 +162,14 @@ private fun ConnectionLine(
         )
         drawPath(
             path = drawPath,
-            color = color,
+            brush = Brush.linearGradient(
+                colors = when (isReverseDirection) {
+                    true -> listOf(inputColor, outputColor)
+                    false -> listOf(outputColor, inputColor)
+                },
+                start = path.lines.first().start,
+                end = path.lines.last().end,
+            ),
             style = Stroke(
                 width = lineStrokeWidth,
                 pathEffect = PathEffect.chainPathEffect(
