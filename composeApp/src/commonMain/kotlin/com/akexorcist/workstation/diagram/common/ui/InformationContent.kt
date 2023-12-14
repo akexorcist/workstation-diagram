@@ -6,11 +6,11 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.gestures.scrollBy
-import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.HoverInteraction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -19,11 +19,10 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.List
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -49,6 +49,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun InformationContent(
     workStation: WorkStation,
+    onDeviceClick: (Device) -> Unit,
     onEnterDeviceHoverInteraction: (Device) -> Unit,
     onExitDeviceHoverInteraction: (Device) -> Unit,
 ) {
@@ -59,6 +60,7 @@ fun InformationContent(
         Spacer(modifier = Modifier.height(16.dp))
         DeviceList(
             devices = workStation.getAllDevices(),
+            onDeviceClick = onDeviceClick,
             onEnterHoverInteraction = onEnterDeviceHoverInteraction,
             onExitHoverInteraction = onExitDeviceHoverInteraction,
         )
@@ -93,6 +95,7 @@ private fun Title() {
 @Composable
 private fun DeviceList(
     devices: List<Device>,
+    onDeviceClick: (Device) -> Unit,
     onEnterHoverInteraction: (Device) -> Unit,
     onExitHoverInteraction: (Device) -> Unit,
 ) {
@@ -145,6 +148,7 @@ private fun DeviceList(
                         ) { index, device ->
                             DeviceItem(
                                 device = device,
+                                onDeviceClick = onDeviceClick,
                                 onEnterHoverInteraction = onEnterHoverInteraction,
                                 onExitHoverInteraction = onExitHoverInteraction,
                             )
@@ -186,6 +190,7 @@ private fun DeviceList(
 @Composable
 private fun DeviceItem(
     device: Device,
+    onDeviceClick: (Device) -> Unit,
     onEnterHoverInteraction: (Device) -> Unit,
     onExitHoverInteraction: (Device) -> Unit,
 ) {
@@ -218,12 +223,16 @@ private fun DeviceItem(
     Row(
         modifier = Modifier
             .padding(end = 16.dp)
-            .hoverable(interactionSource = interactionSource)
-            .fillMaxWidth()
-            .background(
-                color = backgroundColor,
-                shape = RoundedCornerShape(8.dp),
+            .clip(shape = RoundedCornerShape(8.dp))
+            .clickable(
+                interactionSource = interactionSource,
+                indication = rememberRipple(
+                    color = ContentColorTheme.default.selectedBackground,
+                ),
+                onClick = { onDeviceClick(device) },
             )
+            .fillMaxWidth()
+            .background(color = backgroundColor)
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -233,9 +242,9 @@ private fun DeviceItem(
                 .height(26.dp)
                 .background(
                     color = when {
-                        device.isComputer() -> DeviceComponentTheme.Computer.color
-                        device.isHub() -> DeviceComponentTheme.Hub.color
-                        device.isAccessory() -> DeviceComponentTheme.End.color
+                        device.type.isComputer() -> DeviceComponentTheme.Computer.color
+                        device.type.isHub() -> DeviceComponentTheme.Hub.color
+                        device.type.isAccessory() -> DeviceComponentTheme.End.color
                         else -> ThemeColor.Gray200
                     },
                     shape = RoundedCornerShape(2.dp),
@@ -285,27 +294,27 @@ private fun Instruction() {
         ) {
             Column {
                 Spacer(modifier = Modifier.height(4.dp))
-                DeviceIntruction(
+                DeviceInstruction(
                     color = DeviceComponentTheme.Computer.color,
                     label = "Computer"
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                DeviceIntruction(
+                DeviceInstruction(
                     color = DeviceComponentTheme.Hub.color,
                     label = "Hub"
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                DeviceIntruction(
+                DeviceInstruction(
                     color = DeviceComponentTheme.End.color,
                     label = "Accessory"
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                DeviceIntruction(
+                DeviceInstruction(
                     color = ConnectorComponentTheme.Output.color,
                     label = "Output Connector"
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                DeviceIntruction(
+                DeviceInstruction(
                     color = ConnectorComponentTheme.Input.color,
                     label = "Input Connector"
                 )
@@ -316,7 +325,7 @@ private fun Instruction() {
 }
 
 @Composable
-private fun DeviceIntruction(
+private fun DeviceInstruction(
     color: Color,
     label: String,
 ) {

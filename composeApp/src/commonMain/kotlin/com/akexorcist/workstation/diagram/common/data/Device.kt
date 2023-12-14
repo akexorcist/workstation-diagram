@@ -208,7 +208,7 @@ sealed class Device(
     ) : Device(
         type = Type.UsbDac,
         title = "USB DAC",
-        subtitle = "GameDAC Gen2",
+        subtitle = "SteelSeries GameDAC Gen2",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
     ) {
@@ -222,7 +222,7 @@ sealed class Device(
         override val rightConnections: List<Connector>,
     ) : Device(
         type = Type.UsbDongle1,
-        title = "Usb Dongle",
+        title = "USB Dongle",
         subtitle = "Logitech G Pro X Superlight",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
@@ -237,7 +237,7 @@ sealed class Device(
         override val rightConnections: List<Connector>,
     ) : Device(
         type = Type.UsbDongle2,
-        title = "Usb Dongle",
+        title = "USB Dongle",
         subtitle = "Logi Bolt",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
@@ -252,8 +252,8 @@ sealed class Device(
         override val rightConnections: List<Connector>,
     ) : Device(
         type = Type.LedLamp,
-        title = "LED Lamp",
-        subtitle = "Baseus Monitor Handing Lamp",
+        title = "LED Light Bar",
+        subtitle = "Baseus I-Wok Monitor Light Bar",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
     ) {
@@ -268,7 +268,7 @@ sealed class Device(
     ) : Device(
         type = Type.Speaker,
         title = "Speaker",
-        subtitle = "Bose SoundLink Mini II",
+        subtitle = "Bose SoundLink Mini SE",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
     ) {
@@ -357,7 +357,7 @@ sealed class Device(
         override val rightConnections: List<Connector>,
     ) : Device(
         type = Type.Headphone,
-        title = "Headphone",
+        title = "Gaming Headset",
         subtitle = "SteelSeries Arctis Nova Pro",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
@@ -373,45 +373,6 @@ sealed class Device(
     fun hasConnection(connector: Connector) =
         leftConnections.any { it.target == connector.owner && it.owner == connector.target } ||
                 rightConnections.any { it.target == connector.owner && it.owner == connector.target }
-
-    fun isComputer(): Boolean = when (this.type) {
-        Type.OfficeLaptop,
-        Type.PersonalLaptop,
-        Type.PcDesktop -> true
-
-        else -> false
-    }
-
-    fun isHub(): Boolean = when (this.type) {
-        Type.UsbDockingStation,
-        Type.UsbCSwitcher,
-        Type.UsbHub,
-        Type.UsbPowerAdapter,
-        Type.SecondaryMonitor,
-        Type.PrimaryMonitor,
-        Type.UsbDac -> true
-
-        else -> false
-    }
-
-    fun isAccessory(): Boolean = when (this.type) {
-        Type.DigitalCamera,
-        Type.HdmiToWebcam,
-        Type.StreamDeck,
-        Type.ExternalSsd,
-        Type.UsbDongle1,
-        Type.UsbDongle2,
-        Type.LedLamp,
-        Type.Speaker,
-        Type.Microphone1,
-        Type.Microphone2,
-        Type.HdmiCapture,
-        Type.AndroidDevice,
-        Type.GameController,
-        Type.Headphone -> true
-
-        else -> false
-    }
 
     enum class Type {
         OfficeLaptop,
@@ -437,7 +398,46 @@ sealed class Device(
         HdmiCapture,
         AndroidDevice,
         GameController,
-        Headphone,
+        Headphone;
+
+        fun isComputer(): Boolean = when (this) {
+            OfficeLaptop,
+            PersonalLaptop,
+            PcDesktop -> true
+
+            else -> false
+        }
+
+        fun isHub(): Boolean = when (this) {
+            UsbDockingStation,
+            UsbCSwitcher,
+            UsbHub,
+            UsbPowerAdapter,
+            SecondaryMonitor,
+            PrimaryMonitor,
+            UsbDac -> true
+
+            else -> false
+        }
+
+        fun isAccessory(): Boolean = when (this) {
+            DigitalCamera,
+            HdmiToWebcam,
+            StreamDeck,
+            ExternalSsd,
+            UsbDongle1,
+            UsbDongle2,
+            LedLamp,
+            Speaker,
+            Microphone1,
+            Microphone2,
+            HdmiCapture,
+            AndroidDevice,
+            GameController,
+            Headphone -> true
+
+            else -> false
+        }
     }
 }
 

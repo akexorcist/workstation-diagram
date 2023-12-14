@@ -97,7 +97,6 @@ private fun WorkspaceContainer(
     )
 }
 
-
 @Composable
 private fun WorkspaceContent(
     workStation: WorkStation,
@@ -111,6 +110,7 @@ private fun WorkspaceContent(
     val deviceCoordinateHostState = rememberWorkstationCoordinateState()
     var currentHoveredConnector: Connector? by remember { mutableStateOf(null) }
     var currentHoveredDevice: Device? by remember { mutableStateOf(null) }
+    var currentSelectedDevice: Device? by remember { mutableStateOf(null) }
 
     Box {
         Box(modifier = Modifier.transformable(state = transformableState)) {
@@ -141,6 +141,7 @@ private fun WorkspaceContent(
                     currentHoveredDevice = currentHoveredDevice,
                     config = config,
                     debugConfig = debugConfig,
+                    onDeviceClick = { currentSelectedDevice = it },
                     onEnterHoveDeviceInteraction = { currentHoveredDevice = it },
                     onExitHoverDeviceInteraction = { currentHoveredDevice = null },
                     onEnterHoveConnectorInteraction = { currentHoveredConnector = it },
@@ -150,9 +151,17 @@ private fun WorkspaceContent(
         }
         InformationContent(
             workStation = workStation,
+            onDeviceClick = { currentSelectedDevice = it },
             onEnterDeviceHoverInteraction = { currentHoveredDevice = it },
             onExitDeviceHoverInteraction = { currentHoveredDevice = null },
         )
+        currentSelectedDevice?.let { device ->
+            SpecificationContent(
+                specification = device.toDeviceSpecification(),
+                onWebsiteClick = {},
+                onDismissRequest = { currentSelectedDevice = null },
+            )
+        }
     }
 }
 
@@ -164,12 +173,12 @@ private fun WorkspaceContent(
     currentHoveredDevice: Device?,
     config: Config,
     debugConfig: DebugConfig,
+    onDeviceClick: (Device) -> Unit,
     onEnterHoveDeviceInteraction: (Device) -> Unit,
     onExitHoverDeviceInteraction: (Device) -> Unit,
     onEnterHoveConnectorInteraction: (Connector) -> Unit,
     onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
-
     val connections: List<Connection> = state.currentWorkstationCoordinates
         .takeIf { it.areAvailable() }
         ?.let { coordinates ->
@@ -210,9 +219,7 @@ private fun WorkspaceContent(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .onWorkspaceCoordinated(
-                onWorkspaceCoordinated = { state.update(it) },
-            ),
+            .onWorkspaceCoordinated(onWorkspaceCoordinated = { state.update(it) }),
     ) {
         ConnectionContent(
             connections = connections,
@@ -224,9 +231,7 @@ private fun WorkspaceContent(
             state = state,
             currentHoveredDevice = currentHoveredDevice,
             currentHoveredConnector = currentHoveredConnector,
-            onDeviceClick = {
-                println("onDeviceClick ${it.title}")
-            },
+            onDeviceClick = onDeviceClick,
             onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
             onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
             onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,

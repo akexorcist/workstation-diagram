@@ -30,6 +30,7 @@ object ThemeColor {
     val Amber100 = Color(0xFFFFECB3)
     val Amber200 = Color(0xFFFFE082)
     val Amber300 = Color(0xFFFFD54F)
+    val Gray50 = Color(0xFFFAFAFA)
     val Gray100 = Color(0xFFF5F5F5)
     val Gray200 = Color(0xFFEEEEEE)
     val Gray300 = Color(0xFFE0E0E0)
@@ -141,7 +142,9 @@ data class ContentColor(
     val icon: Color,
     val background: Color,
     val transparentBackground: Color,
+    val selectedBackground: Color,
     val hoveredBackground: Color,
+    val outlinedButtonColors: @Composable () -> ButtonColors,
 )
 
 
@@ -151,6 +154,15 @@ object ContentColorTheme {
         icon = ThemeColor.Gray900,
         background = ThemeColor.White,
         transparentBackground = ThemeColor.Transparent,
-        hoveredBackground = ThemeColor.Gray100
+        selectedBackground = ThemeColor.Gray500,
+        hoveredBackground = ThemeColor.Gray50,
+        outlinedButtonColors = {
+            ButtonDefaults.outlinedButtonColors(
+                containerColor = ThemeColor.Transparent,
+                contentColor = ThemeColor.Gray900,
+                disabledContainerColor = ThemeColor.Transparent,
+                disabledContentColor = ThemeColor.Gray500,
+            )
+        }
     )
 }
