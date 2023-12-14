@@ -1,7 +1,10 @@
+@file:Suppress("FunctionName")
+
 package com.akexorcist.workstation.diagram.common.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.TransformableState
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.*
@@ -47,7 +50,7 @@ fun MainScreen(
         y = screenInPx.height * boundOffsetRatio,
     )
 
-    WorkspaceArea(
+    WorkspaceContainer(
         screenInPx = screenInPx,
         workspaceInDp = workspaceInDp,
         workspaceInPx = workspaceInPx,
@@ -56,8 +59,7 @@ fun MainScreen(
 }
 
 @Composable
-fun WorkspaceArea(
-    workStation: WorkStation = MyWorkStation,
+private fun WorkspaceContainer(
     screenInPx: SizePx,
     workspaceInDp: SizeDp,
     workspaceInPx: SizePx,
@@ -65,7 +67,6 @@ fun WorkspaceArea(
 ) {
     val config by remember { mutableStateOf(DefaultConfig) }
     val debugConfig by remember { mutableStateOf(DefaultDebugConfig) }
-    val deviceCoordinateHostState = rememberWorkstationCoordinateState()
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
     val transformableState = rememberTransformableState { zoomChange, offsetChange, _ ->
@@ -85,6 +86,29 @@ fun WorkspaceArea(
         )
     }
 
+    WorkspaceContent(
+        workStation = MyWorkStation,
+        config = config,
+        debugConfig = debugConfig,
+        workspaceInDp = workspaceInDp,
+        scale = scale,
+        offset = offset,
+        transformableState = transformableState,
+    )
+}
+
+
+@Composable
+private fun WorkspaceContent(
+    workStation: WorkStation,
+    config: Config,
+    debugConfig: DebugConfig,
+    workspaceInDp: SizeDp,
+    scale: Float,
+    offset: Offset,
+    transformableState: TransformableState,
+) {
+    val deviceCoordinateHostState = rememberWorkstationCoordinateState()
     var currentHoveredConnector: Connector? by remember { mutableStateOf(null) }
     var currentHoveredDevice: Device? by remember { mutableStateOf(null) }
 
@@ -216,25 +240,6 @@ private fun WorkspaceContent(
         )
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun MainScreenPreview() {
-//    InteractiveDiagramTheme {
-//        MainScreen()
-//    }
-//}
-
-//@Preview(widthDp = 2000, heightDp = 1200, showBackground = true)
-//@Composable
-//fun WorkspaceContentPreview() {
-//    val state = rememberWorkstationCoordinateHostState()
-//    InteractiveDiagramTheme {
-//        WorkspaceContent(
-//            state = state,
-//        )
-//    }
-//}
 
 private fun getWorkspaceOffset(
     offset: Offset,

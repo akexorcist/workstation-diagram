@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName")
+
 package com.akexorcist.workstation.diagram.common.ui
 
 import androidx.compose.animation.AnimatedVisibility
@@ -64,8 +66,7 @@ fun InformationContent(
 }
 
 @Composable
-private fun Title(
-) {
+private fun Title() {
     Column(
         modifier = Modifier
             .informationBackground()

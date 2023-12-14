@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName")
+
 package com.akexorcist.workstation.diagram.common.ui
 
 import androidx.compose.foundation.Canvas
@@ -22,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import com.akexorcist.workstation.diagram.common.data.*
-
 
 @Composable
 fun DebugPanel(

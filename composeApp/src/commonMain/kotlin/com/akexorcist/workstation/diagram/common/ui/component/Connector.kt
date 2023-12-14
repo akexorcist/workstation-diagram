@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName")
+
 package com.akexorcist.workstation.diagram.common.ui.component
 
 import androidx.compose.animation.core.animateFloatAsState
@@ -31,7 +33,7 @@ private val ConnectorWidth = 110.dp
 private val ConnectorSpacing = 20.dp
 
 @Composable
-internal fun InputConnectorComponent(
+private fun InputConnectorComponent(
     device: Device.Type,
     connector: Connector,
     side: ConnectorSide,
@@ -71,7 +73,7 @@ internal fun InputConnectorComponent(
 }
 
 @Composable
-internal fun OutputConnectorComponent(
+private fun OutputConnectorComponent(
     device: Device.Type,
     connector: Connector,
     side: ConnectorSide,
@@ -152,7 +154,7 @@ private fun ConnectorComponent(
 }
 
 @Composable
-internal fun ConnectorRenderer(
+fun ConnectorRenderer(
     device: Device.Type,
     side: ConnectorSide,
     connectors: List<Connector>,

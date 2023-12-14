@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName")
+
 package com.akexorcist.workstation.diagram.common.ui.component
 
 import androidx.compose.animation.core.animateFloatAsState
@@ -34,7 +36,7 @@ import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
 import com.akexorcist.workstation.diagram.common.utility.onDeviceCoordinated
 
 @Composable
-internal fun ComputerDeviceComponent(
+fun ComputerDeviceComponent(
     device: Device,
     currentHoveredDevice: Device?,
     currentHoveredConnector: Connector?,
@@ -118,7 +120,7 @@ private fun ComputerDeviceContent(
 }
 
 @Composable
-internal fun HubDeviceComponent(
+fun HubDeviceComponent(
     device: Device,
     currentHoveredDevice: Device?,
     currentHoveredConnector: Connector?,
@@ -207,7 +209,7 @@ private fun HubDeviceContent(
 }
 
 @Composable
-internal fun EndDeviceComponent(
+fun EndDeviceComponent(
     device: Device,
     currentHoveredDevice: Device?,
     currentHoveredConnector: Connector?,

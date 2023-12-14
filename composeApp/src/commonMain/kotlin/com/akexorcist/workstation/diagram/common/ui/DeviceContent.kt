@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName")
+
 package com.akexorcist.workstation.diagram.common.ui
 
 import androidx.compose.foundation.layout.Column
