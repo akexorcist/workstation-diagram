@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.akexorcist.workstation.diagram.common.data.Connector
 import com.akexorcist.workstation.diagram.common.data.ConnectorSide
 import com.akexorcist.workstation.diagram.common.data.Device
@@ -350,6 +351,7 @@ private fun DeviceComponent(
                     text = it,
                     fontSize = MaterialTheme.typography.labelSmall.fontSize,
                     color = ContentColorTheme.default.text,
+                    lineHeight = 14.sp,
                 )
             }
         }

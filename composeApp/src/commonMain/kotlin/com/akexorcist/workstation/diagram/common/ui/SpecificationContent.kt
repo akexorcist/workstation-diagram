@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,8 +24,10 @@ import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
 import com.akexorcist.workstation.diagram.common.theme.DeviceComponentTheme
 import com.akexorcist.workstation.diagram.common.theme.ThemeColor
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun SpecificationContent(
     specification: DeviceSpecification,
@@ -91,12 +92,13 @@ fun SpecificationContent(
                     color = ContentColorTheme.default.text,
                     fontWeight = FontWeight.Medium,
                 )
-                Spacer(modifier = Modifier.height(16.dp))
-                Column() {
-                    Spacer(modifier = Modifier.fillMaxWidth().height(200.dp).background(ThemeColor.Gray100))
-//                Image(
-//                    modifier = Modifier.fillMaxWidth().height(200.dp)
-//                )
+                Spacer(modifier = Modifier.height(32.dp))
+                Column {
+                    Image(
+                        painter = painterResource(specification.image),
+                        modifier = Modifier.fillMaxWidth().height(200.dp),
+                        contentDescription = specification.title,
+                    )
                     Spacer(modifier = Modifier.height(32.dp))
                     AdditionalInformation(specification.information)
                 }

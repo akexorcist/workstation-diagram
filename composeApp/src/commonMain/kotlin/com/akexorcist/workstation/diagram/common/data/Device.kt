@@ -193,7 +193,7 @@ sealed class Device(
     ) : Device(
         type = Type.PrimaryMonitor,
         title = "Primary Monitor",
-        subtitle = "Dell U2722D",
+        subtitle = "Dell UltraSharp U2722D",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
     ) {
@@ -297,7 +297,7 @@ sealed class Device(
         override val rightConnections: List<Connector>,
     ) : Device(
         type = Type.HdmiCapture,
-        title = "HD Capture",
+        title = "HDMI Capture",
         subtitle = "Elgato HD60 X",
         leftConnections = leftConnections,
         rightConnections = rightConnections,

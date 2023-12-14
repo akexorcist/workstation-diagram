@@ -34,7 +34,7 @@ private data class AdditionalDeviceInformation(
 private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInformation {
     return when (this) {
         Device.Type.OfficeLaptop -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/office_laptop.jpg",
             website = "https://support.apple.com/kb/SP854",
             description = "MacBook Pro 14\" 2021",
             information = listOf(
@@ -76,7 +76,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.PersonalLaptop -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/personal_laptop.jpg",
             website = "https://support.apple.com/kb/SP889",
             description = "MacBook Pro 14\" 2023",
             information = listOf(
@@ -119,11 +119,11 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.PcDesktop -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/pc_desktop.jpg",
             website = null,
             description = "Custom Gaming PC",
             information = listOf(
-                "OS" to "Microsoft Windows 11",
+                "OS" to "Windows 11",
                 "Mainboard" to "GIGABYTE B560 HD3 (rev. 1.0)",
                 "CPU" to "Intel Core i5-11400F Processor (12M Cache, up to 4.40 GHz)",
                 "VGA" to "ASUS ROG Strix GTX 1080 Ti GAMING OC",
@@ -136,7 +136,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.UsbDockingStation -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/usb_docking_station.jpg",
             website = "https://www.dell.com/support/manuals/en-us/dell-wd19tbs-dock/wd19tbs_user_guide/docking-specifications",
             description = "Docking Station with Thunderbolt",
             information = listOf(
@@ -166,7 +166,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.DigitalCamera -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/digital_camera.jpg",
             website = "https://www.sony.co.th/th/electronics/interchangeable-lens-cameras/ilce-6000-body-kit",
             description = "E-mount camera with APS-C Sensor",
             information = listOf(
@@ -206,7 +206,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.HdmiToWebcam -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/hdmi_webcam.jpg",
             website = "https://www.elgato.com/ww/en/p/cam-link-4k",
             description = "Turn your camera into a webcam",
             information = listOf(
@@ -222,7 +222,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.StreamDeck -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/stream_deck.jpg",
             website = "https://www.elgato.com/ww/en/p/stream-deck-mk2-black",
             description = "15 customizable LCD keys to control apps and platforms",
             information = listOf(
@@ -234,7 +234,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.ExternalSsd -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/external_ssd.jpg",
             website = "https://www.seagate.com/as/en/support/external-hard-drives/portable-hard-drives/fast-ssd/",
             description = "Portable Storage High-performance USB-C external SSD",
             information = listOf(
@@ -247,7 +247,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.UsbCSwitcher -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/usb_c_switcher.jpg",
             website = "https://www.aten.com/global/en/products/usb-solutions/docks-and-switches/us3342/",
             description = "2-Port USB-C Gen 2 Sharing Switch with Power Pass-through",
             information = listOf(
@@ -266,7 +266,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.UsbHub -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/usb_hub.jpg",
             website = "https://www.orico.cc/usmobile/product/detail/id/7415",
             description = "Mini 3-in-1 USB Hub",
             information = listOf(
@@ -280,7 +280,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.UsbPowerAdapter -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/usb_power_adapter.jpg",
             website = "https://aukey.com.my/products/pa-t11-6-usb-port-qualcomm-quick-charge-3-0-desktop-charger",
             description = "6 USB Port Qualcomm Quick Charge 3.0 Desktop Charger",
             information = listOf(
@@ -294,7 +294,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.SecondaryMonitor -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/secondary_monitor.jpg",
             website = "https://www.arzopa.com/products/a1-15-6-fhd-1080p-portable-monitor",
             description = "15.6\" FHD 1080P Portable Monitor",
             information = listOf(
@@ -318,7 +318,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.PrimaryMonitor -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/primary_monitor.jpg",
             website = "https://www.dell.com/support/home/en-th/product-support/product/dell-u2722d-monitor/overview",
             description = "27\" QHD IPS Monitor",
             information = listOf(
@@ -357,7 +357,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.UsbDac -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/usb_dac.jpg",
             website = "https://steelseries.com/gaming-accessories/gamedac-gen-2",
             description = "Hi-Res Certified DAC for PC and PlayStation",
             information = listOf(
@@ -370,7 +370,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.UsbDongle1 -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/usb_dongle_1.jpg",
             website = "https://www.logitechg.com/en-us/products/gaming-mice/pro-x-superlight-wireless-mouse.910-005878.html",
             description = "USB wireless receiver for Wireless Gaming Mouse",
             information = listOf(
@@ -387,7 +387,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.UsbDongle2 -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/usb_dongle_2.jpg",
             website = "https://www.logitech.com/en-us/products/mice/logi-bolt-usb-receiver.956-000007.html",
             description = "USB wireless receiver for Logi Bolt",
             information = listOf(
@@ -397,7 +397,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.LedLamp -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/led_light_bar.jpg",
             website = "https://www.baseus.com/products/i-wok-monitor-light-bar",
             description = "Monitor Light Bar for Computer",
             information = listOf(
@@ -411,7 +411,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.Speaker -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/speaker.jpg",
             website = "https://www.bose.com/p/speakers/bose-soundlink-mini-ii-special-edition/SLMINIISE-SPEAKERWIRELESS.html",
             description = "Bluetooth Speaker",
             information = listOf(
@@ -428,7 +428,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.Microphone1 -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/microphone_1.jpg",
             website = "https://www.audio-technica.com/en-eu/atr2500x-usb",
             description = "Cardioid Condenser USB Microphone",
             information = listOf(
@@ -448,7 +448,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.Microphone2 -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/microphone_2.jpg",
             website = "https://www.shure.com/en-US/products/microphones/mv7",
             description = "Professional-quality USB dynamic microphone",
             information = listOf(
@@ -473,7 +473,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.HdmiCapture -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/hdmi_capture.jpg",
             website = "https://www.elgato.com/us/en/p/game-capture-hd60-x",
             description = "Video Capture Device",
             information = listOf(
@@ -487,7 +487,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.AndroidDevice -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/android_device.jpg",
             website = "https://www.gsmarena.com/google_pixel_4-9896.php",
             description = "Android device for app development testing",
             information = listOf(
@@ -521,7 +521,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.GameController -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/game_controller.jpg",
             website = "https://www.nintendo.com/us/store/products/pro-controller/",
             description = "Game Controller for Nintendo Switch",
             information = listOf(
@@ -538,7 +538,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.Headphone -> AdditionalDeviceInformation(
-            image = "",
+            image = "image/gaming_headset.jpg",
             website = "https://steelseries.com/gaming-headsets/arctis-nova-pro",
             description = "Wired High-Fidelity Gaming Audio",
             information = listOf(
