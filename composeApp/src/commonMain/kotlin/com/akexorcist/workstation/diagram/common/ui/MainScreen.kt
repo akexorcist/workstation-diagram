@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.akexorcist.workstation.diagram.common.data.*
+import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
 import com.akexorcist.workstation.diagram.common.ui.state.*
 import com.akexorcist.workstation.diagram.common.utility.*
 
@@ -56,13 +57,14 @@ fun MainScreen(
 
 @Composable
 fun WorkspaceArea(
+    workStation: WorkStation = MyWorkStation,
     screenInPx: SizePx,
     workspaceInDp: SizeDp,
     workspaceInPx: SizePx,
     boundOffset: Offset,
 ) {
     val config by remember { mutableStateOf(DefaultConfig) }
-    var debugConfig by remember { mutableStateOf(DefaultDebugConfig) }
+    val debugConfig by remember { mutableStateOf(DefaultDebugConfig) }
     val deviceCoordinateHostState = rememberWorkstationCoordinateState()
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -83,80 +85,71 @@ fun WorkspaceArea(
         )
     }
 
-//    Box {
-    Box(modifier = Modifier.transformable(state = transformableState)) {
-        Box(
-            modifier = Modifier
-                .requiredWidth(workspaceInDp.width)
-                .requiredHeight(workspaceInDp.height)
-                .graphicsLayer(
-                    scaleX = scale,
-                    scaleY = scale,
+    var currentHoveredConnector: Connector? by remember { mutableStateOf(null) }
+    var currentHoveredDevice: Device? by remember { mutableStateOf(null) }
+
+    Box {
+        Box(modifier = Modifier.transformable(state = transformableState)) {
+            Box(
+                modifier = Modifier
+                    .requiredWidth(workspaceInDp.width)
+                    .requiredHeight(workspaceInDp.height)
+                    .graphicsLayer(
+                        scaleX = scale,
+                        scaleY = scale,
 //                    scaleX = config.zoomScale,
 //                    scaleY = config.zoomScale,
-                    translationX = offset.x,
-                    translationY = offset.y,
+                        translationX = offset.x,
+                        translationY = offset.y,
+                    )
+                    .background(ContentColorTheme.default.background)
+                    .border(
+                        width = 2.dp,
+                        color = Color.LightGray,
+                        shape = RoundedCornerShape(16.dp),
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                WorkspaceContent(
+                    workStation = workStation,
+                    state = deviceCoordinateHostState,
+                    currentHoveredConnector = currentHoveredConnector,
+                    currentHoveredDevice = currentHoveredDevice,
+                    config = config,
+                    debugConfig = debugConfig,
+                    onEnterHoveDeviceInteraction = { currentHoveredDevice = it },
+                    onExitHoverDeviceInteraction = { currentHoveredDevice = null },
+                    onEnterHoveConnectorInteraction = { currentHoveredConnector = it },
+                    onExitHoverConnectorInteraction = { currentHoveredConnector = null },
                 )
-                .background(Color.White)
-                .border(
-                    width = 2.dp,
-                    color = Color.LightGray,
-                    shape = RoundedCornerShape(16.dp),
-                ),
-            contentAlignment = Alignment.Center,
-        ) {
-            WorkspaceContent(
-                state = deviceCoordinateHostState,
-                config = config,
-                debugConfig = debugConfig,
-            )
+            }
         }
-        DebugPanel(
-            debugConfig = debugConfig,
-            onNextIndex = { debugConfig = debugConfig.copy(lineIndex = it + 1) },
-            onPreviousIndex = {
-                if (debugConfig.lineIndex > 0) {
-                    debugConfig = debugConfig.copy(lineIndex = it - 1)
-                }
-            },
-            onToggleShowWorkspaceArea = {
-                debugConfig = debugConfig.copy(showWorkspaceArea = it)
-            },
-            onToggleShowDeviceArea = {
-                debugConfig = debugConfig.copy(showDeviceArea = it)
-            },
-            onToggleShowOverlapBoundArea = {
-                debugConfig = debugConfig.copy(showOverlapBoundArea = it)
-            },
-            onToggleShowConnectorArea = {
-                debugConfig = debugConfig.copy(showConnectorArea = it)
-            },
-            onToggleShowAllConnectionLines = {
-                debugConfig = debugConfig.copy(showAllConnectionLines = it)
-            },
-            onToggleLineConnectionPoint = {
-                debugConfig = debugConfig.copy(showLineConnectionPoint = it)
-            },
-            onToggleLineOptimization = {
-                debugConfig = debugConfig.copy(disableLineOptimization = it)
-            },
+        InformationContent(
+            workStation = workStation,
+            onEnterDeviceHoverInteraction = { currentHoveredDevice = it },
+            onExitDeviceHoverInteraction = { currentHoveredDevice = null },
         )
     }
 }
 
 @Composable
 private fun WorkspaceContent(
+    workStation: WorkStation,
     state: WorkstationCoordinateState,
+    currentHoveredConnector: Connector?,
+    currentHoveredDevice: Device?,
     config: Config,
     debugConfig: DebugConfig,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
 ) {
-    var currentHoveredConnector: Connector? by remember { mutableStateOf(null) }
-    var currentHoveredDevice: Device? by remember { mutableStateOf(null) }
 
     val connections: List<Connection> = state.currentWorkstationCoordinates
         .takeIf { it.areAvailable() }
         ?.let { coordinates ->
-            val deviceAreas = coordinates.getSortedDeviceConnectorsByLeft()
+            val deviceAreas = coordinates.getSortedDevicesByLeft()
                 .mapToMinimumBound(
                     horizontalBoundDistance = config.minimumHorizontalDistanceToDevice.px(),
                     verticalBoundDistance = config.minimumVerticalDistanceToDevice.px(),
@@ -203,25 +196,17 @@ private fun WorkspaceContent(
             currentHoveredConnector = currentHoveredConnector,
         )
         DeviceContent(
-            workStation = MyWorkStation,
+            workStation = workStation,
             state = state,
             currentHoveredDevice = currentHoveredDevice,
             currentHoveredConnector = currentHoveredConnector,
             onDeviceClick = {
                 println("onDeviceClick ${it.title}")
             },
-            onEnterHoveDeviceInteraction = {
-                currentHoveredDevice = it
-            },
-            onExitHoverDeviceInteraction = {
-                currentHoveredDevice = null
-            },
-            onEnterHoveConnectorInteraction = {
-                currentHoveredConnector = it
-            },
-            onExitHoverConnectorInteraction = {
-                currentHoveredConnector = null
-            },
+            onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+            onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+            onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+            onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
         )
         DebugContent(
             coordinates = state.currentWorkstationCoordinates,

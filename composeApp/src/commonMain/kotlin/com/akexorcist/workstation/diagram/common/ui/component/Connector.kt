@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.akexorcist.workstation.diagram.common.data.*
 import com.akexorcist.workstation.diagram.common.theme.ConnectorComponentTheme
+import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
 import com.akexorcist.workstation.diagram.common.utility.onConnectorCoordinated
 
 private val ConnectorWidth = 110.dp
@@ -144,6 +145,7 @@ private fun ConnectorComponent(
         Text(
             text = label,
             fontSize = MaterialTheme.typography.labelSmall.fontSize,
+            color = ContentColorTheme.default.text,
             fontWeight = FontWeight.SemiBold,
         )
     }

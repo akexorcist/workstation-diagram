@@ -6,7 +6,7 @@ data class WorkStation(
     val pcDesktop: Device.PcDesktop,
     val usbDockingStation: Device.UsbDockingStation,
     val digitalCamera: Device.DigitalCamera,
-    val hdmiToWebCam: Device.HdmiToWebcam,
+    val hdmiToWebcam: Device.HdmiToWebcam,
     val streamDeck: Device.StreamDeck,
     val externalSsd: Device.ExternalSsd,
     val usbCSwitcher: Device.UsbCSwitcher,
@@ -169,7 +169,7 @@ val MyWorkStation = WorkStation(
             ),
         )
     },
-    hdmiToWebCam = Device.HdmiToWebcam.builder {
+    hdmiToWebcam = Device.HdmiToWebcam.builder {
         Device.HdmiToWebcam(
             leftConnections = listOf(
                 Connector(
@@ -582,4 +582,31 @@ val MyWorkStation = WorkStation(
             rightConnections = listOf(),
         )
     },
+)
+
+fun WorkStation.getAllDevices(): List<Device> = listOf(
+    this.officeLaptop,
+    this.personalLaptop,
+    this.pcDesktop,
+    this.usbDockingStation,
+    this.usbCSwitcher,
+    this.usbHub,
+    this.usbPowerAdapter,
+    this.secondaryMonitor,
+    this.primaryMonitor,
+    this.usbDac,
+    this.digitalCamera,
+    this.hdmiToWebcam,
+    this.streamDeck,
+    this.externalSsd,
+    this.usbDongle1,
+    this.usbDongle2,
+    this.ledLamp,
+    this.speaker,
+    this.microphone1,
+    this.microphone2,
+    this.hdmiCapture,
+    this.androidDevice,
+    this.gameController,
+    this.headphone,
 )

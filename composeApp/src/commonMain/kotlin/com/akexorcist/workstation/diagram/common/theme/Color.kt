@@ -30,6 +30,7 @@ object ThemeColor {
     val Amber100 = Color(0xFFFFECB3)
     val Amber200 = Color(0xFFFFE082)
     val Amber300 = Color(0xFFFFD54F)
+    val Gray100 = Color(0xFFF5F5F5)
     val Gray200 = Color(0xFFEEEEEE)
     val Gray300 = Color(0xFFE0E0E0)
     val Gray500 = Color(0xFF9E9E9E)
@@ -45,26 +46,51 @@ object ThemeColor {
     val Indigo200 = Color(0xFF9FA8DA)
     val White = Color.White
     val Black = Color.Black
-    val Transparent = Color.Transparent
+    val Transparent = Color(0x00FFFFFF)
 }
 
 data class DeviceComponent(
     val cornerRadius: Dp,
+    val color: Color,
     val buttonColors: @Composable () -> ButtonColors,
 )
 
 object DeviceComponentTheme {
     val Computer = DeviceComponent(
         cornerRadius = 8.dp,
-        buttonColors = { DeviceColor.computer() },
+        color = ThemeColor.Red100,
+        buttonColors = {
+            ButtonDefaults.buttonColors(
+                containerColor = ThemeColor.Red100,
+                contentColor = ThemeColor.Gray900,
+                disabledContainerColor = ThemeColor.Gray200,
+                disabledContentColor = ThemeColor.Gray500,
+            )
+        },
     )
     val Hub = DeviceComponent(
         cornerRadius = 8.dp,
-        buttonColors = { DeviceColor.hub() },
+        color = ThemeColor.Teal100,
+        buttonColors = {
+            ButtonDefaults.buttonColors(
+                containerColor = ThemeColor.Teal100,
+                contentColor = ThemeColor.Gray900,
+                disabledContainerColor = ThemeColor.Gray200,
+                disabledContentColor = ThemeColor.Gray500,
+            )
+        },
     )
     val End = DeviceComponent(
         cornerRadius = 8.dp,
-        buttonColors = { DeviceColor.end() },
+        color = ThemeColor.Amber100,
+        buttonColors = {
+            ButtonDefaults.buttonColors(
+                containerColor = ThemeColor.Amber100,
+                contentColor = ThemeColor.Gray900,
+                disabledContainerColor = ThemeColor.Gray200,
+                disabledContentColor = ThemeColor.Gray500,
+            )
+        },
     )
 }
 
@@ -110,28 +136,21 @@ object ConnectionLineComponentTheme {
     )
 }
 
-object DeviceColor {
-    @Composable
-    fun computer() = ButtonDefaults.buttonColors(
-        containerColor = ThemeColor.Red100,
-        contentColor = ThemeColor.Gray900,
-        disabledContainerColor = ThemeColor.Gray200,
-        disabledContentColor = ThemeColor.Gray500,
-    )
+data class ContentColor(
+    val text: Color,
+    val icon: Color,
+    val background: Color,
+    val transparentBackground: Color,
+    val hoveredBackground: Color,
+)
 
-    @Composable
-    fun hub() = ButtonDefaults.buttonColors(
-        containerColor = ThemeColor.Teal100,
-        contentColor = ThemeColor.Gray900,
-        disabledContainerColor = ThemeColor.Gray200,
-        disabledContentColor = ThemeColor.Gray500,
-    )
 
-    @Composable
-    fun end() = ButtonDefaults.buttonColors(
-        containerColor = ThemeColor.Amber100,
-        contentColor = ThemeColor.Gray900,
-        disabledContainerColor = ThemeColor.Gray200,
-        disabledContentColor = ThemeColor.Gray500,
+object ContentColorTheme {
+    val default = ContentColor(
+        text = ThemeColor.Gray900,
+        icon = ThemeColor.Gray900,
+        background = ThemeColor.White,
+        transparentBackground = ThemeColor.Transparent,
+        hoveredBackground = ThemeColor.Gray100
     )
 }

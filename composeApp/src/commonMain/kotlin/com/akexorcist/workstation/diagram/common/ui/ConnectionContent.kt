@@ -120,11 +120,11 @@ private fun ConnectionLine(
 
     val infiniteTransition = rememberInfiniteTransition()
     val phase by infiniteTransition.animateFloat(
-        initialValue = if (isReverseDirection) 0f else 100f,
-        targetValue = if (isReverseDirection) 100f else 0f,
+        initialValue = if (isReverseDirection) 0.dp.px() else 20.dp.px(),
+        targetValue = if (isReverseDirection) 20.dp.px() else 0.dp.px(),
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 5000,
+                durationMillis = 1000,
                 easing = LinearEasing,
             ),
             repeatMode = RepeatMode.Restart

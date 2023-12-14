@@ -374,6 +374,45 @@ sealed class Device(
         leftConnections.any { it.target == connector.owner && it.owner == connector.target } ||
                 rightConnections.any { it.target == connector.owner && it.owner == connector.target }
 
+    fun isComputer(): Boolean = when (this.type) {
+        Type.OfficeLaptop,
+        Type.PersonalLaptop,
+        Type.PcDesktop -> true
+
+        else -> false
+    }
+
+    fun isHub(): Boolean = when (this.type) {
+        Type.UsbDockingStation,
+        Type.UsbCSwitcher,
+        Type.UsbHub,
+        Type.UsbPowerAdapter,
+        Type.SecondaryMonitor,
+        Type.PrimaryMonitor,
+        Type.UsbDac -> true
+
+        else -> false
+    }
+
+    fun isAccessory(): Boolean = when (this.type) {
+        Type.DigitalCamera,
+        Type.HdmiToWebcam,
+        Type.StreamDeck,
+        Type.ExternalSsd,
+        Type.UsbDongle1,
+        Type.UsbDongle2,
+        Type.LedLamp,
+        Type.Speaker,
+        Type.Microphone1,
+        Type.Microphone2,
+        Type.HdmiCapture,
+        Type.AndroidDevice,
+        Type.GameController,
+        Type.Headphone -> true
+
+        else -> false
+    }
+
     enum class Type {
         OfficeLaptop,
         PersonalLaptop,

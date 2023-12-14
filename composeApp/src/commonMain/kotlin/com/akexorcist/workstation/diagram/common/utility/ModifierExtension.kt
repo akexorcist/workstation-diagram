@@ -1,10 +1,20 @@
 package com.akexorcist.workstation.diagram.common.utility
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.*
+import androidx.compose.ui.unit.dp
 import com.akexorcist.workstation.diagram.common.data.*
+import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
 
 @Composable
 fun Modifier.onDeviceCoordinated(
@@ -70,3 +80,19 @@ fun Modifier.onWorkspaceCoordinated(
         )
     }
 }
+
+@Composable
+fun Modifier.informationBackground(
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+): Modifier = this
+    .shadow(
+        elevation = 4.dp,
+        shape = RoundedCornerShape(8.dp),
+    )
+    .hoverable(interactionSource = interactionSource)
+    .clip(RoundedCornerShape(8.dp))
+    .background(
+        color = ContentColorTheme.default.background,
+        shape = RoundedCornerShape(8.dp),
+    )
+

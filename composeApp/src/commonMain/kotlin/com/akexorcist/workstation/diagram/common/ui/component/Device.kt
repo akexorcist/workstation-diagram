@@ -30,6 +30,7 @@ import com.akexorcist.workstation.diagram.common.data.ConnectorSide
 import com.akexorcist.workstation.diagram.common.data.Device
 import com.akexorcist.workstation.diagram.common.data.DeviceCoordinate
 import com.akexorcist.workstation.diagram.common.theme.DeviceComponentTheme
+import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
 import com.akexorcist.workstation.diagram.common.utility.onDeviceCoordinated
 
 @Composable
@@ -339,12 +340,14 @@ private fun DeviceComponent(
             Text(
                 text = title,
                 fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                color = ContentColorTheme.default.text,
                 fontWeight = FontWeight.Bold,
             )
             subtitle?.let {
                 Text(
                     text = it,
                     fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                    color = ContentColorTheme.default.text,
                 )
             }
         }

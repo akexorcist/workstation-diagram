@@ -112,7 +112,7 @@ internal fun DeviceContent(
             )
             Spacer(modifier = Modifier.height(21.dp))
             HdmiToWebcam(
-                device = workStation.hdmiToWebCam,
+                device = workStation.hdmiToWebcam,
                 currentHoveredDevice = currentHoveredDevice,
                 currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
