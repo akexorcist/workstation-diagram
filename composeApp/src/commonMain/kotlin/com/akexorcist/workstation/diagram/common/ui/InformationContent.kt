@@ -1,6 +1,8 @@
 package com.akexorcist.workstation.diagram.common.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -27,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -92,8 +95,15 @@ private fun DeviceList(
     onEnterHoverInteraction: (Device) -> Unit,
     onExitHoverInteraction: (Device) -> Unit,
 ) {
+    var isExpanded by remember { mutableStateOf(true) }
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+//    val bottomOverflowAlpha by animateFloatAsState(
+//        targetValue = when (!lazyListState.isScrollInProgress) {
+//            true -> 1f
+//            false -> 0f
+//        }
+//    )
 
     Column(
         modifier = Modifier
@@ -103,7 +113,7 @@ private fun DeviceList(
                 start = 24.dp,
                 end = 16.dp,
                 top = 12.dp,
-                bottom = 16.dp,
+                bottom = 12.dp,
             )
             .draggable(
                 orientation = Orientation.Vertical,
@@ -117,24 +127,56 @@ private fun DeviceList(
         CollapsibleHeader(
             label = "Device List",
             icon = Icons.Outlined.List,
-            isExpanded = true,
-            onToggleClick = {},
+            isExpanded = isExpanded,
+            onToggleClick = { isExpanded = !isExpanded },
         )
-        Spacer(modifier = Modifier.height(4.dp))
-        Box {
-            LazyColumn(
-                state = lazyListState,
-            ) {
-                itemsIndexed(
-                    items = devices,
-                    key = { _, device -> device.type.name },
-                ) { index, device ->
-                    DeviceItem(
-                        device = device,
-                        onEnterHoverInteraction = onEnterHoverInteraction,
-                        onExitHoverInteraction = onExitHoverInteraction,
-                    )
+
+        AnimatedVisibility(visible = isExpanded) {
+            Column {
+                Spacer(modifier = Modifier.height(4.dp))
+                Box(modifier = Modifier.weight(1f)) {
+                    LazyColumn(
+                        state = lazyListState,
+                    ) {
+                        itemsIndexed(
+                            items = devices,
+                            key = { _, device -> device.type.name },
+                        ) { index, device ->
+                            DeviceItem(
+                                device = device,
+                                onEnterHoverInteraction = onEnterHoverInteraction,
+                                onExitHoverInteraction = onExitHoverInteraction,
+                            )
+                        }
+                    }
+//            Spacer(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(20.dp)
+//                    .alpha(bottomOverflowAlpha)
+//                    .background(
+//                        brush = Brush.linearGradient(
+//                            colors = listOf(
+//                                MaterialTheme.colorScheme.background,
+//                                MaterialTheme.colorScheme.background.copy(alpha = 0f),
+//                            ),
+//                            start = Offset(x = 0f, y = 20.dp.px()),
+//                            end = Offset(x = 0f, y = 0f),
+//                        )
+//                    )
+//                    .align(Alignment.BottomCenter)
+//            )
+//            Spacer(
+//                modifier = Modifier
+//                    .offset(
+//                        y = lazyListState.firstVisibleItemScrollOffset.dp
+//                    )
+//                    .width(10.dp)
+//                    .height(10.dp)
+//                    .background(Color.Red)
+//            )
                 }
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
@@ -218,8 +260,8 @@ private fun DeviceItem(
 }
 
 @Composable
-private fun Instruction(
-) {
+private fun Instruction() {
+    var isExpanded by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .width(260.dp)
@@ -228,40 +270,47 @@ private fun Instruction(
                 start = 32.dp,
                 end = 16.dp,
                 top = 12.dp,
-                bottom = 24.dp,
+                bottom = 12.dp,
             )
     ) {
         CollapsibleHeader(
             label = "Instruction",
             icon = Icons.Outlined.Info,
-            isExpanded = true,
-            onToggleClick = {},
+            isExpanded = isExpanded,
+            onToggleClick = { isExpanded = !isExpanded },
         )
-        Spacer(modifier = Modifier.height(4.dp))
-        DeviceIntruction(
-            color = DeviceComponentTheme.Computer.color,
-            label = "Computer"
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        DeviceIntruction(
-            color = DeviceComponentTheme.Hub.color,
-            label = "Hub"
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        DeviceIntruction(
-            color = DeviceComponentTheme.End.color,
-            label = "Accessory"
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        DeviceIntruction(
-            color = ConnectorComponentTheme.Output.color,
-            label = "Output Connector"
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        DeviceIntruction(
-            color = ConnectorComponentTheme.Input.color,
-            label = "Input Connector"
-        )
+        AnimatedVisibility(
+            visible = isExpanded,
+        ) {
+            Column {
+                Spacer(modifier = Modifier.height(4.dp))
+                DeviceIntruction(
+                    color = DeviceComponentTheme.Computer.color,
+                    label = "Computer"
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                DeviceIntruction(
+                    color = DeviceComponentTheme.Hub.color,
+                    label = "Hub"
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                DeviceIntruction(
+                    color = DeviceComponentTheme.End.color,
+                    label = "Accessory"
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                DeviceIntruction(
+                    color = ConnectorComponentTheme.Output.color,
+                    label = "Output Connector"
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                DeviceIntruction(
+                    color = ConnectorComponentTheme.Input.color,
+                    label = "Input Connector"
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+        }
     }
 }
 
@@ -292,6 +341,12 @@ private fun CollapsibleHeader(
     isExpanded: Boolean,
     onToggleClick: () -> Unit,
 ) {
+    val rotate by animateFloatAsState(
+        targetValue = when (isExpanded) {
+            true -> 0f
+            false -> 180f
+        }
+    )
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             modifier = Modifier.size(20.dp),
@@ -309,7 +364,9 @@ private fun CollapsibleHeader(
         )
         IconButton(onClick = onToggleClick) {
             Icon(
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier
+                    .size(20.dp)
+                    .rotate(rotate),
                 imageVector = Icons.Default.KeyboardArrowUp,
                 contentDescription = when (isExpanded) {
                     true -> "Collapse"
