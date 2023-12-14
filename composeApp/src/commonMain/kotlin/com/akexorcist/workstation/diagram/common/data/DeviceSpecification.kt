@@ -321,7 +321,39 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
             image = "",
             website = "https://www.dell.com/support/home/en-th/product-support/product/dell-u2722d-monitor/overview",
             description = "27\" QHD IPS Monitor",
-            information = listOf(),
+            information = listOf(
+                "Screen Size" to "27\"",
+                "Active Display Area" to "596.7 x 335.7 mm | 23.49 x 13.21 in",
+                "Maximum Resolution" to "2,560 x 1,440 @ 60Hz",
+                "Aspect Ratio" to "16:9",
+                "Pixel Pitch " to "0.2331 mm x 0.2331 mm",
+                "Brightness" to "350 cd/m²  (typical)",
+                "Color Gamut" to "100% sRGB, 100% Rec.709, 95% DCI-P3",
+                "Color Depth" to "1.07 billion colors",
+                "Contrast Ratio" to "1000: 1  (typical)",
+                "Viewing Angle" to "178° vertical / 178° horizontal",
+                "Response Time" to "8 ms (Normal mode); 5 ms (Fast mode)",
+                "Panel Technology " to "IPS",
+                "Backlight Technology" to "LED",
+                "Display Screen Coating" to "Anti-glare treatment of the front polarizer (3H) hard coating",
+                "Connectors" to "1 x DP 1.4 (HDCP 1.4)\n" +
+                        "1 x HDMI 1.4\n" +
+                        "1 x USB-C (USB 3.2 Gen2, 10Gbps) upstream port, data only\n" +
+                        "1 x DP (Out)\n" +
+                        "2 x super speed USB-A (USB 3.2 Gen2, 10Gbps) downstream ports\n" +
+                        "1 x super speed USB-A (USB 3.2 Gen2, 10Gbps) with B.C 1.2\n" +
+                        "1 x USB-C (USB 3.2 Gen2, 10Gbps, Up to 15W charging) downstream port\n" +
+                        "1 x Analog 2.0 audio line out (3.5mm jack)",
+                "VESA Mounting Support" to "VESA mounting holes (100 x 100 mm)",
+                "AC Input" to "100 VAC to 240 VAC / 50 Hz or 60 Hz ± 3 Hz / 1.6 A (maximum)",
+                "Power Consumption" to "<0.3 W (Off Mode)\n" +
+                        "<0.5 W (Standby Mode)\n" +
+                        "25 W (On Mode)\n" +
+                        "74 W (Maximum)",
+                "Dimension" to "385.1 - 535.1 x 611.3 x 185.0 mm | 15.16 - 21.07 x 24.07 x 7.28 in)",
+                "Weight (panel only)" to "4.38 kg | (9.66 lb",
+                "Weight (with stand and cables)" to "6.61 kg (14.57 lb)",
+            ),
         )
 
         Device.Type.UsbDac -> AdditionalDeviceInformation(
