@@ -11,10 +11,10 @@ plugins {
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "composeApp"
+        moduleName = "workstation-diagram"
         browser {
             commonWebpackConfig {
-                outputFileName = "composeApp.js"
+                outputFileName = "workstation-diagram.js"
             }
         }
         binaries.executable()
