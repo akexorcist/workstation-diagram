@@ -14,15 +14,23 @@
     <meta property="og:title" content="Workstation Diagram"/>
     <meta property="og:url" content="https://akexorcist.github.io/workstation-diagram/"/>
     <meta property="og:type" content="website"/>
-    <meta property="og:description" content="My workstation's interactive diagram using Kotlin Multiplatform"/>
+    <meta property="og:description" content="My workstation's interactive diagram"/>
     <meta property="og:image" content="../image/icon/preview.jpg"/>
     <meta property="twitter:card" content="summary_large_image"/>
     <meta property="twitter:url" content="https://akexorcist.github.io/workstation-diagram/">
     <meta property="twitter:title" content="Workstation Diagram"/>
-    <meta property="twitter:description" content="My workstation's interactive diagram using Kotlin Multiplatform"></meta>
+    <meta property="twitter:description" content="My workstation's interactive diagram"></meta>
     <meta property="twitter:image" content="../image/icon/preview.jpg"/>
+    <script defer type="application/javascript">
+        window.onload = function(){
+            document.getElementById("loading").style.display='none';
+        };
+    </script>
 </head>
 <body>
+<div id="loading" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <div id="message">Loading...</div>
+</div>
 <canvas id="WorkstationDiagram"></canvas>
 </body>
 </html>
