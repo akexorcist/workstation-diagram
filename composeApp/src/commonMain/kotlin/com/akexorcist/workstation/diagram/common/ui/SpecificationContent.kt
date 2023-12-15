@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.sp
 import com.akexorcist.workstation.diagram.common.data.DeviceSpecification
 import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
 import com.akexorcist.workstation.diagram.common.theme.DeviceComponentTheme
-import com.akexorcist.workstation.diagram.common.theme.ThemeColor
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource

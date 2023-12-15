@@ -15,12 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.akexorcist.workstation.diagram.common.data.*
 import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
 import com.akexorcist.workstation.diagram.common.ui.state.*
 import com.akexorcist.workstation.diagram.common.utility.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import openUrl
 
 
 private val workspaceWidth = 2850.dp
@@ -111,6 +115,7 @@ private fun WorkspaceContent(
     var currentHoveredConnector: Connector? by remember { mutableStateOf(null) }
     var currentHoveredDevice: Device? by remember { mutableStateOf(null) }
     var currentSelectedDevice: Device? by remember { mutableStateOf(null) }
+    val uriHandler = LocalUriHandler.current
 
     Box {
         Box(modifier = Modifier.transformable(state = transformableState)) {
@@ -158,7 +163,7 @@ private fun WorkspaceContent(
         currentSelectedDevice?.let { device ->
             SpecificationContent(
                 specification = device.toDeviceSpecification(),
-                onWebsiteClick = {},
+                onWebsiteClick = { url -> uriHandler.openUri(url) },
                 onDismissRequest = { currentSelectedDevice = null },
             )
         }
