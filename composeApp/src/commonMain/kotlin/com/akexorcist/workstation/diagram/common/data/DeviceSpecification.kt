@@ -542,7 +542,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
             website = "https://steelseries.com/gaming-headsets/arctis-nova-pro",
             description = "Wired High-Fidelity Gaming Audio",
             information = listOf(
-                "Neodymium Drivers" to "40 mm",
+                "Neodymium Drivers" to "40 mm",
                 "Headphone Frequency Response" to "10–40,000 Hz",
                 "Headphone Sensitivity" to "\n" +
                         "93 dBSPL",

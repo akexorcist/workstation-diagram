@@ -18,18 +18,12 @@ class WorkstationCoordinateState {
         private set
 
     fun update(coordinate: WorkspaceCoordinate) {
-//        println("Update workspace")
-//        Log.e("Check", "Update Workspace Coordinate")
-//        if (currentWorkstationCoordinates.workspace != null) return
         currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
             workspace = coordinate
         )
     }
 
     fun update(coordinate: DeviceCoordinate.Device) {
-//        println("Update device")
-//        Log.e("Check", "Update Device Coordinate: ${coordinate.device}")
-
         val updatedCoordinate = coordinate.copy(
             offset = Offset(
                 x = coordinate.offset.x + (currentWorkstationCoordinates.workspace?.adjustment?.x ?: 0f),
@@ -232,7 +226,6 @@ class WorkstationCoordinateState {
     }
 
     fun update(coordinate: DeviceCoordinate.Connector) {
-//        println("Update connector")
         val updatedCoordinate = coordinate.copy(
             offset = Offset(
                 x = coordinate.offset.x + (currentWorkstationCoordinates.workspace?.adjustment?.x ?: 0f),

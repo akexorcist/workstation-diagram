@@ -102,12 +102,6 @@ private fun DeviceList(
     var isExpanded by remember { mutableStateOf(true) }
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-//    val bottomOverflowAlpha by animateFloatAsState(
-//        targetValue = when (!lazyListState.isScrollInProgress) {
-//            true -> 1f
-//            false -> 0f
-//        }
-//    )
 
     Column(
         modifier = Modifier
@@ -145,7 +139,7 @@ private fun DeviceList(
                         itemsIndexed(
                             items = devices,
                             key = { _, device -> device.type.name },
-                        ) { index, device ->
+                        ) { _, device ->
                             DeviceItem(
                                 device = device,
                                 onDeviceClick = onDeviceClick,
@@ -154,32 +148,6 @@ private fun DeviceList(
                             )
                         }
                     }
-//            Spacer(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(20.dp)
-//                    .alpha(bottomOverflowAlpha)
-//                    .background(
-//                        brush = Brush.linearGradient(
-//                            colors = listOf(
-//                                MaterialTheme.colorScheme.background,
-//                                MaterialTheme.colorScheme.background.copy(alpha = 0f),
-//                            ),
-//                            start = Offset(x = 0f, y = 20.dp.px()),
-//                            end = Offset(x = 0f, y = 0f),
-//                        )
-//                    )
-//                    .align(Alignment.BottomCenter)
-//            )
-//            Spacer(
-//                modifier = Modifier
-//                    .offset(
-//                        y = lazyListState.firstVisibleItemScrollOffset.dp
-//                    )
-//                    .width(10.dp)
-//                    .height(10.dp)
-//                    .background(Color.Red)
-//            )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
             }

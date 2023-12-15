@@ -30,7 +30,6 @@ fun WorkstationCoordinates.getSortedDevicesByLeft(): List<Pair<Rect, Device.Type
     this.gameController.device,
     this.headphone.device,
 )
-//    .sortedWith(compareBy({ -it.offset.x }, { -it.offset.y }))
     .sortedBy { it.offset.x }
     .map {
         Rect(

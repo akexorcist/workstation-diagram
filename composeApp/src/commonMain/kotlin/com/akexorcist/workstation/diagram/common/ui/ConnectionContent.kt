@@ -29,7 +29,6 @@ internal fun ConnectionContent(
     currentHoveredDevice: Device?,
     currentHoveredConnector: Connector?,
 ) {
-//    println("############ Recomposition ############")
     Box(modifier = Modifier.fillMaxSize()) {
         connections.forEach { connection ->
             ConnectionLine(

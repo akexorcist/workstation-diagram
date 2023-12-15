@@ -147,7 +147,6 @@ fun DebugContent(
             }
 
             if (debugConfig.showDeviceArea) {
-                // Draw all device area with blue line
                 getAllDevices(coordinates)
                     .forEach { device ->
                         drawRect(

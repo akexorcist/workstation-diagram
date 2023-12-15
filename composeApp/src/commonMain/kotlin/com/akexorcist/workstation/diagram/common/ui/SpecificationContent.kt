@@ -156,8 +156,7 @@ private fun AdditionalInformation(
                     )
                     Spacer(modifier = Modifier.width(24.dp))
                     Text(
-                        modifier = Modifier
-                            .weight(0.7f),
+                        modifier = Modifier.weight(0.7f),
                         text = value,
                         fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                         color = ContentColorTheme.default.text,

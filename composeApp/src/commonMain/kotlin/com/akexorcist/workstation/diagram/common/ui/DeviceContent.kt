@@ -1034,15 +1034,3 @@ private fun Headphone(
         onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
     )
 }
-
-//@Preview(heightDp = 1000, widthDp = 2000, showBackground = true)
-//@Composable
-//fun DeviceContentPreview() {
-//    val state = rememberWorkstationCoordinateHostState()
-//    MaterialTheme {
-//        DeviceContent(
-//            workStation = MyWorkStation,
-//            state = state,
-//        )
-//    }
-//}
