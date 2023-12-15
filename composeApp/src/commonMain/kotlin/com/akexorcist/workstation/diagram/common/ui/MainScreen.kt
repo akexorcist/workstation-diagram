@@ -22,9 +22,6 @@ import com.akexorcist.workstation.diagram.common.data.*
 import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
 import com.akexorcist.workstation.diagram.common.ui.state.*
 import com.akexorcist.workstation.diagram.common.utility.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import openUrl
 
 
 private val workspaceWidth = 2850.dp
@@ -201,8 +198,6 @@ private fun WorkspaceContent(
                     this
                 } else {
                     filterIndexed { index, _ -> index == debugConfig.lineIndex }
-//                    filterIndexed { index, _ -> listOf(17, 25, 26, 27).contains(index) }
-//                    filterIndexed { index, _ -> (0..12).contains(index) || (15..30).contains(index) }
                 }
             }.map { connector ->
                 Connection(

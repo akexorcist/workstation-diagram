@@ -3,6 +3,10 @@
 package com.akexorcist.workstation.diagram.common.ui
 
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -92,7 +96,18 @@ fun SpecificationContent(
                     fontWeight = FontWeight.Medium,
                 )
                 Spacer(modifier = Modifier.height(32.dp))
-                Column {
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(state = scrollState)
+                        .draggable(
+                            orientation = Orientation.Vertical,
+                            state = rememberDraggableState { delta ->
+                                coroutineScope.launch {
+                                    scrollState.scrollBy(-delta)
+                                }
+                            },
+                        )
+                ) {
                     Image(
                         painter = painterResource(specification.image),
                         modifier = Modifier.fillMaxWidth().height(200.dp),
@@ -148,8 +163,9 @@ private fun AdditionalInformation(
                         color = ContentColorTheme.default.text,
                         lineHeight = 28.sp,
                     )
+
                 }
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(64.dp))
             }
         }
     }
@@ -200,7 +216,7 @@ private fun ProductWebsiteButton(url: String, onClick: (String) -> Unit) {
             Icon(
                 modifier = Modifier.size(24.dp),
                 imageVector = Icons.Default.ExitToApp,
-                contentDescription = "Close device specification",
+                contentDescription = "Open product website",
                 tint = ContentColorTheme.default.text,
             )
         }
