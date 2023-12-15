@@ -57,6 +57,14 @@ fun MainScreen(
         workspaceInPx = workspaceInPx,
         boundOffset = boundOffset,
     )
+//    LaunchedEffect(Unit) {
+//        val fpsCounter = org.jetbrains.skiko.FPSCounter(logOnTick = true)
+//        while (true) {
+//            withFrameNanos {
+//                fpsCounter.tick()
+//            }
+//        }
+//    }
 }
 
 @Composable
