@@ -2,6 +2,8 @@
 
 My workstation's interactive diagram using Kotlin Multiplatform
 
+Try it on https://akexorcist.github.io/workstation-diagram
+
 ![Overview](image%2Foverview.gif)
 
 ## Framework & Library

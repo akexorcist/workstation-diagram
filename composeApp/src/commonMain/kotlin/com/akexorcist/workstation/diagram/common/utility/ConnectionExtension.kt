@@ -591,7 +591,6 @@ private fun Offset.getOptimizedOffset(
     isStartLine: Boolean,
     debugLog: Boolean,
 ): Offset {
-    println("${connectionLine.source.owner} (${connectionLine.source.type}) => ${connectionLine.target?.owner} (${connectionLine.target?.type})")
     val startLineArea =
         if (isStartLine)
             Rect.from(this, connectionLine.offset)
