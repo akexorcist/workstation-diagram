@@ -88,7 +88,7 @@ private fun WorkspaceContainer(
     }
 
     WorkspaceContent(
-        workStation = MyWorkStation,
+        workStation = MyWorkstation,
         config = config,
         debugConfig = debugConfig,
         workspaceInDp = workspaceInDp,
@@ -100,7 +100,7 @@ private fun WorkspaceContainer(
 
 @Composable
 private fun WorkspaceContent(
-    workStation: WorkStation,
+    workStation: Workstation,
     config: Config,
     debugConfig: DebugConfig,
     workspaceInDp: SizeDp,
@@ -169,7 +169,7 @@ private fun WorkspaceContent(
 
 @Composable
 private fun WorkspaceContent(
-    workStation: WorkStation,
+    workStation: Workstation,
     state: WorkstationCoordinateState,
     currentHoveredConnector: Connector?,
     currentHoveredDevice: Device?,

@@ -1,6 +1,6 @@
 package com.akexorcist.workstation.diagram.common.data
 
-data class WorkStation(
+data class Workstation(
     val officeLaptop: Device.OfficeLapTop,
     val personalLaptop: Device.PersonalLapTop,
     val pcDesktop: Device.PcDesktop,
@@ -27,7 +27,7 @@ data class WorkStation(
     val headphone: Device.Headphone,
 )
 
-val MyWorkStation = WorkStation(
+val MyWorkstation = Workstation(
     officeLaptop = Device.OfficeLapTop.builder {
         Device.OfficeLapTop(
             leftConnections = listOf(),
@@ -584,7 +584,7 @@ val MyWorkStation = WorkStation(
     },
 )
 
-fun WorkStation.getAllDevices(): List<Device> = listOf(
+fun Workstation.getAllDevices(): List<Device> = listOf(
     this.officeLaptop,
     this.pcDesktop,
     this.personalLaptop,

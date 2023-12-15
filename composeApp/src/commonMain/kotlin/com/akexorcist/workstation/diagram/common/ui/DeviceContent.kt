@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.akexorcist.workstation.diagram.common.data.Connector
 import com.akexorcist.workstation.diagram.common.data.Device
 import com.akexorcist.workstation.diagram.common.data.DeviceCoordinate
-import com.akexorcist.workstation.diagram.common.data.WorkStation
+import com.akexorcist.workstation.diagram.common.data.Workstation
 import com.akexorcist.workstation.diagram.common.ui.component.ComputerDeviceComponent
 import com.akexorcist.workstation.diagram.common.ui.component.EndDeviceComponent
 import com.akexorcist.workstation.diagram.common.ui.component.HubDeviceComponent
@@ -29,7 +29,7 @@ private val ForthRowSpacing = MinimumRowSpacing
 
 @Composable
 internal fun DeviceContent(
-    workStation: WorkStation,
+    workStation: Workstation,
     state: WorkstationCoordinateState,
     currentHoveredDevice: Device?,
     currentHoveredConnector: Connector?,

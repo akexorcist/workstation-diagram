@@ -37,7 +37,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.akexorcist.workstation.diagram.common.data.Device
-import com.akexorcist.workstation.diagram.common.data.WorkStation
+import com.akexorcist.workstation.diagram.common.data.Workstation
 import com.akexorcist.workstation.diagram.common.data.getAllDevices
 import com.akexorcist.workstation.diagram.common.theme.ConnectorComponentTheme
 import com.akexorcist.workstation.diagram.common.theme.DeviceComponentTheme
@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun InformationContent(
-    workStation: WorkStation,
+    workStation: Workstation,
     onDeviceClick: (Device) -> Unit,
     onEnterDeviceHoverInteraction: (Device) -> Unit,
     onExitDeviceHoverInteraction: (Device) -> Unit,
