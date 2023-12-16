@@ -11,6 +11,7 @@ import com.akexorcist.workstation.diagram.common.data.Device
 import com.akexorcist.workstation.diagram.common.data.DeviceCoordinate
 import com.akexorcist.workstation.diagram.common.data.WorkspaceCoordinate
 import com.akexorcist.workstation.diagram.common.data.WorkstationCoordinates
+import com.akexorcist.workstation.diagram.common.utility.getSortedDevicesByLeft
 
 @Stable
 class WorkstationCoordinateState {

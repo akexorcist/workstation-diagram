@@ -4,7 +4,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.unit.toSize
 import com.akexorcist.workstation.diagram.common.data.*
 
-fun WorkstationCoordinates.getSortedDevicesByLeft(): List<Pair<Rect, Device.Type>> = listOfNotNull(
+fun WorkstationCoordinates.getAllDeviceRect(): List<DeviceCoordinate.Device> = listOfNotNull(
     this.officeLaptop.device,
     this.personalLaptop.device,
     this.pcDesktop.device,
@@ -30,6 +30,9 @@ fun WorkstationCoordinates.getSortedDevicesByLeft(): List<Pair<Rect, Device.Type
     this.gameController.device,
     this.headphone.device,
 )
+
+fun WorkstationCoordinates.getSortedDevicesByLeft(): List<Pair<Rect, Device.Type>> = this
+    .getAllDeviceRect()
     .sortedBy { it.offset.x }
     .map {
         Rect(

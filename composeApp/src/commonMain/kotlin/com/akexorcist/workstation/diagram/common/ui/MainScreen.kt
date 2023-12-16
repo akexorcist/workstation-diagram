@@ -103,7 +103,8 @@ private fun WorkspaceContainer(
         scale = scale,
         offset = offset,
         transformableState = transformableState,
-        onAnimationToggleClick = { config = config.copy(isAnimationOn = it) }
+        onAnimationToggleClick = { config = config.copy(isAnimationOn = it) },
+        onRequestDeviceFocus = { offset = it },
     )
 }
 
@@ -117,6 +118,7 @@ private fun WorkspaceContent(
     offset: Offset,
     transformableState: TransformableState,
     onAnimationToggleClick: (Boolean) -> Unit,
+    onRequestDeviceFocus: (Offset) -> Unit,
 ) {
     val deviceCoordinateHostState = rememberWorkstationCoordinateState()
     var currentHoveredConnector: Connector? by remember { mutableStateOf(null) }
@@ -165,7 +167,25 @@ private fun WorkspaceContent(
             workStation = workStation,
             isAnimationOn = config.isAnimationOn,
             onDeviceClick = { currentSelectedDevice = it },
-            onEnterDeviceHoverInteraction = { currentHoveredDevice = it },
+            onEnterDeviceHoverInteraction = { device ->
+                currentHoveredDevice = device
+                deviceCoordinateHostState.currentWorkstationCoordinates
+                    .getAllDeviceRect()
+                    .find { it.device == device.type }
+                    ?.let { targetDevice ->
+                        deviceCoordinateHostState
+                            .currentWorkstationCoordinates
+                            .workspace
+                            ?.let { workspace ->
+                                onRequestDeviceFocus(
+                                    Offset(
+                                        x = ((workspace.size.width / 2f) - targetDevice.offset.x) - 50f,
+                                        y = ((workspace.size.height / 2f) - targetDevice.offset.y) - 100f,
+                                    )
+                                )
+                            }
+                    }
+            },
             onExitDeviceHoverInteraction = { currentHoveredDevice = null },
             onAnimationToggleClick = onAnimationToggleClick,
         )
