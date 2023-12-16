@@ -68,34 +68,6 @@ fun SpecificationContent(
                         top = 16.dp,
                     )
             ) {
-                specification.website?.let { website ->
-                    ProductWebsiteButton(
-                        url = website,
-                        onClick = { onWebsiteClick(website) },
-                    )
-                    Spacer(modifier = Modifier.height(24.dp))
-                }
-                if (specification.subtitle != null) {
-                    DeviceTag(
-                        deviceSpecification = specification,
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-                Text(
-                    text = specification.subtitle ?: specification.title,
-                    fontSize = MaterialTheme.typography.displaySmall.fontSize,
-                    color = ContentColorTheme.default.text,
-                    fontWeight = FontWeight.Medium,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    modifier = Modifier.offset(x = 2.dp),
-                    text = specification.description,
-                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                    color = ContentColorTheme.default.text,
-                    fontWeight = FontWeight.Medium,
-                )
-                Spacer(modifier = Modifier.height(32.dp))
                 Column(
                     modifier = Modifier
                         .verticalScroll(state = scrollState)
@@ -108,6 +80,34 @@ fun SpecificationContent(
                             },
                         )
                 ) {
+                    specification.website?.let { website ->
+                        ProductWebsiteButton(
+                            url = website,
+                            onClick = { onWebsiteClick(website) },
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
+                    if (specification.subtitle != null) {
+                        DeviceTag(
+                            deviceSpecification = specification,
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                    Text(
+                        text = specification.subtitle ?: specification.title,
+                        fontSize = MaterialTheme.typography.displaySmall.fontSize,
+                        color = ContentColorTheme.default.text,
+                        fontWeight = FontWeight.Medium,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        modifier = Modifier.offset(x = 2.dp),
+                        text = specification.description,
+                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                        color = ContentColorTheme.default.text,
+                        fontWeight = FontWeight.Medium,
+                    )
+                    Spacer(modifier = Modifier.height(32.dp))
                     Image(
                         painter = painterResource(specification.image),
                         modifier = Modifier.fillMaxWidth().height(200.dp),

@@ -179,8 +179,8 @@ private fun WorkspaceContent(
                             ?.let { workspace ->
                                 onRequestDeviceFocus(
                                     Offset(
-                                        x = ((workspace.size.width / 2f) - targetDevice.offset.x) - 50f,
-                                        y = ((workspace.size.height / 2f) - targetDevice.offset.y) - 100f,
+                                        x = ((workspace.size.width / 2f) - targetDevice.offset.x) - ((targetDevice.size.width / 2f) - 25f),
+                                        y = ((workspace.size.height / 2f) - targetDevice.offset.y) - ((targetDevice.size.height / 2f) - 25f),
                                     )
                                 )
                             }
