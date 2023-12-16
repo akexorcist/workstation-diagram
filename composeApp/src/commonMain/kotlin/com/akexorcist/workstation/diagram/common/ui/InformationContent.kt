@@ -19,6 +19,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.List
@@ -32,6 +34,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.akexorcist.workstation.diagram.common.data.Device
@@ -43,6 +46,8 @@ import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
 import com.akexorcist.workstation.diagram.common.theme.ThemeColor
 import com.akexorcist.workstation.diagram.common.utility.informationBackground
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun InformationContent(
@@ -101,6 +106,71 @@ private fun Title() {
             fontSize = MaterialTheme.typography.bodySmall.fontSize,
             color = ContentColorTheme.default.text,
         )
+        Spacer(modifier = Modifier.height(16.dp))
+        Row {
+            LinkButton(
+                url = "https://akexorcist.dev",
+                icon = ImageData.Image(Icons.Default.Home),
+                description = "Go to home page",
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            LinkButton(
+                url = "https://github.com/akexorcist",
+                icon = ImageData.Painter("image/ic_github.webp"),
+                description = "Go to home page",
+            )
+        }
+    }
+}
+
+sealed class ImageData {
+    data class Image(
+        val image: ImageVector
+    ) : ImageData()
+
+    data class Painter(
+        val path: String,
+    ) : ImageData()
+}
+
+@OptIn(ExperimentalResourceApi::class)
+@Composable
+private fun LinkButton(
+    url: String,
+    icon: ImageData,
+    description: String,
+) {
+    val uriHandler = LocalUriHandler.current
+    OutlinedButton(
+        modifier = Modifier.size(32.dp),
+        onClick = { uriHandler.openUri(url) },
+        shape = RoundedCornerShape(8.dp),
+        colors = ContentColorTheme.default.outlinedButtonColors(),
+        contentPadding = PaddingValues(2.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            when (icon) {
+                is ImageData.Image -> {
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        imageVector = icon.image,
+                        contentDescription = description,
+                        tint = ContentColorTheme.default.text,
+                    )
+                }
+
+                is ImageData.Painter -> {
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(icon.path),
+                        contentDescription = description,
+                        tint = ContentColorTheme.default.text,
+                    )
+                }
+            }
+        }
     }
 }
 
