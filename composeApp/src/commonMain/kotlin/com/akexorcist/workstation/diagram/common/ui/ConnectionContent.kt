@@ -7,8 +7,7 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -25,6 +24,7 @@ private val LineCornerRadius = 15.dp
 
 @Composable
 internal fun ConnectionContent(
+    isAnimationOn: Boolean,
     connections: List<Connection>,
     currentHoveredDevice: Device?,
     currentHoveredConnector: Connector?,
@@ -33,6 +33,7 @@ internal fun ConnectionContent(
         connections.forEach { connection ->
             ConnectionLine(
                 path = connection.path,
+                isAnimationOn = isAnimationOn,
                 isActive = when {
                     currentHoveredConnector == null &&
                             currentHoveredDevice == null
@@ -68,6 +69,7 @@ internal fun ConnectionContent(
 @Composable
 private fun ConnectionLine(
     path: ConnectionPath,
+    isAnimationOn: Boolean,
     isActive: Boolean,
     isReverseDirection: Boolean,
     lineCornerRadius: Float,
@@ -118,19 +120,22 @@ private fun ConnectionLine(
     )
 
     val ovalPath = createOvalPath(lineStrokeWidth)
-
-    val infiniteTransition = rememberInfiniteTransition()
-    val phase by infiniteTransition.animateFloat(
-        initialValue = if (isReverseDirection) 0.dp.px() else 20.dp.px(),
-        targetValue = if (isReverseDirection) 20.dp.px() else 0.dp.px(),
-        animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = 1000,
-                easing = LinearEasing,
+    val phase: State<Float> = if (isAnimationOn) {
+        val infiniteTransition = rememberInfiniteTransition()
+        infiniteTransition.animateFloat(
+            initialValue = if (isReverseDirection) 0.dp.px() else 20.dp.px(),
+            targetValue = if (isReverseDirection) 20.dp.px() else 0.dp.px(),
+            animationSpec = infiniteRepeatable(
+                animation = tween(
+                    durationMillis = 1000,
+                    easing = LinearEasing,
+                ),
+                repeatMode = RepeatMode.Restart
             ),
-            repeatMode = RepeatMode.Restart
-        ),
-    )
+        )
+    } else {
+        mutableStateOf(0f)
+    }
     val stampSpacing = 20.dp.px()
 
     Canvas(
@@ -177,7 +182,7 @@ private fun ConnectionLine(
                     outer = PathEffect.stampedPathEffect(
                         shape = ovalPath,
                         style = StampedPathEffectStyle.Translate,
-                        phase = phase,
+                        phase = phase.value,
                         advance = stampSpacing,
                     ),
                     inner = PathEffect.cornerPathEffect(lineCornerRadius),

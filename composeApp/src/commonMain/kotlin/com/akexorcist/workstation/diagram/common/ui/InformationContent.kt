@@ -23,15 +23,13 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -49,21 +47,35 @@ import kotlinx.coroutines.launch
 @Composable
 fun InformationContent(
     workStation: Workstation,
+    isAnimationOn: Boolean,
     onDeviceClick: (Device) -> Unit,
     onEnterDeviceHoverInteraction: (Device) -> Unit,
     onExitDeviceHoverInteraction: (Device) -> Unit,
+    onAnimationToggleClick: (Boolean) -> Unit,
 ) {
-    Column(modifier = Modifier.padding(32.dp)) {
-        Title()
-        Spacer(modifier = Modifier.height(16.dp))
-        Instruction()
-        Spacer(modifier = Modifier.height(16.dp))
-        DeviceList(
-            devices = workStation.getAllDevices(),
-            onDeviceClick = onDeviceClick,
-            onEnterHoverInteraction = onEnterDeviceHoverInteraction,
-            onExitHoverInteraction = onExitDeviceHoverInteraction,
-        )
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.padding(32.dp)) {
+            Title()
+            Spacer(modifier = Modifier.height(16.dp))
+            Instruction()
+            Spacer(modifier = Modifier.height(16.dp))
+            DeviceList(
+                devices = workStation.getAllDevices(),
+                onDeviceClick = onDeviceClick,
+                onEnterHoverInteraction = onEnterDeviceHoverInteraction,
+                onExitHoverInteraction = onExitDeviceHoverInteraction,
+            )
+        }
+        Column(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(32.dp)
+        ) {
+            AnimationSetting(
+                isAnimationOn = isAnimationOn,
+                onAnimationToggleClick = onAnimationToggleClick,
+            )
+        }
     }
 }
 
@@ -353,5 +365,33 @@ private fun CollapsibleHeader(
                 tint = ContentColorTheme.default.text,
             )
         }
+    }
+}
+
+@Composable
+private fun AnimationSetting(
+    isAnimationOn: Boolean,
+    onAnimationToggleClick: (Boolean) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .informationBackground()
+            .padding(
+                horizontal = 24.dp,
+                vertical = 16.dp,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = "Animation",
+            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+            color = ContentColorTheme.default.text,
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Switch(
+            modifier = Modifier.scale(0.75f),
+            checked = isAnimationOn,
+            onCheckedChange = { onAnimationToggleClick(!isAnimationOn) }
+        )
     }
 }

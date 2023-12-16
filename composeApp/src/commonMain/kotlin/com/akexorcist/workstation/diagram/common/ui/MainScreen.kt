@@ -74,7 +74,7 @@ private fun WorkspaceContainer(
     workspaceInPx: SizePx,
     boundOffset: Offset,
 ) {
-    val config by remember { mutableStateOf(DefaultConfig) }
+    var config by remember { mutableStateOf(DefaultConfig) }
     val debugConfig by remember { mutableStateOf(DefaultDebugConfig) }
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -103,6 +103,7 @@ private fun WorkspaceContainer(
         scale = scale,
         offset = offset,
         transformableState = transformableState,
+        onAnimationToggleClick = { config = config.copy(isAnimationOn = it) }
     )
 }
 
@@ -115,6 +116,7 @@ private fun WorkspaceContent(
     scale: Float,
     offset: Offset,
     transformableState: TransformableState,
+    onAnimationToggleClick: (Boolean) -> Unit,
 ) {
     val deviceCoordinateHostState = rememberWorkstationCoordinateState()
     var currentHoveredConnector: Connector? by remember { mutableStateOf(null) }
@@ -161,9 +163,11 @@ private fun WorkspaceContent(
         }
         InformationContent(
             workStation = workStation,
+            isAnimationOn = config.isAnimationOn,
             onDeviceClick = { currentSelectedDevice = it },
             onEnterDeviceHoverInteraction = { currentHoveredDevice = it },
             onExitDeviceHoverInteraction = { currentHoveredDevice = null },
+            onAnimationToggleClick = onAnimationToggleClick,
         )
         currentSelectedDevice?.let { device ->
             SpecificationContent(
@@ -230,6 +234,7 @@ private fun WorkspaceContent(
             .onWorkspaceCoordinated(onWorkspaceCoordinated = { state.update(it) }),
     ) {
         ConnectionContent(
+            isAnimationOn = config.isAnimationOn,
             connections = connections,
             currentHoveredDevice = currentHoveredDevice,
             currentHoveredConnector = currentHoveredConnector,
