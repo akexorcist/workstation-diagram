@@ -8,5 +8,6 @@ Try it on [workstation.akexorcist.dev](https://workstation.akexorcist.dev)
 
 ## Framework & Library
 
+* [Kotlin Multiplatform](https://www.jetbrains.com/kotlin-multiplatform/)
 * [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
 * [Material Design 3](https://m3.material.io/components)
