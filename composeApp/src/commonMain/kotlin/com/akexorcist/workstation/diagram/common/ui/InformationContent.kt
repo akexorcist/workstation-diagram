@@ -120,6 +120,18 @@ private fun Title() {
                 description = "Go to home page",
             )
         }
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "Powered by",
+            fontSize = MaterialTheme.typography.bodySmall.fontSize,
+            color = ContentColorTheme.default.text,
+            fontWeight = FontWeight.Bold,
+        )
+        Text(
+            text = "Kotlin Multiplatform & Compose Multiplatform",
+            fontSize = MaterialTheme.typography.bodySmall.fontSize,
+            color = ContentColorTheme.default.text,
+        )
     }
 }
 
@@ -453,7 +465,7 @@ private fun AnimationSetting(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = "Animation",
+            text = "Connection Animation",
             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
             color = ContentColorTheme.default.text,
         )
