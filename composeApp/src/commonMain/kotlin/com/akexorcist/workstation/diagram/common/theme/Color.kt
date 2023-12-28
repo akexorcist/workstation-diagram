@@ -36,6 +36,8 @@ object ThemeColor {
     val Gray300 = Color(0xFFE0E0E0)
     val Gray400 = Color(0xFFBDBDBD)
     val Gray500 = Color(0xFF9E9E9E)
+    val Gray600 = Color(0xFF757575)
+    val Gray700 = Color(0xFF616161)
     val Gray800 = Color(0xFF424242)
     val Gray850 = Color(0xFF333333)
     val Gray900 = Color(0xFF212121)
@@ -169,32 +171,32 @@ val darkContentColor = ContentColor(
     outerBackground = ThemeColor.Gray1000,
     outerBorder = ThemeColor.Gray900,
     transparentBackground = ThemeColor.Transparent,
-    selectedBackground = ThemeColor.Gray500,
-    hoveredBackground = ThemeColor.Gray50,
+    selectedBackground = ThemeColor.Gray200,
+    hoveredBackground = ThemeColor.Transparent,
     outlinedButtonColors = {
         ButtonDefaults.outlinedButtonColors(
             containerColor = ThemeColor.Transparent,
-            contentColor = ThemeColor.Gray900,
+            contentColor = ThemeColor.Gray200,
             disabledContainerColor = ThemeColor.Transparent,
-            disabledContentColor = ThemeColor.Gray500,
+            disabledContentColor = ThemeColor.Gray600,
         )
     },
     computer = ThemeColor.DimBlue500.copy(alpha = 0.7f),
     computerButton = {
         ButtonDefaults.buttonColors(
             containerColor = ThemeColor.DimBlue500.copy(alpha = 0.7f),
-            contentColor = ThemeColor.Gray900,
-            disabledContainerColor = ThemeColor.Gray200,
-            disabledContentColor = ThemeColor.Gray500,
+            contentColor = ThemeColor.Gray200,
+            disabledContainerColor = ThemeColor.Gray700,
+            disabledContentColor = ThemeColor.Gray600,
         )
     },
     hub = ThemeColor.DimTeal500.copy(alpha = 0.7f),
     hubButton = {
         ButtonDefaults.buttonColors(
             containerColor = ThemeColor.DimTeal500.copy(alpha = 0.7f),
-            contentColor = ThemeColor.Gray900,
-            disabledContainerColor = ThemeColor.Gray200,
-            disabledContentColor = ThemeColor.Gray500,
+            contentColor = ThemeColor.Gray200,
+            disabledContainerColor = ThemeColor.Gray700,
+            disabledContentColor = ThemeColor.Gray600,
         )
     },
     accessory = ThemeColor.DimAmber500.copy(alpha = 0.7f),
@@ -202,8 +204,8 @@ val darkContentColor = ContentColor(
         ButtonDefaults.buttonColors(
             containerColor = ThemeColor.DimAmber500.copy(alpha = 0.7f),
             contentColor = ThemeColor.Gray900,
-            disabledContainerColor = ThemeColor.Gray200,
-            disabledContentColor = ThemeColor.Gray500,
+            disabledContainerColor = ThemeColor.Gray700,
+            disabledContentColor = ThemeColor.Gray600,
         )
     },
     input = ThemeColor.DimIndigo500,
