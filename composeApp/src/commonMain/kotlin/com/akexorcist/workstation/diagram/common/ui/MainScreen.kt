@@ -19,7 +19,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.akexorcist.workstation.diagram.common.data.*
-import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
+import com.akexorcist.workstation.diagram.common.theme.WorkstationDiagramTheme
 import com.akexorcist.workstation.diagram.common.ui.state.*
 import com.akexorcist.workstation.diagram.common.utility.*
 
@@ -32,7 +32,9 @@ private const val minZoomScale = 0.5f
 
 @Composable
 fun MainScreen(
+    darkTheme: Boolean,
     windowSize: DpSize,
+    onDarkThemeToggle: (Boolean) -> Unit,
 ) {
     val screenInPx = SizePx(
         width = windowSize.width.px(),
@@ -56,6 +58,8 @@ fun MainScreen(
         workspaceInDp = workspaceInDp,
         workspaceInPx = workspaceInPx,
         boundOffset = boundOffset,
+        darkTheme = darkTheme,
+        onDarkThemeToggle = onDarkThemeToggle,
     )
 //    LaunchedEffect(Unit) {
 //        val fpsCounter = org.jetbrains.skiko.FPSCounter(logOnTick = true)
@@ -73,6 +77,8 @@ private fun WorkspaceContainer(
     workspaceInDp: SizeDp,
     workspaceInPx: SizePx,
     boundOffset: Offset,
+    darkTheme: Boolean,
+    onDarkThemeToggle: (enable: Boolean) -> Unit,
 ) {
     var config by remember { mutableStateOf(DefaultConfig) }
     val debugConfig by remember { mutableStateOf(DefaultDebugConfig) }
@@ -103,8 +109,10 @@ private fun WorkspaceContainer(
         scale = scale,
         offset = offset,
         transformableState = transformableState,
+        darkTheme = darkTheme,
         onAnimationToggleClick = { config = config.copy(isAnimationOn = it) },
         onRequestDeviceFocus = { offset = it },
+        onDarkThemeToggle = onDarkThemeToggle,
     )
 }
 
@@ -117,8 +125,10 @@ private fun WorkspaceContent(
     scale: Float,
     offset: Offset,
     transformableState: TransformableState,
+    darkTheme: Boolean,
     onAnimationToggleClick: (Boolean) -> Unit,
     onRequestDeviceFocus: (Offset) -> Unit,
+    onDarkThemeToggle: (enable: Boolean) -> Unit,
 ) {
     val deviceCoordinateHostState = rememberWorkstationCoordinateState()
     var currentHoveredConnector: Connector? by remember { mutableStateOf(null) }
@@ -126,7 +136,9 @@ private fun WorkspaceContent(
     var currentSelectedDevice: Device? by remember { mutableStateOf(null) }
     val uriHandler = LocalUriHandler.current
 
-    Box {
+    Box(
+        modifier = Modifier.background(color = WorkstationDiagramTheme.themeColor.outerBackground)
+    ) {
         Box(modifier = Modifier.transformable(state = transformableState)) {
             Box(
                 modifier = Modifier
@@ -140,10 +152,13 @@ private fun WorkspaceContent(
                         translationX = offset.x,
                         translationY = offset.y,
                     )
-                    .background(ContentColorTheme.default.background)
+                    .background(
+                        color = WorkstationDiagramTheme.themeColor.background,
+                        shape = RoundedCornerShape(16.dp),
+                    )
                     .border(
                         width = 2.dp,
-                        color = Color.LightGray,
+                        color = WorkstationDiagramTheme.themeColor.outerBorder,
                         shape = RoundedCornerShape(16.dp),
                     ),
                 contentAlignment = Alignment.Center,
@@ -166,6 +181,7 @@ private fun WorkspaceContent(
         InformationContent(
             workStation = workStation,
             isAnimationOn = config.isAnimationOn,
+            darkTheme = darkTheme,
             onDeviceClick = { currentSelectedDevice = it },
             onEnterDeviceHoverInteraction = { device ->
                 currentHoveredDevice = device
@@ -188,6 +204,7 @@ private fun WorkspaceContent(
             },
             onExitDeviceHoverInteraction = { currentHoveredDevice = null },
             onAnimationToggleClick = onAnimationToggleClick,
+            onDarkThemeToggle = onDarkThemeToggle,
         )
         currentSelectedDevice?.let { device ->
             SpecificationContent(

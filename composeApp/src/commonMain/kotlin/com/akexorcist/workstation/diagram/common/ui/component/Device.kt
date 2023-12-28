@@ -32,8 +32,7 @@ import com.akexorcist.workstation.diagram.common.data.Connector
 import com.akexorcist.workstation.diagram.common.data.ConnectorSide
 import com.akexorcist.workstation.diagram.common.data.Device
 import com.akexorcist.workstation.diagram.common.data.DeviceCoordinate
-import com.akexorcist.workstation.diagram.common.theme.DeviceComponentTheme
-import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
+import com.akexorcist.workstation.diagram.common.theme.WorkstationDiagramTheme
 import com.akexorcist.workstation.diagram.common.utility.onDeviceCoordinated
 
 @Composable
@@ -109,8 +108,8 @@ private fun ComputerDeviceContent(
         modifier = modifier,
         width = 190.dp,
         height = height,
-        colors = DeviceComponentTheme.Computer.buttonColors(),
-        shape = RoundedCornerShape(DeviceComponentTheme.End.cornerRadius),
+        colors = WorkstationDiagramTheme.themeColor.computerButton(),
+        shape = RoundedCornerShape(WorkstationDiagramTheme.componentSpec.computer.cornerRadius),
         onClick = onClick,
         title = title,
         subtitle = subtitle,
@@ -198,8 +197,8 @@ private fun HubDeviceContent(
         modifier = modifier,
         width = width ?: 140.dp,
         height = height ?: 220.dp,
-        colors = DeviceComponentTheme.Hub.buttonColors(),
-        shape = RoundedCornerShape(DeviceComponentTheme.End.cornerRadius),
+        colors = WorkstationDiagramTheme.themeColor.hubButton(),
+        shape = RoundedCornerShape(WorkstationDiagramTheme.componentSpec.hub.cornerRadius),
         title = title,
         subtitle = subtitle,
         isActive = isActive,
@@ -287,8 +286,8 @@ private fun EndDeviceContent(
         modifier = modifier,
         width = width,
         height = height,
-        colors = DeviceComponentTheme.End.buttonColors(),
-        shape = RoundedCornerShape(DeviceComponentTheme.End.cornerRadius),
+        colors = WorkstationDiagramTheme.themeColor.accessoryButton(),
+        shape = RoundedCornerShape(WorkstationDiagramTheme.componentSpec.accessory.cornerRadius),
         title = title,
         subtitle = subtitle,
         isActive = isActive,
@@ -343,14 +342,14 @@ private fun DeviceComponent(
             Text(
                 text = title,
                 fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                color = ContentColorTheme.default.text,
+                color = WorkstationDiagramTheme.themeColor.text,
                 fontWeight = FontWeight.Bold,
             )
             subtitle?.let {
                 Text(
                     text = it,
                     fontSize = MaterialTheme.typography.labelSmall.fontSize,
-                    color = ContentColorTheme.default.text,
+                    color = WorkstationDiagramTheme.themeColor.text,
                     lineHeight = 14.sp,
                 )
             }

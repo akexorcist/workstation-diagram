@@ -25,8 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.akexorcist.workstation.diagram.common.data.*
-import com.akexorcist.workstation.diagram.common.theme.ConnectorComponentTheme
-import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
+import com.akexorcist.workstation.diagram.common.theme.WorkstationDiagramTheme
 import com.akexorcist.workstation.diagram.common.utility.onConnectorCoordinated
 
 private val ConnectorWidth = 110.dp
@@ -64,8 +63,8 @@ private fun InputConnectorComponent(
         ),
         label = connector.type.value,
         isActive = isActive,
-        color = ConnectorComponentTheme.Input.color,
-        cornerRadius = ConnectorComponentTheme.Input.cornerRadius,
+        color = WorkstationDiagramTheme.themeColor.input,
+        cornerRadius = WorkstationDiagramTheme.componentSpec.input.cornerRadius,
         direction = side,
         onEnterHoverInteraction = { onEnterHoverInteraction(connector) },
         onExitHoverInteraction = { onExitHoverInteraction(connector) },
@@ -91,8 +90,8 @@ private fun OutputConnectorComponent(
         ),
         label = connector.type.value,
         isActive = isActive,
-        color = ConnectorComponentTheme.Output.color,
-        cornerRadius = ConnectorComponentTheme.Output.cornerRadius,
+        color = WorkstationDiagramTheme.themeColor.output,
+        cornerRadius = WorkstationDiagramTheme.componentSpec.output.cornerRadius,
         direction = side,
         onEnterHoverInteraction = { onEnterHoverInteraction(connector) },
         onExitHoverInteraction = { onExitHoverInteraction(connector) },
@@ -147,7 +146,7 @@ private fun ConnectorComponent(
         Text(
             text = label,
             fontSize = MaterialTheme.typography.labelSmall.fontSize,
-            color = ContentColorTheme.default.text,
+            color = WorkstationDiagramTheme.themeColor.text,
             fontWeight = FontWeight.SemiBold,
         )
     }

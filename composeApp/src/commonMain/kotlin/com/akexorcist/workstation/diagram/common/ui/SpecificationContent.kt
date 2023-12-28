@@ -20,12 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.akexorcist.workstation.diagram.common.data.DeviceSpecification
-import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
-import com.akexorcist.workstation.diagram.common.theme.DeviceComponentTheme
+import com.akexorcist.workstation.diagram.common.theme.WorkstationDiagramTheme
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -47,8 +47,8 @@ fun SpecificationContent(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
         dragHandle = null,
-        containerColor = ContentColorTheme.default.background,
-        contentColor = ContentColorTheme.default.text,
+        containerColor = WorkstationDiagramTheme.themeColor.background,
+        contentColor = WorkstationDiagramTheme.themeColor.text,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
     ) {
         Box(
@@ -96,7 +96,7 @@ fun SpecificationContent(
                     Text(
                         text = specification.subtitle ?: specification.title,
                         fontSize = MaterialTheme.typography.displaySmall.fontSize,
-                        color = ContentColorTheme.default.text,
+                        color = WorkstationDiagramTheme.themeColor.text,
                         fontWeight = FontWeight.Medium,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -104,15 +104,21 @@ fun SpecificationContent(
                         modifier = Modifier.offset(x = 2.dp),
                         text = specification.description,
                         fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                        color = ContentColorTheme.default.text,
+                        color = WorkstationDiagramTheme.themeColor.text,
                         fontWeight = FontWeight.Medium,
                     )
                     Spacer(modifier = Modifier.height(32.dp))
-                    Image(
-                        painter = painterResource(specification.image),
-                        modifier = Modifier.fillMaxWidth().height(200.dp),
-                        contentDescription = specification.title,
-                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                    ) {
+                        Image(
+                            modifier = Modifier.clip(RoundedCornerShape(8.dp)),
+                            painter = painterResource(specification.image),
+                            contentDescription = specification.title,
+                        )
+                    }
                     Spacer(modifier = Modifier.height(32.dp))
                     AdditionalInformation(specification.information)
                 }
@@ -138,7 +144,7 @@ private fun AdditionalInformation(
             Text(
                 text = "No additional information",
                 fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                color = ContentColorTheme.default.text,
+                color = WorkstationDiagramTheme.themeColor.text,
             )
         } else {
             information.forEach { (label, value) ->
@@ -150,7 +156,7 @@ private fun AdditionalInformation(
                         modifier = Modifier.weight(0.3f),
                         text = label,
                         fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                        color = ContentColorTheme.default.text,
+                        color = WorkstationDiagramTheme.themeColor.text,
                         lineHeight = 28.sp,
                         fontWeight = FontWeight.SemiBold,
                     )
@@ -159,7 +165,7 @@ private fun AdditionalInformation(
                         modifier = Modifier.weight(0.7f),
                         text = value,
                         fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                        color = ContentColorTheme.default.text,
+                        color = WorkstationDiagramTheme.themeColor.text,
                         lineHeight = 28.sp,
                     )
 
@@ -177,10 +183,10 @@ private fun DeviceTag(deviceSpecification: DeviceSpecification) {
         modifier = Modifier
             .background(
                 color = when {
-                    deviceSpecification.type.isComputer() -> DeviceComponentTheme.Computer.color
-                    deviceSpecification.type.isHub() -> DeviceComponentTheme.Hub.color
-                    deviceSpecification.type.isAccessory() -> DeviceComponentTheme.End.color
-                    else -> ContentColorTheme.default.transparentBackground
+                    deviceSpecification.type.isComputer() -> WorkstationDiagramTheme.themeColor.computer
+                    deviceSpecification.type.isHub() -> WorkstationDiagramTheme.themeColor.hub
+                    deviceSpecification.type.isAccessory() -> WorkstationDiagramTheme.themeColor.accessory
+                    else -> WorkstationDiagramTheme.themeColor.transparentBackground
                 },
                 shape = RoundedCornerShape(4.dp),
             )
@@ -192,7 +198,7 @@ private fun DeviceTag(deviceSpecification: DeviceSpecification) {
         Text(
             text = deviceSpecification.title,
             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-            color = ContentColorTheme.default.text,
+            color = WorkstationDiagramTheme.themeColor.text,
             fontWeight = FontWeight.Medium,
         )
     }
@@ -203,21 +209,21 @@ private fun ProductWebsiteButton(url: String, onClick: (String) -> Unit) {
     OutlinedButton(
         onClick = { onClick(url) },
         shape = RoundedCornerShape(8.dp),
-        colors = ContentColorTheme.default.outlinedButtonColors(),
+        colors = WorkstationDiagramTheme.themeColor.outlinedButtonColors(),
         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = "Product's Website",
                 fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                color = ContentColorTheme.default.text,
+                color = WorkstationDiagramTheme.themeColor.text,
             )
             Spacer(modifier = Modifier.width(4.dp))
             Icon(
                 modifier = Modifier.size(24.dp),
                 imageVector = Icons.Default.ExitToApp,
                 contentDescription = "Open product website",
-                tint = ContentColorTheme.default.text,
+                tint = WorkstationDiagramTheme.themeColor.text,
             )
         }
     }
@@ -233,7 +239,7 @@ private fun BoxScope.CloseButton(onClick: () -> Unit) {
             modifier = Modifier.size(32.dp),
             imageVector = Icons.Default.Close,
             contentDescription = "Close device specification",
-            tint = ContentColorTheme.default.text,
+            tint = WorkstationDiagramTheme.themeColor.text,
         )
     }
 }

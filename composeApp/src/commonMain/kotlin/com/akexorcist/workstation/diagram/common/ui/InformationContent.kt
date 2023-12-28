@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.Info
@@ -40,10 +39,7 @@ import androidx.compose.ui.unit.dp
 import com.akexorcist.workstation.diagram.common.data.Device
 import com.akexorcist.workstation.diagram.common.data.Workstation
 import com.akexorcist.workstation.diagram.common.data.getAllDevices
-import com.akexorcist.workstation.diagram.common.theme.ConnectorComponentTheme
-import com.akexorcist.workstation.diagram.common.theme.DeviceComponentTheme
-import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
-import com.akexorcist.workstation.diagram.common.theme.ThemeColor
+import com.akexorcist.workstation.diagram.common.theme.*
 import com.akexorcist.workstation.diagram.common.utility.informationBackground
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -53,10 +49,12 @@ import org.jetbrains.compose.resources.painterResource
 fun InformationContent(
     workStation: Workstation,
     isAnimationOn: Boolean,
+    darkTheme: Boolean,
     onDeviceClick: (Device) -> Unit,
     onEnterDeviceHoverInteraction: (Device) -> Unit,
     onExitDeviceHoverInteraction: (Device) -> Unit,
     onAnimationToggleClick: (Boolean) -> Unit,
+    onDarkThemeToggle: (Boolean) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.padding(32.dp)) {
@@ -75,10 +73,22 @@ fun InformationContent(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(32.dp)
+                .informationBackground()
+                .padding(
+                    horizontal = 24.dp,
+                    vertical = 16.dp,
+                ),
+            horizontalAlignment = Alignment.End,
         ) {
-            AnimationSetting(
-                isAnimationOn = isAnimationOn,
-                onAnimationToggleClick = onAnimationToggleClick,
+            SettingMenu(
+                label = "Connection Animation",
+                enable = isAnimationOn,
+                onSettingToggle = onAnimationToggleClick,
+            )
+            SettingMenu(
+                label = "Dark Theme",
+                enable = darkTheme,
+                onSettingToggle = onDarkThemeToggle,
             )
         }
     }
@@ -97,14 +107,14 @@ private fun Title() {
         Text(
             text = "Akexorcist's Workstation",
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
-            color = ContentColorTheme.default.text,
+            color = WorkstationDiagramTheme.themeColor.text,
             fontWeight = FontWeight.Bold,
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = "April 2023",
             fontSize = MaterialTheme.typography.bodySmall.fontSize,
-            color = ContentColorTheme.default.text,
+            color = WorkstationDiagramTheme.themeColor.text,
         )
         Spacer(modifier = Modifier.height(16.dp))
         Row {
@@ -124,13 +134,13 @@ private fun Title() {
         Text(
             text = "Powered by",
             fontSize = MaterialTheme.typography.bodySmall.fontSize,
-            color = ContentColorTheme.default.text,
+            color = WorkstationDiagramTheme.themeColor.text,
             fontWeight = FontWeight.Bold,
         )
         Text(
             text = "Kotlin Multiplatform & Compose Multiplatform",
             fontSize = MaterialTheme.typography.bodySmall.fontSize,
-            color = ContentColorTheme.default.text,
+            color = WorkstationDiagramTheme.themeColor.text,
         )
     }
 }
@@ -157,7 +167,7 @@ private fun LinkButton(
         modifier = Modifier.size(32.dp),
         onClick = { uriHandler.openUri(url) },
         shape = RoundedCornerShape(8.dp),
-        colors = ContentColorTheme.default.outlinedButtonColors(),
+        colors = WorkstationDiagramTheme.themeColor.outlinedButtonColors(),
         contentPadding = PaddingValues(2.dp),
     ) {
         Row(
@@ -169,7 +179,7 @@ private fun LinkButton(
                         modifier = Modifier.size(24.dp),
                         imageVector = icon.image,
                         contentDescription = description,
-                        tint = ContentColorTheme.default.text,
+                        tint = WorkstationDiagramTheme.themeColor.text,
                     )
                 }
 
@@ -178,7 +188,7 @@ private fun LinkButton(
                         modifier = Modifier.size(24.dp),
                         painter = painterResource(icon.path),
                         contentDescription = description,
-                        tint = ContentColorTheme.default.text,
+                        tint = WorkstationDiagramTheme.themeColor.text,
                     )
                 }
             }
@@ -261,8 +271,8 @@ private fun DeviceItem(
 
     val backgroundColor by animateColorAsState(
         targetValue = when (isHovered) {
-            true -> ContentColorTheme.default.hoveredBackground
-            false -> ContentColorTheme.default.transparentBackground
+            true -> WorkstationDiagramTheme.themeColor.hoveredBackground
+            false -> WorkstationDiagramTheme.themeColor.transparentBackground
         }
     )
 
@@ -289,7 +299,7 @@ private fun DeviceItem(
             .clickable(
                 interactionSource = interactionSource,
                 indication = rememberRipple(
-                    color = ContentColorTheme.default.selectedBackground,
+                    color = WorkstationDiagramTheme.themeColor.selectedBackground,
                 ),
                 onClick = { onDeviceClick(device) },
             )
@@ -304,9 +314,9 @@ private fun DeviceItem(
                 .height(26.dp)
                 .background(
                     color = when {
-                        device.type.isComputer() -> DeviceComponentTheme.Computer.color
-                        device.type.isHub() -> DeviceComponentTheme.Hub.color
-                        device.type.isAccessory() -> DeviceComponentTheme.End.color
+                        device.type.isComputer() -> WorkstationDiagramTheme.themeColor.computer
+                        device.type.isHub() -> WorkstationDiagramTheme.themeColor.hub
+                        device.type.isAccessory() -> WorkstationDiagramTheme.themeColor.accessory
                         else -> ThemeColor.Gray200
                     },
                     shape = RoundedCornerShape(2.dp),
@@ -318,13 +328,13 @@ private fun DeviceItem(
                 text = device.title,
                 fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                 fontWeight = FontWeight.Medium,
-                color = ContentColorTheme.default.text,
+                color = WorkstationDiagramTheme.themeColor.text,
             )
             device.subtitle?.let {
                 Text(
                     text = it,
                     fontSize = MaterialTheme.typography.labelSmall.fontSize,
-                    color = ContentColorTheme.default.text,
+                    color = WorkstationDiagramTheme.themeColor.text,
                 )
             }
         }
@@ -357,27 +367,27 @@ private fun Instruction() {
             Column {
                 Spacer(modifier = Modifier.height(4.dp))
                 DeviceInstruction(
-                    color = DeviceComponentTheme.Computer.color,
+                    color = WorkstationDiagramTheme.themeColor.computer,
                     label = "Computer"
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 DeviceInstruction(
-                    color = DeviceComponentTheme.Hub.color,
+                    color = WorkstationDiagramTheme.themeColor.hub,
                     label = "Hub"
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 DeviceInstruction(
-                    color = DeviceComponentTheme.End.color,
+                    color = WorkstationDiagramTheme.themeColor.accessory,
                     label = "Accessory"
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 DeviceInstruction(
-                    color = ConnectorComponentTheme.Output.color,
+                    color = WorkstationDiagramTheme.themeColor.output,
                     label = "Output Connector"
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 DeviceInstruction(
-                    color = ConnectorComponentTheme.Input.color,
+                    color = WorkstationDiagramTheme.themeColor.input,
                     label = "Input Connector"
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -401,7 +411,7 @@ private fun DeviceInstruction(
         Text(
             text = label,
             fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-            color = ContentColorTheme.default.text,
+            color = WorkstationDiagramTheme.themeColor.text,
         )
     }
 }
@@ -424,14 +434,14 @@ private fun CollapsibleHeader(
             modifier = Modifier.size(20.dp),
             imageVector = icon,
             contentDescription = label,
-            tint = ContentColorTheme.default.text,
+            tint = WorkstationDiagramTheme.themeColor.text,
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             modifier = Modifier.weight(1f),
             text = label,
             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-            color = ContentColorTheme.default.text,
+            color = WorkstationDiagramTheme.themeColor.text,
             fontWeight = FontWeight.Bold,
         )
         IconButton(onClick = onToggleClick) {
@@ -444,7 +454,7 @@ private fun CollapsibleHeader(
                     true -> "Collapse"
                     false -> "Expand"
                 },
-                tint = ContentColorTheme.default.text,
+                tint = WorkstationDiagramTheme.themeColor.text,
             )
         }
     }
@@ -467,13 +477,37 @@ private fun AnimationSetting(
         Text(
             text = "Connection Animation",
             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-            color = ContentColorTheme.default.text,
+            color = WorkstationDiagramTheme.themeColor.text,
         )
         Spacer(modifier = Modifier.width(4.dp))
         Switch(
             modifier = Modifier.scale(0.75f),
             checked = isAnimationOn,
             onCheckedChange = { onAnimationToggleClick(!isAnimationOn) }
+        )
+    }
+}
+
+@Composable
+private fun SettingMenu(
+    label: String,
+    enable: Boolean,
+    onSettingToggle: (Boolean) -> Unit,
+) {
+    Row(
+        modifier = Modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = label,
+            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+            color = WorkstationDiagramTheme.themeColor.text,
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Switch(
+            modifier = Modifier.scale(0.75f),
+            checked = enable,
+            onCheckedChange = { onSettingToggle(!enable) }
         )
     }
 }

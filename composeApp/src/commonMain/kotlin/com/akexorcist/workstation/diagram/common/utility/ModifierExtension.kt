@@ -12,7 +12,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.dp
 import com.akexorcist.workstation.diagram.common.data.*
-import com.akexorcist.workstation.diagram.common.theme.ContentColorTheme
+import com.akexorcist.workstation.diagram.common.theme.WorkstationDiagramTheme
 
 @Composable
 fun Modifier.onDeviceCoordinated(
@@ -90,7 +90,7 @@ fun Modifier.informationBackground(
     .hoverable(interactionSource = interactionSource)
     .clip(RoundedCornerShape(8.dp))
     .background(
-        color = ContentColorTheme.default.background,
+        color = WorkstationDiagramTheme.themeColor.uiBackground,
         shape = RoundedCornerShape(8.dp),
     )
 

@@ -7,7 +7,6 @@ import androidx.compose.ui.window.rememberWindowState
 
 fun main() = application {
     val state = rememberWindowState(placement = WindowPlacement.Maximized)
-//    val state = rememberWindowState()
     Window(
         onCloseRequest = ::exitApplication,
         title = "Workstation Diagram",

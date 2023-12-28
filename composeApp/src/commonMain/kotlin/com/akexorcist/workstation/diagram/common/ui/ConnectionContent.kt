@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.akexorcist.workstation.diagram.common.data.*
-import com.akexorcist.workstation.diagram.common.theme.ConnectionLineComponentTheme
+import com.akexorcist.workstation.diagram.common.theme.WorkstationDiagramTheme
 import com.akexorcist.workstation.diagram.common.utility.px
 
 private val LineCornerRadius = 15.dp
@@ -75,7 +75,7 @@ private fun ConnectionLine(
     lineCornerRadius: Float,
 ) {
     val drawPath = path.toPath()
-    val spacingBackgroundColor = ConnectionLineComponentTheme.default.spacingColor
+    val spacingBackgroundColor = WorkstationDiagramTheme.themeColor.connection.spacingColor
     val spacingBackgroundStrokeWidth by animateFloatAsState(
         when (isActive) {
             true -> 16.dp.px()
@@ -84,26 +84,26 @@ private fun ConnectionLine(
     )
     val inputBackgroundColor by animateColorAsState(
         when (isActive) {
-            true -> ConnectionLineComponentTheme.default.inputBackgroundActiveColor
-            false -> ConnectionLineComponentTheme.default.inputBackgroundInactiveColor
+            true -> WorkstationDiagramTheme.themeColor.connection.inputBackgroundActiveColor
+            false -> WorkstationDiagramTheme.themeColor.connection.inputBackgroundInactiveColor
         }
     )
     val outputBackgroundColor by animateColorAsState(
         when (isActive) {
-            true -> ConnectionLineComponentTheme.default.outputBackgroundActiveColor
-            false -> ConnectionLineComponentTheme.default.outputBackgroundInactiveColor
+            true -> WorkstationDiagramTheme.themeColor.connection.outputBackgroundActiveColor
+            false -> WorkstationDiagramTheme.themeColor.connection.outputBackgroundInactiveColor
         }
     )
     val inputColor by animateColorAsState(
         when (isActive) {
-            true -> ConnectionLineComponentTheme.default.inputActiveColor
-            false -> ConnectionLineComponentTheme.default.inputInactiveColor
+            true -> WorkstationDiagramTheme.themeColor.connection.inputActiveColor
+            false -> WorkstationDiagramTheme.themeColor.connection.inputInactiveColor
         }
     )
     val outputColor by animateColorAsState(
         when (isActive) {
-            true -> ConnectionLineComponentTheme.default.outputActiveColor
-            false -> ConnectionLineComponentTheme.default.outputInactiveColor
+            true -> WorkstationDiagramTheme.themeColor.connection.outputActiveColor
+            false -> WorkstationDiagramTheme.themeColor.connection.outputInactiveColor
         }
     )
     val lineBackgroundStrokeWidth by animateFloatAsState(
