@@ -1,5 +1,6 @@
 @file:Suppress("FunctionName")
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.*
@@ -13,16 +14,16 @@ import com.akexorcist.workstation.diagram.common.ui.MainScreen
 fun App(
     windowSize: DpSize,
 ) {
-    var darkTheme by remember { mutableStateOf(true) }
+    var darkTheme by remember { mutableStateOf<Boolean?>(null) }
     WorkstationDiagramTheme(
-        darkTheme = darkTheme,
+        darkTheme = darkTheme ?: isSystemInDarkTheme(),
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             MainScreen(
-                darkTheme = darkTheme,
+                darkTheme = darkTheme ?: isSystemInDarkTheme(),
                 windowSize = windowSize,
                 onDarkThemeToggle = { enable -> darkTheme = enable }
             )
