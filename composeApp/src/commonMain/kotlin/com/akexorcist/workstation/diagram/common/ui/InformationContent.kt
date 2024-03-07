@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.Info
@@ -229,7 +230,7 @@ private fun DeviceList(
     ) {
         CollapsibleHeader(
             label = "Device List",
-            icon = Icons.Outlined.List,
+            icon = Icons.AutoMirrored.Outlined.List,
             isExpanded = isExpanded,
             onToggleClick = { isExpanded = !isExpanded },
         )
