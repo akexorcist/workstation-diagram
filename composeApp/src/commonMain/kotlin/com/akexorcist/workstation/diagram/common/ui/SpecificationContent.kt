@@ -13,8 +13,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.akexorcist.workstation.diagram.common.data.DeviceSpecification
 import com.akexorcist.workstation.diagram.common.theme.WorkstationDiagramTheme
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -115,7 +116,7 @@ fun SpecificationContent(
                     ) {
                         Image(
                             modifier = Modifier.clip(RoundedCornerShape(8.dp)),
-                            painter = painterResource(specification.image),
+                            painter = painterResource(DrawableResource(specification.image)),
                             contentDescription = specification.title,
                         )
                     }
@@ -221,7 +222,7 @@ private fun ProductWebsiteButton(url: String, onClick: (String) -> Unit) {
             Spacer(modifier = Modifier.width(4.dp))
             Icon(
                 modifier = Modifier.size(24.dp),
-                imageVector = Icons.Default.ExitToApp,
+                imageVector = Icons.AutoMirrored.Filled.ExitToApp,
                 contentDescription = "Open product website",
                 tint = WorkstationDiagramTheme.themeColor.text,
             )

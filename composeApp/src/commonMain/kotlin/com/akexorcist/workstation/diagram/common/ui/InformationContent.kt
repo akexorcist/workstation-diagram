@@ -42,6 +42,7 @@ import com.akexorcist.workstation.diagram.common.data.getAllDevices
 import com.akexorcist.workstation.diagram.common.theme.*
 import com.akexorcist.workstation.diagram.common.utility.informationBackground
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -186,7 +187,7 @@ private fun LinkButton(
                 is ImageData.Painter -> {
                     Icon(
                         modifier = Modifier.size(24.dp),
-                        painter = painterResource(icon.path),
+                        painter = painterResource(DrawableResource(icon.path)),
                         contentDescription = description,
                         tint = WorkstationDiagramTheme.themeColor.text,
                     )
