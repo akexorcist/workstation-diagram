@@ -33,8 +33,8 @@ data class DebugConfig(
 )
 
 val DefaultDebugConfig = DebugConfig(
-    visible = true,
-    lineIndex = 27,
+    visible = false,
+    lineIndex = 0,
     zoomScale = 1f,
     showWorkspaceArea = false,
     showDeviceArea = false,
@@ -42,5 +42,5 @@ val DefaultDebugConfig = DebugConfig(
     showConnectorArea = false,
     showAllConnectionLines = true,
     showLineConnectionPoint = false,
-    disableLineOptimization = true,
+    disableLineOptimization = false,
 )
