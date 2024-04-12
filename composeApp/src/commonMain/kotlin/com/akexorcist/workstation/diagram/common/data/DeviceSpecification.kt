@@ -135,6 +135,20 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
             ),
         )
 
+        Device.Type.NintendoSwitch -> AdditionalDeviceInformation(
+            image = "image/pc_desktop.webp",
+            website = null,
+            description = "",
+            information = listOf(),
+        )
+
+        Device.Type.PlayStation5 -> AdditionalDeviceInformation(
+            image = "image/pc_desktop.webp",
+            website = null,
+            description = "",
+            information = listOf(),
+        )
+
         Device.Type.UsbDockingStation -> AdditionalDeviceInformation(
             image = "image/usb_docking_station.webp",
             website = "https://www.dell.com/support/manuals/en-us/dell-wd19tbs-dock/wd19tbs_user_guide/docking-specifications",
@@ -163,6 +177,13 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
                 "Dimensions" to "205 x 90 x 29 mm | 8.07 x 3.54 x 1.14 in",
                 "Dock Weight (without power adapter)" to "585 g | 1.29 lbs",
             ),
+        )
+
+        Device.Type.HdmiSwitcher -> AdditionalDeviceInformation(
+            image = "image/pc_desktop.webp",
+            website = null,
+            description = "HDMI 2.1 Switch, 2 In 1 Out",
+            information = listOf(),
         )
 
         Device.Type.DigitalCamera -> AdditionalDeviceInformation(

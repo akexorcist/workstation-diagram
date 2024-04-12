@@ -52,6 +52,36 @@ sealed class Device(
         }
     }
 
+    data class NintendoSwitch(
+        override val leftConnections: List<Connector>,
+        override val rightConnections: List<Connector>,
+    ) : Device(
+        type = Type.NintendoSwitch,
+        title = "Nintendo Switch",
+        subtitle = null,
+        leftConnections = leftConnections,
+        rightConnections = rightConnections,
+    ) {
+        companion object {
+            fun builder(block: Type.() -> NintendoSwitch) = block(Type.NintendoSwitch)
+        }
+    }
+
+    data class PlayStation5(
+        override val leftConnections: List<Connector>,
+        override val rightConnections: List<Connector>,
+    ) : Device(
+        type = Type.PlayStation5,
+        title = "PlayStation 5",
+        subtitle = null,
+        leftConnections = leftConnections,
+        rightConnections = rightConnections,
+    ) {
+        companion object {
+            fun builder(block: Type.() -> PlayStation5) = block(Type.PlayStation5)
+        }
+    }
+
     data class UsbDockingStation(
         override val leftConnections: List<Connector>,
         override val rightConnections: List<Connector>,
@@ -64,6 +94,21 @@ sealed class Device(
     ) {
         companion object {
             fun builder(block: Type.() -> UsbDockingStation) = block(Type.UsbDockingStation)
+        }
+    }
+
+    data class HdmiSwitcher(
+        override val leftConnections: List<Connector>,
+        override val rightConnections: List<Connector>,
+    ) : Device(
+        type = Type.HdmiSwitcher,
+        title = "HDMI Switcher",
+        subtitle = "UGREEN 90385",
+        leftConnections = leftConnections,
+        rightConnections = rightConnections,
+    ) {
+        companion object {
+            fun builder(block: Type.() -> HdmiSwitcher) = block(Type.HdmiSwitcher)
         }
     }
 
@@ -378,7 +423,10 @@ sealed class Device(
         OfficeLaptop,
         PersonalLaptop,
         PcDesktop,
+        NintendoSwitch,
+        PlayStation5,
         UsbDockingStation,
+        HdmiSwitcher,
         DigitalCamera,
         HdmiToWebcam,
         StreamDeck,
@@ -403,13 +451,16 @@ sealed class Device(
         fun isComputer(): Boolean = when (this) {
             OfficeLaptop,
             PersonalLaptop,
-            PcDesktop -> true
+            PcDesktop,
+            NintendoSwitch,
+            PlayStation5 -> true
 
             else -> false
         }
 
         fun isHub(): Boolean = when (this) {
             UsbDockingStation,
+            HdmiSwitcher,
             UsbCSwitcher,
             UsbHub,
             UsbPowerAdapter,

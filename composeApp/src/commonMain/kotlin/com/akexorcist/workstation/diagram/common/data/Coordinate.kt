@@ -10,7 +10,10 @@ data class WorkstationCoordinates(
     val officeLaptop: DeviceCoordinate = DeviceCoordinate(),
     val personalLaptop: DeviceCoordinate = DeviceCoordinate(),
     val pcDesktop: DeviceCoordinate = DeviceCoordinate(),
+    val nintendoSwitch: DeviceCoordinate = DeviceCoordinate(),
+    val playStation5: DeviceCoordinate = DeviceCoordinate(),
     val usbDockingStation: DeviceCoordinate = DeviceCoordinate(),
+    val hdmiSwitcher: DeviceCoordinate = DeviceCoordinate(),
     val digitalCamera: DeviceCoordinate = DeviceCoordinate(),
     val hdmiToWebcam: DeviceCoordinate = DeviceCoordinate(),
     val streamDeck: DeviceCoordinate = DeviceCoordinate(),
@@ -36,7 +39,10 @@ data class WorkstationCoordinates(
             officeLaptop.isAvailable() &&
             personalLaptop.isAvailable() &&
             pcDesktop.isAvailable() &&
+            nintendoSwitch.isAvailable() &&
+            playStation5.isAvailable() &&
             usbDockingStation.isAvailable() &&
+            hdmiSwitcher.isAvailable() &&
             digitalCamera.isAvailable() &&
             hdmiToWebcam.isAvailable() &&
             streamDeck.isAvailable() &&

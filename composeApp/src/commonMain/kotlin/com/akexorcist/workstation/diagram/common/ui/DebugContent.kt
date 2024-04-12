@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import com.akexorcist.workstation.diagram.common.data.*
+import com.akexorcist.workstation.diagram.common.theme.WorkstationDiagramTheme
+import com.akexorcist.workstation.diagram.common.utility.informationBackground
 
 @Composable
 fun DebugPanel(
@@ -249,7 +251,10 @@ private fun getAllConnectorsByBottom(
         coordinates.officeLaptop.connectors,
         coordinates.personalLaptop.connectors,
         coordinates.pcDesktop.connectors,
+        coordinates.nintendoSwitch.connectors,
+        coordinates.playStation5.connectors,
         coordinates.usbDockingStation.connectors,
+        coordinates.hdmiSwitcher.connectors,
         coordinates.digitalCamera.connectors,
         coordinates.hdmiToWebcam.connectors,
         coordinates.streamDeck.connectors,
@@ -280,7 +285,10 @@ private fun getAllDevices(
     coordinates.officeLaptop.device,
     coordinates.personalLaptop.device,
     coordinates.pcDesktop.device,
+    coordinates.nintendoSwitch.device,
+    coordinates.playStation5.device,
     coordinates.usbDockingStation.device,
+    coordinates.hdmiSwitcher.device,
     coordinates.digitalCamera.device,
     coordinates.hdmiToWebcam.device,
     coordinates.streamDeck.device,

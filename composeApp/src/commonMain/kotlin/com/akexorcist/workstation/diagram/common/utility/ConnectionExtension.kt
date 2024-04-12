@@ -13,7 +13,10 @@ fun getTargetConnector(
     Device.Type.OfficeLaptop -> coordinates.officeLaptop.connectors
     Device.Type.PersonalLaptop -> coordinates.personalLaptop.connectors
     Device.Type.PcDesktop -> coordinates.pcDesktop.connectors
+    Device.Type.NintendoSwitch -> coordinates.nintendoSwitch.connectors
+    Device.Type.PlayStation5 -> coordinates.playStation5.connectors
     Device.Type.UsbDockingStation -> coordinates.usbDockingStation.connectors
+    Device.Type.HdmiSwitcher -> coordinates.hdmiSwitcher.connectors
     Device.Type.DigitalCamera -> coordinates.digitalCamera.connectors
     Device.Type.HdmiToWebcam -> coordinates.hdmiToWebcam.connectors
     Device.Type.StreamDeck -> coordinates.streamDeck.connectors

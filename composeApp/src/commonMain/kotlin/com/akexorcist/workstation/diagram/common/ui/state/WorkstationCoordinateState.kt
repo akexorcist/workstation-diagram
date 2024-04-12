@@ -56,9 +56,33 @@ class WorkstationCoordinateState {
                 )
             }
 
+            Device.Type.NintendoSwitch -> {
+                currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
+                    nintendoSwitch = currentWorkstationCoordinates.nintendoSwitch.copy(
+                        device = updatedCoordinate
+                    )
+                )
+            }
+
+            Device.Type.PlayStation5 -> {
+                currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
+                    playStation5 = currentWorkstationCoordinates.playStation5.copy(
+                        device = updatedCoordinate
+                    )
+                )
+            }
+
             Device.Type.UsbDockingStation -> {
                 currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
                     usbDockingStation = currentWorkstationCoordinates.usbDockingStation.copy(
+                        device = updatedCoordinate
+                    )
+                )
+            }
+
+            Device.Type.HdmiSwitcher -> {
+                currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
+                    hdmiSwitcher = currentWorkstationCoordinates.hdmiSwitcher.copy(
                         device = updatedCoordinate
                     )
                 )
@@ -279,10 +303,55 @@ class WorkstationCoordinateState {
                 )
             }
 
+            Device.Type.NintendoSwitch -> {
+                currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
+                    nintendoSwitch = currentWorkstationCoordinates.nintendoSwitch.copy(
+                        connectors = currentWorkstationCoordinates.nintendoSwitch.connectors
+                            ?.toMutableList()
+                            ?.apply {
+                                if (!contains(updatedCoordinate)) {
+                                    add(updatedCoordinate)
+                                }
+                            }
+                            ?: listOf(updatedCoordinate)
+                    )
+                )
+            }
+
+            Device.Type.PlayStation5 -> {
+                currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
+                    playStation5 = currentWorkstationCoordinates.playStation5.copy(
+                        connectors = currentWorkstationCoordinates.playStation5.connectors
+                            ?.toMutableList()
+                            ?.apply {
+                                if (!contains(updatedCoordinate)) {
+                                    add(updatedCoordinate)
+                                }
+                            }
+                            ?: listOf(updatedCoordinate)
+                    )
+                )
+            }
+
             Device.Type.UsbDockingStation -> {
                 currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
                     usbDockingStation = currentWorkstationCoordinates.usbDockingStation.copy(
                         connectors = currentWorkstationCoordinates.usbDockingStation.connectors
+                            ?.toMutableList()
+                            ?.apply {
+                                if (!contains(updatedCoordinate)) {
+                                    add(updatedCoordinate)
+                                }
+                            }
+                            ?: listOf(updatedCoordinate)
+                    )
+                )
+            }
+
+            Device.Type.HdmiSwitcher -> {
+                currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
+                    hdmiSwitcher = currentWorkstationCoordinates.hdmiSwitcher.copy(
+                        connectors = currentWorkstationCoordinates.hdmiSwitcher.connectors
                             ?.toMutableList()
                             ?.apply {
                                 if (!contains(updatedCoordinate)) {

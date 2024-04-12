@@ -4,7 +4,10 @@ data class Workstation(
     val officeLaptop: Device.OfficeLapTop,
     val personalLaptop: Device.PersonalLapTop,
     val pcDesktop: Device.PcDesktop,
+    val nintendoSwitch: Device.NintendoSwitch,
+    val playStation5: Device.PlayStation5,
     val usbDockingStation: Device.UsbDockingStation,
+    val hdmiSwitcher: Device.HdmiSwitcher,
     val digitalCamera: Device.DigitalCamera,
     val hdmiToWebcam: Device.HdmiToWebcam,
     val streamDeck: Device.StreamDeck,
@@ -59,16 +62,16 @@ val MyWorkstation = Workstation(
             leftConnections = listOf(),
             rightConnections = listOf(
                 Connector(
-                    type = ConnectorType.DisplayPort,
+                    type = ConnectorType.Hdmi,
                     direction = ConnectorDirection.Output,
                     owner = this,
-                    target = Device.Type.SecondaryMonitor,
+                    target = Device.Type.HdmiSwitcher,
                 ),
                 Connector(
                     type = ConnectorType.DisplayPort,
                     direction = ConnectorDirection.Output,
                     owner = this,
-                    target = Device.Type.PrimaryMonitor,
+                    target = Device.Type.SecondaryMonitor,
                 ),
                 Connector(
                     type = ConnectorType.UsbA3,
@@ -81,6 +84,32 @@ val MyWorkstation = Workstation(
                     direction = ConnectorDirection.Input,
                     owner = this,
                     target = Device.Type.UsbHub,
+                ),
+            ),
+        )
+    },
+    nintendoSwitch = Device.NintendoSwitch.builder {
+        Device.NintendoSwitch(
+            leftConnections = listOf(),
+            rightConnections = listOf(
+                Connector(
+                    type = ConnectorType.Hdmi,
+                    direction = ConnectorDirection.Output,
+                    owner = this,
+                    target = Device.Type.HdmiSwitcher,
+                ),
+            ),
+        )
+    },
+    playStation5 = Device.PlayStation5.builder {
+        Device.PlayStation5(
+            leftConnections = listOf(),
+            rightConnections = listOf(
+                Connector(
+                    type = ConnectorType.Hdmi,
+                    direction = ConnectorDirection.Output,
+                    owner = this,
+                    target = Device.Type.HdmiSwitcher,
                 ),
             ),
         )
@@ -145,6 +174,38 @@ val MyWorkstation = Workstation(
                     direction = ConnectorDirection.Input,
                     owner = this,
                     target = Device.Type.UsbCSwitcher,
+                ),
+            ),
+        )
+    },
+    hdmiSwitcher = Device.HdmiSwitcher.builder {
+        Device.HdmiSwitcher(
+            leftConnections = listOf(
+                Connector(
+                    type = ConnectorType.Hdmi,
+                    direction = ConnectorDirection.Input,
+                    owner = this,
+                    target = Device.Type.NintendoSwitch,
+                ),
+                Connector(
+                    type = ConnectorType.Hdmi,
+                    direction = ConnectorDirection.Input,
+                    owner = this,
+                    target = Device.Type.PlayStation5,
+                ),
+                Connector(
+                    type = ConnectorType.Hdmi,
+                    direction = ConnectorDirection.Input,
+                    owner = this,
+                    target = Device.Type.PcDesktop,
+                ),
+            ),
+            rightConnections = listOf(
+                Connector(
+                    type = ConnectorType.Hdmi,
+                    direction = ConnectorDirection.Output,
+                    owner = this,
+                    target = Device.Type.PrimaryMonitor,
                 ),
             ),
         )
@@ -361,7 +422,7 @@ val MyWorkstation = Workstation(
                     type = ConnectorType.Hdmi,
                     direction = ConnectorDirection.Input,
                     owner = this,
-                    target = Device.Type.PcDesktop,
+                    target = Device.Type.HdmiSwitcher,
                 ),
                 Connector.spacing(device = this),
                 Connector.spacing(device = this),
@@ -586,8 +647,10 @@ val MyWorkstation = Workstation(
 
 fun Workstation.getAllDevices(): List<Device> = listOf(
     this.officeLaptop,
-    this.pcDesktop,
     this.personalLaptop,
+    this.pcDesktop,
+    this.nintendoSwitch,
+    this.playStation5,
     this.primaryMonitor,
     this.secondaryMonitor,
     this.usbCSwitcher,

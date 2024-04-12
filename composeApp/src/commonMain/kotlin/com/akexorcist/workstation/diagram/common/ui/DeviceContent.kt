@@ -67,7 +67,33 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(87.dp))
+            Spacer(modifier = Modifier.height(184.dp))
+            NintendoSwitch(
+                device = workStation.nintendoSwitch,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
+                onDeviceCoordinated = { state.update(it) },
+                onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
+            )
+            Spacer(modifier = Modifier.height(21.dp))
+            PlayStation5(
+                device = workStation.playStation5,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
+                onDeviceCoordinated = { state.update(it) },
+                onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
+            )
+            Spacer(modifier = Modifier.height(58.dp))
             PcDesktop(
                 device = workStation.pcDesktop,
                 currentHoveredDevice = currentHoveredDevice,
@@ -86,6 +112,19 @@ internal fun DeviceContent(
             Spacer(modifier = Modifier.height(294.dp))
             UsbDockingStation(
                 device = workStation.usbDockingStation,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
+                onDeviceCoordinated = { state.update(it) },
+                onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
+            )
+            Spacer(modifier = Modifier.height(90.dp))
+            HdmiSwitcher(
+                device = workStation.hdmiSwitcher,
                 currentHoveredDevice = currentHoveredDevice,
                 currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
@@ -452,6 +491,60 @@ private fun PcDesktop(
 }
 
 @Composable
+private fun NintendoSwitch(
+    device: Device.NintendoSwitch,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
+    onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
+    onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
+) {
+    ComputerDeviceComponent(
+        device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
+        onDeviceCoordinated = onDeviceCoordinated,
+        onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
+    )
+}
+
+@Composable
+private fun PlayStation5(
+    device: Device.PlayStation5,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
+    onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
+    onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
+) {
+    ComputerDeviceComponent(
+        device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
+        onDeviceCoordinated = onDeviceCoordinated,
+        onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
+    )
+}
+
+@Composable
 private fun UsbDockingStation(
     device: Device.UsbDockingStation,
     currentHoveredDevice: Device?,
@@ -469,6 +562,34 @@ private fun UsbDockingStation(
         currentHoveredDevice = currentHoveredDevice,
         currentHoveredConnector = currentHoveredConnector,
         height = 370.dp,
+        onDeviceCoordinated = onDeviceCoordinated,
+        onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
+    )
+}
+
+@Composable
+private fun HdmiSwitcher(
+    device: Device.HdmiSwitcher,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
+    onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
+    onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
+) {
+    HubDeviceComponent(
+        device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
+        height = 160.dp,
         onDeviceCoordinated = onDeviceCoordinated,
         onConnectorCoordinated = onConnectorCoordinated,
         onDeviceClick = { onDeviceClick(device) },
