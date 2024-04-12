@@ -23,7 +23,6 @@ import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -37,6 +36,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.akexorcist.workstation.diagram.common.data.DebugConfig
 import com.akexorcist.workstation.diagram.common.data.Device
 import com.akexorcist.workstation.diagram.common.data.Workstation
 import com.akexorcist.workstation.diagram.common.data.getAllDevices
@@ -57,6 +57,17 @@ fun InformationContent(
     onExitDeviceHoverInteraction: (Device) -> Unit,
     onAnimationToggleClick: (Boolean) -> Unit,
     onDarkThemeToggle: (Boolean) -> Unit,
+    // Debug
+    debugConfig: DebugConfig,
+    onNextIndex: (Int) -> Unit,
+    onPreviousIndex: (Int) -> Unit,
+    onToggleShowWorkspaceArea: (Boolean) -> Unit,
+    onToggleShowDeviceArea: (Boolean) -> Unit,
+    onToggleShowOverlapBoundArea: (Boolean) -> Unit,
+    onToggleShowConnectorArea: (Boolean) -> Unit,
+    onToggleShowAllConnectionLines: (Boolean) -> Unit,
+    onToggleLineConnectionPoint: (Boolean) -> Unit,
+    onToggleLineOptimization: (Boolean) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.padding(32.dp)) {
@@ -72,26 +83,48 @@ fun InformationContent(
             )
         }
         Column(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(32.dp)
-                .informationBackground()
-                .padding(
-                    horizontal = 24.dp,
-                    vertical = 16.dp,
-                ),
+            modifier = Modifier.align(Alignment.TopEnd),
             horizontalAlignment = Alignment.End,
         ) {
-            SettingMenu(
-                label = "Connection Animation",
-                enable = isAnimationOn,
-                onSettingToggle = onAnimationToggleClick,
-            )
-            SettingMenu(
-                label = "Dark Theme",
-                enable = darkTheme,
-                onSettingToggle = onDarkThemeToggle,
-            )
+            Column(
+                modifier = Modifier
+                    .padding(
+                        top = 32.dp,
+                        end = 32.dp,
+                    )
+                    .informationBackground()
+                    .padding(
+                        horizontal = 24.dp,
+                        vertical = 16.dp,
+                    ),
+                horizontalAlignment = Alignment.End,
+            ) {
+                SettingMenu(
+                    label = "Connection Animation",
+                    enable = isAnimationOn,
+                    onSettingToggle = onAnimationToggleClick,
+                )
+                SettingMenu(
+                    label = "Dark Theme",
+                    enable = darkTheme,
+                    onSettingToggle = onDarkThemeToggle,
+                )
+            }
+            if (debugConfig.visible) {
+                Spacer(modifier = Modifier.height(16.dp))
+                DebugPanel(
+                    debugConfig = debugConfig,
+                    onNextIndex = onNextIndex,
+                    onPreviousIndex = onPreviousIndex,
+                    onToggleShowWorkspaceArea = onToggleShowWorkspaceArea,
+                    onToggleShowDeviceArea = onToggleShowDeviceArea,
+                    onToggleShowOverlapBoundArea = onToggleShowOverlapBoundArea,
+                    onToggleShowConnectorArea = onToggleShowConnectorArea,
+                    onToggleShowAllConnectionLines = onToggleShowAllConnectionLines,
+                    onToggleLineConnectionPoint = onToggleLineConnectionPoint,
+                    onToggleLineOptimization = onToggleLineOptimization,
+                )
+            }
         }
     }
 }

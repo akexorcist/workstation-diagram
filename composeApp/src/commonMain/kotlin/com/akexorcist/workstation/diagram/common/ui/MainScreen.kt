@@ -13,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.DpSize
@@ -22,7 +21,7 @@ import com.akexorcist.workstation.diagram.common.data.*
 import com.akexorcist.workstation.diagram.common.theme.WorkstationDiagramTheme
 import com.akexorcist.workstation.diagram.common.ui.state.*
 import com.akexorcist.workstation.diagram.common.utility.*
-
+import kotlin.math.max
 
 private val workspaceWidth = 2850.dp
 private val workspaceHeight = 1350.dp
@@ -81,7 +80,7 @@ private fun WorkspaceContainer(
     onDarkThemeToggle: (enable: Boolean) -> Unit,
 ) {
     var config by remember { mutableStateOf(DefaultConfig) }
-    val debugConfig by remember { mutableStateOf(DefaultDebugConfig) }
+    var debugConfig by remember { mutableStateOf(DefaultDebugConfig) }
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
     val transformableState = rememberTransformableState { zoomChange, offsetChange, _ ->
@@ -113,6 +112,16 @@ private fun WorkspaceContainer(
         onAnimationToggleClick = { config = config.copy(isAnimationOn = it) },
         onRequestDeviceFocus = { offset = it },
         onDarkThemeToggle = onDarkThemeToggle,
+        // Debug
+        onNextIndex = { debugConfig = debugConfig.copy(lineIndex = debugConfig.lineIndex + 1) },
+        onPreviousIndex = { debugConfig = debugConfig.copy(lineIndex = max(debugConfig.lineIndex - 1, 0)) },
+        onToggleShowWorkspaceArea = { debugConfig = debugConfig.copy(showWorkspaceArea = it) },
+        onToggleShowDeviceArea = { debugConfig = debugConfig.copy(showDeviceArea = it) },
+        onToggleShowOverlapBoundArea = { debugConfig = debugConfig.copy(showOverlapBoundArea = it) },
+        onToggleShowConnectorArea = { debugConfig = debugConfig.copy(showConnectorArea = it) },
+        onToggleShowAllConnectionLines = { debugConfig = debugConfig.copy(showAllConnectionLines = it) },
+        onToggleLineConnectionPoint = { debugConfig = debugConfig.copy(showLineConnectionPoint = it) },
+        onToggleLineOptimization = { debugConfig = debugConfig.copy(disableLineOptimization = it) },
     )
 }
 
@@ -129,6 +138,16 @@ private fun WorkspaceContent(
     onAnimationToggleClick: (Boolean) -> Unit,
     onRequestDeviceFocus: (Offset) -> Unit,
     onDarkThemeToggle: (enable: Boolean) -> Unit,
+    // Debug
+    onNextIndex: (Int) -> Unit,
+    onPreviousIndex: (Int) -> Unit,
+    onToggleShowWorkspaceArea: (Boolean) -> Unit,
+    onToggleShowDeviceArea: (Boolean) -> Unit,
+    onToggleShowOverlapBoundArea: (Boolean) -> Unit,
+    onToggleShowConnectorArea: (Boolean) -> Unit,
+    onToggleShowAllConnectionLines: (Boolean) -> Unit,
+    onToggleLineConnectionPoint: (Boolean) -> Unit,
+    onToggleLineOptimization: (Boolean) -> Unit,
 ) {
     val deviceCoordinateHostState = rememberWorkstationCoordinateState()
     var currentHoveredConnector: Connector? by remember { mutableStateOf(null) }
@@ -205,6 +224,16 @@ private fun WorkspaceContent(
             onExitDeviceHoverInteraction = { currentHoveredDevice = null },
             onAnimationToggleClick = onAnimationToggleClick,
             onDarkThemeToggle = onDarkThemeToggle,
+            debugConfig = debugConfig,
+            onNextIndex = onNextIndex,
+            onPreviousIndex = onPreviousIndex,
+            onToggleShowWorkspaceArea = onToggleShowWorkspaceArea,
+            onToggleShowDeviceArea = onToggleShowDeviceArea,
+            onToggleShowOverlapBoundArea = onToggleShowOverlapBoundArea,
+            onToggleShowConnectorArea = onToggleShowConnectorArea,
+            onToggleShowAllConnectionLines = onToggleShowAllConnectionLines,
+            onToggleLineConnectionPoint = onToggleLineConnectionPoint,
+            onToggleLineOptimization = onToggleLineOptimization,
         )
         currentSelectedDevice?.let { device ->
             SpecificationContent(

@@ -7,18 +7,23 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,27 +45,37 @@ fun DebugPanel(
 ) {
     Column(
         modifier = Modifier
-            .padding(32.dp)
-            .background(
-                color = Color.White.copy(alpha = 0.5f),
-                shape = RoundedCornerShape(16.dp),
-            )
-            .border(
-                width = 1.dp,
-                color = Color.Black.copy(alpha = 0.15f),
-                shape = RoundedCornerShape(16.dp),
-            )
-            .padding(32.dp)
+            .padding(end = 32.dp)
+            .informationBackground()
+            .padding(
+                horizontal = 24.dp,
+                vertical = 16.dp,
+            ),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Button(onClick = { onPreviousIndex(debugConfig.lineIndex) }) {
-                Text(text = "<")
+            IconButton(onClick = { onPreviousIndex(debugConfig.lineIndex) }) {
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                    contentDescription = "Previous line index",
+                    tint = WorkstationDiagramTheme.themeColor.text,
+                )
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "Line ${debugConfig.lineIndex}")
+            Text(
+                text = "Line ${debugConfig.lineIndex}",
+                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                color = WorkstationDiagramTheme.themeColor.text,
+                fontWeight = FontWeight.Bold,
+            )
             Spacer(modifier = Modifier.width(8.dp))
-            Button(onClick = { onNextIndex(debugConfig.lineIndex) }) {
-                Text(text = ">")
+            IconButton(onClick = { onNextIndex(debugConfig.lineIndex) }) {
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = "Next line index",
+                    tint = WorkstationDiagramTheme.themeColor.text,
+                )
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -116,7 +131,11 @@ private fun ToggleDebugMenu(
             checked = isChecked,
             onCheckedChange = onCheckedChange,
         )
-        Text(label)
+        Text(
+            text = label,
+            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+            color = WorkstationDiagramTheme.themeColor.text,
+        )
     }
 }
 
