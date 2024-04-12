@@ -19,6 +19,7 @@ enum class ConnectorType(val value: String) {
     MiniHdmi("Mini HDMI"),
     MicroHdmi("Micro HDMI"),
     Hdmi("HDMI"),
+    Hdmi21("HDMI 2.1"),
     Aux("AUX"),
     Battery("Battery"),
 }
