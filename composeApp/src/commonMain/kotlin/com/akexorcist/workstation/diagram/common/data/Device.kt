@@ -373,7 +373,7 @@ sealed class Device(
     ) : Device(
         type = Type.AndroidDevice,
         title = "Android Device",
-        subtitle = "Google Pixel 4",
+        subtitle = "OPPO A18 (CPH2591)",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
     ) {

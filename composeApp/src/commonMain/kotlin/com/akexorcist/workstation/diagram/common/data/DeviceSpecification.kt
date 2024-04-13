@@ -508,35 +508,31 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
 
         Device.Type.AndroidDevice -> AdditionalDeviceInformation(
             image = "image/android_device.webp",
-            website = "https://www.gsmarena.com/google_pixel_4-9896.php",
-            description = "Android device for app development testing",
+            website = "https://www.gsmarena.com/oppo_a18-12591.php",
+            description = "Test device for app development",
             information = listOf(
-                "CPU" to "Qualcomm SM8150 Snapdragon 855",
-                "GPU" to "Adreno 640",
-                "Display" to "P-OLED, 90Hz, HDR\n" +
-                        "5.7\" (19:9) 1080 x 2280 px\n" +
-                        "Corning Gorilla Glass 5",
-                "OS" to "Android 10, upgradable to Android 13",
-                "Memory" to "6GB",
-                "Storage" to "64GB UFS 2.1",
-                "SD Card" to "No",
-                "SIM" to "Nano-SIM and eSIM",
-                "Back Camera" to "12.2 MP, f/1.7, 27mm (wide), 1/2.55\", 1.4µm, dual pixel PDAF, OIS\n" +
-                        "16 MP, f/2.4, 50mm (telephoto), 1/3.6\", 1.0µm, PDAF, OIS, 2x optical zoom\n" +
-                        "4K@30fps, 1080p@30/60/120fps, 1080p@30fps (gyro-EIS) video recording",
-                "Rear Camera" to "8 MP, f/2.0, 22mm (wide), 1.22µm, no AF\n" +
-                        "TOF 3D, (depth/biometrics sensor)\n" +
+                "CPU" to "Mediatek MT6769 Helio G85",
+                "GPU" to "Mali-G52 MC2",
+                "Display" to "IPS LCD, 90Hz, 720 nits\n" +
+                        "6.56\" (20:9) 720 x 1612 px",
+                "OS" to "Android 13, upgradable to Android 14, ColorOS 14",
+                "Memory" to "4GB",
+                "Storage" to "128GB eMMC 5.1",
+                "SD Card" to "microSDXC",
+                "SIM" to "Nano-SIM, dual stand-by",
+                "Back Camera" to "8 MP, f/2.0, (wide), AF\n" +
+                        "2 MP, f/2.4, (depth)\n" +
                         "1080p@30fps video recording",
-                "WLAN" to "Wi-Fi 802.11 a/b/g/n/ac, dual-band, Wi-Fi Direct, DLNA",
-                "Bluetooth" to "Bluetooth 5.0, A2DP, LE, aptX HD",
-                "Location" to "GPS, GLONASS, BDS, GALILEO",
-                "NFC" to "Yes",
-                "USB" to "USB Type-C 3.1",
-                "Battery" to "Li-Po 2800 mAh",
-                "Charging" to "18W wired, PD2.0\n" +
-                        "Wireless",
-                "Dimensions" to "147.1 x 68.8 x 8.2 mm / 5.79 x 2.71 x 0.32 in",
-                "Weight" to "162 g / 5.71 oz",
+                "Rear Camera" to "5 MP, f/2.2, (wide)\n" +
+                        "1080p@30fps video recording",
+                "WLAN" to "Wi-Fi 802.11 a/b/g/n/ac, dual-band",
+                "Bluetooth" to "Bluetooth 5.3, A2DP, LE, aptX HD",
+                "Location" to "GPS, GALILEO, GLONASS, BDS, QZSS",
+                "NFC" to "No",
+                "USB" to "USB Type-C 2.0",
+                "Battery" to "Li-Po 5000 mAh",
+                "Dimensions" to "163.7 x 75 x 8.2 mm / 6.44 x 2.95 x 0.32 in",
+                "Weight" to "188 g / 6.63 oz",
             ),
         )
 
