@@ -14,7 +14,7 @@ data class Config(
 val DefaultConfig = Config(
     minimumHorizontalDistanceToDevice = 140.dp,
     minimumVerticalDistanceToDevice = 30.dp,
-    minimumDistanceBetweenLine = 50.dp,
+    minimumDistanceBetweenLine = 30.dp,
     minimumStartLineDistance = 140.dp,
     isAnimationOn = true,
 )
