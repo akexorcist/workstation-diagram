@@ -1,7 +1,7 @@
 [versions]
-compose = "1.6.0"
-compose-plugin = "1.6.0"
-kotlin = "1.9.22"
+compose = "1.6.5"
+compose-plugin = "1.6.2"
+kotlin = "1.9.23"
 material3 = "1.2.1"
 
 [libraries]
