@@ -449,19 +449,19 @@ val MyWorkstation = Workstation(
             ),
             rightConnections = listOf(
                 Connector(
-                    type = ConnectorType.UsbA2,
+                    type = ConnectorType.UsbA32Gen2,
                     direction = ConnectorDirection.Input,
                     owner = this,
                     target = Device.Type.Microphone1,
                 ),
                 Connector(
-                    type = ConnectorType.UsbA31,
+                    type = ConnectorType.UsbC32Gen2,
                     direction = ConnectorDirection.Input,
                     owner = this,
                     target = Device.Type.HdmiCapture,
                 ),
                 Connector(
-                    type = ConnectorType.UsbA31,
+                    type = ConnectorType.UsbA32Gen2,
                     direction = ConnectorDirection.Input,
                     owner = this,
                     target = Device.Type.AndroidDevice,

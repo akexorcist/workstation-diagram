@@ -450,21 +450,20 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
 
         Device.Type.Microphone1 -> AdditionalDeviceInformation(
             image = "image/microphone_1.webp",
-            website = "https://www.audio-technica.com/en-eu/atr2500x-usb",
-            description = "Cardioid Condenser USB Microphone",
+            website = "https://nzxt.com/product/capsule",
+            description = "Cardioid USB Gaming Microphone",
             information = listOf(
                 "Element" to "Condenser",
                 "Polar Pattern" to "Cardioid",
+                "Frequency Response" to "20Hz - 20kHz",
+                "Maximum Sound Pressure Level (SPL)" to "120dB",
+                "Total Harmonic Distortion (THD)" to "0.1% @ 1kHz",
+                "Bit Depth" to "24-bit",
+                "Sample Rate" to "96kHz",
                 "Output Connector" to "USB-C",
-                "Frequency Response" to "30 - 15,000 Hz",
-                "Bit Depth" to "Up to 24 bit",
-                "Sample Rate" to "44.1kHz / 48kHz / 96kHz / 192kHz",
-                "Power Requirements" to "USB Power (5V DC)",
-                "Headphone Output Power" to "10 mW @ 16 ohms",
-                "Headphone Jack" to "3.5 mm TRS (stereo)",
-                "Volume Control" to "Headphone volume controlled by up/down buttons",
-                "Dimensions" to "155.0 mm (6.10 in) long, 50.0 mm (1.97 in) maximum body diameter",
-                "Weight" to "366 g | 12.9 oz",
+                "Materials" to "Extruded Aluminum Structure with PC ABS Shell",
+                "Dimensions" to "60 x 65.1 x 170.2mm (without stand)",
+                "Weight" to "314g (without stand)",
             ),
         )
 

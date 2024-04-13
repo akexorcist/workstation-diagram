@@ -12,6 +12,7 @@ enum class ConnectorType(val value: String) {
     UsbA2("USB-A 2.0"),
     UsbA3("USB-A 3.0"),
     UsbA31("USB-A 3.1"),
+    UsbA32Gen2("USB-A 3.2 Gen 2"),
     UsbA("USB-A"),
     UsbC("USB-C"),
     UsbC32Gen2("USB-C 3.2 Gen 2"),

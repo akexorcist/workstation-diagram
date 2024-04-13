@@ -343,7 +343,7 @@ sealed class Device(
     ) : Device(
         type = Type.Microphone1,
         title = "Microphone",
-        subtitle = "Audio-Technica ATR2500x-USB",
+        subtitle = "NZXT Capsule",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
     ) {
