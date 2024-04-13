@@ -1,4 +1,5 @@
 @file:Suppress("FunctionName")
+@file:OptIn(ExperimentalComposeUiApi::class)
 
 package com.akexorcist.workstation.diagram.common.ui
 
@@ -12,11 +13,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import com.akexorcist.workstation.diagram.common.data.*
 import com.akexorcist.workstation.diagram.common.theme.WorkstationDiagramTheme
@@ -31,12 +33,12 @@ private const val boundOffsetRatio = 0.8f
 @Composable
 fun MainScreen(
     darkTheme: Boolean,
-    windowSize: DpSize,
     onDarkThemeToggle: (Boolean) -> Unit,
 ) {
+    val windowSize = LocalWindowInfo.current.containerSize
     val screenInPx = SizePx(
-        width = windowSize.width.px(),
-        height = windowSize.height.px(),
+        width = windowSize.width.toFloat(),
+        height = windowSize.height.toFloat(),
     )
     val workspaceInDp = SizeDp(
         width = workspaceWidth,

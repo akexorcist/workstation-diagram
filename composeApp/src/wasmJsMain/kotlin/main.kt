@@ -7,12 +7,6 @@ import androidx.compose.ui.window.CanvasBasedWindow
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     CanvasBasedWindow(canvasElementId = "WorkstationDiagram") {
-        val windowSize = LocalWindowInfo.current.containerSize
-        App(
-            windowSize = DpSize(
-                width = windowSize.width.dp,
-                height = windowSize.height.dp,
-            )
-        )
+        App()
     }
 }

@@ -11,9 +11,7 @@ import com.akexorcist.workstation.diagram.common.theme.WorkstationDiagramTheme
 import com.akexorcist.workstation.diagram.common.ui.MainScreen
 
 @Composable
-fun App(
-    windowSize: DpSize,
-) {
+fun App() {
     var darkTheme by remember { mutableStateOf<Boolean?>(null) }
     WorkstationDiagramTheme(
         darkTheme = darkTheme ?: isSystemInDarkTheme(),
@@ -24,7 +22,6 @@ fun App(
         ) {
             MainScreen(
                 darkTheme = darkTheme ?: isSystemInDarkTheme(),
-                windowSize = windowSize,
                 onDarkThemeToggle = { enable -> darkTheme = enable }
             )
         }
