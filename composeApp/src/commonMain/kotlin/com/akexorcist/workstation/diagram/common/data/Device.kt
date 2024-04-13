@@ -238,7 +238,7 @@ sealed class Device(
     ) : Device(
         type = Type.PrimaryMonitor,
         title = "Primary Monitor",
-        subtitle = "Dell UltraSharp U2722D",
+        subtitle = "Dell UltraSharp U2724D",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
     ) {
