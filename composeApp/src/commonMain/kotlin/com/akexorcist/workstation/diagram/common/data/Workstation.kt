@@ -449,7 +449,7 @@ val MyWorkstation = Workstation(
             ),
             rightConnections = listOf(
                 Connector(
-                    type = ConnectorType.UsbA32Gen2,
+                    type = ConnectorType.UsbA2,
                     direction = ConnectorDirection.Input,
                     owner = this,
                     target = Device.Type.Microphone1,
@@ -622,7 +622,7 @@ val MyWorkstation = Workstation(
         Device.AndroidDevice(
             leftConnections = listOf(
                 Connector(
-                    type = ConnectorType.UsbC,
+                    type = ConnectorType.UsbC32Gen2,
                     direction = ConnectorDirection.Output,
                     owner = this,
                     target = Device.Type.PrimaryMonitor,
