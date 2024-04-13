@@ -1,4 +1,5 @@
 @file:Suppress("FunctionName")
+@file:OptIn(ExperimentalResourceApi::class)
 
 package com.akexorcist.workstation.diagram.common.ui
 
@@ -54,6 +55,7 @@ fun InformationContent(
     isAnimationOn: Boolean,
     darkTheme: Boolean,
     onDeviceClick: (Device) -> Unit,
+    onDeviceInfoClick: (Device) -> Unit,
     onEnterDeviceHoverInteraction: (Device) -> Unit,
     onExitDeviceHoverInteraction: (Device) -> Unit,
     onAnimationToggleClick: (Boolean) -> Unit,
@@ -79,6 +81,7 @@ fun InformationContent(
             DeviceList(
                 devices = workStation.getAllDevices(),
                 onDeviceClick = onDeviceClick,
+                onDeviceInfoClick = onDeviceInfoClick,
                 onEnterHoverInteraction = onEnterDeviceHoverInteraction,
                 onExitHoverInteraction = onExitDeviceHoverInteraction,
             )
@@ -238,6 +241,7 @@ private fun LinkButton(
 private fun DeviceList(
     devices: List<Device>,
     onDeviceClick: (Device) -> Unit,
+    onDeviceInfoClick: (Device) -> Unit,
     onEnterHoverInteraction: (Device) -> Unit,
     onExitHoverInteraction: (Device) -> Unit,
 ) {
@@ -247,10 +251,10 @@ private fun DeviceList(
 
     Column(
         modifier = Modifier
-            .width(260.dp)
+            .width(320.dp)
             .informationBackground()
             .padding(
-                start = 24.dp,
+                start = 32.dp,
                 end = 16.dp,
                 top = 12.dp,
                 bottom = 12.dp,
@@ -285,6 +289,7 @@ private fun DeviceList(
                             DeviceItem(
                                 device = device,
                                 onDeviceClick = onDeviceClick,
+                                onDeviceInfoClick = onDeviceInfoClick,
                                 onEnterHoverInteraction = onEnterHoverInteraction,
                                 onExitHoverInteraction = onExitHoverInteraction,
                             )
@@ -301,6 +306,7 @@ private fun DeviceList(
 private fun DeviceItem(
     device: Device,
     onDeviceClick: (Device) -> Unit,
+    onDeviceInfoClick: (Device) -> Unit,
     onEnterHoverInteraction: (Device) -> Unit,
     onExitHoverInteraction: (Device) -> Unit,
 ) {
@@ -332,7 +338,6 @@ private fun DeviceItem(
 
     Row(
         modifier = Modifier
-            .padding(end = 16.dp)
             .clip(shape = RoundedCornerShape(8.dp))
             .clickable(
                 interactionSource = interactionSource,
@@ -375,6 +380,18 @@ private fun DeviceItem(
                     color = WorkstationDiagramTheme.themeColor.text,
                 )
             }
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        IconButton(
+            modifier = Modifier.size(32.dp),
+            onClick = { onDeviceInfoClick(device) },
+        ) {
+            Icon(
+                modifier = Modifier.size(24.dp),
+                painter = painterResource(DrawableResource("image/ic_more_info.webp")),
+                contentDescription = "${device.subtitle} information",
+                tint = WorkstationDiagramTheme.themeColor.text,
+            )
         }
     }
 }

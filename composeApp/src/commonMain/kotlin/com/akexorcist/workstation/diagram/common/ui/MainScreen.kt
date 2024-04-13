@@ -229,9 +229,8 @@ private fun WorkspaceContent(
                             }
                     }
             },
-            onEnterDeviceHoverInteraction = { device ->
-                currentHoveredDevice = device
-            },
+            onDeviceInfoClick = { device -> currentSelectedDevice = device },
+            onEnterDeviceHoverInteraction = { device -> currentHoveredDevice = device },
             onExitDeviceHoverInteraction = { currentHoveredDevice = null },
             onAnimationToggleClick = onAnimationToggleClick,
             onDarkThemeToggle = onDarkThemeToggle,
