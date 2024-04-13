@@ -44,6 +44,7 @@ fun SpecificationContent(
     val coroutineScope = rememberCoroutineScope()
     ModalBottomSheet(
         modifier = Modifier
+            .requiredWidthIn(min = 400.dp)
             .fillMaxWidth(0.4f)
             .fillMaxHeight(0.8f),
         onDismissRequest = onDismissRequest,
@@ -101,6 +102,7 @@ fun SpecificationContent(
                             fontSize = MaterialTheme.typography.displaySmall.fontSize,
                             color = WorkstationDiagramTheme.themeColor.text,
                             fontWeight = FontWeight.Medium,
+                            lineHeight = MaterialTheme.typography.displaySmall.lineHeight,
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
