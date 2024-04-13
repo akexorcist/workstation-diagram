@@ -674,8 +674,8 @@ sealed class ImageData {
 
 private fun Float.display(digit: Int = 2): String {
     val rounder = 10f.pow(digit).toInt()
-    val result = (((this * rounder).toInt()).toFloat() / rounder)
-    return when (result % 1 != 0f) {
+    val result = (this * rounder).toInt().toDouble() / rounder.toDouble()
+    return when (result % 1 != .0) {
         true -> result
         false -> result.toInt()
     }.toString()

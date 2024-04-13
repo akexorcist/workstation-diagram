@@ -27,8 +27,6 @@ import kotlin.math.max
 private val workspaceWidth = 2540.dp
 private val workspaceHeight = 1340.dp
 private const val boundOffsetRatio = 0.8f
-private const val maxZoomScale = 3f
-private const val minZoomScale = 0.5f
 
 @Composable
 fun MainScreen(
