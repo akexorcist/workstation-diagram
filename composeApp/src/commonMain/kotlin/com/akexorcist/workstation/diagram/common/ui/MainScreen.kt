@@ -84,17 +84,11 @@ private fun WorkspaceContainer(
     var debugConfig by remember { mutableStateOf(DefaultDebugConfig) }
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
-    val transformableState = rememberTransformableState { zoomChange, offsetChange, _ ->
-        val newScale = scale * zoomChange
-        if (newScale < maxZoomScale && newScale > minZoomScale) {
-            scale = newScale
-        }
-
+    val transformableState = rememberTransformableState { _, offsetChange, _ ->
         offset = getWorkspaceOffset(
             offset = offset,
             offsetChange = offsetChange,
-            zoom = scale,
-//            zoom = config.zoomScale,
+            scale = scale,
             screenInPx = screenInPx,
             workspaceInPx = workspaceInPx,
             boundOffset = boundOffset,
@@ -115,13 +109,14 @@ private fun WorkspaceContainer(
         config = config,
         debugConfig = debugConfig,
         workspaceInDp = workspaceInDp,
-        scale = scale,
         offset = animatedOffset,
+        scale = scale,
         transformableState = transformableState,
         darkTheme = darkTheme,
         onAnimationToggleClick = { config = config.copy(isAnimationOn = it) },
         onRequestDeviceFocus = { offset = it },
         onDarkThemeToggle = onDarkThemeToggle,
+        onZoomChanged = { scale = it },
         // Debug
         onNextIndex = { debugConfig = debugConfig.copy(lineIndex = debugConfig.lineIndex + 1) },
         onPreviousIndex = { debugConfig = debugConfig.copy(lineIndex = max(debugConfig.lineIndex - 1, 0)) },
@@ -141,13 +136,14 @@ private fun WorkspaceContent(
     config: Config,
     debugConfig: DebugConfig,
     workspaceInDp: SizeDp,
-    scale: Float,
     offset: Offset,
+    scale: Float,
     transformableState: TransformableState,
     darkTheme: Boolean,
     onAnimationToggleClick: (Boolean) -> Unit,
     onRequestDeviceFocus: (Offset) -> Unit,
     onDarkThemeToggle: (enable: Boolean) -> Unit,
+    onZoomChanged: (zoom: Float) -> Unit,
     // Debug
     onNextIndex: (Int) -> Unit,
     onPreviousIndex: (Int) -> Unit,
@@ -177,8 +173,6 @@ private fun WorkspaceContent(
                     .graphicsLayer(
                         scaleX = scale,
                         scaleY = scale,
-//                    scaleX = config.zoomScale,
-//                    scaleY = config.zoomScale,
                         translationX = offset.x,
                         translationY = offset.y,
                     )
@@ -212,6 +206,7 @@ private fun WorkspaceContent(
             workStation = workStation,
             isAnimationOn = config.isAnimationOn,
             darkTheme = darkTheme,
+            scale = scale,
             showUiPanel = showUiPanel,
             onDeviceClick = { device ->
                 deviceCoordinateHostState.currentWorkstationCoordinates
@@ -236,6 +231,7 @@ private fun WorkspaceContent(
             onExitDeviceHoverInteraction = { currentHoveredDevice = null },
             onAnimationToggleClick = onAnimationToggleClick,
             onDarkThemeToggle = onDarkThemeToggle,
+            onZoomChanged = onZoomChanged,
             onToggleUiPanelClick = { visible -> showUiPanel = visible },
             // Debug
             debugConfig = debugConfig,
@@ -342,20 +338,25 @@ private fun WorkspaceContent(
 private fun getWorkspaceOffset(
     offset: Offset,
     offsetChange: Offset,
-    zoom: Float,
+    scale: Float,
     screenInPx: SizePx,
     workspaceInPx: SizePx,
     boundOffset: Offset,
 ): Offset {
+    val multiply =
+        if (scale < 1f) 1f
+        else scale
     val boundedOffsetX = getBoundedOffset(
         screenSize = screenInPx.width,
         workspaceSize = workspaceInPx.width,
         boundOffset = boundOffset.x,
+        scale = multiply,
     )
     val boundedOffsetY = getBoundedOffset(
         screenSize = screenInPx.height,
         workspaceSize = workspaceInPx.height,
         boundOffset = boundOffset.y,
+        scale = multiply,
     )
     val x = when {
         offsetChange.x > 0 && offset.x < boundedOffsetX -> {
@@ -390,4 +391,5 @@ private fun getBoundedOffset(
     screenSize: Float,
     workspaceSize: Float,
     boundOffset: Float,
-): Float = (screenSize / 2) + (workspaceSize / 2) - boundOffset
+    scale: Float,
+): Float = (screenSize / 2 * scale) + (workspaceSize / 2 * scale) - boundOffset

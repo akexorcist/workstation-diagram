@@ -49,6 +49,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import kotlin.math.pow
 
 @Composable
 fun InformationContent(
@@ -56,12 +57,14 @@ fun InformationContent(
     isAnimationOn: Boolean,
     darkTheme: Boolean,
     showUiPanel: Boolean,
+    scale: Float,
     onDeviceClick: (Device) -> Unit,
     onDeviceInfoClick: (Device) -> Unit,
     onEnterDeviceHoverInteraction: (Device) -> Unit,
     onExitDeviceHoverInteraction: (Device) -> Unit,
     onAnimationToggleClick: (Boolean) -> Unit,
     onDarkThemeToggle: (Boolean) -> Unit,
+    onZoomChanged: (Float) -> Unit,
     onToggleUiPanelClick: (Boolean) -> Unit,
     // Debug
     debugConfig: DebugConfig,
@@ -144,30 +147,14 @@ fun InformationContent(
                 modifier = Modifier.align(Alignment.TopEnd),
                 horizontalAlignment = Alignment.End,
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(
-                            top = 32.dp,
-                            end = 32.dp,
-                        )
-                        .informationBackground()
-                        .padding(
-                            horizontal = 24.dp,
-                            vertical = 16.dp,
-                        ),
-                    horizontalAlignment = Alignment.End,
-                ) {
-                    SettingMenu(
-                        label = "Connection Animation",
-                        enable = isAnimationOn,
-                        onSettingToggle = onAnimationToggleClick,
-                    )
-                    SettingMenu(
-                        label = "Dark Theme",
-                        enable = darkTheme,
-                        onSettingToggle = onDarkThemeToggle,
-                    )
-                }
+                SettingMenu(
+                    isAnimationOn = isAnimationOn,
+                    onAnimationToggleClick = onAnimationToggleClick,
+                    darkTheme = darkTheme,
+                    onDarkThemeToggle = onDarkThemeToggle,
+                    zoom = scale,
+                    onZoomChanged = onZoomChanged,
+                )
                 if (debugConfig.visible) {
                     Spacer(modifier = Modifier.height(16.dp))
                     DebugPanel(
@@ -185,6 +172,49 @@ fun InformationContent(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun SettingMenu(
+    isAnimationOn: Boolean,
+    onAnimationToggleClick: (Boolean) -> Unit,
+    darkTheme: Boolean,
+    onDarkThemeToggle: (Boolean) -> Unit,
+    zoom: Float,
+    onZoomChanged: (Float) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .padding(
+                top = 32.dp,
+                end = 32.dp,
+            )
+            .informationBackground()
+            .width(300.dp)
+            .padding(
+                horizontal = 24.dp,
+                vertical = 16.dp,
+            ),
+        horizontalAlignment = Alignment.End,
+    ) {
+        Spacer(modifier = Modifier.height(8.dp))
+        SliderSettingMenu(
+            label = "x${zoom.display()} Zoom",
+            value = zoom,
+            valueRange = 0.75f..1.5f,
+            onZoomChanged = onZoomChanged,
+        )
+        ToggleSettingMenu(
+            label = "Connection Animation",
+            enable = isAnimationOn,
+            onSettingToggle = onAnimationToggleClick,
+        )
+        ToggleSettingMenu(
+            label = "Dark Theme",
+            enable = darkTheme,
+            onSettingToggle = onDarkThemeToggle,
+        )
     }
 }
 
@@ -584,35 +614,7 @@ private fun CollapsibleHeader(
 }
 
 @Composable
-private fun AnimationSetting(
-    isAnimationOn: Boolean,
-    onAnimationToggleClick: (Boolean) -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .informationBackground()
-            .padding(
-                horizontal = 24.dp,
-                vertical = 16.dp,
-            ),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = "Connection Animation",
-            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-            color = WorkstationDiagramTheme.themeColor.text,
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-        Switch(
-            modifier = Modifier.scale(0.75f),
-            checked = isAnimationOn,
-            onCheckedChange = { onAnimationToggleClick(!isAnimationOn) }
-        )
-    }
-}
-
-@Composable
-private fun SettingMenu(
+private fun ToggleSettingMenu(
     label: String,
     enable: Boolean,
     onSettingToggle: (Boolean) -> Unit,
@@ -635,6 +637,34 @@ private fun SettingMenu(
     }
 }
 
+@Composable
+private fun SliderSettingMenu(
+    label: String,
+    value: Float,
+    valueRange: ClosedFloatingPointRange<Float>,
+    onZoomChanged: (Float) -> Unit,
+) {
+    Column(
+        modifier = Modifier,
+        horizontalAlignment = Alignment.End,
+    ) {
+        Row(modifier = Modifier.offset(y = 4.dp)) {
+            Text(
+                text = label,
+                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                color = WorkstationDiagramTheme.themeColor.text,
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+        }
+        Slider(
+            modifier = Modifier.offset(y = (-4).dp),
+            value = value,
+            valueRange = valueRange,
+            onValueChange = onZoomChanged,
+        )
+    }
+}
+
 sealed class ImageData {
     data class Image(
         val image: ImageVector
@@ -643,4 +673,13 @@ sealed class ImageData {
     data class Painter(
         val path: String,
     ) : ImageData()
+}
+
+private fun Float.display(digit: Int = 2): String {
+    val rounder = 10f.pow(digit).toInt()
+    val result = (((this * rounder).toInt()).toFloat() / rounder)
+    return when (result % 1 != 0f) {
+        true -> result
+        false -> result.toInt()
+    }.toString()
 }

@@ -22,7 +22,6 @@ val DefaultConfig = Config(
 data class DebugConfig(
     val visible: Boolean,
     val lineIndex: Int,
-    val zoomScale: Float,
     val showWorkspaceArea: Boolean,
     val showDeviceArea: Boolean,
     val showOverlapBoundArea: Boolean,
@@ -35,7 +34,6 @@ data class DebugConfig(
 val DefaultDebugConfig = DebugConfig(
     visible = false,
     lineIndex = 0,
-    zoomScale = 1f,
     showWorkspaceArea = false,
     showDeviceArea = false,
     showOverlapBoundArea = false,
