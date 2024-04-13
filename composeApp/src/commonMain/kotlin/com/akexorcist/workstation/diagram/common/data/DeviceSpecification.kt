@@ -542,19 +542,14 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.WirelessCharger -> AdditionalDeviceInformation(
-            image = "image/game_controller.webp",
-            website = "https://www.nintendo.com/us/store/products/pro-controller/",
-            description = "Game Controller for Nintendo Switch",
+            image = "image/wireless_charger.webp",
+            website = "https://www.ikea.com/us/en/p/nordmaerke-wireless-charger-textile-gray-10491658/",
+            description = "Charging pad",
             information = listOf(
-                "Communication Features" to "Bluetooth 3.0 / NFC",
-                "Sensors" to "Accelerometer / Gyroscope",
-                "Rumble Features" to "HD Rumble (capable of multiple vibration patterns)",
-                "USB Connector" to "USB Type-C connector",
-                "Battery" to "Lithium-ion 1,300 mAh",
-                "Battery Life" to "Approx. 40 hours",
-                "Charging Time" to "Approx. 6 hours",
-                "Dimensions" to "106 x 152 x 60 mm",
-                "Weight" to "Approx. 246 g",
+                "Input" to "5.0V DC, 2.0A USB Type-C",
+                "Output power" to " 36 dBµA/m at 3m",
+                "Operating frequency" to "110.3KHz – 148 KHz",
+                "Compatibility" to " Qi 1.2.4BPP",
             ),
         )
 
@@ -565,8 +560,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
             information = listOf(
                 "Neodymium Drivers" to "40 mm",
                 "Headphone Frequency Response" to "10–40,000 Hz",
-                "Headphone Sensitivity" to "\n" +
-                        "93 dBSPL",
+                "Headphone Sensitivity" to "93 dBSPL",
                 "Headphone Impedance" to "38 Ohm",
                 "Headphone Total Harmonic Distortion" to "< 1%",
                 "Microphone Type" to "ClearCast Gen 2 - Fully Retractable Boom",
