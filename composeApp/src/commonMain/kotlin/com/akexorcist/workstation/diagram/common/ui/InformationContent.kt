@@ -102,72 +102,76 @@ fun InformationContent(
         ),
     )
     Box {
-        Box(
-            modifier = Modifier
-                .padding(32.dp)
-                .offset(x = animatedShowUiPanelOffsetX)
-                .alpha(1 - animatedUiPanelAlpha)
-        ) {
-            ToggleHudVisibilityButton(
-                icon = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
-                onToggleUiPanelClick = { onToggleUiPanelClick(true) },
-            )
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .alpha(animatedUiPanelAlpha)
-                .scale(animatedUiPanelScale),
-        ) {
-            Column(modifier = Modifier.padding(32.dp)) {
-                Row {
-                    Title()
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Column {
-                        Spacer(modifier = Modifier.height(16.dp))
-                        ToggleHudVisibilityButton(
-                            icon = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
-                            onToggleUiPanelClick = { onToggleUiPanelClick(false) },
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                Instruction()
-                Spacer(modifier = Modifier.height(16.dp))
-                DeviceList(
-                    devices = workStation.getAllDevices(),
-                    onDeviceClick = onDeviceClick,
-                    onDeviceInfoClick = onDeviceInfoClick,
-                    onEnterHoverInteraction = onEnterDeviceHoverInteraction,
-                    onExitHoverInteraction = onExitDeviceHoverInteraction,
+        if (animatedUiPanelAlpha != 1f) {
+            Box(
+                modifier = Modifier
+                    .padding(32.dp)
+                    .offset(x = animatedShowUiPanelOffsetX)
+                    .alpha(1 - animatedUiPanelAlpha)
+            ) {
+                ToggleHudVisibilityButton(
+                    icon = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                    onToggleUiPanelClick = { onToggleUiPanelClick(true) },
                 )
             }
-            Column(
-                modifier = Modifier.align(Alignment.TopEnd),
-                horizontalAlignment = Alignment.End,
+        }
+        if (animatedUiPanelAlpha != 0f) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .alpha(animatedUiPanelAlpha)
+                    .scale(animatedUiPanelScale),
             ) {
-                SettingMenu(
-                    isAnimationOn = isAnimationOn,
-                    onAnimationToggleClick = onAnimationToggleClick,
-                    darkTheme = darkTheme,
-                    onDarkThemeToggle = onDarkThemeToggle,
-                    zoom = scale,
-                    onZoomChanged = onZoomChanged,
-                )
-                if (debugConfig.visible) {
+                Column(modifier = Modifier.padding(32.dp)) {
+                    Row {
+                        Title()
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Column {
+                            Spacer(modifier = Modifier.height(16.dp))
+                            ToggleHudVisibilityButton(
+                                icon = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
+                                onToggleUiPanelClick = { onToggleUiPanelClick(false) },
+                            )
+                        }
+                    }
                     Spacer(modifier = Modifier.height(16.dp))
-                    DebugPanel(
-                        debugConfig = debugConfig,
-                        onNextIndex = onNextIndex,
-                        onPreviousIndex = onPreviousIndex,
-                        onToggleShowWorkspaceArea = onToggleShowWorkspaceArea,
-                        onToggleShowDeviceArea = onToggleShowDeviceArea,
-                        onToggleShowOverlapBoundArea = onToggleShowOverlapBoundArea,
-                        onToggleShowConnectorArea = onToggleShowConnectorArea,
-                        onToggleShowAllConnectionLines = onToggleShowAllConnectionLines,
-                        onToggleLineConnectionPoint = onToggleLineConnectionPoint,
-                        onToggleLineOptimization = onToggleLineOptimization,
+                    Instruction()
+                    Spacer(modifier = Modifier.height(16.dp))
+                    DeviceList(
+                        devices = workStation.getAllDevices(),
+                        onDeviceClick = onDeviceClick,
+                        onDeviceInfoClick = onDeviceInfoClick,
+                        onEnterHoverInteraction = onEnterDeviceHoverInteraction,
+                        onExitHoverInteraction = onExitDeviceHoverInteraction,
                     )
+                }
+                Column(
+                    modifier = Modifier.align(Alignment.TopEnd),
+                    horizontalAlignment = Alignment.End,
+                ) {
+                    SettingMenu(
+                        isAnimationOn = isAnimationOn,
+                        onAnimationToggleClick = onAnimationToggleClick,
+                        darkTheme = darkTheme,
+                        onDarkThemeToggle = onDarkThemeToggle,
+                        zoom = scale,
+                        onZoomChanged = onZoomChanged,
+                    )
+                    if (debugConfig.visible) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        DebugPanel(
+                            debugConfig = debugConfig,
+                            onNextIndex = onNextIndex,
+                            onPreviousIndex = onPreviousIndex,
+                            onToggleShowWorkspaceArea = onToggleShowWorkspaceArea,
+                            onToggleShowDeviceArea = onToggleShowDeviceArea,
+                            onToggleShowOverlapBoundArea = onToggleShowOverlapBoundArea,
+                            onToggleShowConnectorArea = onToggleShowConnectorArea,
+                            onToggleShowAllConnectionLines = onToggleShowAllConnectionLines,
+                            onToggleLineConnectionPoint = onToggleLineConnectionPoint,
+                            onToggleLineOptimization = onToggleLineOptimization,
+                        )
+                    }
                 }
             }
         }

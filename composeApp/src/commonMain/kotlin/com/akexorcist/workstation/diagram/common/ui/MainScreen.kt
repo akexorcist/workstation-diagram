@@ -161,7 +161,9 @@ private fun WorkspaceContent(
     val uriHandler = LocalUriHandler.current
 
     Box(
-        modifier = Modifier.background(color = WorkstationDiagramTheme.themeColor.outerBackground)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = WorkstationDiagramTheme.themeColor.outerBackground)
     ) {
         Box(modifier = Modifier.transformable(state = transformableState)) {
             Box(
