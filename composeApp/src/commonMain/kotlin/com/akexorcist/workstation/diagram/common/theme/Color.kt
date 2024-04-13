@@ -2,6 +2,8 @@ package com.akexorcist.workstation.diagram.common.theme
 
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
@@ -91,6 +93,7 @@ data class ContentColor(
     val transparentBackground: Color,
     val selectedBackground: Color,
     val hoveredBackground: Color,
+    val uiIconButtonColors: @Composable () -> IconButtonColors,
     val outlinedButtonColors: @Composable () -> ButtonColors,
     val computer: Color,
     val computerButton: @Composable () -> ButtonColors,
@@ -113,6 +116,12 @@ val lightContentColor = ContentColor(
     transparentBackground = ThemeColor.Transparent,
     selectedBackground = ThemeColor.Gray500,
     hoveredBackground = ThemeColor.Gray50,
+    uiIconButtonColors = {
+        IconButtonDefaults.outlinedIconButtonColors(
+            containerColor = ThemeColor.Purple50,
+            contentColor = ThemeColor.Gray900,
+        )
+    },
     outlinedButtonColors = {
         ButtonDefaults.outlinedButtonColors(
             containerColor = ThemeColor.Transparent,
@@ -173,6 +182,12 @@ val darkContentColor = ContentColor(
     transparentBackground = ThemeColor.Transparent,
     selectedBackground = ThemeColor.Gray200,
     hoveredBackground = ThemeColor.Transparent,
+    uiIconButtonColors = {
+        IconButtonDefaults.outlinedIconButtonColors(
+            containerColor = ThemeColor.Purple200,
+            contentColor = ThemeColor.Gray900,
+        )
+    },
     outlinedButtonColors = {
         ButtonDefaults.outlinedButtonColors(
             containerColor = ThemeColor.Transparent,

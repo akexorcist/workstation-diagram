@@ -163,6 +163,7 @@ private fun WorkspaceContent(
     var currentHoveredConnector: Connector? by remember { mutableStateOf(null) }
     var currentHoveredDevice: Device? by remember { mutableStateOf(null) }
     var currentSelectedDevice: Device? by remember { mutableStateOf(null) }
+    var showUiPanel: Boolean by remember { mutableStateOf(true) }
     val uriHandler = LocalUriHandler.current
 
     Box(
@@ -211,6 +212,7 @@ private fun WorkspaceContent(
             workStation = workStation,
             isAnimationOn = config.isAnimationOn,
             darkTheme = darkTheme,
+            showUiPanel = showUiPanel,
             onDeviceClick = { device ->
                 deviceCoordinateHostState.currentWorkstationCoordinates
                     .getAllDeviceRect()
@@ -234,6 +236,8 @@ private fun WorkspaceContent(
             onExitDeviceHoverInteraction = { currentHoveredDevice = null },
             onAnimationToggleClick = onAnimationToggleClick,
             onDarkThemeToggle = onDarkThemeToggle,
+            onToggleUiPanelClick = { visible -> showUiPanel = visible },
+            // Debug
             debugConfig = debugConfig,
             onNextIndex = onNextIndex,
             onPreviousIndex = onPreviousIndex,

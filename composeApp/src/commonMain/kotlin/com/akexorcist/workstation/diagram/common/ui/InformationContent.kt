@@ -5,7 +5,7 @@ package com.akexorcist.workstation.diagram.common.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -18,9 +18,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -30,9 +33,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalUriHandler
@@ -54,12 +55,14 @@ fun InformationContent(
     workStation: Workstation,
     isAnimationOn: Boolean,
     darkTheme: Boolean,
+    showUiPanel: Boolean,
     onDeviceClick: (Device) -> Unit,
     onDeviceInfoClick: (Device) -> Unit,
     onEnterDeviceHoverInteraction: (Device) -> Unit,
     onExitDeviceHoverInteraction: (Device) -> Unit,
     onAnimationToggleClick: (Boolean) -> Unit,
     onDarkThemeToggle: (Boolean) -> Unit,
+    onToggleUiPanelClick: (Boolean) -> Unit,
     // Debug
     debugConfig: DebugConfig,
     onNextIndex: (Int) -> Unit,
@@ -72,62 +75,114 @@ fun InformationContent(
     onToggleLineConnectionPoint: (Boolean) -> Unit,
     onToggleLineOptimization: (Boolean) -> Unit,
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.padding(32.dp)) {
-            Title()
-            Spacer(modifier = Modifier.height(16.dp))
-            Instruction()
-            Spacer(modifier = Modifier.height(16.dp))
-            DeviceList(
-                devices = workStation.getAllDevices(),
-                onDeviceClick = onDeviceClick,
-                onDeviceInfoClick = onDeviceInfoClick,
-                onEnterHoverInteraction = onEnterDeviceHoverInteraction,
-                onExitHoverInteraction = onExitDeviceHoverInteraction,
+    val animatedUiPanelAlpha by animateFloatAsState(
+        targetValue = when (showUiPanel) {
+            true -> 1f
+            false -> 0f
+        },
+    )
+    val animatedUiPanelScale by animateFloatAsState(
+        targetValue = when (showUiPanel) {
+            true -> 1f
+            false -> 1.5f
+        },
+        animationSpec = spring(
+            stiffness = Spring.StiffnessMediumLow,
+        ),
+    )
+    val animatedShowUiPanelOffsetX by animateDpAsState(
+        targetValue = when (showUiPanel) {
+            true -> (-32).dp
+            false -> 0.dp
+        },
+        animationSpec = spring(
+            stiffness = Spring.StiffnessMediumLow,
+        ),
+    )
+    Box {
+        Box(
+            modifier = Modifier
+                .padding(32.dp)
+                .offset(x = animatedShowUiPanelOffsetX)
+                .alpha(1 - animatedUiPanelAlpha)
+        ) {
+            ToggleHudVisibilityButton(
+                icon = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                onToggleUiPanelClick = { onToggleUiPanelClick(true) },
             )
         }
-        Column(
-            modifier = Modifier.align(Alignment.TopEnd),
-            horizontalAlignment = Alignment.End,
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(animatedUiPanelAlpha)
+                .scale(animatedUiPanelScale),
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(
-                        top = 32.dp,
-                        end = 32.dp,
-                    )
-                    .informationBackground()
-                    .padding(
-                        horizontal = 24.dp,
-                        vertical = 16.dp,
-                    ),
-                horizontalAlignment = Alignment.End,
-            ) {
-                SettingMenu(
-                    label = "Connection Animation",
-                    enable = isAnimationOn,
-                    onSettingToggle = onAnimationToggleClick,
-                )
-                SettingMenu(
-                    label = "Dark Theme",
-                    enable = darkTheme,
-                    onSettingToggle = onDarkThemeToggle,
+            Column(modifier = Modifier.padding(32.dp)) {
+                Row {
+                    Title()
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Column {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        ToggleHudVisibilityButton(
+                            icon = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
+                            onToggleUiPanelClick = { onToggleUiPanelClick(false) },
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Instruction()
+                Spacer(modifier = Modifier.height(16.dp))
+                DeviceList(
+                    devices = workStation.getAllDevices(),
+                    onDeviceClick = onDeviceClick,
+                    onDeviceInfoClick = onDeviceInfoClick,
+                    onEnterHoverInteraction = onEnterDeviceHoverInteraction,
+                    onExitHoverInteraction = onExitDeviceHoverInteraction,
                 )
             }
-            if (debugConfig.visible) {
-                Spacer(modifier = Modifier.height(16.dp))
-                DebugPanel(
-                    debugConfig = debugConfig,
-                    onNextIndex = onNextIndex,
-                    onPreviousIndex = onPreviousIndex,
-                    onToggleShowWorkspaceArea = onToggleShowWorkspaceArea,
-                    onToggleShowDeviceArea = onToggleShowDeviceArea,
-                    onToggleShowOverlapBoundArea = onToggleShowOverlapBoundArea,
-                    onToggleShowConnectorArea = onToggleShowConnectorArea,
-                    onToggleShowAllConnectionLines = onToggleShowAllConnectionLines,
-                    onToggleLineConnectionPoint = onToggleLineConnectionPoint,
-                    onToggleLineOptimization = onToggleLineOptimization,
-                )
+            Column(
+                modifier = Modifier.align(Alignment.TopEnd),
+                horizontalAlignment = Alignment.End,
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(
+                            top = 32.dp,
+                            end = 32.dp,
+                        )
+                        .informationBackground()
+                        .padding(
+                            horizontal = 24.dp,
+                            vertical = 16.dp,
+                        ),
+                    horizontalAlignment = Alignment.End,
+                ) {
+                    SettingMenu(
+                        label = "Connection Animation",
+                        enable = isAnimationOn,
+                        onSettingToggle = onAnimationToggleClick,
+                    )
+                    SettingMenu(
+                        label = "Dark Theme",
+                        enable = darkTheme,
+                        onSettingToggle = onDarkThemeToggle,
+                    )
+                }
+                if (debugConfig.visible) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    DebugPanel(
+                        debugConfig = debugConfig,
+                        onNextIndex = onNextIndex,
+                        onPreviousIndex = onPreviousIndex,
+                        onToggleShowWorkspaceArea = onToggleShowWorkspaceArea,
+                        onToggleShowDeviceArea = onToggleShowDeviceArea,
+                        onToggleShowOverlapBoundArea = onToggleShowOverlapBoundArea,
+                        onToggleShowConnectorArea = onToggleShowConnectorArea,
+                        onToggleShowAllConnectionLines = onToggleShowAllConnectionLines,
+                        onToggleLineConnectionPoint = onToggleLineConnectionPoint,
+                        onToggleLineOptimization = onToggleLineOptimization,
+                    )
+                }
             }
         }
     }
@@ -186,14 +241,27 @@ private fun Title() {
     }
 }
 
-sealed class ImageData {
-    data class Image(
-        val image: ImageVector
-    ) : ImageData()
-
-    data class Painter(
-        val path: String,
-    ) : ImageData()
+@Composable
+private fun ToggleHudVisibilityButton(
+    icon: ImageVector,
+    onToggleUiPanelClick: () -> Unit,
+) {
+    IconButton(
+        modifier = Modifier
+            .shadow(
+                elevation = 4.dp,
+                shape = CircleShape,
+            )
+            .size(40.dp),
+        colors = WorkstationDiagramTheme.themeColor.uiIconButtonColors(),
+        onClick = onToggleUiPanelClick,
+    ) {
+        Icon(
+            modifier = Modifier.size(24.dp),
+            imageVector = icon,
+            contentDescription = "Toggle UI panel visibility",
+        )
+    }
 }
 
 @OptIn(ExperimentalResourceApi::class)
@@ -565,4 +633,14 @@ private fun SettingMenu(
             onCheckedChange = { onSettingToggle(!enable) }
         )
     }
+}
+
+sealed class ImageData {
+    data class Image(
+        val image: ImageVector
+    ) : ImageData()
+
+    data class Painter(
+        val path: String,
+    ) : ImageData()
 }
