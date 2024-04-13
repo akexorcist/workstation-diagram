@@ -103,7 +103,7 @@ sealed class Device(
     ) : Device(
         type = Type.HdmiSwitcher,
         title = "HDMI Switcher",
-        subtitle = "UGREEN 90385",
+        subtitle = "UGREEN CM561",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
     ) {

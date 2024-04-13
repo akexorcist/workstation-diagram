@@ -180,10 +180,22 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.HdmiSwitcher -> AdditionalDeviceInformation(
-            image = "image/pc_desktop.webp",
-            website = null,
+            image = "image/hdmi_switcher.webp",
+            website = "https://www.amazon.com/UGREEN-Switcher-Splitter-Supports-Compatible/dp/B09S5YS68P",
             description = "HDMI 2.1 Switch, 2 In 1 Out",
-            information = listOf(),
+            information = listOf(
+                "Chipset" to "PI3HDX12221 + EN8F156S14",
+                "HDMI Input" to "2 x HDMI 2.1",
+                "HDMI Output" to "1 x HDMI 2.1",
+                "Supported Resolutions" to "8K@60, 4K@144, 2K@240, 1080P@240",
+                "Variable Refresh Rate" to "VRR, AMD Free-Sync, G-Sync",
+                "Dynamic HDR Chroma" to "4:2:0 / 4:2:2 / 4:4:4",
+                "Video Compatibility" to "Dolby Vision, HDCP2.3, HDR/3D, ALLM, QFT, QMS, CEC",
+                "Audio Compatibility" to "Dolby Atmos, LPCM, PCM",
+                "Power Supply" to "USB-C",
+                "Dimensions" to "155 x 98 x 19 mm (6.1 x 3.86 x 0.75 in)",
+                "Weight" to "99.79 g / 3.52 oz"
+            ),
         )
 
         Device.Type.DigitalCamera -> AdditionalDeviceInformation(
