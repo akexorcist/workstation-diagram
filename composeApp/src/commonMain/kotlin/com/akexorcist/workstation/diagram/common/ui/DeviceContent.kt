@@ -22,7 +22,7 @@ import com.akexorcist.workstation.diagram.common.ui.state.WorkstationCoordinateS
 
 private val FirstRowSpacing = 140.dp
 private val SecondRowSpacing = 120.dp
-private val ThirdRowSpacing = 160.dp
+private val ThirdRowSpacing = 150.dp
 private val ForthRowSpacing = 70.dp
 
 @Composable
@@ -91,7 +91,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(71.dp))
+            Spacer(modifier = Modifier.height(64.dp))
             PcDesktop(
                 device = workStation.pcDesktop,
                 currentHoveredDevice = currentHoveredDevice,
@@ -201,7 +201,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(182.dp))
+            Spacer(modifier = Modifier.height(175.dp))
             UsbHub(
                 device = workStation.usbHub,
                 currentHoveredDevice = currentHoveredDevice,
@@ -269,7 +269,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(63.dp))
+            Spacer(modifier = Modifier.height(56.dp))
             UsbDongle1(
                 device = workStation.usbDongle1,
                 currentHoveredDevice = currentHoveredDevice,
