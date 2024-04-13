@@ -2,6 +2,7 @@
 
 package com.akexorcist.workstation.diagram.common.ui
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.TransformableState
@@ -100,13 +101,22 @@ private fun WorkspaceContainer(
         )
     }
 
+    val animatedOffset by animateOffsetAsState(
+        targetValue = offset,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioNoBouncy,
+            stiffness = Spring.StiffnessVeryLow,
+            visibilityThreshold = Offset.VisibilityThreshold,
+        ),
+    )
+
     WorkspaceContent(
         workStation = MyWorkstation,
         config = config,
         debugConfig = debugConfig,
         workspaceInDp = workspaceInDp,
         scale = scale,
-        offset = offset,
+        offset = animatedOffset,
         transformableState = transformableState,
         darkTheme = darkTheme,
         onAnimationToggleClick = { config = config.copy(isAnimationOn = it) },
