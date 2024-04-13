@@ -201,9 +201,7 @@ private fun WorkspaceContent(
             workStation = workStation,
             isAnimationOn = config.isAnimationOn,
             darkTheme = darkTheme,
-            onDeviceClick = { currentSelectedDevice = it },
-            onEnterDeviceHoverInteraction = { device ->
-                currentHoveredDevice = device
+            onDeviceClick = { device ->
                 deviceCoordinateHostState.currentWorkstationCoordinates
                     .getAllDeviceRect()
                     .find { it.device == device.type }
@@ -220,6 +218,9 @@ private fun WorkspaceContent(
                                 )
                             }
                     }
+            },
+            onEnterDeviceHoverInteraction = { device ->
+                currentHoveredDevice = device
             },
             onExitDeviceHoverInteraction = { currentHoveredDevice = null },
             onAnimationToggleClick = onAnimationToggleClick,
