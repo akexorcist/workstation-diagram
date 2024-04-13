@@ -23,7 +23,7 @@ import com.akexorcist.workstation.diagram.common.ui.state.*
 import com.akexorcist.workstation.diagram.common.utility.*
 import kotlin.math.max
 
-private val workspaceWidth = 2850.dp
+private val workspaceWidth = 2540.dp
 private val workspaceHeight = 1348.dp
 private const val boundOffsetRatio = 0.8f
 private const val maxZoomScale = 3f
