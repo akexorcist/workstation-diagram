@@ -462,8 +462,10 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
                 "Sample Rate" to "96kHz",
                 "Output Connector" to "USB-C",
                 "Materials" to "Extruded Aluminum Structure with PC ABS Shell",
-                "Dimensions" to "60 x 65.1 x 170.2mm (without stand)",
-                "Weight" to "314g (without stand)",
+                "Dimensions" to "115 x 131.3 x 252.8mm (Total)\n" +
+                        "60 x 65.1 x 170.2mm (without stand)",
+                "Weight" to "883g (Total)\n" +
+                        "314g (without stand)",
             ),
         )
 
