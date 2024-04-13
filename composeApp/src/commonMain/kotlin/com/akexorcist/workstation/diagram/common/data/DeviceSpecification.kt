@@ -135,18 +135,59 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
             ),
         )
 
-        Device.Type.NintendoSwitch -> AdditionalDeviceInformation(
-            image = "image/pc_desktop.webp",
-            website = null,
-            description = "",
-            information = listOf(),
+        Device.Type.GamingConsole1 -> AdditionalDeviceInformation(
+            image = "image/gaming_console_1.webp",
+            website = "https://www.nintendo.com/us/switch/system/",
+            description = "Nintendo Switch Splatoon 2 Bundle Edition",
+            information = listOf(
+                "Model" to "HAC-001 (First Revision)",
+                "Display" to "6.2-inch LCD Screen, 1280 x 720\n" +
+                        "Multi-touch capacitive touch screen",
+                "CPU/GPU" to "NVIDIA Custom Tegra processor",
+                "Memory" to "4 GB LPDDR4 SDRAM",
+                "Storage" to "32 GB eMMC",
+                "SD Card" to "microSDXC, Up to 2TB",
+                "Video Output" to "Up to 1080p via HDMI in TV mode\n" +
+                        "Up to 720p via built-in screen in tabletop mode and handheld mode",
+                "Audio output" to "Compatible with 5.1ch Linear PCM output\n" +
+                        "Output via HDMI connector in TV mode",
+                "Wireless Connection" to "Wi-Fi (IEEE 802.11 a/b/g/n/ac)\n" +
+                        "Bluetooth 4.1",
+                "USB connector" to "USB Type-C (for charging)",
+                "Speakers" to "Stereo",
+                "Headphone/Microphone Jack" to "3.5mm 4-pole stereo (CTIA standard)",
+                "Sensor" to "Accelerometer, gyroscope, and brightness sensor",
+                "Battery" to "4310mAh Lithium-ion battery",
+                "Dimensions" to "101.6 x 238.76 x 13.97 mm (4 x 9.4 x 0.55 in)",
+                "Weight" to "399.16 g (0.88 lbs)",
+            ),
         )
 
-        Device.Type.PlayStation5 -> AdditionalDeviceInformation(
-            image = "image/pc_desktop.webp",
-            website = null,
-            description = "",
-            information = listOf(),
+        Device.Type.GamingConsole2 -> AdditionalDeviceInformation(
+            image = "image/gaming_console_2.webp",
+            website = "https://www.playstation.com/en-th/ps5/",
+            description = "PlayStation 5 Disk Edition with Final Fantasy XVI Limited Cover",
+            information = listOf(
+                "Model" to "CFI-1118A (2021 Revision)",
+                "CPU" to "x86-64-AMD Ryzen™ Zen2, 8 cores/16 threads",
+                "GPU" to "AMD Radeon™ RDNA-based graphics engine",
+                "Memory" to "GDDR6 16 GB",
+                "Storage" to "825 GB SSD",
+                "Blu-Ray Disc Drive" to "Yes",
+                "Interfaces" to "USB Type-A port (Hi-Speed USB)\n" +
+                        "USB Type-A port (SuperSpeed USB 10Gbps) ×2\n" +
+                        "USB Type-C®port (SuperSpeed USB 10Gbps)\n" +
+                        "Expansion Connector (Key M)",
+                "Networking" to "Ethernet (10BASE-T, 100BASE-TX, 1000BASE-T)\n" +
+                        "IEEE 802.11 a/b/g/n/ac/ax\n" +
+                        "Bluetooth 5.1",
+                "AV output" to "HDMI Out Port\n" +
+                        "Support of 4K 120Hz TVs, 8K TVs, VRR (specified by HDMI ver.2.1)",
+                "Audio" to "Tempest 3D AudioTech",
+                "Power Consumption" to "350W (Maximum)",
+                "Dimensions" to "390 x 104 x 260 mm",
+                "Weight" to "4.2 kg",
+            ),
         )
 
         Device.Type.UsbDockingStation -> AdditionalDeviceInformation(
@@ -222,7 +263,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
                 "Shutter Speed" to "Still images:1/4000 to 30 sec, Bulb, Movies: 1/4000 to 1/4(1/3 steps) up to 1/60 in AUTO mode (up to 1/30 in Auto slow shutter mode)",
                 "Flash Sync Speed" to "Still images:1/4000 to 30 sec, Bulb, Movies: 1/4000 to 1/4(1/3 steps) up to 1/60 in AUTO mode (up to 1/30 in Auto slow shutter mode)",
                 "Flash Compensation" to "+/- 3.0 EV (switchable between 1/3 and 1/2 EV steps)",
-                "Interfaces" to "4Kstill image PB\n" +
+                "Interfaces" to "4K still image PB\n" +
                         "BRAVIA Sync (link menu)\n" +
                         "HDMI micro connector (Type-D)\n" +
                         "Multi/Micro USB Terminal\n" +

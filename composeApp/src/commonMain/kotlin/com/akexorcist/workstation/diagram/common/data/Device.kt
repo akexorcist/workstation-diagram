@@ -52,33 +52,33 @@ sealed class Device(
         }
     }
 
-    data class NintendoSwitch(
+    data class GamingConsole1(
         override val leftConnections: List<Connector>,
         override val rightConnections: List<Connector>,
     ) : Device(
-        type = Type.NintendoSwitch,
-        title = "Nintendo Switch",
-        subtitle = null,
+        type = Type.GamingConsole1,
+        title = "Gaming Console",
+        subtitle = "Nintendo Switch",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
     ) {
         companion object {
-            fun builder(block: Type.() -> NintendoSwitch) = block(Type.NintendoSwitch)
+            fun builder(block: Type.() -> GamingConsole1) = block(Type.GamingConsole1)
         }
     }
 
-    data class PlayStation5(
+    data class GamingConsole2(
         override val leftConnections: List<Connector>,
         override val rightConnections: List<Connector>,
     ) : Device(
-        type = Type.PlayStation5,
-        title = "PlayStation 5",
-        subtitle = null,
+        type = Type.GamingConsole2,
+        title = "Gaming Console",
+        subtitle = "PlayStation 5",
         leftConnections = leftConnections,
         rightConnections = rightConnections,
     ) {
         companion object {
-            fun builder(block: Type.() -> PlayStation5) = block(Type.PlayStation5)
+            fun builder(block: Type.() -> GamingConsole2) = block(Type.GamingConsole2)
         }
     }
 
@@ -423,8 +423,8 @@ sealed class Device(
         OfficeLaptop,
         PersonalLaptop,
         PcDesktop,
-        NintendoSwitch,
-        PlayStation5,
+        GamingConsole1,
+        GamingConsole2,
         UsbDockingStation,
         HdmiSwitcher,
         DigitalCamera,
@@ -452,8 +452,8 @@ sealed class Device(
             OfficeLaptop,
             PersonalLaptop,
             PcDesktop,
-            NintendoSwitch,
-            PlayStation5 -> true
+            GamingConsole1,
+            GamingConsole2 -> true
 
             else -> false
         }

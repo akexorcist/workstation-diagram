@@ -4,8 +4,8 @@ data class Workstation(
     val officeLaptop: Device.OfficeLapTop,
     val personalLaptop: Device.PersonalLapTop,
     val pcDesktop: Device.PcDesktop,
-    val nintendoSwitch: Device.NintendoSwitch,
-    val playStation5: Device.PlayStation5,
+    val gamingConsole1: Device.GamingConsole1,
+    val gamingConsole2: Device.GamingConsole2,
     val usbDockingStation: Device.UsbDockingStation,
     val hdmiSwitcher: Device.HdmiSwitcher,
     val digitalCamera: Device.DigitalCamera,
@@ -88,8 +88,8 @@ val MyWorkstation = Workstation(
             ),
         )
     },
-    nintendoSwitch = Device.NintendoSwitch.builder {
-        Device.NintendoSwitch(
+    gamingConsole1 = Device.GamingConsole1.builder {
+        Device.GamingConsole1(
             leftConnections = listOf(),
             rightConnections = listOf(
                 Connector(
@@ -101,8 +101,8 @@ val MyWorkstation = Workstation(
             ),
         )
     },
-    playStation5 = Device.PlayStation5.builder {
-        Device.PlayStation5(
+    gamingConsole2 = Device.GamingConsole2.builder {
+        Device.GamingConsole2(
             leftConnections = listOf(),
             rightConnections = listOf(
                 Connector(
@@ -185,13 +185,13 @@ val MyWorkstation = Workstation(
                     type = ConnectorType.Hdmi21,
                     direction = ConnectorDirection.Input,
                     owner = this,
-                    target = Device.Type.NintendoSwitch,
+                    target = Device.Type.GamingConsole1,
                 ),
                 Connector(
                     type = ConnectorType.Hdmi21,
                     direction = ConnectorDirection.Input,
                     owner = this,
-                    target = Device.Type.PlayStation5,
+                    target = Device.Type.GamingConsole2,
                 ),
                 Connector(
                     type = ConnectorType.Hdmi21,
@@ -650,8 +650,8 @@ fun Workstation.getAllDevices(): List<Device> = listOf(
     this.officeLaptop,
     this.personalLaptop,
     this.pcDesktop,
-    this.nintendoSwitch,
-    this.playStation5,
+    this.gamingConsole1,
+    this.gamingConsole2,
     this.primaryMonitor,
     this.secondaryMonitor,
     this.usbCSwitcher,

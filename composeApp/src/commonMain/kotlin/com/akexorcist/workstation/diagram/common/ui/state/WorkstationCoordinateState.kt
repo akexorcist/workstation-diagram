@@ -55,17 +55,17 @@ class WorkstationCoordinateState {
                 )
             }
 
-            Device.Type.NintendoSwitch -> {
+            Device.Type.GamingConsole1 -> {
                 currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
-                    nintendoSwitch = currentWorkstationCoordinates.nintendoSwitch.copy(
+                    gamingConsole1 = currentWorkstationCoordinates.gamingConsole1.copy(
                         device = updatedCoordinate
                     )
                 )
             }
 
-            Device.Type.PlayStation5 -> {
+            Device.Type.GamingConsole2 -> {
                 currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
-                    playStation5 = currentWorkstationCoordinates.playStation5.copy(
+                    gamingConsole2 = currentWorkstationCoordinates.gamingConsole2.copy(
                         device = updatedCoordinate
                     )
                 )
@@ -302,10 +302,10 @@ class WorkstationCoordinateState {
                 )
             }
 
-            Device.Type.NintendoSwitch -> {
+            Device.Type.GamingConsole1 -> {
                 currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
-                    nintendoSwitch = currentWorkstationCoordinates.nintendoSwitch.copy(
-                        connectors = currentWorkstationCoordinates.nintendoSwitch.connectors
+                    gamingConsole1 = currentWorkstationCoordinates.gamingConsole1.copy(
+                        connectors = currentWorkstationCoordinates.gamingConsole1.connectors
                             ?.toMutableList()
                             ?.apply {
                                 if (!contains(updatedCoordinate)) {
@@ -317,10 +317,10 @@ class WorkstationCoordinateState {
                 )
             }
 
-            Device.Type.PlayStation5 -> {
+            Device.Type.GamingConsole2 -> {
                 currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
-                    playStation5 = currentWorkstationCoordinates.playStation5.copy(
-                        connectors = currentWorkstationCoordinates.playStation5.connectors
+                    gamingConsole2 = currentWorkstationCoordinates.gamingConsole2.copy(
+                        connectors = currentWorkstationCoordinates.gamingConsole2.connectors
                             ?.toMutableList()
                             ?.apply {
                                 if (!contains(updatedCoordinate)) {

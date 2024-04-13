@@ -66,8 +66,8 @@ internal fun DeviceContent(
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(173.dp))
-            NintendoSwitch(
-                device = workStation.nintendoSwitch,
+            GamingConsole1(
+                device = workStation.gamingConsole1,
                 currentHoveredDevice = currentHoveredDevice,
                 currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
@@ -79,8 +79,8 @@ internal fun DeviceContent(
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
             Spacer(modifier = Modifier.height(21.dp))
-            PlayStation5(
-                device = workStation.playStation5,
+            GamingConsole2(
+                device = workStation.gamingConsole2,
                 currentHoveredDevice = currentHoveredDevice,
                 currentHoveredConnector = currentHoveredConnector,
                 onDeviceCoordinated = { state.update(it) },
@@ -489,8 +489,8 @@ private fun PcDesktop(
 }
 
 @Composable
-private fun NintendoSwitch(
-    device: Device.NintendoSwitch,
+private fun GamingConsole1(
+    device: Device.GamingConsole1,
     currentHoveredDevice: Device?,
     currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
@@ -516,8 +516,8 @@ private fun NintendoSwitch(
 }
 
 @Composable
-private fun PlayStation5(
-    device: Device.PlayStation5,
+private fun GamingConsole2(
+    device: Device.GamingConsole2,
     currentHoveredDevice: Device?,
     currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,

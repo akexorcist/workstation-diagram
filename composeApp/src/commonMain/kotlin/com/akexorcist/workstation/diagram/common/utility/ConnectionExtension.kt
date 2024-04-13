@@ -13,8 +13,8 @@ fun getTargetConnector(
     Device.Type.OfficeLaptop -> coordinates.officeLaptop.connectors
     Device.Type.PersonalLaptop -> coordinates.personalLaptop.connectors
     Device.Type.PcDesktop -> coordinates.pcDesktop.connectors
-    Device.Type.NintendoSwitch -> coordinates.nintendoSwitch.connectors
-    Device.Type.PlayStation5 -> coordinates.playStation5.connectors
+    Device.Type.GamingConsole1 -> coordinates.gamingConsole1.connectors
+    Device.Type.GamingConsole2 -> coordinates.gamingConsole2.connectors
     Device.Type.UsbDockingStation -> coordinates.usbDockingStation.connectors
     Device.Type.HdmiSwitcher -> coordinates.hdmiSwitcher.connectors
     Device.Type.DigitalCamera -> coordinates.digitalCamera.connectors
