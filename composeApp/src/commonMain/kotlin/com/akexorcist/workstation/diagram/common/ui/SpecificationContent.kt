@@ -9,7 +9,6 @@ import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -63,70 +62,68 @@ fun SpecificationContent(
                     top = 24.dp,
                 )
         ) {
-            SelectionContainer {
+            Column(
+                modifier = Modifier.fillMaxSize()
+                    .padding(
+                        start = 24.dp,
+                        end = 24.dp,
+                        top = 16.dp,
+                    )
+            ) {
                 Column(
-                    modifier = Modifier.fillMaxSize()
-                        .padding(
-                            start = 24.dp,
-                            end = 24.dp,
-                            top = 16.dp,
+                    modifier = Modifier
+                        .verticalScroll(state = scrollState)
+                        .draggable(
+                            orientation = Orientation.Vertical,
+                            state = rememberDraggableState { delta ->
+                                coroutineScope.launch {
+                                    scrollState.scrollBy(-delta)
+                                }
+                            },
                         )
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .verticalScroll(state = scrollState)
-                            .draggable(
-                                orientation = Orientation.Vertical,
-                                state = rememberDraggableState { delta ->
-                                    coroutineScope.launch {
-                                        scrollState.scrollBy(-delta)
-                                    }
-                                },
-                            )
-                    ) {
-                        specification.website?.let { website ->
-                            ProductWebsiteButton(
-                                url = website,
-                                onClick = { onWebsiteClick(website) },
-                            )
-                            Spacer(modifier = Modifier.height(24.dp))
-                        }
-                        if (specification.subtitle != null) {
-                            DeviceTag(
-                                deviceSpecification = specification,
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                        }
-                        Text(
-                            text = specification.subtitle ?: specification.title,
-                            fontSize = MaterialTheme.typography.displaySmall.fontSize,
-                            color = WorkstationDiagramTheme.themeColor.text,
-                            fontWeight = FontWeight.Medium,
-                            lineHeight = MaterialTheme.typography.displaySmall.lineHeight,
+                    specification.website?.let { website ->
+                        ProductWebsiteButton(
+                            url = website,
+                            onClick = { onWebsiteClick(website) },
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
+                    if (specification.subtitle != null) {
+                        DeviceTag(
+                            deviceSpecification = specification,
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            modifier = Modifier.offset(x = 2.dp),
-                            text = specification.description,
-                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                            color = WorkstationDiagramTheme.themeColor.text,
-                            fontWeight = FontWeight.Medium,
-                        )
-                        Spacer(modifier = Modifier.height(32.dp))
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                        ) {
-                            Image(
-                                modifier = Modifier.clip(RoundedCornerShape(8.dp)),
-                                painter = painterResource(DrawableResource(specification.image)),
-                                contentDescription = specification.title,
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(32.dp))
-                        AdditionalInformation(specification.information)
                     }
+                    Text(
+                        text = specification.subtitle ?: specification.title,
+                        fontSize = MaterialTheme.typography.displaySmall.fontSize,
+                        color = WorkstationDiagramTheme.themeColor.text,
+                        fontWeight = FontWeight.Medium,
+                        lineHeight = MaterialTheme.typography.displaySmall.lineHeight,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        modifier = Modifier.offset(x = 2.dp),
+                        text = specification.description,
+                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                        color = WorkstationDiagramTheme.themeColor.text,
+                        fontWeight = FontWeight.Medium,
+                    )
+                    Spacer(modifier = Modifier.height(32.dp))
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                    ) {
+                        Image(
+                            modifier = Modifier.clip(RoundedCornerShape(8.dp)),
+                            painter = painterResource(DrawableResource(specification.image)),
+                            contentDescription = specification.title,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(32.dp))
+                    AdditionalInformation(specification.information)
                 }
             }
             CloseButton(

@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
@@ -220,54 +219,52 @@ private fun SettingMenu(
 
 @Composable
 private fun Title() {
-    SelectionContainer {
-        Column(
-            modifier = Modifier
-                .informationBackground()
-                .padding(
-                    horizontal = 32.dp,
-                    vertical = 24.dp,
-                )
-        ) {
-            Text(
-                text = "Akexorcist's Workstation",
-                fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                color = WorkstationDiagramTheme.themeColor.text,
-                fontWeight = FontWeight.Bold,
+    Column(
+        modifier = Modifier
+            .informationBackground()
+            .padding(
+                horizontal = 32.dp,
+                vertical = 24.dp,
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "April 2024",
-                fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                color = WorkstationDiagramTheme.themeColor.text,
+    ) {
+        Text(
+            text = "Akexorcist's Workstation",
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+            color = WorkstationDiagramTheme.themeColor.text,
+            fontWeight = FontWeight.Bold,
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "April 2024",
+            fontSize = MaterialTheme.typography.bodySmall.fontSize,
+            color = WorkstationDiagramTheme.themeColor.text,
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Row {
+            LinkButton(
+                url = "https://akexorcist.dev",
+                icon = ImageData.Image(Icons.Default.Home),
+                description = "Go to home page",
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Row {
-                LinkButton(
-                    url = "https://akexorcist.dev",
-                    icon = ImageData.Image(Icons.Default.Home),
-                    description = "Go to home page",
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                LinkButton(
-                    url = "https://github.com/akexorcist",
-                    icon = ImageData.Painter("image/ic_github.webp"),
-                    description = "Go to home page",
-                )
-            }
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = "Powered by",
-                fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                color = WorkstationDiagramTheme.themeColor.text,
-                fontWeight = FontWeight.Bold,
-            )
-            Text(
-                text = "Kotlin Multiplatform & Compose Multiplatform",
-                fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                color = WorkstationDiagramTheme.themeColor.text,
+            Spacer(modifier = Modifier.width(8.dp))
+            LinkButton(
+                url = "https://github.com/akexorcist",
+                icon = ImageData.Painter("image/ic_github.webp"),
+                description = "Go to home page",
             )
         }
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "Powered by",
+            fontSize = MaterialTheme.typography.bodySmall.fontSize,
+            color = WorkstationDiagramTheme.themeColor.text,
+            fontWeight = FontWeight.Bold,
+        )
+        Text(
+            text = "Kotlin Multiplatform & Compose Multiplatform",
+            fontSize = MaterialTheme.typography.bodySmall.fontSize,
+            color = WorkstationDiagramTheme.themeColor.text,
+        )
     }
 }
 
