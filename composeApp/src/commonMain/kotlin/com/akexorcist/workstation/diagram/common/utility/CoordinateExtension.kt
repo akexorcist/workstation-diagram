@@ -25,12 +25,12 @@ fun WorkstationCoordinates.getAllDeviceRect(): List<DeviceCoordinate.Device> = l
     this.usbDongle1.device,
     this.usbDongle2.device,
     this.ledLamp.device,
+    this.wirelessCharger.device,
     this.speaker.device,
     this.microphone1.device,
     this.microphone2.device,
     this.hdmiCapture.device,
     this.androidDevice.device,
-    this.gameController.device,
     this.headphone.device,
 )
 
@@ -98,12 +98,12 @@ private fun WorkstationCoordinates.getAllConnectors(): List<DeviceCoordinate.Con
         this.usbDongle1.connectors,
         this.usbDongle2.connectors,
         this.ledLamp.connectors,
+        this.wirelessCharger.connectors,
         this.speaker.connectors,
         this.microphone1.connectors,
         this.microphone2.connectors,
         this.hdmiCapture.connectors,
         this.androidDevice.connectors,
-        this.gameController.connectors,
         this.headphone.connectors,
     )
         .flatMap { it ?: listOf() }

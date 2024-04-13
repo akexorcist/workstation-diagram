@@ -26,7 +26,7 @@ data class Workstation(
     val microphone2: Device.Microphone2,
     val hdmiCapture: Device.HdmiCapture,
     val androidDevice: Device.AndroidDevice,
-    val gameController: Device.GameController,
+    val wirelessCharger: Device.WirelessCharger,
     val headphone: Device.Headphone,
 )
 
@@ -354,14 +354,14 @@ val MyWorkstation = Workstation(
         Device.UsbPowerAdapter(
             leftConnections = listOf(
                 Connector(
-                    type = ConnectorType.UsbA2,
+                    type = ConnectorType.UsbA,
                     direction = ConnectorDirection.Output,
                     owner = this,
                     target = Device.Type.DigitalCamera,
                 ),
                 Connector.spacing(device = this),
                 Connector(
-                    type = ConnectorType.UsbC,
+                    type = ConnectorType.UsbA,
                     direction = ConnectorDirection.Output,
                     owner = this,
                     target = Device.Type.SecondaryMonitor,
@@ -369,13 +369,19 @@ val MyWorkstation = Workstation(
             ),
             rightConnections = listOf(
                 Connector(
-                    type = ConnectorType.UsbA2,
+                    type = ConnectorType.UsbA,
                     direction = ConnectorDirection.Output,
                     owner = this,
                     target = Device.Type.LedLamp,
                 ),
                 Connector(
-                    type = ConnectorType.UsbA2,
+                    type = ConnectorType.UsbA,
+                    direction = ConnectorDirection.Output,
+                    owner = this,
+                    target = Device.Type.WirelessCharger,
+                ),
+                Connector(
+                    type = ConnectorType.UsbA,
                     direction = ConnectorDirection.Output,
                     owner = this,
                     target = Device.Type.Speaker,
@@ -387,7 +393,7 @@ val MyWorkstation = Workstation(
         Device.SecondaryMonitor(
             leftConnections = listOf(
                 Connector(
-                    type = ConnectorType.UsbA,
+                    type = ConnectorType.UsbC,
                     direction = ConnectorDirection.Input,
                     owner = this,
                     target = Device.Type.UsbPowerAdapter,
@@ -459,12 +465,6 @@ val MyWorkstation = Workstation(
                     direction = ConnectorDirection.Input,
                     owner = this,
                     target = Device.Type.AndroidDevice,
-                ),
-                Connector(
-                    type = ConnectorType.UsbA3,
-                    direction = ConnectorDirection.Input,
-                    owner = this,
-                    target = Device.Type.GameController,
                 ),
             ),
         )
@@ -547,6 +547,19 @@ val MyWorkstation = Workstation(
             rightConnections = listOf(),
         )
     },
+    wirelessCharger = Device.WirelessCharger.builder {
+        Device.WirelessCharger(
+            leftConnections = listOf(
+                Connector(
+                    type = ConnectorType.UsbC,
+                    direction = ConnectorDirection.Input,
+                    owner = this,
+                    target = Device.Type.UsbPowerAdapter,
+                ),
+            ),
+            rightConnections = listOf(),
+        )
+    },
     speaker = Device.Speaker.builder {
         Device.Speaker(
             leftConnections = listOf(
@@ -618,19 +631,6 @@ val MyWorkstation = Workstation(
             rightConnections = listOf(),
         )
     },
-    gameController = Device.GameController.builder {
-        Device.GameController(
-            leftConnections = listOf(
-                Connector(
-                    type = ConnectorType.UsbA3,
-                    direction = ConnectorDirection.Output,
-                    owner = this,
-                    target = Device.Type.PrimaryMonitor,
-                ),
-            ),
-            rightConnections = listOf(),
-        )
-    },
     headphone = Device.Headphone.builder {
         Device.Headphone(
             leftConnections = listOf(
@@ -662,7 +662,7 @@ fun Workstation.getAllDevices(): List<Device> = listOf(
     this.androidDevice,
     this.digitalCamera,
     this.externalSsd,
-    this.gameController,
+    this.wirelessCharger,
     this.hdmiCapture,
     this.hdmiToWebcam,
     this.headphone,

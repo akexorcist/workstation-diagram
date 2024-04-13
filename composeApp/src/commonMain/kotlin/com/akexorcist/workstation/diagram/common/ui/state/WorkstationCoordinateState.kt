@@ -11,7 +11,6 @@ import com.akexorcist.workstation.diagram.common.data.Device
 import com.akexorcist.workstation.diagram.common.data.DeviceCoordinate
 import com.akexorcist.workstation.diagram.common.data.WorkspaceCoordinate
 import com.akexorcist.workstation.diagram.common.data.WorkstationCoordinates
-import com.akexorcist.workstation.diagram.common.utility.getSortedDevicesByLeft
 
 @Stable
 class WorkstationCoordinateState {
@@ -192,6 +191,14 @@ class WorkstationCoordinateState {
                 )
             }
 
+            Device.Type.WirelessCharger -> {
+                currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
+                    wirelessCharger = currentWorkstationCoordinates.wirelessCharger.copy(
+                        device = updatedCoordinate
+                    )
+                )
+            }
+
             Device.Type.Speaker -> {
                 currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
                     speaker = currentWorkstationCoordinates.speaker.copy(
@@ -227,14 +234,6 @@ class WorkstationCoordinateState {
             Device.Type.AndroidDevice -> {
                 currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
                     androidDevice = currentWorkstationCoordinates.androidDevice.copy(
-                        device = updatedCoordinate
-                    )
-                )
-            }
-
-            Device.Type.GameController -> {
-                currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
-                    gameController = currentWorkstationCoordinates.gameController.copy(
                         device = updatedCoordinate
                     )
                 )
@@ -558,6 +557,21 @@ class WorkstationCoordinateState {
                 )
             }
 
+            Device.Type.WirelessCharger -> {
+                currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
+                    wirelessCharger = currentWorkstationCoordinates.wirelessCharger.copy(
+                        connectors = currentWorkstationCoordinates.wirelessCharger.connectors
+                            ?.toMutableList()
+                            ?.apply {
+                                if (!contains(updatedCoordinate)) {
+                                    add(updatedCoordinate)
+                                }
+                            }
+                            ?: listOf(updatedCoordinate)
+                    )
+                )
+            }
+
             Device.Type.Speaker -> {
                 currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
                     speaker = currentWorkstationCoordinates.speaker.copy(
@@ -622,21 +636,6 @@ class WorkstationCoordinateState {
                 currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
                     androidDevice = currentWorkstationCoordinates.androidDevice.copy(
                         connectors = currentWorkstationCoordinates.androidDevice.connectors
-                            ?.toMutableList()
-                            ?.apply {
-                                if (!contains(updatedCoordinate)) {
-                                    add(updatedCoordinate)
-                                }
-                            }
-                            ?: listOf(updatedCoordinate)
-                    )
-                )
-            }
-
-            Device.Type.GameController -> {
-                currentWorkstationCoordinates = currentWorkstationCoordinates.copy(
-                    gameController = currentWorkstationCoordinates.gameController.copy(
-                        connectors = currentWorkstationCoordinates.gameController.connectors
                             ?.toMutableList()
                             ?.apply {
                                 if (!contains(updatedCoordinate)) {

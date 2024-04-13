@@ -27,12 +27,12 @@ data class WorkstationCoordinates(
     val usbDongle1: DeviceCoordinate = DeviceCoordinate(),
     val usbDongle2: DeviceCoordinate = DeviceCoordinate(),
     val ledLamp: DeviceCoordinate = DeviceCoordinate(),
+    val wirelessCharger: DeviceCoordinate = DeviceCoordinate(),
     val speaker: DeviceCoordinate = DeviceCoordinate(),
     val microphone1: DeviceCoordinate = DeviceCoordinate(),
     val microphone2: DeviceCoordinate = DeviceCoordinate(),
     val hdmiCapture: DeviceCoordinate = DeviceCoordinate(),
     val androidDevice: DeviceCoordinate = DeviceCoordinate(),
-    val gameController: DeviceCoordinate = DeviceCoordinate(),
     val headphone: DeviceCoordinate = DeviceCoordinate(),
 ) {
     fun areAvailable() = workspace != null &&
@@ -56,12 +56,12 @@ data class WorkstationCoordinates(
             usbDongle1.isAvailable() &&
             usbDongle2.isAvailable() &&
             ledLamp.isAvailable() &&
+            wirelessCharger.isAvailable() &&
             speaker.isAvailable() &&
             microphone1.isAvailable() &&
             microphone2.isAvailable() &&
             hdmiCapture.isAvailable() &&
             androidDevice.isAvailable() &&
-            gameController.isAvailable() &&
             headphone.isAvailable()
 }
 

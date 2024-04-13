@@ -41,7 +41,7 @@ internal fun DeviceContent(
 ) {
     Row(modifier = Modifier.fillMaxSize()) {
         Column {
-            Spacer(modifier = Modifier.height(388.dp))
+            Spacer(modifier = Modifier.height(397.dp))
             OfficeLaptop(
                 device = workStation.officeLaptop,
                 currentHoveredDevice = currentHoveredDevice,
@@ -67,7 +67,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(172.dp))
+            Spacer(modifier = Modifier.height(173.dp))
             NintendoSwitch(
                 device = workStation.nintendoSwitch,
                 currentHoveredDevice = currentHoveredDevice,
@@ -93,7 +93,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(70.dp))
+            Spacer(modifier = Modifier.height(71.dp))
             PcDesktop(
                 device = workStation.pcDesktop,
                 currentHoveredDevice = currentHoveredDevice,
@@ -109,7 +109,7 @@ internal fun DeviceContent(
         }
         Spacer(modifier = Modifier.width(FirstRowSpacing))
         Column {
-            Spacer(modifier = Modifier.height(294.dp))
+            Spacer(modifier = Modifier.height(303.dp))
             UsbDockingStation(
                 device = workStation.usbDockingStation,
                 currentHoveredDevice = currentHoveredDevice,
@@ -122,7 +122,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(138.dp))
+            Spacer(modifier = Modifier.height(139.dp))
             HdmiSwitcher(
                 device = workStation.hdmiSwitcher,
                 currentHoveredDevice = currentHoveredDevice,
@@ -138,7 +138,7 @@ internal fun DeviceContent(
         }
         Spacer(modifier = Modifier.width(SecondRowSpacing))
         Column {
-            Spacer(modifier = Modifier.height(47.dp))
+            Spacer(modifier = Modifier.height(57.dp))
             DigitalCamera(
                 device = workStation.digitalCamera,
                 currentHoveredDevice = currentHoveredDevice,
@@ -164,7 +164,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(160.dp))
+            Spacer(modifier = Modifier.height(159.dp))
             StreamDeck(
                 device = workStation.streamDeck,
                 currentHoveredDevice = currentHoveredDevice,
@@ -190,7 +190,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(98.dp))
+            Spacer(modifier = Modifier.height(99.dp))
             UsbCSwitcher(
                 device = workStation.usbCSwitcher,
                 currentHoveredDevice = currentHoveredDevice,
@@ -219,7 +219,7 @@ internal fun DeviceContent(
         }
         Spacer(modifier = Modifier.width(ThirdRowSpacing))
         Column {
-            Spacer(modifier = Modifier.height(38.dp))
+            Spacer(modifier = Modifier.height(48.dp))
             UsbPowerAdapter(
                 device = workStation.usbPowerAdapter,
                 currentHoveredDevice = currentHoveredDevice,
@@ -300,7 +300,7 @@ internal fun DeviceContent(
         }
         Spacer(modifier = Modifier.width(ForthRowSpacing))
         Column {
-            Spacer(modifier = Modifier.height(57.dp))
+            Spacer(modifier = Modifier.height(47.dp))
             LedLamp(
                 device = workStation.ledLamp,
                 currentHoveredDevice = currentHoveredDevice,
@@ -313,7 +313,20 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(38.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+            WirelessCharger(
+                device = workStation.wirelessCharger,
+                currentHoveredDevice = currentHoveredDevice,
+                currentHoveredConnector = currentHoveredConnector,
+                onDeviceCoordinated = { state.update(it) },
+                onConnectorCoordinated = { state.update(it) },
+                onDeviceClick = onDeviceClick,
+                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
+                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
+                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
             Speaker(
                 device = workStation.speaker,
                 currentHoveredDevice = currentHoveredDevice,
@@ -326,7 +339,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(110.dp))
+            Spacer(modifier = Modifier.height(76.dp))
             Microphone1(
                 device = workStation.microphone1,
                 currentHoveredDevice = currentHoveredDevice,
@@ -365,20 +378,7 @@ internal fun DeviceContent(
                 onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
                 onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            GameController(
-                device = workStation.gameController,
-                currentHoveredDevice = currentHoveredDevice,
-                currentHoveredConnector = currentHoveredConnector,
-                onDeviceCoordinated = { state.update(it) },
-                onConnectorCoordinated = { state.update(it) },
-                onDeviceClick = onDeviceClick,
-                onEnterHoveDeviceInteraction = onEnterHoveDeviceInteraction,
-                onExitHoverDeviceInteraction = onExitHoverDeviceInteraction,
-                onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
-                onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
-            )
-            Spacer(modifier = Modifier.height(252.dp))
+            Spacer(modifier = Modifier.height(91.dp))
             Microphone2(
                 device = workStation.microphone2,
                 currentHoveredDevice = currentHoveredDevice,
@@ -960,6 +960,34 @@ private fun LedLamp(
 }
 
 @Composable
+private fun WirelessCharger(
+    device: Device.WirelessCharger,
+    currentHoveredDevice: Device?,
+    currentHoveredConnector: Connector?,
+    onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
+    onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
+    onDeviceClick: (Device) -> Unit,
+    onEnterHoveDeviceInteraction: (Device) -> Unit,
+    onExitHoverDeviceInteraction: (Device) -> Unit,
+    onEnterHoveConnectorInteraction: (Connector) -> Unit,
+    onExitHoverConnectorInteraction: (Connector) -> Unit,
+) {
+    EndDeviceComponent(
+        device = device,
+        currentHoveredDevice = currentHoveredDevice,
+        currentHoveredConnector = currentHoveredConnector,
+        width = 220.dp,
+        onDeviceCoordinated = onDeviceCoordinated,
+        onConnectorCoordinated = onConnectorCoordinated,
+        onDeviceClick = { onDeviceClick(device) },
+        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
+        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
+        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
+        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
+    )
+}
+
+@Composable
 private fun Speaker(
     device: Device.Speaker,
     currentHoveredDevice: Device?,
@@ -1075,34 +1103,6 @@ private fun HdmiCapture(
 @Composable
 private fun AndroidDevice(
     device: Device.AndroidDevice,
-    currentHoveredDevice: Device?,
-    currentHoveredConnector: Connector?,
-    onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,
-    onConnectorCoordinated: (DeviceCoordinate.Connector) -> Unit,
-    onDeviceClick: (Device) -> Unit,
-    onEnterHoveDeviceInteraction: (Device) -> Unit,
-    onExitHoverDeviceInteraction: (Device) -> Unit,
-    onEnterHoveConnectorInteraction: (Connector) -> Unit,
-    onExitHoverConnectorInteraction: (Connector) -> Unit,
-) {
-    EndDeviceComponent(
-        device = device,
-        currentHoveredDevice = currentHoveredDevice,
-        currentHoveredConnector = currentHoveredConnector,
-        width = 220.dp,
-        onDeviceCoordinated = onDeviceCoordinated,
-        onConnectorCoordinated = onConnectorCoordinated,
-        onDeviceClick = { onDeviceClick(device) },
-        onEnterHoveDeviceInteraction = { onEnterHoveDeviceInteraction(device) },
-        onExitHoverDeviceInteraction = { onExitHoverDeviceInteraction(device) },
-        onEnterHoveConnectorInteraction = onEnterHoveConnectorInteraction,
-        onExitHoverConnectorInteraction = onExitHoverConnectorInteraction,
-    )
-}
-
-@Composable
-private fun GameController(
-    device: Device.GameController,
     currentHoveredDevice: Device?,
     currentHoveredConnector: Connector?,
     onDeviceCoordinated: (DeviceCoordinate.Device) -> Unit,

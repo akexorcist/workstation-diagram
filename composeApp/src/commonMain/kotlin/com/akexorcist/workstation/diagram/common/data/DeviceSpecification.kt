@@ -541,7 +541,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
             ),
         )
 
-        Device.Type.GameController -> AdditionalDeviceInformation(
+        Device.Type.WirelessCharger -> AdditionalDeviceInformation(
             image = "image/game_controller.webp",
             website = "https://www.nintendo.com/us/store/products/pro-controller/",
             description = "Game Controller for Nintendo Switch",

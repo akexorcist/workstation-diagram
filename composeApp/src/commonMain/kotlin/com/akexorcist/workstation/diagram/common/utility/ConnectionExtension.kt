@@ -35,7 +35,7 @@ fun getTargetConnector(
     Device.Type.Microphone2 -> coordinates.microphone2.connectors
     Device.Type.HdmiCapture -> coordinates.hdmiCapture.connectors
     Device.Type.AndroidDevice -> coordinates.androidDevice.connectors
-    Device.Type.GameController -> coordinates.gameController.connectors
+    Device.Type.WirelessCharger -> coordinates.wirelessCharger.connectors
     Device.Type.Headphone -> coordinates.headphone.connectors
     else -> null
 }?.find { it.connector.target == connectionLine.source.owner }

@@ -3,20 +3,14 @@
 package com.akexorcist.workstation.diagram.common.ui
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
@@ -268,12 +262,12 @@ private fun getAllConnectorsByBottom(
         coordinates.usbDongle1.connectors,
         coordinates.usbDongle2.connectors,
         coordinates.ledLamp.connectors,
+        coordinates.wirelessCharger.connectors,
         coordinates.speaker.connectors,
         coordinates.microphone1.connectors,
         coordinates.microphone2.connectors,
         coordinates.hdmiCapture.connectors,
         coordinates.androidDevice.connectors,
-        coordinates.gameController.connectors,
         coordinates.headphone.connectors,
     )
         .flatMap { it ?: listOf() }
@@ -302,11 +296,11 @@ private fun getAllDevices(
     coordinates.usbDongle1.device,
     coordinates.usbDongle2.device,
     coordinates.ledLamp.device,
+    coordinates.wirelessCharger.device,
     coordinates.speaker.device,
     coordinates.microphone1.device,
     coordinates.microphone2.device,
     coordinates.hdmiCapture.device,
     coordinates.androidDevice.device,
-    coordinates.gameController.device,
     coordinates.headphone.device,
 )

@@ -307,6 +307,21 @@ sealed class Device(
         }
     }
 
+    data class WirelessCharger(
+        override val leftConnections: List<Connector>,
+        override val rightConnections: List<Connector>,
+    ) : Device(
+        type = Type.WirelessCharger,
+        title = "Wireless Charger",
+        subtitle = "IKEA NORDMÄRKE",
+        leftConnections = leftConnections,
+        rightConnections = rightConnections,
+    ) {
+        companion object {
+            fun builder(block: Type.() -> WirelessCharger) = block(Type.WirelessCharger)
+        }
+    }
+
     data class Speaker(
         override val leftConnections: List<Connector>,
         override val rightConnections: List<Connector>,
@@ -364,21 +379,6 @@ sealed class Device(
     ) {
         companion object {
             fun builder(block: Type.() -> AndroidDevice) = block(Type.AndroidDevice)
-        }
-    }
-
-    data class GameController(
-        override val leftConnections: List<Connector>,
-        override val rightConnections: List<Connector>,
-    ) : Device(
-        type = Type.GameController,
-        title = "Game Controller",
-        subtitle = "Nintendo Switch Pro Controller",
-        leftConnections = leftConnections,
-        rightConnections = rightConnections,
-    ) {
-        companion object {
-            fun builder(block: Type.() -> GameController) = block(Type.GameController)
         }
     }
 
@@ -440,12 +440,12 @@ sealed class Device(
         UsbDongle1,
         UsbDongle2,
         LedLamp,
+        WirelessCharger,
         Speaker,
         Microphone1,
         Microphone2,
         HdmiCapture,
         AndroidDevice,
-        GameController,
         Headphone;
 
         fun isComputer(): Boolean = when (this) {
@@ -479,12 +479,12 @@ sealed class Device(
             UsbDongle1,
             UsbDongle2,
             LedLamp,
+            WirelessCharger,
             Speaker,
             Microphone1,
             Microphone2,
             HdmiCapture,
             AndroidDevice,
-            GameController,
             Headphone -> true
 
             else -> false
