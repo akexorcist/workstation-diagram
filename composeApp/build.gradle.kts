@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    
+
     alias(libs.plugins.jetbrainsCompose)
 }
 
@@ -18,12 +18,12 @@ kotlin {
         }
         binaries.executable()
     }
-    
+
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -44,9 +44,28 @@ compose.desktop {
         mainClass = "MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.akexorcist.workstation.diagram"
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi)
+            packageName = "Workstation Diagram"
             packageVersion = "1.0.0"
+            description = "My workstation's interactive diagram"
+
+            macOS {
+                bundleID = "com.akexorcist.workstation.diagram"
+                iconFile.set(project.file("image/icons/icon.icns"))
+            }
+
+            windows {
+                iconFile.set(project.file("image/icons/icon.ico"))
+            }
+
+            linux {
+                packageName = "com-akexorcist-workstation-diagram"
+                debMaintainer = "akexorcist@gmail.com"
+                appRelease = "1"
+                debPackageVersion = "1.0.0"
+                appCategory = "Utility"
+                iconFile.set(project.file("image/icons/icon.png"))
+            }
         }
     }
 }
