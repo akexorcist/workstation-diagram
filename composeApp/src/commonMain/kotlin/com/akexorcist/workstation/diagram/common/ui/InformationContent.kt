@@ -238,7 +238,7 @@ private fun Title() {
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "April 2024",
+            text = "Feb 2025",
             fontSize = MaterialTheme.typography.bodySmall.fontSize,
             color = WorkstationDiagramTheme.themeColor.text,
         )
