@@ -1,10 +1,11 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+import org.jetbrains.compose.resources.ResourcesExtension
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.composeCompiler)
 }
 
 kotlin {
@@ -68,6 +69,12 @@ compose.desktop {
             }
         }
     }
+}
+
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "com.akexorcist.workstation.diagram.resources"
+    generateResClass = ResourcesExtension.ResourceClassGeneration.Auto
 }
 
 compose.experimental {

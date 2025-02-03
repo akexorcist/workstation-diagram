@@ -27,11 +27,9 @@ import androidx.compose.ui.unit.sp
 import com.akexorcist.workstation.diagram.common.data.DeviceSpecification
 import com.akexorcist.workstation.diagram.common.theme.WorkstationDiagramTheme
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SpecificationContent(
     specification: DeviceSpecification,
@@ -118,7 +116,7 @@ fun SpecificationContent(
                     ) {
                         Image(
                             modifier = Modifier.clip(RoundedCornerShape(8.dp)),
-                            painter = painterResource(DrawableResource(specification.image)),
+                            painter = painterResource(specification.image),
                             contentDescription = specification.title,
                         )
                     }

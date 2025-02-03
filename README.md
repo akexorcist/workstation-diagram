@@ -4,7 +4,7 @@ My workstation's interactive diagram using Kotlin Multiplatform
 
 Try it on [workstation.akexorcist.dev](https://workstation.akexorcist.dev)
 
-![Overview](image%2Foverview.gif)
+![Overview](./image/overview.gif)
 
 ## Framework & Library
 

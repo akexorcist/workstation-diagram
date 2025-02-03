@@ -1,6 +1,4 @@
 @file:Suppress("FunctionName")
-@file:OptIn(ExperimentalResourceApi::class)
-
 package com.akexorcist.workstation.diagram.common.ui
 
 import androidx.compose.animation.AnimatedVisibility
@@ -27,7 +25,6 @@ import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -44,9 +41,11 @@ import com.akexorcist.workstation.diagram.common.data.Workstation
 import com.akexorcist.workstation.diagram.common.data.getAllDevices
 import com.akexorcist.workstation.diagram.common.theme.*
 import com.akexorcist.workstation.diagram.common.utility.informationBackground
+import com.akexorcist.workstation.diagram.resources.Res
+import com.akexorcist.workstation.diagram.resources.ic_github
+import com.akexorcist.workstation.diagram.resources.ic_more_info
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.pow
 
@@ -253,7 +252,7 @@ private fun Title() {
             Spacer(modifier = Modifier.width(8.dp))
             LinkButton(
                 url = "https://github.com/akexorcist",
-                icon = ImageData.Painter("image/ic_github.webp"),
+                icon = ImageData.Resource(Res.drawable.ic_github),
                 description = "Go to home page",
             )
         }
@@ -295,7 +294,6 @@ private fun ToggleHudVisibilityButton(
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun LinkButton(
     url: String,
@@ -323,10 +321,10 @@ private fun LinkButton(
                     )
                 }
 
-                is ImageData.Painter -> {
+                is ImageData.Resource -> {
                     Icon(
                         modifier = Modifier.size(24.dp),
-                        painter = painterResource(DrawableResource(icon.path)),
+                        painter = painterResource(icon.id),
                         contentDescription = description,
                         tint = WorkstationDiagramTheme.themeColor.text,
                     )
@@ -440,7 +438,7 @@ private fun DeviceItem(
             .clip(shape = RoundedCornerShape(8.dp))
             .clickable(
                 interactionSource = interactionSource,
-                indication = rememberRipple(
+                indication = ripple(
                     color = WorkstationDiagramTheme.themeColor.selectedBackground,
                 ),
                 onClick = { onDeviceClick(device) },
@@ -487,7 +485,7 @@ private fun DeviceItem(
         ) {
             Icon(
                 modifier = Modifier.size(24.dp),
-                painter = painterResource(DrawableResource("image/ic_more_info.webp")),
+                painter = painterResource(Res.drawable.ic_more_info),
                 contentDescription = "${device.subtitle} information",
                 tint = WorkstationDiagramTheme.themeColor.text,
             )
@@ -671,8 +669,12 @@ sealed class ImageData {
         val image: ImageVector
     ) : ImageData()
 
-    data class Painter(
-        val path: String,
+//    data class Painter(
+//        val path: String,
+//    ) : ImageData()
+
+    data class Resource(
+        val id: DrawableResource,
     ) : ImageData()
 }
 

@@ -1,11 +1,15 @@
 package com.akexorcist.workstation.diagram.common.data
 
+import com.akexorcist.workstation.diagram.resources.Res
+import com.akexorcist.workstation.diagram.resources.*
+import org.jetbrains.compose.resources.DrawableResource
+
 data class DeviceSpecification(
     val type: Device.Type,
     val title: String,
     val subtitle: String?,
     val website: String?,
-    val image: String,
+    val image: DrawableResource,
     val description: String,
     val information: List<Pair<String, String>>,
 )
@@ -26,7 +30,7 @@ fun Device.toDeviceSpecification(): DeviceSpecification =
 
 private data class AdditionalDeviceInformation(
     val website: String?,
-    val image: String,
+    val image: DrawableResource,
     val description: String,
     val information: List<Pair<String, String>>,
 )
@@ -34,7 +38,7 @@ private data class AdditionalDeviceInformation(
 private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInformation {
     return when (this) {
         Device.Type.OfficeLaptop -> AdditionalDeviceInformation(
-            image = "image/office_laptop.webp",
+            image = Res.drawable.office_laptop,
             website = "https://support.apple.com/kb/SP854",
             description = "MacBook Pro 14\" 2021",
             information = listOf(
@@ -76,7 +80,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.PersonalLaptop -> AdditionalDeviceInformation(
-            image = "image/personal_laptop.webp",
+            image = Res.drawable.personal_laptop,
             website = "https://support.apple.com/kb/SP889",
             description = "MacBook Pro 14\" 2023",
             information = listOf(
@@ -119,7 +123,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.PcDesktop -> AdditionalDeviceInformation(
-            image = "image/pc_desktop.webp",
+            image = Res.drawable.pc_desktop,
             website = null,
             description = "Custom Gaming PC",
             information = listOf(
@@ -136,7 +140,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.GamingConsole1 -> AdditionalDeviceInformation(
-            image = "image/gaming_console_1.webp",
+            image = Res.drawable.gaming_console_1,
             website = "https://www.nintendo.com/us/switch/system/",
             description = "Nintendo Switch Splatoon 2 Bundle Edition",
             information = listOf(
@@ -164,7 +168,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.GamingConsole2 -> AdditionalDeviceInformation(
-            image = "image/gaming_console_2.webp",
+            image = Res.drawable.gaming_console_2,
             website = "https://www.playstation.com/en-th/ps5/",
             description = "PlayStation 5 Disk Edition with Final Fantasy XVI Limited Cover",
             information = listOf(
@@ -191,7 +195,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.UsbDockingStation -> AdditionalDeviceInformation(
-            image = "image/usb_docking_station.webp",
+            image = Res.drawable.usb_docking_station,
             website = "https://www.dell.com/support/manuals/en-us/dell-wd19tbs-dock/wd19tbs_user_guide/docking-specifications",
             description = "Docking Station with Thunderbolt",
             information = listOf(
@@ -221,7 +225,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.HdmiSwitcher -> AdditionalDeviceInformation(
-            image = "image/hdmi_switcher.webp",
+            image = Res.drawable.hdmi_switcher,
             website = "https://www.amazon.com/UGREEN-Switcher-Splitter-Supports-Compatible/dp/B09S5YS68P",
             description = "HDMI 2.1 Switch, 2 In 1 Out",
             information = listOf(
@@ -240,7 +244,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.DigitalCamera -> AdditionalDeviceInformation(
-            image = "image/digital_camera.webp",
+            image = Res.drawable.digital_camera,
             website = "https://www.sony.co.th/th/electronics/interchangeable-lens-cameras/ilce-6000-body-kit",
             description = "E-mount camera with APS-C Sensor",
             information = listOf(
@@ -280,7 +284,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.HdmiToWebcam -> AdditionalDeviceInformation(
-            image = "image/hdmi_webcam.webp",
+            image = Res.drawable.hdmi_webcam,
             website = "https://www.elgato.com/ww/en/p/cam-link-4k",
             description = "Turn your camera into a webcam",
             information = listOf(
@@ -296,7 +300,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.StreamDeck -> AdditionalDeviceInformation(
-            image = "image/stream_deck.webp",
+            image = Res.drawable.stream_deck,
             website = "https://www.elgato.com/ww/en/p/stream-deck-mk2-black",
             description = "15 customizable LCD keys to control apps and platforms",
             information = listOf(
@@ -308,7 +312,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.ExternalSsd -> AdditionalDeviceInformation(
-            image = "image/external_ssd.webp",
+            image = Res.drawable.external_ssd,
             website = "https://www.seagate.com/as/en/support/external-hard-drives/portable-hard-drives/fast-ssd/",
             description = "Portable Storage High-performance USB-C external SSD",
             information = listOf(
@@ -321,7 +325,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.UsbCSwitcher -> AdditionalDeviceInformation(
-            image = "image/usb_c_switcher.webp",
+            image = Res.drawable.usb_c_switcher,
             website = "https://www.aten.com/global/en/products/usb-solutions/docks-and-switches/us3342/",
             description = "2-Port USB-C Gen 2 Sharing Switch with Power Pass-through",
             information = listOf(
@@ -340,7 +344,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.UsbHub -> AdditionalDeviceInformation(
-            image = "image/usb_hub.webp",
+            image = Res.drawable.usb_hub,
             website = "https://www.orico.cc/usmobile/product/detail/id/7415",
             description = "Mini 3-in-1 USB Hub",
             information = listOf(
@@ -354,7 +358,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.UsbPowerAdapter -> AdditionalDeviceInformation(
-            image = "image/usb_power_adapter.webp",
+            image = Res.drawable.usb_power_adapter,
             website = "https://aukey.com.my/products/pa-t11-6-usb-port-qualcomm-quick-charge-3-0-desktop-charger",
             description = "6 USB Port Qualcomm Quick Charge 3.0 Desktop Charger",
             information = listOf(
@@ -368,7 +372,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.SecondaryMonitor -> AdditionalDeviceInformation(
-            image = "image/secondary_monitor.webp",
+            image = Res.drawable.secondary_monitor,
             website = "https://www.arzopa.com/products/a1-15-6-fhd-1080p-portable-monitor",
             description = "15.6\" FHD 1080P Portable Monitor",
             information = listOf(
@@ -392,7 +396,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.PrimaryMonitor -> AdditionalDeviceInformation(
-            image = "image/primary_monitor.webp",
+            image = Res.drawable.primary_monitor,
             website = "https://www.dell.com/support/home/en-us/product-support/product/u2724d-monitor/overview",
             description = "27\" QHD 120Hz IPS Monitor",
             information = listOf(
@@ -438,7 +442,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.UsbDac -> AdditionalDeviceInformation(
-            image = "image/usb_dac.webp",
+            image = Res.drawable.usb_dac,
             website = "https://steelseries.com/gaming-accessories/gamedac-gen-2",
             description = "Hi-Res Certified DAC for PC and PlayStation",
             information = listOf(
@@ -451,7 +455,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.UsbDongle1 -> AdditionalDeviceInformation(
-            image = "image/usb_dongle_1.webp",
+            image = Res.drawable.usb_dongle_1,
             website = "https://www.logitechg.com/en-us/products/gaming-mice/pro-x-superlight-wireless-mouse.910-005878.html",
             description = "USB wireless receiver for Wireless Gaming Mouse",
             information = listOf(
@@ -468,7 +472,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.UsbDongle2 -> AdditionalDeviceInformation(
-            image = "image/usb_dongle_2.webp",
+            image = Res.drawable.usb_dongle_2,
             website = "https://www.logitech.com/en-us/products/mice/logi-bolt-usb-receiver.956-000007.html",
             description = "USB wireless receiver for Logi Bolt",
             information = listOf(
@@ -478,7 +482,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.LedLamp -> AdditionalDeviceInformation(
-            image = "image/led_light_bar.webp",
+            image = Res.drawable.led_light_bar,
             website = "https://www.baseus.com/products/i-wok-monitor-light-bar",
             description = "Monitor Light Bar for Computer",
             information = listOf(
@@ -492,7 +496,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.Speaker -> AdditionalDeviceInformation(
-            image = "image/speaker.webp",
+            image = Res.drawable.speaker,
             website = "https://www.bose.com/p/speakers/bose-soundlink-mini-ii-special-edition/SLMINIISE-SPEAKERWIRELESS.html",
             description = "Bluetooth Speaker",
             information = listOf(
@@ -509,7 +513,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.Microphone1 -> AdditionalDeviceInformation(
-            image = "image/microphone_1.webp",
+            image = Res.drawable.microphone_1,
             website = "https://nzxt.com/product/capsule",
             description = "Cardioid USB Gaming Microphone",
             information = listOf(
@@ -530,7 +534,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.Microphone2 -> AdditionalDeviceInformation(
-            image = "image/microphone_2.webp",
+            image = Res.drawable.microphone_2,
             website = "https://www.shure.com/en-US/products/microphones/mv7",
             description = "Professional-quality USB dynamic microphone",
             information = listOf(
@@ -555,7 +559,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.HdmiCapture -> AdditionalDeviceInformation(
-            image = "image/hdmi_capture.webp",
+            image = Res.drawable.hdmi_capture,
             website = "https://www.elgato.com/us/en/p/game-capture-hd60-x",
             description = "Video Capture Device",
             information = listOf(
@@ -569,7 +573,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.AndroidDevice -> AdditionalDeviceInformation(
-            image = "image/android_device.webp",
+            image = Res.drawable.android_device,
             website = "https://www.gsmarena.com/oppo_a18-12591.php",
             description = "Test device for app development",
             information = listOf(
@@ -599,7 +603,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.WirelessCharger -> AdditionalDeviceInformation(
-            image = "image/wireless_charger.webp",
+            image = Res.drawable.wireless_charger,
             website = "https://www.ikea.com/us/en/p/nordmaerke-wireless-charger-textile-gray-10491658/",
             description = "Charging pad",
             information = listOf(
@@ -611,7 +615,7 @@ private fun Device.Type.getAdditionalDeviceInformation(): AdditionalDeviceInform
         )
 
         Device.Type.Headphone -> AdditionalDeviceInformation(
-            image = "image/gaming_headset.webp",
+            image = Res.drawable.gaming_headset,
             website = "https://steelseries.com/gaming-headsets/arctis-nova-pro",
             description = "Wired High-Fidelity Gaming Audio",
             information = listOf(

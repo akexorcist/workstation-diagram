@@ -7,6 +7,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
+@Suppress("unused")
 object ThemeColor {
     val Red100 = Color(0xFFFFCDD2)
     val Red200 = Color(0xFFEF9A9A)
