@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     permissions:
-      contents: read
+      contents: write
       pages: write
       id-token: write
     if: github.ref == 'refs/heads/feature/github-action'
