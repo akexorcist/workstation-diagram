@@ -44,7 +44,7 @@ jobs:
       contents: read
       pages: write
       id-token: write
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/feature/github-action'
     steps:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
