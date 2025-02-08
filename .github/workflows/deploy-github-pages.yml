@@ -1,0 +1,77 @@
+name: Build and Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 21
+
+      - name: Run install
+        uses: borales/actions-yarn@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@v3
+
+      - name: Build project
+        run: ./gradlew wasmJsBrowserDistribution
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: web-output
+          path: ./composeApp/build/dist/wasmJs/productionExecutable
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: web-output
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./web-output
+          publish_branch: gh-pages
+
+      - name: Deployment Status
+        uses: actions/github-script@vึ
+        with:
+          script: |
+            const deployment_id = ${{ steps.deployment.outputs.deployment_id }};
+            const environment = ${{ needs.deploy.environment }};
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment_id,
+              state: 'inactive',
+              environment: environment,
+              description: 'Deployment awaiting approval'
+            });
