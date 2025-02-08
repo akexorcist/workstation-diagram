@@ -47,7 +47,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi)
             packageName = "Workstation Diagram"
-            packageVersion = "1.0.0"
+            packageVersion = "1.1.0"
             description = "My workstation's interactive diagram"
 
             macOS {
@@ -63,7 +63,7 @@ compose.desktop {
                 packageName = "com-akexorcist-workstation-diagram"
                 debMaintainer = "akexorcist@gmail.com"
                 appRelease = "1"
-                debPackageVersion = "1.0.0"
+                debPackageVersion = "1.1.0"
                 appCategory = "Utility"
                 iconFile.set(project.file("image/icons/icon.png"))
             }
