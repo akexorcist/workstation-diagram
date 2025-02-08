@@ -51,12 +51,6 @@ jobs:
         with:
           name: web-output
 
-      - name: Debug command
-        run: |
-             ls -l
-             cd web-output
-             ls -l1
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: peaceiris/actions-gh-pages@v4
