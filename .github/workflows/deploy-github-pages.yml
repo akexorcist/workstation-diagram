@@ -60,7 +60,7 @@ jobs:
           publish_branch: gh-pages
 
       - name: Deployment Status
-        uses: actions/github-script@vึ
+        uses: actions/github-script@v7
         with:
           script: |
             const deployment_id = ${{ steps.deployment.outputs.deployment_id }};
