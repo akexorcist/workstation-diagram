@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - feature/github-action
 
 jobs:
   build:
@@ -44,7 +43,7 @@ jobs:
       contents: write
       pages: write
       id-token: write
-    if: github.ref == 'refs/heads/feature/github-action'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
