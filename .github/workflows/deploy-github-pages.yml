@@ -58,18 +58,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./web-output
           publish_branch: gh-pages
-
-      - name: Deployment Status
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const deployment_id = ${{ steps.deployment.outputs.deployment_id }};
-            const environment = ${{ needs.deploy.environment }};
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: deployment_id,
-              state: 'inactive',
-              environment: environment,
-              description: 'Deployment awaiting approval'
-            });
