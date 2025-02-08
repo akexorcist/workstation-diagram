@@ -56,5 +56,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./web-output
+          publish_dir: ./composeApp/build/dist/wasmJs/productionExecutable
           publish_branch: gh-pages
