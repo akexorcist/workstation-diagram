@@ -1,0 +1,601 @@
+{
+  "metadata": {
+    "title": "Sample Workstation",
+    "date": "2025-12-30",
+    "canvasSize": {
+      "width": 1920,
+      "height": 1080
+    },
+    "version": "1.0",
+    "theme": {
+      "isDark": true
+    }
+  },
+  "devices": [
+    {
+      "id": "laptop-main",
+      "name": "Main Laptop",
+      "model": "MacBook Pro",
+      "type": "LAPTOP",
+      "category": "CENTRAL_DEVICE",
+      "position": {
+        "x": 100,
+        "y": 200
+      },
+      "size": {
+        "width": 200,
+        "height": 150
+      },
+      "ports": [
+        {
+          "id": "usb-c-1",
+          "name": "USB-C Thunderbolt",
+          "type": "USB_C",
+          "direction": "BIDIRECTIONAL",
+          "position": {
+            "side": "LEFT",
+            "offset": 0.3
+          }
+        },
+        {
+          "id": "usb-c-2",
+          "name": "USB-C Thunderbolt",
+          "type": "USB_C",
+          "direction": "BIDIRECTIONAL",
+          "position": {
+            "side": "LEFT",
+            "offset": 0.7
+          }
+        },
+        {
+          "id": "hdmi-out",
+          "name": "HDMI Output",
+          "type": "HDMI",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "offset": 0.5
+          }
+        }
+      ],
+      "specifications": {
+        "manufacturer": "Apple",
+        "modelNumber": "MBP-2023",
+        "technicalSpecs": {
+          "processor": "M2 Pro",
+          "memory": "16GB",
+          "storage": "512GB SSD"
+        }
+      }
+    },
+    {
+      "id": "monitor-1",
+      "name": "Primary Monitor",
+      "model": "Dell UltraSharp",
+      "type": "MONITOR",
+      "category": "PERIPHERAL",
+      "position": {
+        "x": 400,
+        "y": 100
+      },
+      "size": {
+        "width": 250,
+        "height": 180
+      },
+      "ports": [
+        {
+          "id": "hdmi-in",
+          "name": "HDMI Input",
+          "type": "HDMI",
+          "direction": "INPUT",
+          "position": {
+            "side": "BOTTOM",
+            "offset": 0.3
+          }
+        },
+        {
+          "id": "dp-in",
+          "name": "DisplayPort Input",
+          "type": "DISPLAY_PORT",
+          "direction": "INPUT",
+          "position": {
+            "side": "BOTTOM",
+            "offset": 0.7
+          }
+        }
+      ],
+      "specifications": {
+        "manufacturer": "Dell",
+        "modelNumber": "U2723QE",
+        "technicalSpecs": {
+          "size": "27 inch",
+          "resolution": "4K",
+          "refreshRate": "60Hz"
+        }
+      }
+    },
+    {
+      "id": "monitor-2",
+      "name": "Secondary Monitor",
+      "model": "LG UltraGear",
+      "type": "MONITOR",
+      "category": "PERIPHERAL",
+      "position": {
+        "x": 400,
+        "y": 350
+      },
+      "size": {
+        "width": 220,
+        "height": 160
+      },
+      "ports": [
+        {
+          "id": "hdmi-in-2",
+          "name": "HDMI Input",
+          "type": "HDMI",
+          "direction": "INPUT",
+          "position": {
+            "side": "BOTTOM",
+            "offset": 0.5
+          }
+        }
+      ],
+      "specifications": {
+        "manufacturer": "LG",
+        "modelNumber": "27GL850",
+        "technicalSpecs": {
+          "size": "27 inch",
+          "resolution": "1440p",
+          "refreshRate": "144Hz"
+        }
+      }
+    },
+    {
+      "id": "docking-station",
+      "name": "USB-C Docking Station",
+      "model": "CalDigit TS3 Plus",
+      "type": "DOCKING_STATION",
+      "category": "HUB",
+      "position": {
+        "x": 100,
+        "y": 450
+      },
+      "size": {
+        "width": 180,
+        "height": 100
+      },
+      "ports": [
+        {
+          "id": "usb-c-host",
+          "name": "USB-C Host",
+          "type": "USB_C",
+          "direction": "BIDIRECTIONAL",
+          "position": {
+            "side": "TOP",
+            "offset": 0.5
+          }
+        },
+        {
+          "id": "usb-a-1",
+          "name": "USB-A 3.0",
+          "type": "USB_A_3_0",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "BOTTOM",
+            "offset": 0.2
+          }
+        },
+        {
+          "id": "usb-a-2",
+          "name": "USB-A 3.0",
+          "type": "USB_A_3_0",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "BOTTOM",
+            "offset": 0.5
+          }
+        },
+        {
+          "id": "usb-a-3",
+          "name": "USB-A 3.0",
+          "type": "USB_A_3_0",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "BOTTOM",
+            "offset": 0.8
+          }
+        },
+        {
+          "id": "dp-out",
+          "name": "DisplayPort",
+          "type": "DISPLAY_PORT",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "TOP",
+            "offset": 0.3
+          }
+        },
+        {
+          "id": "hdmi-out-2",
+          "name": "HDMI",
+          "type": "HDMI",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "TOP",
+            "offset": 0.7
+          }
+        }
+      ],
+      "specifications": {
+        "manufacturer": "CalDigit",
+        "modelNumber": "TS3 Plus",
+        "technicalSpecs": {
+          "ports": "15 ports",
+          "power": "87W charging"
+        }
+      }
+    },
+    {
+      "id": "usb-hub",
+      "name": "USB Hub",
+      "model": "Anker USB Hub",
+      "type": "USB_HUB",
+      "category": "HUB",
+      "position": {
+        "x": 350,
+        "y": 550
+      },
+      "size": {
+        "width": 120,
+        "height": 80
+      },
+      "ports": [
+        {
+          "id": "usb-c-in",
+          "name": "USB-C Input",
+          "type": "USB_C",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "offset": 0.5
+          }
+        },
+        {
+          "id": "usb-a-out-1",
+          "name": "USB-A 3.0",
+          "type": "USB_A_3_0",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "offset": 0.3
+          }
+        },
+        {
+          "id": "usb-a-out-2",
+          "name": "USB-A 3.0",
+          "type": "USB_A_3_0",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "offset": 0.7
+          }
+        }
+      ],
+      "specifications": {
+        "manufacturer": "Anker",
+        "modelNumber": "USB-C Hub",
+        "technicalSpecs": {
+          "ports": "4 ports",
+          "dataSpeed": "5Gbps"
+        }
+      }
+    },
+    {
+      "id": "external-drive",
+      "name": "External SSD",
+      "model": "Samsung T7",
+      "type": "STORAGE",
+      "category": "PERIPHERAL",
+      "position": {
+        "x": 550,
+        "y": 550
+      },
+      "size": {
+        "width": 100,
+        "height": 70
+      },
+      "ports": [
+        {
+          "id": "usb-c-drive",
+          "name": "USB-C",
+          "type": "USB_C",
+          "direction": "BIDIRECTIONAL",
+          "position": {
+            "side": "LEFT",
+            "offset": 0.5
+          }
+        }
+      ],
+      "specifications": {
+        "manufacturer": "Samsung",
+        "modelNumber": "T7 Shield",
+        "technicalSpecs": {
+          "capacity": "2TB",
+          "speed": "1050MB/s"
+        }
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn-1",
+      "sourceDeviceId": "laptop-main",
+      "sourcePortId": "usb-c-1",
+      "targetDeviceId": "docking-station",
+      "targetPortId": "usb-c-host",
+      "connectionType": {
+        "name": "USB-C 3.2 Gen 2",
+        "category": "DATA"
+      },
+      "cableSpecification": {
+        "length": "1m",
+        "brand": "Anker"
+      }
+    },
+    {
+      "id": "conn-2",
+      "sourceDeviceId": "laptop-main",
+      "sourcePortId": "hdmi-out",
+      "targetDeviceId": "monitor-1",
+      "targetPortId": "hdmi-in",
+      "connectionType": {
+        "name": "HDMI 2.0",
+        "category": "VIDEO"
+      },
+      "cableSpecification": {
+        "length": "1.5m",
+        "brand": "Belkin"
+      }
+    },
+    {
+      "id": "conn-3",
+      "sourceDeviceId": "docking-station",
+      "sourcePortId": "dp-out",
+      "targetDeviceId": "monitor-1",
+      "targetPortId": "dp-in",
+      "connectionType": {
+        "name": "DisplayPort 1.4",
+        "category": "VIDEO"
+      },
+      "cableSpecification": {
+        "length": "2m",
+        "brand": "Cable Matters"
+      }
+    },
+    {
+      "id": "conn-4",
+      "sourceDeviceId": "docking-station",
+      "sourcePortId": "hdmi-out-2",
+      "targetDeviceId": "monitor-2",
+      "targetPortId": "hdmi-in-2",
+      "connectionType": {
+        "name": "HDMI 2.0",
+        "category": "VIDEO"
+      },
+      "cableSpecification": {
+        "length": "2m",
+        "brand": "Amazon Basics"
+      }
+    },
+    {
+      "id": "conn-5",
+      "sourceDeviceId": "docking-station",
+      "sourcePortId": "usb-a-1",
+      "targetDeviceId": "usb-hub",
+      "targetPortId": "usb-c-in",
+      "connectionType": {
+        "name": "USB-A 3.0 to USB-C",
+        "category": "DATA"
+      },
+      "cableSpecification": {
+        "length": "0.5m",
+        "brand": "Anker"
+      }
+    },
+    {
+      "id": "conn-6",
+      "sourceDeviceId": "usb-hub",
+      "sourcePortId": "usb-a-out-1",
+      "targetDeviceId": "external-drive",
+      "targetPortId": "usb-c-drive",
+      "connectionType": {
+        "name": "USB-A 3.0 to USB-C",
+        "category": "DATA"
+      },
+      "cableSpecification": {
+        "length": "0.3m",
+        "brand": "Samsung"
+      }
+    },
+    {
+      "id": "conn-7",
+      "sourceDeviceId": "laptop-main",
+      "sourcePortId": "usb-c-2",
+      "targetDeviceId": "monitor-1",
+      "targetPortId": "dp-in",
+      "connectionType": {
+        "name": "USB-C to DisplayPort",
+        "category": "VIDEO"
+      },
+      "cableSpecification": {
+        "length": "1m",
+        "brand": "CableCreation"
+      }
+    },
+    {
+      "id": "conn-8",
+      "sourceDeviceId": "docking-station",
+      "sourcePortId": "usb-a-2",
+      "targetDeviceId": "external-drive",
+      "targetPortId": "usb-c-drive",
+      "connectionType": {
+        "name": "USB-A 3.0 to USB-C",
+        "category": "DATA"
+      },
+      "cableSpecification": {
+        "length": "1m",
+        "brand": "UGREEN"
+      }
+    },
+    {
+      "id": "conn-10",
+      "sourceDeviceId": "laptop-main",
+      "sourcePortId": "usb-c-1",
+      "targetDeviceId": "monitor-2",
+      "targetPortId": "hdmi-in-2",
+      "connectionType": {
+        "name": "USB-C to HDMI",
+        "category": "VIDEO"
+      },
+      "cableSpecification": {
+        "length": "1.5m",
+        "brand": "Uni"
+      }
+    },
+    {
+      "id": "conn-11",
+      "sourceDeviceId": "docking-station",
+      "sourcePortId": "usb-a-1",
+      "targetDeviceId": "external-drive",
+      "targetPortId": "usb-c-drive",
+      "connectionType": {
+        "name": "USB-A 3.0 to USB-C",
+        "category": "DATA"
+      },
+      "cableSpecification": {
+        "length": "0.8m",
+        "brand": "Baseus"
+      }
+    },
+    {
+      "id": "conn-12",
+      "sourceDeviceId": "laptop-main",
+      "sourcePortId": "usb-c-2",
+      "targetDeviceId": "usb-hub",
+      "targetPortId": "usb-c-in",
+      "connectionType": {
+        "name": "USB-C 3.2 Gen 2",
+        "category": "DATA"
+      },
+      "cableSpecification": {
+        "length": "0.5m",
+        "brand": "Anker"
+      }
+    },
+    {
+      "id": "conn-13",
+      "sourceDeviceId": "docking-station",
+      "sourcePortId": "dp-out",
+      "targetDeviceId": "monitor-2",
+      "targetPortId": "hdmi-in-2",
+      "connectionType": {
+        "name": "DisplayPort to HDMI",
+        "category": "VIDEO"
+      },
+      "cableSpecification": {
+        "length": "2m",
+        "brand": "Benfei"
+      }
+    },
+    {
+      "id": "conn-15",
+      "sourceDeviceId": "laptop-main",
+      "sourcePortId": "usb-c-1",
+      "targetDeviceId": "external-drive",
+      "targetPortId": "usb-c-drive",
+      "connectionType": {
+        "name": "USB-C 3.2 Gen 2",
+        "category": "DATA"
+      },
+      "cableSpecification": {
+        "length": "0.5m",
+        "brand": "Samsung"
+      }
+    },
+    {
+      "id": "conn-16",
+      "sourceDeviceId": "docking-station",
+      "sourcePortId": "usb-a-3",
+      "targetDeviceId": "usb-hub",
+      "targetPortId": "usb-c-in",
+      "connectionType": {
+        "name": "USB-A 3.0 to USB-C",
+        "category": "DATA"
+      },
+      "cableSpecification": {
+        "length": "0.5m",
+        "brand": "Amazon Basics"
+      }
+    },
+    {
+      "id": "conn-17",
+      "sourceDeviceId": "laptop-main",
+      "sourcePortId": "hdmi-out",
+      "targetDeviceId": "monitor-2",
+      "targetPortId": "hdmi-in-2",
+      "connectionType": {
+        "name": "HDMI 2.0",
+        "category": "VIDEO"
+      },
+      "cableSpecification": {
+        "length": "1.5m",
+        "brand": "PowerBear"
+      }
+    },
+    {
+      "id": "conn-18",
+      "sourceDeviceId": "usb-hub",
+      "sourcePortId": "usb-a-out-2",
+      "targetDeviceId": "external-drive",
+      "targetPortId": "usb-c-drive",
+      "connectionType": {
+        "name": "USB-A 3.0 to USB-C",
+        "category": "DATA"
+      },
+      "cableSpecification": {
+        "length": "0.3m",
+        "brand": "SABRENT"
+      }
+    },
+    {
+      "id": "conn-19",
+      "sourceDeviceId": "docking-station",
+      "sourcePortId": "usb-a-2",
+      "targetDeviceId": "monitor-1",
+      "targetPortId": "hdmi-in",
+      "connectionType": {
+        "name": "USB-A to HDMI",
+        "category": "VIDEO"
+      },
+      "cableSpecification": {
+        "length": "1.5m",
+        "brand": "Uni"
+      }
+    },
+    {
+      "id": "conn-20",
+      "sourceDeviceId": "laptop-main",
+      "sourcePortId": "usb-c-2",
+      "targetDeviceId": "docking-station",
+      "targetPortId": "usb-c-host",
+      "connectionType": {
+        "name": "USB-C 3.2 Gen 2",
+        "category": "DATA"
+      },
+      "cableSpecification": {
+        "length": "1m",
+        "brand": "Apple"
+      }
+    }
+  ]
+}
