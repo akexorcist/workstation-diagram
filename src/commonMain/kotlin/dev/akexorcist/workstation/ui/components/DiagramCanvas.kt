@@ -21,7 +21,13 @@ import dev.akexorcist.workstation.data.model.DeviceCategory
 import dev.akexorcist.workstation.data.model.ConnectionCategory
 import dev.akexorcist.workstation.presentation.WorkstationUiState
 import dev.akexorcist.workstation.presentation.config.RenderingConfig
+import dev.akexorcist.workstation.routing.ConnectionRouter
+import dev.akexorcist.workstation.routing.RoutedConnection
+import dev.akexorcist.workstation.routing.RoutingConfig
 import dev.akexorcist.workstation.utils.CoordinateTransformer
+
+// Feature flag to toggle between old and new routing
+private const val USE_INTELLIGENT_ROUTING = true
 
 @Composable
 fun DiagramCanvas(
@@ -42,11 +48,25 @@ fun DiagramCanvas(
     val panOffsetRef = remember { mutableStateOf(uiState.panOffset) }
     panOffsetRef.value = uiState.panOffset
 
+    // Cache for intelligent routing results
+    val routedConnections = remember(uiState.layout) {
+        if (USE_INTELLIGENT_ROUTING && uiState.layout != null) {
+            val layout = uiState.layout
+            val virtualCanvas = layout.metadata.virtualCanvas ?: layout.metadata.canvasSize
+            ConnectionRouter().routeConnections(layout.devices, layout.connections, virtualCanvas)
+        } else {
+            emptyList()
+        }
+    }
+    val routedConnectionMap = remember(routedConnections) {
+        routedConnections.associateBy { it.connectionId }
+    }
+
     Canvas(
         modifier = modifier
             .fillMaxSize()
             .background(if (uiState.isDarkTheme) Color(0xFF3C3C3C) else Color(0xFFE0E0E0))
-            .pointerInput(Unit) {
+            .pointerInput(uiState.zoom, uiState.panOffset, uiState.layout) {
                 awaitPointerEventScope {
                     while (true) {
                         val event = awaitPointerEvent()
@@ -90,10 +110,9 @@ fun DiagramCanvas(
                     }
                 }
             }
-            .pointerInput(Unit) {
+            .pointerInput(uiState.zoom, uiState.panOffset, uiState.layout) {
                 detectTapGestures(
                     onTap = { position ->
-                        // Find clicked device
                         val clickedDevice = uiState.layout?.let { layout ->
                             val canvasSize = CoordinateTransformer.canvasSize(size.width.toFloat(), size.height.toFloat())
                             layout.devices.find { device ->
@@ -200,7 +219,7 @@ fun DiagramCanvas(
                         val sourcePosition = calculatePortScreenPosition(sourceDevice, sourcePort, layout.metadata, canvasSize, zoom, uiState.panOffset)
                         val targetPosition = calculatePortScreenPosition(targetDevice, targetPort, layout.metadata, canvasSize, zoom, uiState.panOffset)
 
-                        val lineColor = when (connection.connectionType.category) {
+                        val baseLineColor = when (connection.connectionType.category) {
                             ConnectionCategory.DATA -> Color.Blue
                             ConnectionCategory.VIDEO -> Color(0xFFBA68C8)
                             ConnectionCategory.AUDIO -> Color(0xFF81C784)
@@ -208,26 +227,33 @@ fun DiagramCanvas(
                             ConnectionCategory.NETWORK -> Color(0xFF4DB6AC)
                         }
 
-                        val strokeWidth = RenderingConfig.connectionLineThicknessByCategory[connection.connectionType.category]
+                        val baseStrokeWidth = RenderingConfig.connectionLineThicknessByCategory[connection.connectionType.category]
                             ?: RenderingConfig.defaultConnectionLineThickness
 
-                        // Calculate orthogonal path
-                        val path = calculateOrthogonalPath(
-                            sourcePosition, 
-                            targetPosition, 
-                            sourcePort.position.side,
-                            targetPort.position.side,
-                            zoom
-                        )
+                        // Use intelligent routing if enabled and available
+                        val routedConnection = routedConnectionMap[connection.id]
+                        if (USE_INTELLIGENT_ROUTING && routedConnection != null) {
+                            val lineColor = if (routedConnection.success) baseLineColor 
+                                else RoutingConfig.failedRouteColor.copy(alpha = RoutingConfig.failedRouteAlpha)
+                            val strokeWidth = if (routedConnection.success) baseStrokeWidth * zoom 
+                                else baseStrokeWidth * zoom * RoutingConfig.failedRouteWidthMultiplier
 
-                        // Draw the path with multiple line segments
-                        for (i in 0 until path.size - 1) {
-                            drawLine(
-                                color = lineColor,
-                                start = path[i],
-                                end = path[i + 1],
-                                strokeWidth = strokeWidth * zoom
+                            val path = routedConnection.virtualWaypoints.map { (vx, vy) ->
+                                virtualToScreen(vx, vy, layout.metadata, canvasSize, zoom, uiState.panOffset)
+                            }
+
+                            for (i in 0 until path.size - 1) {
+                                drawLine(color = lineColor, start = path[i], end = path[i + 1], strokeWidth = strokeWidth)
+                            }
+                        } else {
+                            // Fallback to old orthogonal path
+                            val path = calculateOrthogonalPath(
+                                sourcePosition, targetPosition, 
+                                sourcePort.position.side, targetPort.position.side, zoom
                             )
+                            for (i in 0 until path.size - 1) {
+                                drawLine(color = baseLineColor, start = path[i], end = path[i + 1], strokeWidth = baseStrokeWidth * zoom)
+                            }
                         }
                     }
                 }
@@ -360,54 +386,72 @@ private fun calculatePortScreenPosition(
     zoom: Float,
     panOffset: dev.akexorcist.workstation.data.model.Offset
 ): Offset {
-    // Get device position and size in screen space
-    val screenPos = CoordinateTransformer.transformPosition(
-        device.position,
-        metadata,
-        canvasSize,
-        zoom,
-        panOffset
-    )
-    val screenSize = CoordinateTransformer.transformSize(
-        device.size,
-        metadata,
-        canvasSize,
-        zoom
-    )
-    
-    // Create device rectangle in screen space
-    val deviceRect = androidx.compose.ui.geometry.Rect(
-        left = screenPos.x,
-        top = screenPos.y,
-        right = screenPos.x + screenSize.width,
-        bottom = screenPos.y + screenSize.height
-    )
-
     val offset = when {
         port.position.offset == 0f -> 0.01f
         port.position.offset == 1f -> 0.99f
         else -> port.position.offset
     }
 
-    // Calculate port position on the device rectangle (already in screen space)
-    return when (port.position.side) {
-        dev.akexorcist.workstation.data.model.DeviceSide.TOP -> Offset(
-            x = deviceRect.left + (deviceRect.width * offset),
-            y = deviceRect.top
-        )
-        dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> Offset(
-            x = deviceRect.left + (deviceRect.width * offset),
-            y = deviceRect.bottom
-        )
-        dev.akexorcist.workstation.data.model.DeviceSide.LEFT -> Offset(
-            x = deviceRect.left,
-            y = deviceRect.top + (deviceRect.height * offset)
-        )
-        dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> Offset(
-            x = deviceRect.right,
-            y = deviceRect.top + (deviceRect.height * offset)
-        )
+    // Calculate virtual port position (unsnapped)
+    val virtualPortX: Float
+    val virtualPortY: Float
+    when (port.position.side) {
+        dev.akexorcist.workstation.data.model.DeviceSide.TOP -> {
+            virtualPortX = device.position.x + (device.size.width * offset)
+            virtualPortY = device.position.y
+        }
+        dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
+            virtualPortX = device.position.x + (device.size.width * offset)
+            virtualPortY = device.position.y + device.size.height
+        }
+        dev.akexorcist.workstation.data.model.DeviceSide.LEFT -> {
+            virtualPortX = device.position.x
+            virtualPortY = device.position.y + (device.size.height * offset)
+        }
+        dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
+            virtualPortX = device.position.x + device.size.width
+            virtualPortY = device.position.y + (device.size.height * offset)
+        }
     }
+    
+    // Snap to grid (10 unit grid cells) - use same algorithm as RoutingGrid
+    val gridCellSize = 10f
+    var gridX = (virtualPortX / gridCellSize).toInt()
+    var gridY = (virtualPortY / gridCellSize).toInt()
+    
+    // Adjust grid position to ensure port stays outside device bounds
+    val deviceGridLeft = (device.position.x / gridCellSize).toInt()
+    val deviceGridRight = ((device.position.x + device.size.width) / gridCellSize).toInt()
+    val deviceGridTop = (device.position.y / gridCellSize).toInt()
+    val deviceGridBottom = ((device.position.y + device.size.height) / gridCellSize).toInt()
+    
+    when (port.position.side) {
+        dev.akexorcist.workstation.data.model.DeviceSide.TOP -> {
+            if (gridY >= deviceGridTop) gridY = deviceGridTop - 1
+        }
+        dev.akexorcist.workstation.data.model.DeviceSide.LEFT -> {
+            if (gridX >= deviceGridLeft) gridX = deviceGridLeft - 1
+        }
+        dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM,
+        dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
+            // No adjustment needed - these naturally snap outside
+        }
+    }
+    
+    val snappedVirtualX = gridX * gridCellSize + (gridCellSize / 2f)
+    val snappedVirtualY = gridY * gridCellSize + (gridCellSize / 2f)
+    
+    // Transform snapped virtual position to screen space
+    val snappedVirtual = dev.akexorcist.workstation.data.model.Position(snappedVirtualX, snappedVirtualY)
+    val screenPos = CoordinateTransformer.transformPosition(
+        snappedVirtual,
+        metadata,
+        canvasSize,
+        zoom,
+        panOffset
+    )
+    
+    return Offset(screenPos.x, screenPos.y)
 }
 
 // Orthogonal path routing
@@ -540,4 +584,17 @@ private fun isLineVisible(
 // Helper extension to convert model Offset to Compose Offset
 private fun dev.akexorcist.workstation.data.model.Offset.toComposeOffset(): Offset {
     return Offset(x = this.x, y = this.y)
+}
+
+// Convert virtual coordinates to screen coordinates
+private fun virtualToScreen(
+    virtualX: Float,
+    virtualY: Float,
+    metadata: dev.akexorcist.workstation.data.model.LayoutMetadata,
+    canvasSize: dev.akexorcist.workstation.data.model.Size,
+    zoom: Float,
+    panOffset: dev.akexorcist.workstation.data.model.Offset
+): Offset {
+    val position = dev.akexorcist.workstation.data.model.Position(virtualX, virtualY)
+    return CoordinateTransformer.transformPosition(position, metadata, canvasSize, zoom, panOffset)
 }

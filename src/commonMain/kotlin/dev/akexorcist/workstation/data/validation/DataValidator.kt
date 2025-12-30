@@ -20,6 +20,11 @@ object DataValidator {
             validateConnection(connection, deviceIds, layout.devices)?.let { errors.add(it) }
         }
 
+        when (val portValidation = validatePortUsage(layout)) {
+            is ValidationResult.Error -> errors.add(portValidation.message)
+            is ValidationResult.Success -> {}
+        }
+
         return if (errors.isEmpty()) ValidationResult.Success else ValidationResult.Error(errors.joinToString("\n"))
     }
 
@@ -91,5 +96,25 @@ object DataValidator {
         }
 
         return null
+    }
+
+    fun validatePortUsage(layout: WorkstationLayout): ValidationResult {
+        val errors = mutableListOf<String>()
+        val portUsage = mutableMapOf<String, String>()
+
+        layout.connections.forEach { connection ->
+            val sourceKey = "${connection.sourceDeviceId}:${connection.sourcePortId}"
+            val targetKey = "${connection.targetDeviceId}:${connection.targetPortId}"
+
+            portUsage[sourceKey]?.let {
+                errors.add("Port ${connection.sourcePortId} on device ${connection.sourceDeviceId} is used by multiple connections (1-to-1 only)")
+            } ?: run { portUsage[sourceKey] = connection.id }
+
+            portUsage[targetKey]?.let {
+                errors.add("Port ${connection.targetPortId} on device ${connection.targetDeviceId} is used by multiple connections (1-to-1 only)")
+            } ?: run { portUsage[targetKey] = connection.id }
+        }
+
+        return if (errors.isEmpty()) ValidationResult.Success else ValidationResult.Error(errors.joinToString("\n"))
     }
 }

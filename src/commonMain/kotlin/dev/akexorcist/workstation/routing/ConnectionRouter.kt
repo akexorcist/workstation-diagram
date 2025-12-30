@@ -1,0 +1,209 @@
+package dev.akexorcist.workstation.routing
+
+import dev.akexorcist.workstation.data.model.*
+import kotlin.math.sqrt
+
+data class RoutedConnection(
+    val connectionId: String,
+    val waypoints: List<GridPoint>,
+    val virtualWaypoints: List<Pair<Float, Float>>,
+    val success: Boolean,
+    val crossings: Int
+)
+
+class ConnectionRouter(private val config: RoutingConfig = RoutingConfig) {
+
+    fun routeConnections(
+        devices: List<Device>,
+        connections: List<Connection>,
+        virtualCanvasSize: Size
+    ): List<RoutedConnection> {
+        val gridWidth = (virtualCanvasSize.width / config.gridCellSize).toInt().coerceAtLeast(1)
+        val gridHeight = (virtualCanvasSize.height / config.gridCellSize).toInt().coerceAtLeast(1)
+        val grid = RoutingGrid(gridWidth, gridHeight, config.gridCellSize)
+        val deviceMap = devices.associateBy { it.id }
+
+        devices.forEach { device ->
+            val (width, height) = if (config.deviceSnapToGrid) {
+                grid.snapSize(device.size.width, device.size.height)
+            } else {
+                device.size.width to device.size.height
+            }
+            grid.markDeviceObstacle(device.position.x, device.position.y, width, height, config.deviceClearance)
+        }
+
+        val pathfinder = AStarPathfinder(grid, config)
+        val existingPaths = mutableMapOf<String, List<GridPoint>>()
+
+        return connections
+            .sortedBy { calculateConnectionDistance(it, deviceMap) }
+            .map { connection ->
+                routeConnection(connection, deviceMap, grid, pathfinder, existingPaths).also { routed ->
+                    if (routed.success) {
+                        existingPaths[connection.id] = routed.waypoints
+                        grid.occupyPath(connection.id, routed.waypoints)
+                    }
+                }
+            }
+    }
+
+    private fun routeConnection(
+        connection: Connection,
+        deviceMap: Map<String, Device>,
+        grid: RoutingGrid,
+        pathfinder: AStarPathfinder,
+        existingPaths: Map<String, List<GridPoint>>
+    ): RoutedConnection {
+        val sourceDevice = deviceMap[connection.sourceDeviceId]
+        val targetDevice = deviceMap[connection.targetDeviceId]
+        val sourcePort = sourceDevice?.ports?.find { it.id == connection.sourcePortId }
+        val targetPort = targetDevice?.ports?.find { it.id == connection.targetPortId }
+
+        if (sourceDevice == null || targetDevice == null || sourcePort == null || targetPort == null) {
+            return createFailedRoute(connection, grid)
+        }
+
+        val sourcePos = calculatePortPosition(sourceDevice, sourcePort)
+        val targetPos = calculatePortPosition(targetDevice, targetPort)
+        
+        val sourceGrid = snapPortToGrid(sourcePos, sourceDevice, sourcePort, grid)
+        val targetGrid = snapPortToGrid(targetPos, targetDevice, targetPort, grid)
+        val sourceSnapped = grid.toVirtualPoint(sourceGrid)
+        val targetSnapped = grid.toVirtualPoint(targetGrid)
+        
+        val startPoint = calculateExtendedPortPoint(sourcePort, sourceSnapped, grid)
+        val endPoint = calculateExtendedPortPoint(targetPort, targetSnapped, grid)
+
+        val startGrid = grid.toGridPoint(startPoint.first, startPoint.second)
+        val endGrid = grid.toGridPoint(endPoint.first, endPoint.second)
+
+        val sourceExtensionDir = GridDirection.fromPoints(sourceGrid, startGrid)
+        val targetExtensionDir = GridDirection.fromPoints(targetGrid, endGrid)
+
+        if (!grid.canOccupy(sourceGrid, connection.id, sourceExtensionDir) ||
+            !grid.canOccupy(startGrid, connection.id, sourceExtensionDir) ||
+            !grid.canOccupy(targetGrid, connection.id, targetExtensionDir) ||
+            !grid.canOccupy(endGrid, connection.id, targetExtensionDir)) {
+            return createFailedRoute(connection, grid, sourceSnapped, targetSnapped)
+        }
+
+        val result = pathfinder.findPath(startGrid, endGrid, connection.id, existingPaths)
+
+        return if (result.success) {
+            var lastPoint: GridPoint? = null
+            val fullGridPath = buildList {
+                fun addUnique(point: GridPoint) {
+                    if (point != lastPoint) {
+                        add(point)
+                        lastPoint = point
+                    }
+                }
+                addUnique(sourceGrid)
+                addUnique(startGrid)
+                result.waypoints.forEach { addUnique(it) }
+                addUnique(endGrid)
+                addUnique(targetGrid)
+            }
+            
+            val virtualWaypoints = buildList {
+                add(sourceSnapped)
+                add(startPoint)
+                addAll(result.waypoints.map { grid.toVirtualPoint(it) })
+                add(endPoint)
+                add(targetSnapped)
+            }
+            RoutedConnection(connection.id, fullGridPath, virtualWaypoints, true, result.crossings)
+        } else {
+            createFailedRoute(connection, grid, sourceSnapped, targetSnapped)
+        }
+    }
+
+    private fun createFailedRoute(
+        connection: Connection,
+        grid: RoutingGrid,
+        sourcePos: Pair<Float, Float> = 0f to 0f,
+        targetPos: Pair<Float, Float> = 0f to 0f
+    ): RoutedConnection = RoutedConnection(
+        connectionId = connection.id,
+        waypoints = listOf(
+            grid.toGridPoint(sourcePos.first, sourcePos.second),
+            grid.toGridPoint(targetPos.first, targetPos.second)
+        ),
+        virtualWaypoints = listOf(sourcePos, targetPos),
+        success = false,
+        crossings = 0
+    )
+
+    private fun calculateConnectionDistance(connection: Connection, deviceMap: Map<String, Device>): Float {
+        val sourceDevice = deviceMap[connection.sourceDeviceId] ?: return Float.MAX_VALUE
+        val targetDevice = deviceMap[connection.targetDeviceId] ?: return Float.MAX_VALUE
+        val sourcePort = sourceDevice.ports.find { it.id == connection.sourcePortId } ?: return Float.MAX_VALUE
+        val targetPort = targetDevice.ports.find { it.id == connection.targetPortId } ?: return Float.MAX_VALUE
+
+        val sourcePos = calculatePortPosition(sourceDevice, sourcePort)
+        val targetPos = calculatePortPosition(targetDevice, targetPort)
+        val dx = targetPos.first - sourcePos.first
+        val dy = targetPos.second - sourcePos.second
+        return sqrt(dx * dx + dy * dy)
+    }
+
+    private fun snapPortToGrid(
+        portPos: Pair<Float, Float>,
+        device: Device,
+        port: Port,
+        grid: RoutingGrid
+    ): GridPoint {
+        var gridPoint = grid.toGridPoint(portPos.first, portPos.second)
+        
+        // Calculate device grid bounds
+        val deviceGridLeft = (device.position.x / grid.cellSize).toInt()
+        val deviceGridRight = ((device.position.x + device.size.width) / grid.cellSize).toInt()
+        val deviceGridTop = (device.position.y / grid.cellSize).toInt()
+        val deviceGridBottom = ((device.position.y + device.size.height) / grid.cellSize).toInt()
+        
+        // Adjust grid position to ensure port stays outside device bounds
+        gridPoint = when (port.position.side) {
+            DeviceSide.TOP -> {
+                if (gridPoint.y >= deviceGridTop) {
+                    GridPoint(gridPoint.x, deviceGridTop - 1)
+                } else gridPoint
+            }
+            DeviceSide.LEFT -> {
+                if (gridPoint.x >= deviceGridLeft) {
+                    GridPoint(deviceGridLeft - 1, gridPoint.y)
+                } else gridPoint
+            }
+            DeviceSide.BOTTOM, DeviceSide.RIGHT -> gridPoint
+        }
+        
+        return gridPoint
+    }
+
+    private fun calculatePortPosition(device: Device, port: Port): Pair<Float, Float> {
+        val offset = port.position.offset.coerceIn(0.01f, 0.99f)
+        return when (port.position.side) {
+            DeviceSide.TOP -> device.position.x + (device.size.width * offset) to device.position.y
+            DeviceSide.BOTTOM -> device.position.x + (device.size.width * offset) to device.position.y + device.size.height
+            DeviceSide.LEFT -> device.position.x to device.position.y + (device.size.height * offset)
+            DeviceSide.RIGHT -> device.position.x + device.size.width to device.position.y + (device.size.height * offset)
+        }
+    }
+
+    private fun calculateExtendedPortPoint(
+        port: Port, 
+        portPos: Pair<Float, Float>, 
+        grid: RoutingGrid
+    ): Pair<Float, Float> {
+        val extension = config.portExtension
+        val extendedPos = when (port.position.side) {
+            DeviceSide.LEFT -> portPos.first - extension to portPos.second
+            DeviceSide.RIGHT -> portPos.first + extension to portPos.second
+            DeviceSide.TOP -> portPos.first to portPos.second - extension
+            DeviceSide.BOTTOM -> portPos.first to portPos.second + extension
+        }
+        
+        // Snap extended position to grid
+        val extendedGrid = grid.toGridPoint(extendedPos.first, extendedPos.second)
+        return grid.toVirtualPoint(extendedGrid)
+    }
+}

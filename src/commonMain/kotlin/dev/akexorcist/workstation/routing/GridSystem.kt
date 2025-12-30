@@ -1,0 +1,134 @@
+package dev.akexorcist.workstation.routing
+
+import kotlin.math.abs
+import kotlin.math.ceil
+
+data class GridPoint(val x: Int, val y: Int) {
+    fun manhattanDistanceTo(other: GridPoint): Int = abs(x - other.x) + abs(y - other.y)
+    override fun toString(): String = "($x, $y)"
+}
+
+enum class GridDirection {
+    NORTH, SOUTH, EAST, WEST;
+
+    fun isOpposite(other: GridDirection): Boolean = when (this) {
+        NORTH -> other == SOUTH
+        SOUTH -> other == NORTH
+        EAST -> other == WEST
+        WEST -> other == EAST
+    }
+
+    fun isPerpendicular(other: GridDirection): Boolean =
+        (isVertical() && other.isHorizontal()) || (isHorizontal() && other.isVertical())
+
+    fun isVertical(): Boolean = this == NORTH || this == SOUTH
+    fun isHorizontal(): Boolean = this == EAST || this == WEST
+
+    companion object {
+        fun fromPoints(from: GridPoint, to: GridPoint): GridDirection = when {
+            from == to -> EAST
+            to.x > from.x -> EAST
+            to.x < from.x -> WEST
+            to.y > from.y -> SOUTH
+            to.y < from.y -> NORTH
+            else -> EAST
+        }
+    }
+}
+
+class GridCell(val x: Int, val y: Int) {
+    private val occupancy = mutableMapOf<GridDirection, MutableSet<String>>()
+
+    fun canOccupy(connectionId: String, direction: GridDirection): Boolean {
+        val existing = occupancy[direction]
+        return existing == null || existing.isEmpty() || connectionId in existing
+    }
+
+    fun occupy(connectionId: String, direction: GridDirection) {
+        occupancy.getOrPut(direction) { mutableSetOf() }.add(connectionId)
+    }
+
+    fun release(connectionId: String, direction: GridDirection) {
+        occupancy[direction]?.apply {
+            remove(connectionId)
+            if (isEmpty()) occupancy.remove(direction)
+        }
+    }
+
+    fun releaseAll(connectionId: String) = GridDirection.entries.forEach { release(connectionId, it) }
+    fun isOccupied(): Boolean = occupancy.values.any { it.isNotEmpty() }
+    fun getOccupancy(): Map<GridDirection, Set<String>> = occupancy.mapValues { it.value.toSet() }
+    fun getConnectionIds(): Set<String> = occupancy.values.flatten().toSet()
+}
+
+class RoutingGrid(val width: Int, val height: Int, val cellSize: Float) {
+    private val blocked = Array(width) { BooleanArray(height) }
+    private val cells = Array(width) { x -> Array(height) { y -> GridCell(x, y) } }
+
+    fun toGridPoint(virtualX: Float, virtualY: Float): GridPoint = GridPoint(
+        x = (virtualX / cellSize).toInt().coerceIn(0, width - 1),
+        y = (virtualY / cellSize).toInt().coerceIn(0, height - 1)
+    )
+
+    fun toVirtualPoint(gridPoint: GridPoint): Pair<Float, Float> = Pair(
+        gridPoint.x * cellSize + cellSize / 2f,
+        gridPoint.y * cellSize + cellSize / 2f
+    )
+
+    fun snapSize(width: Float, height: Float): Pair<Float, Float> = Pair(
+        ceil(width / cellSize) * cellSize,
+        ceil(height / cellSize) * cellSize
+    )
+
+    fun markDeviceObstacle(deviceX: Float, deviceY: Float, deviceWidth: Float, deviceHeight: Float, clearance: Float) {
+        val x1 = ((deviceX - clearance) / cellSize).toInt().coerceAtLeast(0)
+        val y1 = ((deviceY - clearance) / cellSize).toInt().coerceAtLeast(0)
+        val x2 = ((deviceX + deviceWidth + clearance) / cellSize).toInt().coerceAtMost(width - 1)
+        val y2 = ((deviceY + deviceHeight + clearance) / cellSize).toInt().coerceAtMost(height - 1)
+
+        for (x in x1..x2) {
+            for (y in y1..y2) {
+                blocked[x][y] = true
+            }
+        }
+    }
+
+    fun isBlocked(point: GridPoint): Boolean =
+        point.x !in 0 until width || point.y !in 0 until height || blocked[point.x][point.y]
+
+    fun getCell(point: GridPoint): GridCell? =
+        if (point.x in 0 until width && point.y in 0 until height) cells[point.x][point.y] else null
+
+    fun canOccupy(point: GridPoint, connectionId: String, direction: GridDirection): Boolean =
+        getCell(point)?.canOccupy(connectionId, direction) ?: false
+
+    fun occupyPath(connectionId: String, path: List<GridPoint>) {
+        path.zipWithNext().forEach { (from, to) ->
+            val direction = GridDirection.fromPoints(from, to)
+            getCell(from)?.occupy(connectionId, direction)
+            getCell(to)?.occupy(connectionId, direction)
+        }
+    }
+
+    fun releasePath(connectionId: String) {
+        cells.forEach { row -> row.forEach { it.releaseAll(connectionId) } }
+    }
+
+    fun getNeighbors(point: GridPoint): List<Pair<GridPoint, GridDirection>> = buildList {
+        if (point.y > 0) add(GridPoint(point.x, point.y - 1) to GridDirection.NORTH)
+        if (point.y < height - 1) add(GridPoint(point.x, point.y + 1) to GridDirection.SOUTH)
+        if (point.x > 0) add(GridPoint(point.x - 1, point.y) to GridDirection.WEST)
+        if (point.x < width - 1) add(GridPoint(point.x + 1, point.y) to GridDirection.EAST)
+    }
+
+    fun clearOccupancy() = cells.forEach { row -> row.forEach { cell ->
+        cell.getConnectionIds().forEach { cell.releaseAll(it) }
+    }}
+
+    fun reset() {
+        cells.forEach { row -> row.forEachIndexed { y, cell ->
+            blocked[row.indexOf(cell)][y] = false
+            cell.releaseAll("")
+        }}
+    }
+}
