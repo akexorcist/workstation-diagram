@@ -6,6 +6,8 @@ data class WorkstationUiState(
     val layout: WorkstationLayout? = null,
     val selectedDeviceId: String? = null,
     val selectedConnectionId: String? = null,
+    val hoveredDeviceId: String? = null,
+    val hoveredConnectionId: String? = null,
     val zoom: Float = 1.0f,
     val panOffset: Offset = Offset.Zero,
     val isDarkTheme: Boolean = true,

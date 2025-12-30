@@ -148,8 +148,57 @@ class WorkstationViewModel(
     }
 
     fun resetPan() {
-        _uiState.value = _uiState.value.copy(panOffset = StateManagementConfig.initialPan)
+        centerViewportOnDevices()
+    }
+
+    fun centerViewportOnDevices(viewportWidth: Float = 1920f, viewportHeight: Float = 1080f) {
+        val layout = _uiState.value.layout ?: return
+        if (layout.devices.isEmpty()) {
+            _uiState.value = _uiState.value.copy(panOffset = StateManagementConfig.initialPan)
+            updateDiagramState()
+            return
+        }
+
+        // Calculate bounding box of all devices
+        val minX = layout.devices.minOf { it.position.x }
+        val maxX = layout.devices.maxOf { it.position.x + it.size.width }
+        val minY = layout.devices.minOf { it.position.y }
+        val maxY = layout.devices.maxOf { it.position.y + it.size.height }
+
+        // Calculate center of all devices
+        val devicesCenterX = (minX + maxX) / 2f
+        val devicesCenterY = (minY + maxY) / 2f
+
+        // Account for sidebar (300px) and control panel (60px) overlays
+        // The visible canvas area is shifted right and down
+        val sidebarWidth = 300f
+        val controlPanelHeight = 60f
+        
+        // Calculate the center of the VISIBLE area (not including overlays)
+        val visibleAreaCenterX = sidebarWidth + (viewportWidth - sidebarWidth) / 2f
+        val visibleAreaCenterY = controlPanelHeight + (viewportHeight - controlPanelHeight) / 2f
+
+        // Calculate pan offset to center devices in the visible area
+        val zoom = _uiState.value.zoom
+        val panX = visibleAreaCenterX - (devicesCenterX * zoom)
+        val panY = visibleAreaCenterY - (devicesCenterY * zoom)
+
+        _uiState.value = _uiState.value.copy(
+            panOffset = Offset(panX, panY)
+        )
         updateDiagramState()
+    }
+
+    fun handleDeviceHover(deviceId: String?, isHovered: Boolean) {
+        _uiState.value = _uiState.value.copy(
+            hoveredDeviceId = if (isHovered) deviceId else null
+        )
+    }
+
+    fun handleConnectionHover(connectionId: String?, isHovered: Boolean) {
+        _uiState.value = _uiState.value.copy(
+            hoveredConnectionId = if (isHovered) connectionId else null
+        )
     }
 
     private fun updateDiagramState() {

@@ -1,5 +1,9 @@
 package dev.akexorcist.workstation.ui
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateOffsetAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
@@ -35,6 +39,15 @@ fun WorkstationDiagramScreen(
 
     // Track canvas size for zoom calculations
     var canvasSize by remember { mutableStateOf(androidx.compose.ui.geometry.Size.Zero) }
+    
+    // Center viewport only on first load
+    var hasInitialCentered by remember { mutableStateOf(false) }
+    LaunchedEffect(canvasSize, uiState.layout) {
+        if (!hasInitialCentered && canvasSize.width > 0 && canvasSize.height > 0 && uiState.layout != null) {
+            viewModel.centerViewportOnDevices(canvasSize.width, canvasSize.height)
+            hasInitialCentered = true
+        }
+    }
     
     Box(
         modifier = Modifier
@@ -130,41 +143,43 @@ fun WorkstationDiagramScreen(
             }
     ) {
         // Canvas layer (full screen, behind everything)
-        when {
-            uiState.isLoading -> {
-                LoadingState(
-                    message = "Loading workstation data...",
-                    isDarkTheme = uiState.isDarkTheme
-                )
+            when {
+                uiState.isLoading -> {
+                    LoadingState(
+                        message = "Loading workstation data...",
+                        isDarkTheme = uiState.isDarkTheme
+                    )
+                }
+                uiState.errorMessage != null -> {
+                    val errorMessage = uiState.errorMessage ?: "Unknown error"
+                    ErrorState(
+                        message = errorMessage,
+                        onRetry = {
+                            coroutineScope.launch {
+                                viewModel.loadLayout()
+                            }
+                        },
+                        isDarkTheme = uiState.isDarkTheme
+                    )
+                }
+                uiState.layout == null -> {
+                    LoadingState(
+                        message = "No data available",
+                        isDarkTheme = uiState.isDarkTheme
+                    )
+                }
+                else -> {
+                    DiagramCanvas(
+                        uiState = uiState,
+                        onDeviceClick = viewModel::handleDeviceClick,
+                        onConnectionClick = viewModel::handleConnectionClick,
+                        onPanChange = viewModel::handlePanChange,
+                        onHoverDevice = { deviceId, isHovered -> viewModel.handleDeviceHover(deviceId, isHovered) },
+                        onHoverConnection = { connectionId, isHovered -> viewModel.handleConnectionHover(connectionId, isHovered) },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
-            uiState.errorMessage != null -> {
-                val errorMessage = uiState.errorMessage ?: "Unknown error"
-                ErrorState(
-                    message = errorMessage,
-                    onRetry = {
-                        coroutineScope.launch {
-                            viewModel.loadLayout()
-                        }
-                    },
-                    isDarkTheme = uiState.isDarkTheme
-                )
-            }
-            uiState.layout == null -> {
-                LoadingState(
-                    message = "No data available",
-                    isDarkTheme = uiState.isDarkTheme
-                )
-            }
-            else -> {
-                DiagramCanvas(
-                    uiState = uiState,
-                    onDeviceClick = viewModel::handleDeviceClick,
-                    onConnectionClick = viewModel::handleConnectionClick,
-                    onPanChange = viewModel::handlePanChange,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-        }
         
         // UI overlay layer (on top)
         Row(
@@ -194,7 +209,9 @@ fun WorkstationDiagramScreen(
                         viewModel.handleZoomChangeAtPoint(newZoom, centerPoint, layoutCanvasSize)
                     },
                     onResetZoom = viewModel::resetZoom,
-                    onResetPan = viewModel::resetPan,
+                    onResetPan = {
+                        viewModel.centerViewportOnDevices(canvasSize.width, canvasSize.height)
+                    },
                     onToggleTheme = viewModel::toggleTheme,
                     onDeselectAll = viewModel::deselectAll,
                     modifier = Modifier.height(60.dp)
