@@ -36,7 +36,6 @@ fun WorkstationTheme(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    // Load layout when composition starts
     LaunchedEffect(Unit) {
         viewModel.loadLayout()
     }
