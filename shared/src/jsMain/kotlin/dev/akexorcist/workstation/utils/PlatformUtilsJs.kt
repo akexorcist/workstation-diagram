@@ -1,11 +1,11 @@
 package dev.akexorcist.workstation.utils
 
 import kotlinx.browser.window
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.await
-import kotlinx.coroutines.withContext
-import org.w3c.fetch.RequestInit
 import kotlin.js.Date
+
+actual fun openUrl(url: String) {
+    window.open(url, "_blank")
+}
 
 actual fun getCurrentDate(): String {
     val date = Date()
@@ -13,7 +13,7 @@ actual fun getCurrentDate(): String {
 }
 
 actual fun readResourceFile(path: String): String {
-    // For JS, we'll need to fetch the resource file
-    // This is a simplified version - in production you'd want proper async handling
+    // For JS, resources are loaded differently
+    // This is a simplified version - actual implementation would use fetch API
     throw NotImplementedError("Async resource loading not implemented for JS target")
 }

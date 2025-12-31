@@ -169,19 +169,14 @@ class WorkstationViewModel(
         val devicesCenterX = (minX + maxX) / 2f
         val devicesCenterY = (minY + maxY) / 2f
 
-        // Account for sidebar (300px) and control panel (60px) overlays
-        // The visible canvas area is shifted right and down
-        val sidebarWidth = 300f
-        val controlPanelHeight = 60f
-        
-        // Calculate the center of the VISIBLE area (not including overlays)
-        val visibleAreaCenterX = sidebarWidth + (viewportWidth - sidebarWidth) / 2f
-        val visibleAreaCenterY = controlPanelHeight + (viewportHeight - controlPanelHeight) / 2f
+        // Center of full viewport (diagram is full window size)
+        val viewportCenterX = viewportWidth / 2f
+        val viewportCenterY = viewportHeight / 2f
 
-        // Calculate pan offset to center devices in the visible area
+        // Calculate pan offset to center devices in the viewport
         val zoom = _uiState.value.zoom
-        val panX = visibleAreaCenterX - (devicesCenterX * zoom)
-        val panY = visibleAreaCenterY - (devicesCenterY * zoom)
+        val panX = viewportCenterX - (devicesCenterX * zoom)
+        val panY = viewportCenterY - (devicesCenterY * zoom)
 
         _uiState.value = _uiState.value.copy(
             panOffset = Offset(panX, panY)
@@ -198,6 +193,24 @@ class WorkstationViewModel(
     fun handleConnectionHover(connectionId: String?, isHovered: Boolean) {
         _uiState.value = _uiState.value.copy(
             hoveredConnectionId = if (isHovered) connectionId else null
+        )
+    }
+
+    fun toggleInstructionExpanded() {
+        _uiState.value = _uiState.value.copy(
+            isInstructionExpanded = !_uiState.value.isInstructionExpanded
+        )
+    }
+
+    fun toggleDeviceListExpanded() {
+        _uiState.value = _uiState.value.copy(
+            isDeviceListExpanded = !_uiState.value.isDeviceListExpanded
+        )
+    }
+
+    fun toggleConnectionAnimation() {
+        _uiState.value = _uiState.value.copy(
+            connectionAnimationEnabled = !_uiState.value.connectionAnimationEnabled
         )
     }
 

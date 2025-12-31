@@ -14,7 +14,10 @@ data class WorkstationUiState(
     val searchQuery: String = "",
     val filteredDeviceIds: Set<String> = emptySet(),
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val isInstructionExpanded: Boolean = false,
+    val isDeviceListExpanded: Boolean = true,
+    val connectionAnimationEnabled: Boolean = true
 )
 
 data class DiagramState(

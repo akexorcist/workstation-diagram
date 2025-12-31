@@ -14,18 +14,25 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.WindowState
 import dev.akexorcist.workstation.presentation.WorkstationViewModel
 import dev.akexorcist.workstation.ui.WorkstationDiagramScreen
+import dev.akexorcist.workstation.ui.theme.WorkstationTheme
 
 fun main() = application {
     val viewModel = remember { WorkstationViewModel() }
+    val uiState by viewModel.uiState.collectAsState()
 
     Window(
         onCloseRequest = ::exitApplication,
         title = "Workstation Diagram",
         state = WindowState(width = 1280.dp, height = 720.dp)
     ) {
-        WorkstationTheme(viewModel = viewModel) {
+        LaunchedEffect(Unit) {
+            viewModel.loadLayout()
+        }
+
+        WorkstationTheme(darkTheme = uiState.isDarkTheme) {
             WorkstationDiagramScreen(viewModel = viewModel)
         }
+
     }
 }
 

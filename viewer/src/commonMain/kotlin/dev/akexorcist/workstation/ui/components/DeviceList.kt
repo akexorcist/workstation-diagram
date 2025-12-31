@@ -60,24 +60,25 @@ fun DeviceList(
 }
 
 /**
- * Viewport culling helper - checks if a rectangle is visible within the viewport.
+ * Check if a rectangle is visible in the viewport with culling margin.
  */
 private fun isRectVisible(
     position: Offset,
     size: Size,
     viewportSize: Size
 ): Boolean {
+    val cullingMargin = 50f
+    
     val rectLeft = position.x
     val rectRight = position.x + size.width
     val rectTop = position.y
     val rectBottom = position.y + size.height
 
-    val viewportLeft = 0f
-    val viewportRight = viewportSize.width
-    val viewportTop = 0f
-    val viewportBottom = viewportSize.height
+    val viewportLeft = -cullingMargin
+    val viewportRight = viewportSize.width + cullingMargin
+    val viewportTop = -cullingMargin
+    val viewportBottom = viewportSize.height + cullingMargin
 
-    // Only hide when completely off-screen
     return rectLeft < viewportRight &&
             rectRight > viewportLeft &&
             rectTop < viewportBottom &&

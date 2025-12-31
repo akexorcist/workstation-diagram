@@ -8,6 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import dev.akexorcist.workstation.ui.theme.ThemeColor
+import dev.akexorcist.workstation.ui.theme.WorkstationTheme
 
 @Composable
 fun LoadingState(
@@ -24,13 +26,13 @@ fun LoadingState(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             CircularProgressIndicator(
-                color = if (isDarkTheme) Color(0xFF2196F3) else Color(0xFF1976D2)
+                color = WorkstationTheme.themeColor.primary
             )
 
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodyLarge,
-                color = if (isDarkTheme) Color.White else Color.Black
+                color = WorkstationTheme.themeColor.text
             )
         }
     }
@@ -54,13 +56,13 @@ fun EmptyState(
                 text = "No Data",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
-                color = if (isDarkTheme) Color.Gray else Color.DarkGray
+                color = WorkstationTheme.themeColor.onSurfaceSecondary
             )
 
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodyLarge,
-                color = if (isDarkTheme) Color.Gray else Color.DarkGray
+                color = WorkstationTheme.themeColor.onSurfaceSecondary
             )
         }
     }

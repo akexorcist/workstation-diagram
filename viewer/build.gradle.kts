@@ -25,9 +25,11 @@ kotlin {
                 implementation(compose.ui)
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
+                implementation(compose.components.resources)
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.androidx.lifecycle.viewmodel.compose)
+                implementation(libs.kotlinx.datetime)
             }
         }
 
@@ -52,6 +54,10 @@ kotlin {
 }
 
 compose {
+    experimental {
+        web.application {}
+    }
+    
     desktop {
         application {
             mainClass = "dev.akexorcist.workstation.MainKt"

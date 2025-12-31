@@ -1,17 +1,22 @@
 package dev.akexorcist.workstation.ui.states
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
+import androidx.compose.ui.draw.clip
+import dev.akexorcist.workstation.utils.defaultShadow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import dev.akexorcist.workstation.ui.theme.ThemeColor
+import dev.akexorcist.workstation.ui.theme.WorkstationTheme
 
 @Composable
 fun ErrorState(
@@ -24,15 +29,13 @@ fun ErrorState(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Card(
+        Box(
             modifier = Modifier
                 .padding(32.dp)
-                .width(400.dp),
-            shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = if (isDarkTheme) Color(0xFF2C2C2C) else Color.White
-            ),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                .width(400.dp)
+                .defaultShadow()
+                .clip(RoundedCornerShape(12.dp))
+                .background(WorkstationTheme.themeColor.surface)
         ) {
             Column(
                 modifier = Modifier
@@ -44,7 +47,7 @@ fun ErrorState(
                 Icon(
                     imageVector = Icons.Default.Error,
                     contentDescription = "Error",
-                    tint = Color(0xFFF44336),
+                    tint = ThemeColor.Pink500,
                     modifier = Modifier.size(48.dp)
                 )
 
@@ -52,13 +55,13 @@ fun ErrorState(
                     text = "Error",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = if (isDarkTheme) Color.White else Color.Black
+                    color = WorkstationTheme.themeColor.onSurface
                 )
 
                 Text(
                     text = message,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = if (isDarkTheme) Color.Gray else Color.DarkGray,
+                    color = WorkstationTheme.themeColor.onSurfaceSecondary,
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -93,7 +96,7 @@ fun ErrorDialog(
             Icon(
                 imageVector = Icons.Default.Error,
                 contentDescription = "Error",
-                tint = Color(0xFFF44336)
+                tint = ThemeColor.Pink500
             )
         },
         title = {
@@ -114,6 +117,6 @@ fun ErrorDialog(
                 Text("OK")
             }
         },
-        containerColor = if (isDarkTheme) Color(0xFF2C2C2C) else Color.White
+        containerColor = WorkstationTheme.themeColor.surface
     )
 }

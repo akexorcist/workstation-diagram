@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import dev.akexorcist.workstation.data.model.Device
 import dev.akexorcist.workstation.data.model.DeviceCategory
 import dev.akexorcist.workstation.presentation.config.RenderingConfig
+import dev.akexorcist.workstation.ui.theme.ThemeColor
+import dev.akexorcist.workstation.ui.theme.WorkstationTheme
 
 @Composable
 fun DeviceNode(
@@ -124,11 +126,12 @@ fun DeviceNode(
 
 // Helper functions for styling and positioning
 
+@Composable
 private fun getDeviceColor(category: DeviceCategory): Color {
     return when (category) {
-        DeviceCategory.HUB -> Color(0xFF4CAF50)
-        DeviceCategory.PERIPHERAL -> Color(0xFFFF9800)
-        DeviceCategory.CENTRAL_DEVICE -> Color(0xFF2196F3)
+        DeviceCategory.HUB -> WorkstationTheme.themeColor.hub
+        DeviceCategory.PERIPHERAL -> WorkstationTheme.themeColor.peripheral
+        DeviceCategory.CENTRAL_DEVICE -> WorkstationTheme.themeColor.centralDevice
     }
 }
 
@@ -144,13 +147,14 @@ private fun getDeviceBackgroundColor(
     }
 }
 
+@Composable
 private fun getDeviceBorderColor(
     deviceColor: Color,
     isHovered: Boolean,
     isSelected: Boolean
 ): Color {
     return when {
-        isSelected -> Color.White
+        isSelected -> WorkstationTheme.themeColor.onPrimary
         isHovered -> deviceColor.copy(alpha = 1f)
         else -> deviceColor
     }

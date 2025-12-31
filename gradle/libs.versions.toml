@@ -3,6 +3,7 @@ kotlin = "2.3.0"
 compose = "1.9.3"
 kotlinx-serialization = "1.9.0"
 kotlinx-coroutines = "1.10.2"
+kotlinx-datetime = "0.6.1"
 lifecycle-viewmodel = "2.8.0"
 
 [plugins]
@@ -23,6 +24,9 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 # Kotlinx Coroutines
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+
+# Kotlinx Datetime
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 # Lifecycle ViewModel
 androidx-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycle-viewmodel" }

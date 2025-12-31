@@ -1,40 +1,56 @@
-package dev.akexorcist.workstation.ui.panels
+package dev.akexorcist.workstation.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.akexorcist.workstation.data.model.Device
 import dev.akexorcist.workstation.data.model.DeviceCategory
 import dev.akexorcist.workstation.data.model.Port
-import dev.akexorcist.workstation.data.model.PortDirection
+import dev.akexorcist.workstation.data.model.PortType
+import dev.akexorcist.workstation.ui.theme.ThemeColor
+import dev.akexorcist.workstation.ui.theme.WorkstationTheme
+import dev.akexorcist.workstation.utils.defaultShadow
 
 @Composable
 fun DeviceDetailPanel(
     device: Device,
-    isDarkTheme: Boolean,
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(400.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isDarkTheme) Color(0xFF2C2C2C) else Color.White
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            .height(400.dp)
+            .defaultShadow()
+            .clip(RoundedCornerShape(12.dp))
+            .background(WorkstationTheme.themeColor.surface)
     ) {
         Column(
             modifier = Modifier
@@ -52,12 +68,12 @@ fun DeviceDetailPanel(
                         text = device.name,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = if (isDarkTheme) Color.White else Color.Black
+                        color = WorkstationTheme.themeColor.onSurface
                     )
                     Text(
                         text = device.model,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = if (isDarkTheme) Color.Gray else Color.DarkGray
+                        color = WorkstationTheme.themeColor.onSurfaceSecondary
                     )
                 }
 
@@ -71,7 +87,6 @@ fun DeviceDetailPanel(
             // Category badge
             CategoryBadge(
                 category = device.category,
-                isDarkTheme = isDarkTheme
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -79,7 +94,6 @@ fun DeviceDetailPanel(
             // Specifications
             SpecificationsSection(
                 device = device,
-                isDarkTheme = isDarkTheme
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -89,7 +103,7 @@ fun DeviceDetailPanel(
                 text = "Ports (${device.ports.size})",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = if (isDarkTheme) Color.White else Color.Black
+                color = WorkstationTheme.themeColor.onSurface
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -101,7 +115,6 @@ fun DeviceDetailPanel(
                 items(device.ports) { port ->
                     PortListItem(
                         port = port,
-                        isDarkTheme = isDarkTheme
                     )
                 }
             }
@@ -112,12 +125,11 @@ fun DeviceDetailPanel(
 @Composable
 private fun CategoryBadge(
     category: DeviceCategory,
-    isDarkTheme: Boolean
 ) {
     val (backgroundColor, textColor) = when (category) {
-        DeviceCategory.HUB -> Color(0xFF4CAF50) to Color.White
-        DeviceCategory.PERIPHERAL -> Color(0xFFFF9800) to Color.White
-        DeviceCategory.CENTRAL_DEVICE -> Color(0xFF2196F3) to Color.White
+        DeviceCategory.HUB -> WorkstationTheme.themeColor.hub to ThemeColor.White
+        DeviceCategory.PERIPHERAL -> WorkstationTheme.themeColor.peripheral to ThemeColor.White
+        DeviceCategory.CENTRAL_DEVICE -> WorkstationTheme.themeColor.centralDevice to ThemeColor.White
     }
 
     Surface(
@@ -137,33 +149,29 @@ private fun CategoryBadge(
 @Composable
 private fun SpecificationsSection(
     device: Device,
-    isDarkTheme: Boolean
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         device.specifications.manufacturer?.let { manufacturer ->
-            SpecificationRow(
+            DeviceDetailSpecificationRow(
                 label = "Manufacturer",
                 value = manufacturer,
-                isDarkTheme = isDarkTheme
             )
         }
 
         device.specifications.modelNumber?.let { modelNumber ->
-            SpecificationRow(
+            DeviceDetailSpecificationRow(
                 label = "Model Number",
                 value = modelNumber,
-                isDarkTheme = isDarkTheme
             )
         }
 
         if (device.specifications.technicalSpecs.isNotEmpty()) {
             device.specifications.technicalSpecs.forEach { (key, value) ->
-                SpecificationRow(
+                DeviceDetailSpecificationRow(
                     label = key,
                     value = value,
-                    isDarkTheme = isDarkTheme
                 )
             }
         }
@@ -171,10 +179,9 @@ private fun SpecificationsSection(
 }
 
 @Composable
-private fun SpecificationRow(
+private fun DeviceDetailSpecificationRow(
     label: String,
     value: String,
-    isDarkTheme: Boolean
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -183,14 +190,14 @@ private fun SpecificationRow(
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
-            color = if (isDarkTheme) Color.Gray else Color.DarkGray,
+            color = WorkstationTheme.themeColor.onSurfaceSecondary,
             modifier = Modifier.weight(1f)
         )
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Medium,
-            color = if (isDarkTheme) Color.White else Color.Black,
+            color = WorkstationTheme.themeColor.onSurface,
             modifier = Modifier.weight(1f)
         )
     }
@@ -199,29 +206,30 @@ private fun SpecificationRow(
 @Composable
 private fun PortListItem(
     port: Port,
-    isDarkTheme: Boolean
 ) {
     val portColor = when (port.type) {
-        dev.akexorcist.workstation.data.model.PortType.USB_C -> Color(0xFF2196F3)
-        dev.akexorcist.workstation.data.model.PortType.USB_A_2_0,
-        dev.akexorcist.workstation.data.model.PortType.USB_A_3_0,
-        dev.akexorcist.workstation.data.model.PortType.USB_A_3_1,
-        dev.akexorcist.workstation.data.model.PortType.USB_A_3_2 -> Color(0xFF4CAF50)
-        dev.akexorcist.workstation.data.model.PortType.HDMI,
-        dev.akexorcist.workstation.data.model.PortType.HDMI_2_1,
-        dev.akexorcist.workstation.data.model.PortType.DISPLAY_PORT,
-        dev.akexorcist.workstation.data.model.PortType.MINI_HDMI,
-        dev.akexorcist.workstation.data.model.PortType.MICRO_HDMI -> Color(0xFFFF9800)
-        dev.akexorcist.workstation.data.model.PortType.ETHERNET -> Color(0xFF9C27B0)
-        dev.akexorcist.workstation.data.model.PortType.AUX -> Color(0xFFE91E63)
-        dev.akexorcist.workstation.data.model.PortType.POWER -> Color(0xFFFFD54F)
+        PortType.USB_C -> ThemeColor.DimBlue500
+        PortType.USB_A_2_0,
+        PortType.USB_A_3_0,
+        PortType.USB_A_3_1,
+        PortType.USB_A_3_2 -> WorkstationTheme.themeColor.hub
+
+        PortType.HDMI,
+        PortType.HDMI_2_1,
+        PortType.DISPLAY_PORT,
+        PortType.MINI_HDMI,
+        PortType.MICRO_HDMI -> WorkstationTheme.themeColor.peripheral
+
+        PortType.ETHERNET -> ThemeColor.Purple500
+        PortType.AUX -> ThemeColor.Pink500
+        PortType.POWER -> ThemeColor.DimAmber500
     }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isDarkTheme) Color(0xFF3C3C3C) else Color(0xFFF5F5F5)
+            containerColor = WorkstationTheme.themeColor.surfaceVariant
         )
     ) {
         Row(
@@ -243,12 +251,12 @@ private fun PortListItem(
                     text = port.name,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
-                    color = if (isDarkTheme) Color.White else Color.Black
+                    color = WorkstationTheme.themeColor.onSurface
                 )
                 Text(
                     text = port.type.name.replace("_", " "),
                     style = MaterialTheme.typography.bodySmall,
-                    color = if (isDarkTheme) Color.Gray else Color.DarkGray
+                    color = WorkstationTheme.themeColor.onSurfaceSecondary
                 )
             }
 

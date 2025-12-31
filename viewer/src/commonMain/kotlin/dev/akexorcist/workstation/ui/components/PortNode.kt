@@ -10,6 +10,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import dev.akexorcist.workstation.data.model.Port
 import dev.akexorcist.workstation.data.model.PortType
+import dev.akexorcist.workstation.ui.theme.ThemeColor
+import dev.akexorcist.workstation.ui.theme.WorkstationTheme
 
 /**
  * A declarative Compose component that renders a single port indicator.
@@ -43,20 +45,21 @@ fun PortNode(
     }
 }
 
+@Composable
 private fun getPortColor(type: PortType): Color {
     return when (type) {
-        PortType.USB_C -> Color(0xFF2196F3)
+        PortType.USB_C -> ThemeColor.DimBlue500
         PortType.USB_A_2_0,
         PortType.USB_A_3_0,
         PortType.USB_A_3_1,
-        PortType.USB_A_3_2 -> Color(0xFF4CAF50)
+        PortType.USB_A_3_2 -> WorkstationTheme.themeColor.hub
         PortType.HDMI,
         PortType.HDMI_2_1,
         PortType.DISPLAY_PORT,
         PortType.MINI_HDMI,
-        PortType.MICRO_HDMI -> Color(0xFFFF9800)
-        PortType.ETHERNET -> Color(0xFF9C27B0)
-        PortType.AUX -> Color(0xFFE91E63)
-        PortType.POWER -> Color(0xFFFFD54F)
+        PortType.MICRO_HDMI -> WorkstationTheme.themeColor.peripheral
+        PortType.ETHERNET -> ThemeColor.Purple500
+        PortType.AUX -> ThemeColor.Pink500
+        PortType.POWER -> ThemeColor.DimAmber500
     }
 }

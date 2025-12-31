@@ -1,39 +1,52 @@
-package dev.akexorcist.workstation.ui.panels
+package dev.akexorcist.workstation.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.akexorcist.workstation.data.model.Connection
 import dev.akexorcist.workstation.data.model.ConnectionCategory
+import dev.akexorcist.workstation.ui.theme.ThemeColor
+import dev.akexorcist.workstation.ui.theme.WorkstationTheme
+import dev.akexorcist.workstation.utils.defaultShadow
 
 @Composable
 fun ConnectionDetailPanel(
     connection: Connection,
     sourceDeviceName: String,
     targetDeviceName: String,
-    isDarkTheme: Boolean,
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(300.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isDarkTheme) Color(0xFF2C2C2C) else Color.White
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            .height(300.dp)
+            .defaultShadow()
+            .clip(RoundedCornerShape(12.dp))
+            .background(WorkstationTheme.themeColor.surface)
     ) {
         Column(
             modifier = Modifier
@@ -50,7 +63,7 @@ fun ConnectionDetailPanel(
                     text = "Connection Details",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = if (isDarkTheme) Color.White else Color.Black
+                    color = WorkstationTheme.themeColor.onSurface
                 )
 
                 IconButton(onClick = onClose) {
@@ -63,7 +76,6 @@ fun ConnectionDetailPanel(
             // Connection type badge
             ConnectionTypeBadge(
                 connection = connection,
-                isDarkTheme = isDarkTheme
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -73,7 +85,6 @@ fun ConnectionDetailPanel(
                 sourceDeviceName = sourceDeviceName,
                 targetDeviceName = targetDeviceName,
                 connection = connection,
-                isDarkTheme = isDarkTheme
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -81,7 +92,6 @@ fun ConnectionDetailPanel(
             // Cable specification
             CableSpecificationSection(
                 connection = connection,
-                isDarkTheme = isDarkTheme
             )
         }
     }
@@ -90,14 +100,13 @@ fun ConnectionDetailPanel(
 @Composable
 private fun ConnectionTypeBadge(
     connection: Connection,
-    isDarkTheme: Boolean
 ) {
     val categoryColor = when (connection.connectionType.category) {
-        ConnectionCategory.DATA -> Color(0xFF2196F3)
-        ConnectionCategory.VIDEO -> Color(0xFFBA68C8)
-        ConnectionCategory.AUDIO -> Color(0xFF81C784)
-        ConnectionCategory.POWER -> Color(0xFFFFD54F)
-        ConnectionCategory.NETWORK -> Color(0xFF4DB6AC)
+        ConnectionCategory.DATA -> ThemeColor.DimBlue500
+        ConnectionCategory.VIDEO -> ThemeColor.DimPink500
+        ConnectionCategory.AUDIO -> ThemeColor.DimTeal500
+        ConnectionCategory.POWER -> ThemeColor.DimAmber500
+        ConnectionCategory.NETWORK -> ThemeColor.DimIndigo500
     }
 
     Surface(
@@ -108,7 +117,7 @@ private fun ConnectionTypeBadge(
             text = connection.connectionType.name,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
             style = MaterialTheme.typography.labelMedium,
-            color = Color.White,
+            color = ThemeColor.White,
             fontWeight = FontWeight.Medium
         )
     }
@@ -119,7 +128,6 @@ private fun ConnectionPathSection(
     sourceDeviceName: String,
     targetDeviceName: String,
     connection: Connection,
-    isDarkTheme: Boolean
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -128,7 +136,7 @@ private fun ConnectionPathSection(
             text = "Connection Path",
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = if (isDarkTheme) Color.White else Color.Black
+                    color = WorkstationTheme.themeColor.onSurface
         )
 
         // Source device
@@ -136,7 +144,6 @@ private fun ConnectionPathSection(
             label = "Source",
             deviceName = sourceDeviceName,
             portName = connection.sourcePortId,
-            isDarkTheme = isDarkTheme
         )
 
         // Arrow
@@ -147,7 +154,7 @@ private fun ConnectionPathSection(
             Icon(
                 imageVector = Icons.Default.ArrowDownward,
                 contentDescription = null,
-                tint = if (isDarkTheme) Color.Gray else Color.DarkGray,
+                tint = WorkstationTheme.themeColor.onSurfaceSecondary,
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -157,7 +164,6 @@ private fun ConnectionPathSection(
             label = "Target",
             deviceName = targetDeviceName,
             portName = connection.targetPortId,
-            isDarkTheme = isDarkTheme
         )
     }
 }
@@ -167,14 +173,12 @@ private fun ConnectionPathItem(
     label: String,
     deviceName: String,
     portName: String,
-    isDarkTheme: Boolean
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isDarkTheme) Color(0xFF3C3C3C) else Color(0xFFF5F5F5)
-        )
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .background(WorkstationTheme.themeColor.surfaceVariant)
     ) {
         Column(
             modifier = Modifier
@@ -184,20 +188,20 @@ private fun ConnectionPathItem(
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
-                color = if (isDarkTheme) Color.Gray else Color.DarkGray
+                    color = WorkstationTheme.themeColor.onSurfaceSecondary
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = deviceName,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium,
-                color = if (isDarkTheme) Color.White else Color.Black
+                    color = WorkstationTheme.themeColor.onSurface
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = "Port: $portName",
                 style = MaterialTheme.typography.bodySmall,
-                color = if (isDarkTheme) Color.Gray else Color.DarkGray
+                    color = WorkstationTheme.themeColor.onSurfaceSecondary
             )
         }
     }
@@ -206,7 +210,6 @@ private fun ConnectionPathItem(
 @Composable
 private fun CableSpecificationSection(
     connection: Connection,
-    isDarkTheme: Boolean
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -215,7 +218,7 @@ private fun CableSpecificationSection(
             text = "Cable Specification",
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = if (isDarkTheme) Color.White else Color.Black
+                    color = WorkstationTheme.themeColor.onSurface
         )
 
         connection.cableSpecification?.let { cable ->
@@ -223,7 +226,6 @@ private fun CableSpecificationSection(
                 SpecificationRow(
                     label = "Length",
                     value = length,
-                    isDarkTheme = isDarkTheme
                 )
             }
 
@@ -231,14 +233,12 @@ private fun CableSpecificationSection(
                 SpecificationRow(
                     label = "Brand",
                     value = brand,
-                    isDarkTheme = isDarkTheme
                 )
             }
         } ?: run {
             SpecificationRow(
                 label = "Cable",
                 value = "Not specified",
-                isDarkTheme = isDarkTheme
             )
         }
     }
@@ -248,7 +248,6 @@ private fun CableSpecificationSection(
 private fun SpecificationRow(
     label: String,
     value: String,
-    isDarkTheme: Boolean
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -257,14 +256,14 @@ private fun SpecificationRow(
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
-            color = if (isDarkTheme) Color.Gray else Color.DarkGray,
+                    color = WorkstationTheme.themeColor.onSurfaceSecondary,
             modifier = Modifier.weight(1f)
         )
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Medium,
-            color = if (isDarkTheme) Color.White else Color.Black,
+                    color = WorkstationTheme.themeColor.onSurface,
             modifier = Modifier.weight(1f)
         )
     }
