@@ -13,6 +13,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import dev.akexorcist.workstation.data.model.ConnectionCategory
@@ -149,11 +154,11 @@ private fun ConnectionCanvas(
     routedConnectionMap: Map<String, RoutedConnection>,
     selectedConnectionId: String?
 ) {
-    // Get theme colors outside the Canvas for use inside
-    val inputActiveColor = WorkstationTheme.themeColor.connection.inputActiveColor
-    val outputActiveColor = WorkstationTheme.themeColor.connection.outputActiveColor
+    val connectionTheme = WorkstationTheme.themeColor.connection
     val hubColor = WorkstationTheme.themeColor.hub
     val peripheralColor = WorkstationTheme.themeColor.peripheral
+    val selectedId = selectedConnectionId
+    val hoveredConnectionId: String? = null
     
     val deviceMap = layout.devices.associateBy { it.id }
 
@@ -211,39 +216,73 @@ private fun ConnectionCanvas(
                         targetDevice, targetPort, layout.metadata, canvasSize, zoom, panOffset
                     )
 
-                    val baseLineColor = when (connection.connectionType.category) {
-                        ConnectionCategory.DATA -> inputActiveColor
-                        ConnectionCategory.VIDEO -> outputActiveColor
-                        ConnectionCategory.AUDIO -> ThemeColor.DimTeal500
-                        ConnectionCategory.POWER -> ThemeColor.DimAmber500
-                        ConnectionCategory.NETWORK -> ThemeColor.DimIndigo500
-                    }
-
-                    val baseStrokeWidth = RenderingConfig.connectionLineThicknessByCategory[connection.connectionType.category]
-                        ?: RenderingConfig.defaultConnectionLineThickness
-
                     val routedConnection = routedConnectionMap[connection.id]
-                    if (routedConnection != null) {
-                        val lineColor = if (routedConnection.success) baseLineColor
-                        else ThemeColor.Pink500.copy(alpha = RoutingConfig.failedRouteAlpha)
-                        val strokeWidth = if (routedConnection.success) baseStrokeWidth * zoom
-                        else baseStrokeWidth * zoom * RoutingConfig.failedRouteWidthMultiplier
-
+                    
+                    if (routedConnection != null && !routedConnection.success) {
+                        val failedLineColor = ThemeColor.Pink500.copy(alpha = RoutingConfig.failedRouteAlpha)
+                        val failedStrokeWidth = RenderingConfig.connectionWidth * zoom * RoutingConfig.failedRouteWidthMultiplier
+                        
                         val path = routedConnection.virtualWaypoints.map { (vx, vy) ->
                             virtualToScreen(vx, vy, layout.metadata, canvasSize, zoom, panOffset)
                         }
-
+                        
                         for (i in 0 until path.size - 1) {
-                            drawLine(color = lineColor, start = path[i], end = path[i + 1], strokeWidth = strokeWidth)
+                            drawLine(
+                                color = failedLineColor, 
+                                start = path[i], 
+                                end = path[i + 1], 
+                                strokeWidth = failedStrokeWidth,
+                                cap = StrokeCap.Round
+                            )
                         }
-                    } else {
-                        val path = calculateOrthogonalPath(
-                            sourcePosition, targetPosition,
-                            sourcePort.position.side, targetPort.position.side, zoom
+                    } 
+                    else {
+                        val path = if (routedConnection != null) {
+                            routedConnection.virtualWaypoints.map { (vx, vy) ->
+                                virtualToScreen(vx, vy, layout.metadata, canvasSize, zoom, panOffset)
+                            }
+                        } else {
+                            calculateOrthogonalPath(
+                                sourcePosition, targetPosition,
+                                sourcePort.position.side, targetPort.position.side, zoom
+                            )
+                        }
+                        
+                        val isSelected = connection.id == selectedId
+                        val isHovered = connection.id == hoveredConnectionId
+                        val inputBackgroundColor = when {
+                            isSelected -> connectionTheme.inputBackgroundActiveColor
+                            isHovered -> connectionTheme.inputBackgroundActiveColor.copy(alpha = 0.7f)
+                            else -> connectionTheme.inputBackgroundInactiveColor
+                        }
+                        
+                        val outputBackgroundColor = when {
+                            isSelected -> connectionTheme.outputBackgroundActiveColor
+                            isHovered -> connectionTheme.outputBackgroundActiveColor.copy(alpha = 0.7f)
+                            else -> connectionTheme.outputBackgroundInactiveColor
+                        }
+                        
+                        val inputForegroundColor = when {
+                            isSelected -> connectionTheme.inputActiveColor
+                            isHovered -> connectionTheme.inputActiveColor.copy(alpha = 0.7f)
+                            else -> connectionTheme.inputInactiveColor
+                        }
+                        
+                        val outputForegroundColor = when {
+                            isSelected -> connectionTheme.outputActiveColor
+                            isHovered -> connectionTheme.outputActiveColor.copy(alpha = 0.7f)
+                            else -> connectionTheme.outputInactiveColor
+                        }
+                        
+                        // Draw the gradient connection with background and dashed foreground
+                        drawGradientConnectionPath(
+                            path = path,
+                            inputBackgroundColor = inputBackgroundColor,
+                            outputBackgroundColor = outputBackgroundColor,
+                            inputForegroundColor = inputForegroundColor,
+                            outputForegroundColor = outputForegroundColor,
+                            zoom = zoom
                         )
-                        for (i in 0 until path.size - 1) {
-                            drawLine(color = baseLineColor, start = path[i], end = path[i + 1], strokeWidth = baseStrokeWidth * zoom)
-                        }
                     }
                 }
             }
@@ -500,6 +539,143 @@ private fun calculateOrthogonalPath(
     path.add(end)
 
     return path
+}
+
+private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawGradientConnectionPath(
+    path: List<Offset>,
+    inputBackgroundColor: Color,
+    outputBackgroundColor: Color, 
+    inputForegroundColor: Color,
+    outputForegroundColor: Color,
+    zoom: Float
+) {
+    if (path.size < 2) return
+    
+    val backgroundWidth = RenderingConfig.connectionBackgroundWidth * zoom
+    val foregroundWidth = RenderingConfig.connectionForegroundWidth * zoom
+    
+    val startPoint = path.first()
+    val endPoint = path.last()
+    
+    // Create gradient brushes for the entire path
+    val backgroundBrush = Brush.linearGradient(
+        colors = listOf(inputBackgroundColor, outputBackgroundColor),
+        start = startPoint,
+        end = endPoint
+    )
+    
+    val foregroundBrush = Brush.linearGradient(
+        colors = listOf(inputForegroundColor, outputForegroundColor),
+        start = startPoint,
+        end = endPoint
+    )
+    
+    // Step 1: Draw the background line
+    val backgroundPath = androidx.compose.ui.graphics.Path()
+    backgroundPath.moveTo(path.first().x, path.first().y)
+    
+    for (i in 1 until path.size) {
+        backgroundPath.lineTo(path[i].x, path[i].y)
+    }
+    
+    drawPath(
+        path = backgroundPath,
+        brush = backgroundBrush,
+        style = androidx.compose.ui.graphics.drawscope.Stroke(
+            width = backgroundWidth,
+            cap = StrokeCap.Round,
+            join = StrokeJoin.Round
+        )
+    )
+    
+    // Step 2: Draw evenly spaced dots along the path
+    val dotRadius = RenderingConfig.connectionDotLength * zoom
+    val dotGap = RenderingConfig.connectionDotGap * zoom
+    val dotStep = dotRadius * 2 + dotGap
+    
+    val totalLength = calculatePathLength(path)
+    
+    // Calculate exactly how many dots we need to distribute evenly
+    val dotsCount = (totalLength / dotStep).toInt() + 1
+    
+    // If we have at least 2 dots, distribute them evenly
+    if (dotsCount >= 2) {
+        // Adjust spacing to distribute dots evenly
+        val adjustedStep = totalLength / (dotsCount - 1)
+        
+        for (i in 0 until dotsCount) {
+            val distance = i * adjustedStep
+            if (distance > totalLength) break
+            
+            val dotPosition = getPointAtDistance(path, distance)
+            
+            // Draw the dot as a filled circle
+            drawCircle(
+                brush = foregroundBrush,
+                radius = dotRadius,
+                center = dotPosition
+            )
+        }
+    }
+}
+
+private fun calculatePathLength(path: List<Offset>): Float {
+    var length = 0f
+    for (i in 0 until path.size - 1) {
+        val start = path[i]
+        val end = path[i + 1]
+        length += kotlin.math.sqrt(
+            (end.x - start.x) * (end.x - start.x) + 
+            (end.y - start.y) * (end.y - start.y)
+        )
+    }
+    return length
+}
+
+private fun getPointAtDistance(path: List<Offset>, distance: Float): Offset {
+    if (distance <= 0f) return path.first()
+    
+    var distanceSoFar = 0f
+    
+    for (i in 0 until path.size - 1) {
+        val start = path[i]
+        val end = path[i + 1]
+        
+        val segmentLength = kotlin.math.sqrt(
+            (end.x - start.x) * (end.x - start.x) + 
+            (end.y - start.y) * (end.y - start.y)
+        )
+        
+        if (distanceSoFar + segmentLength >= distance) {
+            // This segment contains our point
+            val remainingDistance = distance - distanceSoFar
+            val ratio = remainingDistance / segmentLength
+            
+            return Offset(
+                x = start.x + (end.x - start.x) * ratio,
+                y = start.y + (end.y - start.y) * ratio
+            )
+        }
+        
+        distanceSoFar += segmentLength
+    }
+    
+    return path.last() // If we somehow exceeded the path length
+}
+
+private fun calculatePathLengthToPoint(path: List<Offset>, pointIndex: Int): Float {
+    var length = 0f
+    for (i in 0 until pointIndex) {
+        if (i + 1 < path.size) {
+            val start = path[i]
+            val end = path[i + 1]
+            length += kotlin.math.sqrt(
+                (end.x - start.x) * (end.x - start.x) + 
+                (end.y - start.y) * (end.y - start.y)
+            )
+        }
+    }
+    return length
 }
 
 /**

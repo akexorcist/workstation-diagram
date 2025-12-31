@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import dev.akexorcist.workstation.presentation.config.InteractionConfig
 import dev.akexorcist.workstation.ui.theme.WorkstationTheme
 import dev.akexorcist.workstation.utils.defaultShadow
 
@@ -57,7 +58,7 @@ fun ControlPanel(
                 Slider(
                     value = zoom,
                     onValueChange = onZoomChange,
-                    valueRange = 0.5f..3.5f,
+                    valueRange = InteractionConfig.minZoom..InteractionConfig.maxZoom,
                     colors = SliderDefaults.colors(
                         thumbColor = WorkstationTheme.themeColor.primary,
                         activeTrackColor = WorkstationTheme.themeColor.primary.copy(alpha = 0.7f),

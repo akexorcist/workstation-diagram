@@ -75,7 +75,7 @@
       "type": "MONITOR",
       "category": "PERIPHERAL",
       "position": {
-        "x": 400,
+        "x": 500,
         "y": 100
       },
       "size": {
@@ -121,7 +121,7 @@
       "type": "MONITOR",
       "category": "PERIPHERAL",
       "position": {
-        "x": 400,
+        "x": 500,
         "y": 350
       },
       "size": {
@@ -223,7 +223,7 @@
       "type": "USB_HUB",
       "category": "HUB",
       "position": {
-        "x": 400,
+        "x": 500,
         "y": 550
       },
       "size": {
@@ -278,7 +278,7 @@
       "type": "STORAGE",
       "category": "PERIPHERAL",
       "position": {
-        "x": 600,
+        "x": 900,
         "y": 550
       },
       "size": {

@@ -23,7 +23,9 @@ object ThemeColor {
     val Gray1000 = Color(0xFF111111)
     
     // Purple colors
+    val Purple40 = Color(0xFF6650a4)
     val Purple50 = Color(0xFFEDE7F6)
+    val Purple80 = Color(0xFFD0BCFF)
     val Purple100 = Color(0xFFD1C4E9)
     val Purple200 = Color(0xFFB39DDB)
     val Purple500 = Color(0xFF673AB7)
@@ -107,7 +109,7 @@ val lightContentColor = ContentColor(
     onSurface = ThemeColor.Gray900,
     onSurfaceVariant = ThemeColor.Gray800,
     onSurfaceSecondary = ThemeColor.Gray600,
-    primary = Color(0xFF9C27B0),
+    primary = ThemeColor.Purple40,
     onPrimary = ThemeColor.White,
     shadow = ThemeColor.Black.copy(alpha = 0.1f),
     border = ThemeColor.Gray900,
@@ -153,7 +155,7 @@ val darkContentColor = ContentColor(
     onSurface = ThemeColor.Gray200,
     onSurfaceVariant = ThemeColor.Gray300,
     onSurfaceSecondary = ThemeColor.Gray500,
-    primary = Color(0xFFCE93D8),
+    primary = ThemeColor.Purple80,
     onPrimary = ThemeColor.Black,
     shadow = ThemeColor.Black.copy(alpha = 0.2f),
     border = ThemeColor.Gray100,
