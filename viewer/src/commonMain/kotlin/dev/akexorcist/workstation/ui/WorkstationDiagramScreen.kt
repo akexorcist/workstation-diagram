@@ -236,58 +236,63 @@ fun WorkstationDiagramScreen(
             ),
         )
 
-        Box(
-            modifier = Modifier
-                .alpha(sidebarAlpha)
-                .scale(sidebarScale)
-                .fillMaxSize()
-                .padding(32.dp)
-        ) {
-            // Floating Control Panel at top-right (overlay)
-            Box(modifier = Modifier.align(Alignment.TopEnd)) {
-                ControlPanel(
-                    zoom = uiState.zoom,
-                    onZoomChange = { newZoom ->
-                        // Zoom towards viewport center (full window)
-                        val viewportCenterX = canvasSize.width / 2f
-                        val viewportCenterY = canvasSize.height / 2f
-                        val centerPoint = Offset(viewportCenterX, viewportCenterY)
-                        val layoutCanvasSize = uiState.layout?.metadata?.canvasSize
-                            ?: Size(canvasSize.width, canvasSize.height)
-                        viewModel.handleZoomChangeAtPoint(newZoom, centerPoint, layoutCanvasSize)
-                    },
-                    onReset = {
-                        viewModel.resetZoom()
-                        // Use actual canvas size for proper centering, same as initial load
-                        viewModel.centerViewportOnDevices(canvasSize.width, canvasSize.height)
-                    },
-                    connectionAnimationEnabled = uiState.connectionAnimationEnabled,
-                    onConnectionAnimationToggle = { viewModel.toggleConnectionAnimation() },
-                    isDarkTheme = uiState.isDarkTheme,
-                    onThemeToggle = viewModel::toggleTheme
-                )
+        // Only show UI panels when the layout is successfully loaded and no errors
+        val shouldShowUiElements = !uiState.isLoading && uiState.errorMessage == null && uiState.layout != null
+        
+        if (shouldShowUiElements) {
+            Box(
+                modifier = Modifier
+                    .alpha(sidebarAlpha)
+                    .scale(sidebarScale)
+                    .fillMaxSize()
+                    .padding(32.dp)
+            ) {
+                // Floating Control Panel at top-right (overlay)
+                Box(modifier = Modifier.align(Alignment.TopEnd)) {
+                    ControlPanel(
+                        zoom = uiState.zoom,
+                        onZoomChange = { newZoom ->
+                            // Zoom towards viewport center (full window)
+                            val viewportCenterX = canvasSize.width / 2f
+                            val viewportCenterY = canvasSize.height / 2f
+                            val centerPoint = Offset(viewportCenterX, viewportCenterY)
+                            val layoutCanvasSize = uiState.layout?.metadata?.canvasSize
+                                ?: Size(canvasSize.width, canvasSize.height)
+                            viewModel.handleZoomChangeAtPoint(newZoom, centerPoint, layoutCanvasSize)
+                        },
+                        onReset = {
+                            viewModel.resetZoom()
+                            // Use actual canvas size for proper centering, same as initial load
+                            viewModel.centerViewportOnDevices(canvasSize.width, canvasSize.height)
+                        },
+                        connectionAnimationEnabled = uiState.connectionAnimationEnabled,
+                        onConnectionAnimationToggle = { viewModel.toggleConnectionAnimation() },
+                        isDarkTheme = uiState.isDarkTheme,
+                        onThemeToggle = viewModel::toggleTheme
+                    )
+                }
+    
+                Box(modifier = Modifier.align(Alignment.TopStart)) {
+                    DeviceListSidebar(
+                        uiState = uiState,
+                        onDeviceClick = viewModel::handleDeviceClick,
+                        onHomeClick = { openUrl("https://akexorcist.dev/") },
+                        onGithubClick = { openUrl("https://github.com/akexorcist") },
+                        isInstructionExpanded = uiState.isInstructionExpanded,
+                        onInstructionExpandChange = { viewModel.toggleInstructionExpanded() },
+                        isDeviceListExpanded = uiState.isDeviceListExpanded,
+                        onDeviceListExpandChange = { viewModel.toggleDeviceListExpanded() },
+                        showUiPanel = showUiPanel,
+                        onToggleUiPanelClick = { showUiPanel = !showUiPanel }
+                    )
+                }
             }
-
-            Box(modifier = Modifier.align(Alignment.TopStart)) {
-                DeviceListSidebar(
-                    uiState = uiState,
-                    onDeviceClick = viewModel::handleDeviceClick,
-                    onHomeClick = { openUrl("https://akexorcist.dev/") },
-                    onGithubClick = { openUrl("https://github.com/akexorcist") },
-                    isInstructionExpanded = uiState.isInstructionExpanded,
-                    onInstructionExpandChange = { viewModel.toggleInstructionExpanded() },
-                    isDeviceListExpanded = uiState.isDeviceListExpanded,
-                    onDeviceListExpandChange = { viewModel.toggleDeviceListExpanded() },
-                    showUiPanel = showUiPanel,
-                    onToggleUiPanelClick = { showUiPanel = !showUiPanel }
-                )
-            }
+    
+            ShowUiPanelButton(
+                showUiPanel = showUiPanel,
+                onToggleUiPanelClick = { showUiPanel = true },
+            )
         }
-
-        ShowUiPanelButton(
-            showUiPanel = showUiPanel,
-            onToggleUiPanelClick = { showUiPanel = true },
-        )
 
         // Device detail panel (bottom overlay)
         val layout = uiState.layout
