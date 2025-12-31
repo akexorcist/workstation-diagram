@@ -4,6 +4,7 @@ object RoutingConfig {
     var gridCellSize: Float = 10f
     var deviceSnapToGrid: Boolean = true
     var deviceClearance: Float = 10f
+    var portClearance: Float = 15f
     var portExtension: Float = 70f
     var crossingPenalty: Float = 5f
     var gridMoveCost: Float = 1f

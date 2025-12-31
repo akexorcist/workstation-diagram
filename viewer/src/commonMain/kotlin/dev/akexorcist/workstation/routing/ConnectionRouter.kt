@@ -23,6 +23,7 @@ class ConnectionRouter(private val config: RoutingConfig = RoutingConfig) {
         val grid = RoutingGrid(gridWidth, gridHeight, config.gridCellSize)
         val deviceMap = devices.associateBy { it.id }
 
+        // Mark devices as obstacles
         devices.forEach { device ->
             val (width, height) = if (config.deviceSnapToGrid) {
                 grid.snapSize(device.size.width, device.size.height)
@@ -30,6 +31,14 @@ class ConnectionRouter(private val config: RoutingConfig = RoutingConfig) {
                 device.size.width to device.size.height
             }
             grid.markDeviceObstacle(device.position.x, device.position.y, width, height, config.deviceClearance)
+        }
+        
+        // Mark all ports as obstacles for more intelligent routing
+        devices.forEach { device ->
+            device.ports.forEach { port ->
+                val portPosition = calculatePortPosition(device, port)
+                grid.markPortObstacle(portPosition.first, portPosition.second, config.portClearance)
+            }
         }
 
         val pathfinder = AStarPathfinder(grid, config)
@@ -62,12 +71,41 @@ class ConnectionRouter(private val config: RoutingConfig = RoutingConfig) {
         if (sourceDevice == null || targetDevice == null || sourcePort == null || targetPort == null) {
             return createFailedRoute(connection, grid)
         }
-
+        
+        // Unblock the source and target ports that are being connected
         val sourcePos = calculatePortPosition(sourceDevice, sourcePort)
         val targetPos = calculatePortPosition(targetDevice, targetPort)
         
-        val sourceGrid = snapPortToGrid(sourcePos, sourceDevice, sourcePort, grid)
-        val targetGrid = snapPortToGrid(targetPos, targetDevice, targetPort, grid)
+        // Create temporary grid for this connection that allows source and target ports to be connected
+        val tempGrid = RoutingGrid(grid.width, grid.height, grid.cellSize)
+        
+        // Copy the blocked cells from the original grid to the temporary grid
+        for (x in 0 until grid.width) {
+            for (y in 0 until grid.height) {
+                val point = GridPoint(x, y)
+                if (grid.isBlocked(point)) {
+                    // Mark as blocked in the temp grid except for source and target port positions
+                    val sourceGridPoint = grid.toGridPoint(sourcePos.first, sourcePos.second)
+                    val targetGridPoint = grid.toGridPoint(targetPos.first, targetPos.second)
+                    
+                    val isSourcePortPoint = point.manhattanDistanceTo(sourceGridPoint) <= 2
+                    val isTargetPortPoint = point.manhattanDistanceTo(targetGridPoint) <= 2
+                    
+                    if (!isSourcePortPoint && !isTargetPortPoint) {
+                        tempGrid.markDeviceObstacle(
+                            x * grid.cellSize, 
+                            y * grid.cellSize, 
+                            grid.cellSize, 
+                            grid.cellSize,
+                            0f  // No additional clearance since it's already in the original grid
+                        )
+                    }
+                }
+            }
+        }
+
+        val sourceGrid = snapPortToGrid(sourcePos, sourceDevice, sourcePort, tempGrid)
+        val targetGrid = snapPortToGrid(targetPos, targetDevice, targetPort, tempGrid)
         val sourceSnapped = grid.toVirtualPoint(sourceGrid)
         val targetSnapped = grid.toVirtualPoint(targetGrid)
         
@@ -114,14 +152,16 @@ class ConnectionRouter(private val config: RoutingConfig = RoutingConfig) {
         val sourceExtensionDir = GridDirection.fromPoints(sourceGrid, startGrid)
         val targetExtensionDir = GridDirection.fromPoints(targetGrid, endGrid)
 
-        if (!grid.canOccupy(sourceGrid, connection.id, sourceExtensionDir) ||
-            !grid.canOccupy(startGrid, connection.id, sourceExtensionDir) ||
-            !grid.canOccupy(targetGrid, connection.id, targetExtensionDir) ||
-            !grid.canOccupy(endGrid, connection.id, targetExtensionDir)) {
+        if (!tempGrid.canOccupy(sourceGrid, connection.id, sourceExtensionDir) ||
+            !tempGrid.canOccupy(startGrid, connection.id, sourceExtensionDir) ||
+            !tempGrid.canOccupy(targetGrid, connection.id, targetExtensionDir) ||
+            !tempGrid.canOccupy(endGrid, connection.id, targetExtensionDir)) {
             return createFailedRoute(connection, grid, sourceSnapped, targetSnapped)
         }
 
-        val result = pathfinder.findPath(startGrid, endGrid, connection.id, existingPaths)
+        // Use the temporary grid with the pathfinder for this specific connection
+        val pathfinderForConnection = AStarPathfinder(tempGrid, config)
+        val result = pathfinderForConnection.findPath(startGrid, endGrid, connection.id, existingPaths)
 
         return if (result.success) {
             var lastPoint: GridPoint? = null

@@ -92,6 +92,31 @@ class RoutingGrid(val width: Int, val height: Int, val cellSize: Float) {
             }
         }
     }
+    
+    fun markPortObstacle(portX: Float, portY: Float, clearance: Float) {
+        val radius = clearance / cellSize
+        val centerX = (portX / cellSize).toInt()
+        val centerY = (portY / cellSize).toInt()
+        
+        val radiusInt = radius.toInt() + 1
+        
+        val x1 = (centerX - radiusInt).coerceAtLeast(0)
+        val y1 = (centerY - radiusInt).coerceAtLeast(0)
+        val x2 = (centerX + radiusInt).coerceAtMost(width - 1)
+        val y2 = (centerY + radiusInt).coerceAtMost(height - 1)
+        
+        for (x in x1..x2) {
+            for (y in y1..y2) {
+                val dx = x - centerX
+                val dy = y - centerY
+                val distance = kotlin.math.sqrt((dx * dx + dy * dy).toDouble()).toFloat()
+                
+                if (distance <= radius) {
+                    blocked[x][y] = true
+                }
+            }
+        }
+    }
 
     fun isBlocked(point: GridPoint): Boolean =
         point.x !in 0 until width || point.y !in 0 until height || blocked[point.x][point.y]
