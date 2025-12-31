@@ -70,7 +70,7 @@ enum class PortDirection {
 @Serializable
 data class PortPosition(
     val side: DeviceSide,
-    val offset: Float
+    val position: Float
 )
 
 @Serializable

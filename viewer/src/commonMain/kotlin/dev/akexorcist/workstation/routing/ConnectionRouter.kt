@@ -180,12 +180,39 @@ class ConnectionRouter(private val config: RoutingConfig = RoutingConfig) {
     }
 
     private fun calculatePortPosition(device: Device, port: Port): Pair<Float, Float> {
-        val offset = port.position.offset.coerceIn(0.01f, 0.99f)
         return when (port.position.side) {
-            DeviceSide.TOP -> device.position.x + (device.size.width * offset) to device.position.y
-            DeviceSide.BOTTOM -> device.position.x + (device.size.width * offset) to device.position.y + device.size.height
-            DeviceSide.LEFT -> device.position.x to device.position.y + (device.size.height * offset)
-            DeviceSide.RIGHT -> device.position.x + device.size.width to device.position.y + (device.size.height * offset)
+            DeviceSide.TOP -> {
+                val positionX = when {
+                    port.position.position < 0 -> 0f
+                    port.position.position > device.size.width -> device.size.width
+                    else -> port.position.position
+                }
+                device.position.x + positionX to device.position.y
+            }
+            DeviceSide.BOTTOM -> {
+                val positionX = when {
+                    port.position.position < 0 -> 0f
+                    port.position.position > device.size.width -> device.size.width
+                    else -> port.position.position
+                }
+                device.position.x + positionX to device.position.y + device.size.height
+            }
+            DeviceSide.LEFT -> {
+                val positionY = when {
+                    port.position.position < 0 -> 0f
+                    port.position.position > device.size.height -> device.size.height
+                    else -> port.position.position
+                }
+                device.position.x to device.position.y + positionY
+            }
+            DeviceSide.RIGHT -> {
+                val positionY = when {
+                    port.position.position < 0 -> 0f
+                    port.position.position > device.size.height -> device.size.height
+                    else -> port.position.position
+                }
+                device.position.x + device.size.width to device.position.y + positionY
+            }
         }
     }
 

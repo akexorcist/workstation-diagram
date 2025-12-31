@@ -336,29 +336,51 @@ class WorkstationViewModel(
             device.position.y + device.size.height
         )
 
-        val offset = when {
-            port.position.offset == 0f -> 0.01f
-            port.position.offset == 1f -> 0.99f
-            else -> port.position.offset
-        }
-
         return when (port.position.side) {
-            DeviceSide.TOP -> Point(
-                deviceRect.left + (deviceRect.width * offset),
-                deviceRect.top
-            )
-            DeviceSide.BOTTOM -> Point(
-                deviceRect.left + (deviceRect.width * offset),
-                deviceRect.bottom
-            )
-            DeviceSide.LEFT -> Point(
-                deviceRect.left,
-                deviceRect.top + (deviceRect.height * offset)
-            )
-            DeviceSide.RIGHT -> Point(
-                deviceRect.right,
-                deviceRect.top + (deviceRect.height * offset)
-            )
+            DeviceSide.TOP -> {
+                val positionX = when {
+                    port.position.position < 0 -> 0f
+                    port.position.position > device.size.width -> device.size.width
+                    else -> port.position.position
+                }
+                Point(
+                    deviceRect.left + positionX,
+                    deviceRect.top
+                )
+            }
+            DeviceSide.BOTTOM -> {
+                val positionX = when {
+                    port.position.position < 0 -> 0f
+                    port.position.position > device.size.width -> device.size.width
+                    else -> port.position.position
+                }
+                Point(
+                    deviceRect.left + positionX,
+                    deviceRect.bottom
+                )
+            }
+            DeviceSide.LEFT -> {
+                val positionY = when {
+                    port.position.position < 0 -> 0f
+                    port.position.position > device.size.height -> device.size.height
+                    else -> port.position.position
+                }
+                Point(
+                    deviceRect.left,
+                    deviceRect.top + positionY
+                )
+            }
+            DeviceSide.RIGHT -> {
+                val positionY = when {
+                    port.position.position < 0 -> 0f
+                    port.position.position > device.size.height -> device.size.height
+                    else -> port.position.position
+                }
+                Point(
+                    deviceRect.right,
+                    deviceRect.top + positionY
+                )
+            }
         }
     }
 }

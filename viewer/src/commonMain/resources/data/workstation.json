@@ -34,7 +34,7 @@
           "direction": "BIDIRECTIONAL",
           "position": {
             "side": "LEFT",
-            "offset": 0.3
+            "position": 45
           }
         },
         {
@@ -43,8 +43,8 @@
           "type": "USB_C",
           "direction": "BIDIRECTIONAL",
           "position": {
-            "side": "BOTTOM",
-            "offset": 0.3
+            "side": "RIGHT",
+            "position": 45
           }
         },
         {
@@ -54,7 +54,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "offset": 0.5
+            "position": 75
           }
         }
       ],
@@ -89,8 +89,8 @@
           "type": "HDMI",
           "direction": "INPUT",
           "position": {
-            "side": "BOTTOM",
-            "offset": 0.3
+            "side": "LEFT",
+            "position": 45
           }
         },
         {
@@ -99,8 +99,8 @@
           "type": "DISPLAY_PORT",
           "direction": "INPUT",
           "position": {
-            "side": "BOTTOM",
-            "offset": 0.7
+            "side": "LEFT",
+            "position": 120
           }
         }
       ],
@@ -135,8 +135,8 @@
           "type": "HDMI",
           "direction": "INPUT",
           "position": {
-            "side": "BOTTOM",
-            "offset": 0.5
+            "side": "LEFT",
+            "position": 80
           }
         }
       ],
@@ -171,8 +171,8 @@
           "type": "USB_C",
           "direction": "BIDIRECTIONAL",
           "position": {
-            "side": "TOP",
-            "offset": 0.3
+            "side": "LEFT",
+            "position": 45
           }
         },
         {
@@ -182,37 +182,18 @@
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "offset": 0.3
+            "position": 45
           }
         },
-        {
-          "id": "usb-a-2",
-          "name": "USB-A 3.0 Port 2",
-          "type": "USB_A_3_0",
-          "direction": "OUTPUT",
-          "position": {
-            "side": "BOTTOM",
-            "offset": 0.5
-          }
-        },
-        {
-          "id": "usb-a-3",
-          "name": "USB-A 3.0 Port 3",
-          "type": "USB_A_3_0",
-          "direction": "OUTPUT",
-          "position": {
-            "side": "BOTTOM",
-            "offset": 0.8
-          }
-        },
+
         {
           "id": "dp-out",
           "name": "DisplayPort",
           "type": "DISPLAY_PORT",
           "direction": "OUTPUT",
           "position": {
-            "side": "TOP",
-            "offset": 0.7
+            "side": "RIGHT",
+            "position": 70
           }
         },
         {
@@ -222,7 +203,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "offset": 0.7
+            "position": 70
           }
         }
       ],
@@ -257,7 +238,7 @@
           "direction": "INPUT",
           "position": {
             "side": "LEFT",
-            "offset": 0.5
+            "position": 80
           }
         },
         {
@@ -267,7 +248,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "offset": 0.3
+            "position": 45
           }
         },
         {
@@ -277,7 +258,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "offset": 0.7
+            "position": 70
           }
         }
       ],
@@ -312,7 +293,7 @@
           "direction": "BIDIRECTIONAL",
           "position": {
             "side": "LEFT",
-            "offset": 0.5
+            "position": 80
           }
         }
       ],

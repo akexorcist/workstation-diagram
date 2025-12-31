@@ -48,8 +48,11 @@ object DataValidator {
                 return "Device '${device.id}' has duplicate port ID: ${port.id}"
             }
 
-            if (port.position.offset < 0f || port.position.offset > 1f) {
-                return "Port '${port.id}' offset must be between 0.0 and 1.0"
+            // Port position validation is not strict in the validator
+            // as the UI will handle boundary checking at runtime
+            // We only validate that the position is not negative
+            if (port.position.position < 0f) {
+                return "Port '${port.id}' position must be non-negative"
             }
         }
 
