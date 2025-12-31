@@ -44,7 +44,7 @@
           "direction": "BIDIRECTIONAL",
           "position": {
             "side": "RIGHT",
-            "position": 45
+            "position": 30
           }
         },
         {
@@ -54,7 +54,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "position": 75
+            "position": 90
           }
         }
       ],
@@ -100,7 +100,7 @@
           "direction": "INPUT",
           "position": {
             "side": "LEFT",
-            "position": 120
+            "position": 100
           }
         }
       ],
@@ -193,7 +193,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "position": 70
+            "position": 30
           }
         },
         {
@@ -238,7 +238,17 @@
           "direction": "INPUT",
           "position": {
             "side": "LEFT",
-            "position": 80
+            "position": 40
+          }
+        },
+        {
+          "id": "usb-a-in-1",
+          "name": "USB-A 3.0 Input",
+          "type": "USB_A_3_0",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 60
           }
         },
         {
@@ -373,9 +383,9 @@
       "sourceDeviceId": "docking-station",
       "sourcePortId": "usb-a-1",
       "targetDeviceId": "usb-hub",
-      "targetPortId": "usb-c-in",
+      "targetPortId": "usb-a-in-1",
       "connectionType": {
-        "name": "USB-A 3.0 to USB-C",
+        "name": "USB-A 3.0 to USB-A",
         "category": "DATA"
       },
       "cableSpecification": {
@@ -403,9 +413,9 @@
       "sourceDeviceId": "laptop-main",
       "sourcePortId": "usb-c-2",
       "targetDeviceId": "usb-hub",
-      "targetPortId": "usb-a-out-2",
+      "targetPortId": "usb-c-in",
       "connectionType": {
-        "name": "USB-C to USB-A",
+        "name": "USB-C to USB-C",
         "category": "DATA"
       },
       "cableSpecification": {
