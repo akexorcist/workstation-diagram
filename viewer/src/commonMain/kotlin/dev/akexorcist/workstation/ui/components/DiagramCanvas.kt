@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,7 +22,10 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.unit.dp
 import dev.akexorcist.workstation.data.model.ConnectionCategory
+import dev.akexorcist.workstation.data.model.DeviceSide
+import dev.akexorcist.workstation.data.model.Port
 import dev.akexorcist.workstation.presentation.WorkstationUiState
 import dev.akexorcist.workstation.presentation.config.RenderingConfig
 import dev.akexorcist.workstation.routing.ConnectionRouter
@@ -121,7 +126,8 @@ fun DiagramCanvas(
                 canvasSize = canvasSize,
                 viewportSize = viewportSize,
                 routedConnectionMap = routedConnectionMap,
-                selectedConnectionId = uiState.selectedConnectionId
+                selectedConnectionId = uiState.selectedConnectionId,
+                drawPortDots = false // Don't draw port dots, we're using capsule ports instead
             )
 
             DeviceList(
@@ -137,6 +143,17 @@ fun DiagramCanvas(
                 onDeviceClick = onDeviceClick,
                 onHoverChange = onHoverDevice
             )
+            
+            // Add capsule port overlays
+            if (layout != null) {
+                PortsOverlay(
+                    layout = layout,
+                    canvasSize = canvasSize,
+                    zoom = zoom,
+                    panOffset = uiState.panOffset,
+                    viewportSize = viewportSize
+                )
+            }
         }
     }
 }
@@ -152,7 +169,8 @@ private fun ConnectionCanvas(
     canvasSize: dev.akexorcist.workstation.data.model.Size,
     viewportSize: androidx.compose.ui.geometry.Size,
     routedConnectionMap: Map<String, RoutedConnection>,
-    selectedConnectionId: String?
+    selectedConnectionId: String?,
+    drawPortDots: Boolean = false // Add parameter to control port circle rendering
 ) {
     val connectionTheme = WorkstationTheme.themeColor.connection
     val hubColor = WorkstationTheme.themeColor.hub
@@ -250,37 +268,103 @@ private fun ConnectionCanvas(
                         
                         val isSelected = connection.id == selectedId
                         val isHovered = connection.id == hoveredConnectionId
-                        val inputBackgroundColor = when {
-                            isSelected -> connectionTheme.inputBackgroundActiveColor
-                            isHovered -> connectionTheme.inputBackgroundActiveColor.copy(alpha = 0.7f)
-                            else -> connectionTheme.inputBackgroundInactiveColor
+                        val sourceDirection = sourcePort.direction
+                        val targetDirection = targetPort.direction
+                        
+                        val (startBackgroundColor, endBackgroundColor) = when {
+                            sourceDirection == dev.akexorcist.workstation.data.model.PortDirection.OUTPUT &&
+                            targetDirection == dev.akexorcist.workstation.data.model.PortDirection.INPUT -> {
+                                val outputBg = when {
+                                    isSelected -> connectionTheme.outputBackgroundActiveColor
+                                    isHovered -> connectionTheme.outputBackgroundActiveColor.copy(alpha = 0.7f)
+                                    else -> connectionTheme.outputBackgroundInactiveColor
+                                }
+                                val inputBg = when {
+                                    isSelected -> connectionTheme.inputBackgroundActiveColor
+                                    isHovered -> connectionTheme.inputBackgroundActiveColor.copy(alpha = 0.7f)
+                                    else -> connectionTheme.inputBackgroundInactiveColor
+                                }
+                                Pair(outputBg, inputBg)
+                            }
+                            sourceDirection == dev.akexorcist.workstation.data.model.PortDirection.INPUT &&
+                            targetDirection == dev.akexorcist.workstation.data.model.PortDirection.OUTPUT -> {
+                                val inputBg = when {
+                                    isSelected -> connectionTheme.inputBackgroundActiveColor
+                                    isHovered -> connectionTheme.inputBackgroundActiveColor.copy(alpha = 0.7f)
+                                    else -> connectionTheme.inputBackgroundInactiveColor
+                                }
+                                val outputBg = when {
+                                    isSelected -> connectionTheme.outputBackgroundActiveColor
+                                    isHovered -> connectionTheme.outputBackgroundActiveColor.copy(alpha = 0.7f)
+                                    else -> connectionTheme.outputBackgroundInactiveColor
+                                }
+                                Pair(inputBg, outputBg)
+                            }
+                            else -> {
+                                val inputBg = when {
+                                    isSelected -> connectionTheme.inputBackgroundActiveColor
+                                    isHovered -> connectionTheme.inputBackgroundActiveColor.copy(alpha = 0.7f)
+                                    else -> connectionTheme.inputBackgroundInactiveColor
+                                }
+                                val outputBg = when {
+                                    isSelected -> connectionTheme.outputBackgroundActiveColor
+                                    isHovered -> connectionTheme.outputBackgroundActiveColor.copy(alpha = 0.7f)
+                                    else -> connectionTheme.outputBackgroundInactiveColor
+                                }
+                                Pair(inputBg, outputBg)
+                            }
                         }
                         
-                        val outputBackgroundColor = when {
-                            isSelected -> connectionTheme.outputBackgroundActiveColor
-                            isHovered -> connectionTheme.outputBackgroundActiveColor.copy(alpha = 0.7f)
-                            else -> connectionTheme.outputBackgroundInactiveColor
+                        val (startForegroundColor, endForegroundColor) = when {
+                            sourceDirection == dev.akexorcist.workstation.data.model.PortDirection.OUTPUT &&
+                            targetDirection == dev.akexorcist.workstation.data.model.PortDirection.INPUT -> {
+                                val outputFg = when {
+                                    isSelected -> connectionTheme.outputActiveColor
+                                    isHovered -> connectionTheme.outputActiveColor.copy(alpha = 0.7f)
+                                    else -> connectionTheme.outputInactiveColor
+                                }
+                                val inputFg = when {
+                                    isSelected -> connectionTheme.inputActiveColor
+                                    isHovered -> connectionTheme.inputActiveColor.copy(alpha = 0.7f)
+                                    else -> connectionTheme.inputInactiveColor
+                                }
+                                Pair(outputFg, inputFg)
+                            }
+                            sourceDirection == dev.akexorcist.workstation.data.model.PortDirection.INPUT &&
+                            targetDirection == dev.akexorcist.workstation.data.model.PortDirection.OUTPUT -> {
+                                val inputFg = when {
+                                    isSelected -> connectionTheme.inputActiveColor
+                                    isHovered -> connectionTheme.inputActiveColor.copy(alpha = 0.7f)
+                                    else -> connectionTheme.inputInactiveColor
+                                }
+                                val outputFg = when {
+                                    isSelected -> connectionTheme.outputActiveColor
+                                    isHovered -> connectionTheme.outputActiveColor.copy(alpha = 0.7f)
+                                    else -> connectionTheme.outputInactiveColor
+                                }
+                                Pair(inputFg, outputFg)
+                            }
+                            else -> {
+                                val inputFg = when {
+                                    isSelected -> connectionTheme.inputActiveColor
+                                    isHovered -> connectionTheme.inputActiveColor.copy(alpha = 0.7f)
+                                    else -> connectionTheme.inputInactiveColor
+                                }
+                                val outputFg = when {
+                                    isSelected -> connectionTheme.outputActiveColor
+                                    isHovered -> connectionTheme.outputActiveColor.copy(alpha = 0.7f)
+                                    else -> connectionTheme.outputInactiveColor
+                                }
+                                Pair(inputFg, outputFg)
+                            }
                         }
                         
-                        val inputForegroundColor = when {
-                            isSelected -> connectionTheme.inputActiveColor
-                            isHovered -> connectionTheme.inputActiveColor.copy(alpha = 0.7f)
-                            else -> connectionTheme.inputInactiveColor
-                        }
-                        
-                        val outputForegroundColor = when {
-                            isSelected -> connectionTheme.outputActiveColor
-                            isHovered -> connectionTheme.outputActiveColor.copy(alpha = 0.7f)
-                            else -> connectionTheme.outputInactiveColor
-                        }
-                        
-                        // Draw the gradient connection with background and dashed foreground
                         drawGradientConnectionPath(
                             path = path,
-                            inputBackgroundColor = inputBackgroundColor,
-                            outputBackgroundColor = outputBackgroundColor,
-                            inputForegroundColor = inputForegroundColor,
-                            outputForegroundColor = outputForegroundColor,
+                            startBackgroundColor = startBackgroundColor,
+                            endBackgroundColor = endBackgroundColor,
+                            startForegroundColor = startForegroundColor,
+                            endForegroundColor = endForegroundColor,
                             zoom = zoom
                         )
                     }
@@ -288,43 +372,46 @@ private fun ConnectionCanvas(
             }
         }
 
-        layout.devices.forEach { device ->
-            device.ports.forEach { port ->
-                val portPosition = calculatePortScreenPosition(
-                    device, port, layout.metadata, canvasSize, zoom, panOffset
-                )
-                val portSize = 8f * zoom
-                val portRadius = portSize / 2 + 2 // Include background radius for visibility check
-
-                // Only draw ports that are visible in the viewport
-                if (isPortVisibleInViewport(portPosition, portRadius, viewportSize)) {
-                    val portColor = when (port.type) {
-                        dev.akexorcist.workstation.data.model.PortType.USB_C -> ThemeColor.DimBlue500
-                        dev.akexorcist.workstation.data.model.PortType.USB_A_2_0,
-                        dev.akexorcist.workstation.data.model.PortType.USB_A_3_0,
-                        dev.akexorcist.workstation.data.model.PortType.USB_A_3_1,
-                        dev.akexorcist.workstation.data.model.PortType.USB_A_3_2 -> hubColor
-                        dev.akexorcist.workstation.data.model.PortType.HDMI,
-                        dev.akexorcist.workstation.data.model.PortType.HDMI_2_1,
-                        dev.akexorcist.workstation.data.model.PortType.DISPLAY_PORT,
-                        dev.akexorcist.workstation.data.model.PortType.MINI_HDMI,
-                        dev.akexorcist.workstation.data.model.PortType.MICRO_HDMI -> peripheralColor
-                        dev.akexorcist.workstation.data.model.PortType.ETHERNET -> ThemeColor.Purple500
-                        dev.akexorcist.workstation.data.model.PortType.AUX -> ThemeColor.Pink500
-                        dev.akexorcist.workstation.data.model.PortType.POWER -> ThemeColor.DimAmber500
+        // Only draw port circles if drawPortDots is true
+        if (drawPortDots) {
+            layout.devices.forEach { device ->
+                device.ports.forEach { port ->
+                    val portPosition = calculatePortScreenPosition(
+                        device, port, layout.metadata, canvasSize, zoom, panOffset
+                    )
+                    val portSize = 8f * zoom
+                    val portRadius = portSize / 2 + 2 // Include background radius for visibility check
+    
+                    // Only draw ports that are visible in the viewport
+                    if (isPortVisibleInViewport(portPosition, portRadius, viewportSize)) {
+                        val portColor = when (port.type) {
+                            dev.akexorcist.workstation.data.model.PortType.USB_C -> ThemeColor.DimBlue500
+                            dev.akexorcist.workstation.data.model.PortType.USB_A_2_0,
+                            dev.akexorcist.workstation.data.model.PortType.USB_A_3_0,
+                            dev.akexorcist.workstation.data.model.PortType.USB_A_3_1,
+                            dev.akexorcist.workstation.data.model.PortType.USB_A_3_2 -> hubColor
+                            dev.akexorcist.workstation.data.model.PortType.HDMI,
+                            dev.akexorcist.workstation.data.model.PortType.HDMI_2_1,
+                            dev.akexorcist.workstation.data.model.PortType.DISPLAY_PORT,
+                            dev.akexorcist.workstation.data.model.PortType.MINI_HDMI,
+                            dev.akexorcist.workstation.data.model.PortType.MICRO_HDMI -> peripheralColor
+                            dev.akexorcist.workstation.data.model.PortType.ETHERNET -> ThemeColor.Purple500
+                            dev.akexorcist.workstation.data.model.PortType.AUX -> ThemeColor.Pink500
+                            dev.akexorcist.workstation.data.model.PortType.POWER -> ThemeColor.DimAmber500
+                        }
+    
+                        drawCircle(
+                            color = portColor.copy(alpha = 0.3f),
+                            radius = portSize / 2 + 2,
+                            center = portPosition
+                        )
+    
+                        drawCircle(
+                            color = portColor,
+                            radius = portSize / 2,
+                            center = portPosition
+                        )
                     }
-
-                    drawCircle(
-                        color = portColor.copy(alpha = 0.3f),
-                        radius = portSize / 2 + 2,
-                        center = portPosition
-                    )
-
-                    drawCircle(
-                        color = portColor,
-                        radius = portSize / 2,
-                        center = portPosition
-                    )
                 }
             }
         }
@@ -354,31 +441,6 @@ private fun isRectVisibleInViewport(
             rectBottom > viewportTop
 }
 
-/**
- * Check if a port is visible in the viewport with culling margin.
- */
-private fun isPortVisibleInViewport(
-    center: Offset,
-    radius: Float,
-    viewportSize: androidx.compose.ui.geometry.Size
-): Boolean {
-    val cullingMargin = 50f
-    
-    val viewportLeft = -cullingMargin
-    val viewportRight = viewportSize.width + cullingMargin
-    val viewportTop = -cullingMargin
-    val viewportBottom = viewportSize.height + cullingMargin
-
-    val circleLeft = center.x - radius
-    val circleRight = center.x + radius
-    val circleTop = center.y - radius
-    val circleBottom = center.y + radius
-
-    return circleLeft < viewportRight &&
-            circleRight > viewportLeft &&
-            circleTop < viewportBottom &&
-            circleBottom > viewportTop
-}
 
 
 
@@ -543,10 +605,10 @@ private fun calculateOrthogonalPath(
 
 private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawGradientConnectionPath(
     path: List<Offset>,
-    inputBackgroundColor: Color,
-    outputBackgroundColor: Color, 
-    inputForegroundColor: Color,
-    outputForegroundColor: Color,
+    startBackgroundColor: Color,
+    endBackgroundColor: Color, 
+    startForegroundColor: Color,
+    endForegroundColor: Color,
     zoom: Float
 ) {
     if (path.size < 2) return
@@ -554,23 +616,19 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawGradientConnect
     val backgroundWidth = RenderingConfig.connectionBackgroundWidth * zoom
     val foregroundWidth = RenderingConfig.connectionForegroundWidth * zoom
     
-    val startPoint = path.first()
-    val endPoint = path.last()
+    var totalPathLength = 0f
+    val segmentLengths = mutableListOf<Float>()
     
-    // Create gradient brushes for the entire path
-    val backgroundBrush = Brush.linearGradient(
-        colors = listOf(inputBackgroundColor, outputBackgroundColor),
-        start = startPoint,
-        end = endPoint
-    )
+    for (i in 0 until path.size - 1) {
+        val length = androidx.compose.ui.geometry.Offset(
+            path[i+1].x - path[i].x,
+            path[i+1].y - path[i].y
+        ).getDistance()
+        segmentLengths.add(length)
+        totalPathLength += length
+    }
     
-    val foregroundBrush = Brush.linearGradient(
-        colors = listOf(inputForegroundColor, outputForegroundColor),
-        start = startPoint,
-        end = endPoint
-    )
-    
-    // Step 1: Draw the background line
+    // Create a Path object to draw the entire connection path at once
     val backgroundPath = androidx.compose.ui.graphics.Path()
     backgroundPath.moveTo(path.first().x, path.first().y)
     
@@ -578,6 +636,14 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawGradientConnect
         backgroundPath.lineTo(path[i].x, path[i].y)
     }
     
+    // Create a single gradient brush for the entire path
+    val backgroundBrush = Brush.linearGradient(
+        colors = listOf(startBackgroundColor, endBackgroundColor),
+        start = path.first(),
+        end = path.last()
+    )
+    
+    // Draw the entire path at once with proper joins to prevent overlapping circles at corners
     drawPath(
         path = backgroundPath,
         brush = backgroundBrush,
@@ -588,19 +654,14 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawGradientConnect
         )
     )
     
-    // Step 2: Draw evenly spaced dots along the path
     val dotRadius = RenderingConfig.connectionDotLength * zoom
     val dotGap = RenderingConfig.connectionDotGap * zoom
     val dotStep = dotRadius * 2 + dotGap
     
     val totalLength = calculatePathLength(path)
-    
-    // Calculate exactly how many dots we need to distribute evenly
     val dotsCount = (totalLength / dotStep).toInt() + 1
     
-    // If we have at least 2 dots, distribute them evenly
     if (dotsCount >= 2) {
-        // Adjust spacing to distribute dots evenly
         val adjustedStep = totalLength / (dotsCount - 1)
         
         for (i in 0 until dotsCount) {
@@ -608,10 +669,16 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawGradientConnect
             if (distance > totalLength) break
             
             val dotPosition = getPointAtDistance(path, distance)
+            val fraction = distance / totalLength
             
-            // Draw the dot as a filled circle
+            val dotColor = androidx.compose.ui.graphics.lerp(
+                startForegroundColor,
+                endForegroundColor,
+                fraction
+            )
+            
             drawCircle(
-                brush = foregroundBrush,
+                color = dotColor,
                 radius = dotRadius,
                 center = dotPosition
             )
@@ -803,4 +870,119 @@ private fun virtualToScreen(
 ): Offset {
     val position = dev.akexorcist.workstation.data.model.Position(virtualX, virtualY)
     return CoordinateTransformer.transformPosition(position, metadata, canvasSize, zoom, panOffset)
+}
+
+@Composable
+private fun PortsOverlay(
+    layout: dev.akexorcist.workstation.data.model.WorkstationLayout,
+    canvasSize: dev.akexorcist.workstation.data.model.Size,
+    zoom: Float,
+    panOffset: dev.akexorcist.workstation.data.model.Offset,
+    viewportSize: androidx.compose.ui.geometry.Size
+) {
+    // Render each port with its own width based on content
+    layout.devices.forEach { device ->
+        device.ports.forEach { port ->
+            val portPosition = calculatePortScreenPosition(
+                device, port, layout.metadata, canvasSize, zoom, panOffset
+            )
+            
+            // Use fixed height that scales with zoom for consistency
+            val capsuleHeight = RenderingConfig.portCapsuleHeight * zoom
+            
+            // Calculate individual width for this port based on its content
+            val capsuleWidth = getEstimatedPortWidth(port, zoom)
+            
+            // Determine clip edge and position based on device side
+            val clipEdge: String
+            
+            val overlap = RenderingConfig.portDeviceOverlap * zoom
+            
+            val adjustedPosition = when (port.position.side) {
+                dev.akexorcist.workstation.data.model.DeviceSide.LEFT -> {
+                    clipEdge = "right"
+                    val deviceEdgeX = portPosition.x
+                    Offset(deviceEdgeX - capsuleWidth + overlap, portPosition.y - capsuleHeight / 2)
+                }
+                dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
+                    clipEdge = "left"
+                    Offset(portPosition.x - overlap, portPosition.y - capsuleHeight / 2)
+                }
+                dev.akexorcist.workstation.data.model.DeviceSide.TOP -> {
+                    clipEdge = "bottom"
+                    Offset(portPosition.x - capsuleWidth / 2, portPosition.y - capsuleHeight + overlap)
+                }
+                dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
+                    clipEdge = "top"
+                    Offset(portPosition.x - capsuleWidth / 2, portPosition.y - overlap)
+                }
+            }
+            
+            // Only render if the port is in the viewport
+            val portCheckRadius = kotlin.math.max(capsuleWidth, capsuleHeight)
+            if (isPortVisibleInViewport(portPosition, portCheckRadius, viewportSize)) {
+                CapsulePortNode(
+                    port = port,
+                    zoom = zoom,
+                    clipEdge = clipEdge,
+                    modifier = Modifier
+                        .offset(
+                            x = adjustedPosition.x.dp,
+                            y = adjustedPosition.y.dp
+                        )
+                        // We only need to set a minimum width, the height will be determined by the content
+                        .width(capsuleWidth.dp)
+                )
+            }
+        }
+    }
+}
+
+private fun getEstimatedPortWidth(port: Port, zoom: Float): Float {
+    // Get simple estimate of text width with basic character counting
+    val shortName = port.name
+        .replace(" Input", "")
+        .replace(" Output", "")
+        .replace(" Port", "")
+        .replace("Thunderbolt", "TB")
+        .replace("DisplayPort", "DP")
+    
+    // Scale the base container width and character width directly with zoom
+    val baseWidth = RenderingConfig.portCapsuleBaseWidth * zoom
+    val charWidth = shortName.length * RenderingConfig.portCapsuleWidthPerChar * zoom
+    val innerPaddingWidth = RenderingConfig.portCapsuleHorizontalPadding * 2 * zoom
+    
+    // Add consistent side padding that's the same for all ports
+    val sidePadding = RenderingConfig.portCapsuleSidePadding * 2 * zoom // Both left and right sides
+    
+    // Return the total width with consistent side padding
+    return baseWidth + charWidth + innerPaddingWidth + sidePadding
+}
+
+
+
+/**
+ * Check if a port is visible in the viewport with culling margin.
+ */
+private fun isPortVisibleInViewport(
+    center: Offset,
+    radius: Float,
+    viewportSize: androidx.compose.ui.geometry.Size
+): Boolean {
+    val cullingMargin = 50f
+    
+    val viewportLeft = -cullingMargin
+    val viewportRight = viewportSize.width + cullingMargin
+    val viewportTop = -cullingMargin
+    val viewportBottom = viewportSize.height + cullingMargin
+
+    val circleLeft = center.x - radius
+    val circleRight = center.x + radius
+    val circleTop = center.y - radius
+    val circleBottom = center.y + radius
+
+    return circleLeft < viewportRight &&
+            circleRight > viewportLeft &&
+            circleTop < viewportBottom &&
+            circleBottom > viewportTop
 }

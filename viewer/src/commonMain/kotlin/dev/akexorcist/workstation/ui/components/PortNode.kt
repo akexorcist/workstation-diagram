@@ -1,65 +1,113 @@
 package dev.akexorcist.workstation.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import dev.akexorcist.workstation.data.model.Port
-import dev.akexorcist.workstation.data.model.PortType
-import dev.akexorcist.workstation.ui.theme.ThemeColor
+import dev.akexorcist.workstation.data.model.PortDirection
+import dev.akexorcist.workstation.presentation.config.RenderingConfig
 import dev.akexorcist.workstation.ui.theme.WorkstationTheme
 
-/**
- * A declarative Compose component that renders a single port indicator.
- */
 @Composable
-fun PortNode(
+fun CapsulePortNode(
     port: Port,
     zoom: Float,
+    clipEdge: String? = null,
     modifier: Modifier = Modifier
 ) {
-    val portColor = getPortColor(port.type)
-    val portSize = 8f * zoom
-
-    Box(modifier = modifier) {
-        // Port background
+    val capsuleColor = getPortDirectionColor(port.direction)
+    
+    val innerPaddingDp = (RenderingConfig.portCapsuleHorizontalPadding * zoom).dp
+    val sidePaddingDp = (RenderingConfig.portCapsuleSidePadding * zoom).dp
+    val textSizeSp = (RenderingConfig.portCapsuleFontSize * zoom).sp
+    val capsuleHeightDp = (RenderingConfig.portCapsuleHeight * zoom).dp
+    
+    val zeroCorner = 0.dp
+    val cornerRadius = (capsuleHeightDp.value / 2).dp
+    
+    val shape = when(clipEdge) {
+        "left" -> RoundedCornerShape(0.dp, cornerRadius, cornerRadius, 0.dp)
+        "right" -> RoundedCornerShape(cornerRadius, 0.dp, 0.dp, cornerRadius)
+        "top" -> RoundedCornerShape(0.dp, 0.dp, cornerRadius, cornerRadius)
+        "bottom" -> RoundedCornerShape(cornerRadius, cornerRadius, 0.dp, 0.dp)
+        else -> RoundedCornerShape(cornerRadius)
+    }
+    
+    val textAlignment = when(clipEdge) {
+        "right" -> TextAlign.End
+        "left" -> TextAlign.Start
+        else -> TextAlign.Center
+    }
+    
+    val boxAlignment = when(clipEdge) {
+        "right" -> Alignment.CenterEnd
+        "left" -> Alignment.CenterStart
+        else -> Alignment.Center
+    }
+    
+    Surface(
+        shape = shape,
+        color = capsuleColor,
+        modifier = modifier
+            .height(capsuleHeightDp)
+            .clip(shape)
+    ) {
         Box(
-            modifier = Modifier
-                .size((portSize + 4).dp)
-                .background(
-                    color = portColor.copy(alpha = 0.3f),
-                    shape = CircleShape
-                )
-        )
-
-        // Port center
-        Box(
-            modifier = Modifier
-                .size(portSize.dp)
-                .background(portColor, CircleShape)
-        )
+            contentAlignment = boxAlignment,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Text(
+                text = getShortPortName(port),
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = textSizeSp,
+                textAlign = textAlignment,
+                softWrap = false,
+                overflow = TextOverflow.Visible,
+                lineHeight = textSizeSp,
+                modifier = Modifier.padding(start = sidePaddingDp, end = sidePaddingDp, top = 0.dp, bottom = 0.dp)
+            )
+        }
     }
 }
 
 @Composable
-private fun getPortColor(type: PortType): Color {
-    return when (type) {
-        PortType.USB_C -> ThemeColor.DimBlue500
-        PortType.USB_A_2_0,
-        PortType.USB_A_3_0,
-        PortType.USB_A_3_1,
-        PortType.USB_A_3_2 -> WorkstationTheme.themeColor.hub
-        PortType.HDMI,
-        PortType.HDMI_2_1,
-        PortType.DISPLAY_PORT,
-        PortType.MINI_HDMI,
-        PortType.MICRO_HDMI -> WorkstationTheme.themeColor.peripheral
-        PortType.ETHERNET -> ThemeColor.Purple500
-        PortType.AUX -> ThemeColor.Pink500
-        PortType.POWER -> ThemeColor.DimAmber500
+private fun getPortDirectionColor(direction: PortDirection): Color {
+    return when (direction) {
+        PortDirection.INPUT -> WorkstationTheme.themeColor.connection.inputActiveColor
+        PortDirection.OUTPUT -> WorkstationTheme.themeColor.connection.outputActiveColor
+        PortDirection.BIDIRECTIONAL -> WorkstationTheme.themeColor.connection.inputActiveColor.copy(alpha = 0.7f)
     }
+}
+
+private fun getShortPortName(port: Port): String {
+    return port.name
+        .replace(" Input", "")
+        .replace(" Output", "")
+        .replace(" Port", "")
+        .replace("Thunderbolt", "TB")
+        .replace("DisplayPort", "DP")
+}
+
+private fun getShortPortName(portName: String): String {
+    return portName
+        .replace(" Input", "")
+        .replace(" Output", "")
+        .replace(" Port", "")
+        .replace("Thunderbolt", "TB")
+        .replace("DisplayPort", "DP")
 }

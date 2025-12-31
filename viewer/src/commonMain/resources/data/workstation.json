@@ -31,7 +31,7 @@
           "id": "usb-c-1",
           "name": "USB-C Thunderbolt 1",
           "type": "USB_C",
-          "direction": "BIDIRECTIONAL",
+          "direction": "OUTPUT",
           "position": {
             "side": "LEFT",
             "position": 45
@@ -41,7 +41,7 @@
           "id": "usb-c-2",
           "name": "USB-C Thunderbolt 2",
           "type": "USB_C",
-          "direction": "BIDIRECTIONAL",
+          "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
             "position": 30
@@ -169,7 +169,7 @@
           "id": "usb-c-host",
           "name": "USB-C Host",
           "type": "USB_C",
-          "direction": "BIDIRECTIONAL",
+          "direction": "INPUT",
           "position": {
             "side": "LEFT",
             "position": 45
