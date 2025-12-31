@@ -182,7 +182,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "position": 45
+            "position": 50
           }
         },
 
@@ -223,7 +223,7 @@
       "type": "USB_HUB",
       "category": "HUB",
       "position": {
-        "x": 350,
+        "x": 400,
         "y": 550
       },
       "size": {
@@ -260,16 +260,6 @@
             "side": "RIGHT",
             "position": 45
           }
-        },
-        {
-          "id": "usb-a-out-2",
-          "name": "USB-A 3.0 Output 2",
-          "type": "USB_A_3_0",
-          "direction": "OUTPUT",
-          "position": {
-            "side": "RIGHT",
-            "position": 70
-          }
         }
       ],
       "specifications": {
@@ -288,7 +278,7 @@
       "type": "STORAGE",
       "category": "PERIPHERAL",
       "position": {
-        "x": 550,
+        "x": 600,
         "y": 550
       },
       "size": {
@@ -303,7 +293,7 @@
           "direction": "BIDIRECTIONAL",
           "position": {
             "side": "LEFT",
-            "position": 80
+            "position": 40
           }
         }
       ],
