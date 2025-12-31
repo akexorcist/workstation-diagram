@@ -71,8 +71,44 @@ class ConnectionRouter(private val config: RoutingConfig = RoutingConfig) {
         val sourceSnapped = grid.toVirtualPoint(sourceGrid)
         val targetSnapped = grid.toVirtualPoint(targetGrid)
         
-        val startPoint = calculateExtendedPortPoint(sourcePort, sourceSnapped, grid)
-        val endPoint = calculateExtendedPortPoint(targetPort, targetSnapped, grid)
+        val adjustedSourcePort = if (sourcePort.position.side == DeviceSide.LEFT || 
+                                      sourcePort.position.side == DeviceSide.RIGHT) {
+            val portIndex = sourceDevice.ports.filter { it.position.side == sourcePort.position.side }
+                                             .sortedBy { it.position.position }
+                                             .indexOf(sourcePort)
+            val positionVariation = portIndex * 5f  
+            Port(
+                id = sourcePort.id,
+                name = sourcePort.name,
+                type = sourcePort.type,
+                direction = sourcePort.direction,
+                position = PortPosition(
+                    side = sourcePort.position.side,
+                    position = sourcePort.position.position + positionVariation
+                )
+            )
+        } else sourcePort
+        
+        val adjustedTargetPort = if (targetPort.position.side == DeviceSide.LEFT ||
+                                      targetPort.position.side == DeviceSide.RIGHT) {
+            val portIndex = targetDevice.ports.filter { it.position.side == targetPort.position.side }
+                                             .sortedBy { it.position.position }
+                                             .indexOf(targetPort)
+            val positionVariation = portIndex * 5f
+            Port(
+                id = targetPort.id,
+                name = targetPort.name,
+                type = targetPort.type,
+                direction = targetPort.direction,
+                position = PortPosition(
+                    side = targetPort.position.side,
+                    position = targetPort.position.position + positionVariation
+                )
+            )
+        } else targetPort
+        
+        val startPoint = calculateExtendedPortPoint(adjustedSourcePort, sourceSnapped, grid)
+        val endPoint = calculateExtendedPortPoint(adjustedTargetPort, targetSnapped, grid)
 
         val startGrid = grid.toGridPoint(startPoint.first, startPoint.second)
         val endGrid = grid.toGridPoint(endPoint.first, endPoint.second)
@@ -221,7 +257,17 @@ class ConnectionRouter(private val config: RoutingConfig = RoutingConfig) {
         portPos: Pair<Float, Float>, 
         grid: RoutingGrid
     ): Pair<Float, Float> {
-        val extension = config.portExtension
+        val baseExtension = config.portExtension
+        
+        val extension = when (port.position.side) {
+            DeviceSide.LEFT, DeviceSide.RIGHT -> {
+                val positionRatio = port.position.position / 150f
+                val extensionVariation = baseExtension * (0.8f + positionRatio * 0.8f)
+                extensionVariation.coerceAtLeast(baseExtension)
+            }
+            else -> baseExtension
+        }
+        
         val extendedPos = when (port.position.side) {
             DeviceSide.LEFT -> portPos.first - extension to portPos.second
             DeviceSide.RIGHT -> portPos.first + extension to portPos.second
@@ -229,7 +275,6 @@ class ConnectionRouter(private val config: RoutingConfig = RoutingConfig) {
             DeviceSide.BOTTOM -> portPos.first to portPos.second + extension
         }
         
-        // Snap extended position to grid
         val extendedGrid = grid.toGridPoint(extendedPos.first, extendedPos.second)
         return grid.toVirtualPoint(extendedGrid)
     }

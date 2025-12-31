@@ -6,10 +6,10 @@ object RoutingConfig {
     var gridCellSize: Float = 10f
     var deviceSnapToGrid: Boolean = true
     var deviceClearance: Float = 10f
-    var portExtension: Float = 20f
+    var portExtension: Float = 30f
     var crossingPenalty: Float = 5f
     var gridMoveCost: Float = 1f
-    var turnPenalty: Float = 2f
+    var turnPenalty: Float = 1.5f
     var allowDiagonal: Boolean = false
     var simplifyPath: Boolean = true
     var maxPathfindingIterations: Int = 10000
