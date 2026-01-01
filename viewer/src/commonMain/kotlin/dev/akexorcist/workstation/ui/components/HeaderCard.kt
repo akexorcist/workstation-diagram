@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Home
@@ -51,19 +52,23 @@ fun HeaderCard(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(
-                modifier = Modifier.offset(y = 4.dp),
-                text = title,
-                fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                color = WorkstationTheme.themeColor.text,
-                fontWeight = FontWeight.Bold,
-            )
+            SelectionContainer {
+                Text(
+                    modifier = Modifier.offset(y = 4.dp),
+                    text = title,
+                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                    color = WorkstationTheme.themeColor.text,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
 
-            Text(
-                text = date.toDateString(),
-                fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                color = WorkstationTheme.themeColor.text,
-            )
+            SelectionContainer {
+                Text(
+                    text = date.toDateString(),
+                    fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                    color = WorkstationTheme.themeColor.text,
+                )
+            }
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -102,18 +107,22 @@ fun HeaderCard(
                 }
             }
 
-            Text(
-                modifier = Modifier.offset(y = 4.dp),
-                text = "Powered by",
-                style = MaterialTheme.typography.bodySmall,
-                color = WorkstationTheme.themeColor.text,
-                fontWeight = FontWeight.Bold,
-            )
-            Text(
-                text = "Kotlin Multiplatform & Compose Multiplatform",
-                style = MaterialTheme.typography.bodySmall,
-                color = WorkstationTheme.themeColor.text,
-            )
+            SelectionContainer {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        modifier = Modifier.offset(y = 4.dp),
+                        text = "Powered by",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = WorkstationTheme.themeColor.text,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Text(
+                        text = "Kotlin Multiplatform & Compose Multiplatform",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = WorkstationTheme.themeColor.text,
+                    )
+                }
+            }
         }
     }
 }
