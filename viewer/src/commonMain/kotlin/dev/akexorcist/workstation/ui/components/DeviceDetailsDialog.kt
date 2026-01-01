@@ -112,11 +112,11 @@ fun DeviceDetailsDialog(
                             .verticalScroll(rememberScrollState())
                     ) {
                         Spacer(modifier = Modifier.height(24.dp))
-                        val productUrl = device.specifications.url
-                        if (productUrl != null) {
+                        val websiteUrl = device.url
+                        if (websiteUrl != null) {
                             DisableSelection {
                                 OutlinedButton(
-                                    onClick = { openUrl(productUrl) },
+                                    onClick = { openUrl(websiteUrl) },
                                     shape = RoundedCornerShape(8.dp),
                                     border = BorderStroke(0.25.dp, WorkstationTheme.themeColor.text),
                                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp)
@@ -160,14 +160,14 @@ fun DeviceDetailsDialog(
                         }
 
                         Text(
-                            text = device.name,
+                            text = device.title,
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
                             color = WorkstationTheme.themeColor.onSurface
                         )
 
                         Text(
-                            text = device.model,
+                            text = device.description,
                             style = MaterialTheme.typography.bodyLarge,
                             color = WorkstationTheme.themeColor.onSurfaceSecondary
                         )
@@ -209,13 +209,15 @@ private fun DeviceSpecificationsTable(device: Device) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        device.specifications.manufacturer?.let { manufacturer ->
+        // Display specifications
+        device.specifications.forEach { item ->
             DeviceSpecificationRow(
-                label = "Housing",
-                value = manufacturer
+                label = item.key,
+                value = item.value
             )
         }
 
+        // Always show port-related information
         if (device.ports.any { it.direction == dev.akexorcist.workstation.data.model.PortDirection.INPUT }) {
             val inputPorts = device.ports.filter { it.direction == dev.akexorcist.workstation.data.model.PortDirection.INPUT }
             DeviceSpecificationRow(
@@ -245,13 +247,6 @@ private fun DeviceSpecificationsTable(device: Device) {
             DeviceSpecificationRow(
                 label = "Power Interface",
                 value = "Power ${if (powerPorts.size > 1) "x ${powerPorts.size}" else ""}"
-            )
-        }
-
-        device.specifications.technicalSpecs.forEach { (key, value) ->
-            DeviceSpecificationRow(
-                label = key,
-                value = value
             )
         }
     }

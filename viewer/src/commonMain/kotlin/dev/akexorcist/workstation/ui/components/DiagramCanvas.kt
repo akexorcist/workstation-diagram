@@ -82,7 +82,7 @@ fun DiagramCanvas(
 
 
     val relatedDevicesMap = remember(uiState.hoveredDeviceId, uiState.hoveredPortInfo, uiState.layout) {
-        if (uiState.layout != null && RenderingConfig.hoverHighlightEnabled) {
+        if (uiState.layout != null) {
             if (uiState.hoveredDeviceId != null) {
                 DeviceConnectionInfo.getRelatedDevicesMap(uiState.hoveredDeviceId, uiState.layout)
             } else if (uiState.hoveredPortInfo != null) {
@@ -96,7 +96,7 @@ fun DiagramCanvas(
     }
     
     val relatedConnectionsMap = remember(uiState.hoveredDeviceId, uiState.hoveredPortInfo, uiState.layout) {
-        if (uiState.layout != null && RenderingConfig.hoverHighlightEnabled) {
+        if (uiState.layout != null) {
             if (uiState.hoveredDeviceId != null) {
                 DeviceConnectionInfo.getRelatedConnectionsMap(uiState.hoveredDeviceId, uiState.layout)
             } else if (uiState.hoveredPortInfo != null) {
@@ -110,7 +110,7 @@ fun DiagramCanvas(
     }
     
     val relatedPortsMap = remember(uiState.hoveredDeviceId, uiState.hoveredPortInfo, uiState.layout) {
-        if (uiState.layout != null && RenderingConfig.hoverHighlightEnabled) {
+        if (uiState.layout != null) {
             if (uiState.hoveredDeviceId != null) {
                 DeviceConnectionInfo.getRelatedPortsMap(uiState.hoveredDeviceId, uiState.layout)
             } else if (uiState.hoveredPortInfo != null) {
@@ -280,14 +280,11 @@ private fun ConnectionCanvas(
         mutableStateOf(0f)
     }
     val connectionTheme = WorkstationTheme.themeColor.connection
-    val hubColor = WorkstationTheme.themeColor.hub
-    val peripheralColor = WorkstationTheme.themeColor.peripheral
-    val selectedId = selectedConnectionId
     val hoveredConnectionId: String? = null
     
     val deviceMap = layout.devices.associateBy { it.id }
     
-    val isHoverHighlightActive = (hoveredDeviceId != null || hoveredPortInfo != null) && RenderingConfig.hoverHighlightEnabled
+    val isHoverHighlightActive = hoveredDeviceId != null || hoveredPortInfo != null
 
     Canvas(modifier = Modifier.fillMaxSize()) {
         val visibleConnections = layout.connections.filter { connection ->
@@ -375,7 +372,7 @@ private fun ConnectionCanvas(
                             )
                         }
                         
-                        val isSelected = connection.id == selectedId
+                        val isSelected = connection.id == selectedConnectionId
                         val isHovered = connection.id == hoveredConnectionId
                         val sourceDirection = sourcePort.direction
                         val targetDirection = targetPort.direction
@@ -1037,13 +1034,13 @@ private fun PortsOverlay(
     canvasSize: dev.akexorcist.workstation.data.model.Size,
     zoom: Float,
     panOffset: dev.akexorcist.workstation.data.model.Offset,
-    viewportSize: androidx.compose.ui.geometry.Size,
+    viewportSize: Size,
     hoveredDeviceId: String? = null,
     hoveredPortInfo: String? = null,
     relatedPortsMap: Map<String, Boolean> = emptyMap(),
     onHoverPort: (String?, Boolean) -> Unit = { _, _ -> }
 ) {
-    val isHoverHighlightActive = (hoveredDeviceId != null || hoveredPortInfo != null) && RenderingConfig.hoverHighlightEnabled
+    val isHoverHighlightActive = hoveredDeviceId != null || hoveredPortInfo != null
     
     // Render each port with its own width based on content
     layout.devices.forEach { device ->
@@ -1129,7 +1126,7 @@ private fun getEstimatedPortWidth(port: Port, zoom: Float): Float {
 private fun isPortVisibleInViewport(
     center: Offset,
     radius: Float,
-    viewportSize: androidx.compose.ui.geometry.Size
+    viewportSize: Size
 ): Boolean {
     val cullingMargin = 50f
     

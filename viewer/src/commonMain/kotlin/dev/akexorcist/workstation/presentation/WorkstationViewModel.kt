@@ -132,8 +132,8 @@ class WorkstationViewModel(
         } else {
             layout.devices
                 .filter { device ->
-                    device.name.contains(query, ignoreCase = true) ||
-                    device.model.contains(query, ignoreCase = true)
+                    device.description.contains(query, ignoreCase = true) ||
+                    device.title.contains(query, ignoreCase = true)
                 }
                 .map { it.id }
                 .toSet()

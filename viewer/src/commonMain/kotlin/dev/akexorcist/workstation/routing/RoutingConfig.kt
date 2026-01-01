@@ -1,7 +1,5 @@
 package dev.akexorcist.workstation.routing
 
-import androidx.compose.ui.graphics.Color
-
 object RoutingConfig {
     // Grid System
     var gridCellSize: Float = 10f
@@ -10,7 +8,7 @@ object RoutingConfig {
     // Clearance and Extension
     var deviceClearance: Float = 10f
     var portClearance: Float = 15f
-    var portExtension: Float = 70f
+    var portExtension: Float = 60f
     var minPathSpacing: Float = 20f
 
     // Pathfinding Costs
@@ -28,10 +26,8 @@ object RoutingConfig {
     // Performance and Limits
     var maxPathfindingIterations: Int = 10000
     var enableCaching: Boolean = true
-    var recalculateOnResize: Boolean = true
-    
+
     // Failed Route Visualization
     var failedRouteAlpha: Float = 0.8f
     var failedRouteWidthMultiplier: Float = 1.5f
-    var failedRouteColor: Color = Color(0xFFFF5722) // Orange-red
 }

@@ -65,13 +65,13 @@ fun DeviceDetailPanel(
             ) {
                 Column {
                     Text(
-                        text = device.name,
+                        text = device.title,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         color = WorkstationTheme.themeColor.onSurface
                     )
                     Text(
-                        text = device.model,
+                        text = device.description,
                         style = MaterialTheme.typography.bodyMedium,
                         color = WorkstationTheme.themeColor.onSurfaceSecondary
                     )
@@ -153,27 +153,12 @@ private fun SpecificationsSection(
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        device.specifications.manufacturer?.let { manufacturer ->
+        // Display specifications
+        device.specifications.forEach { item ->
             DeviceDetailSpecificationRow(
-                label = "Manufacturer",
-                value = manufacturer,
+                label = item.key,
+                value = item.value,
             )
-        }
-
-        device.specifications.modelNumber?.let { modelNumber ->
-            DeviceDetailSpecificationRow(
-                label = "Model Number",
-                value = modelNumber,
-            )
-        }
-
-        if (device.specifications.technicalSpecs.isNotEmpty()) {
-            device.specifications.technicalSpecs.forEach { (key, value) ->
-                DeviceDetailSpecificationRow(
-                    label = key,
-                    value = value,
-                )
-            }
         }
     }
 }

@@ -35,11 +35,16 @@ object DataValidator {
 
         if (device.position.x < 0 || device.position.x > canvasSize.width ||
             device.position.y < 0 || device.position.y > canvasSize.height) {
-            return "Device '${device.name}' position is outside canvas bounds"
+            return "Device '${device.description}' position is outside canvas bounds"
         }
 
         if (device.size.width <= 0 || device.size.height <= 0) {
-            return "Device '${device.name}' has invalid size (must be positive)"
+            return "Device '${device.description}' has invalid size (must be positive)"
+        }
+        
+        // Validate specifications
+        if (device.specifications.isEmpty()) {
+            return "Device '${device.id}' has empty specifications"
         }
 
         val portIds = device.ports.map { it.id }.toSet()

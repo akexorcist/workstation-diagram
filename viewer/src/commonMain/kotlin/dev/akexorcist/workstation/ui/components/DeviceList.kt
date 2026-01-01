@@ -35,7 +35,7 @@ fun DeviceList(
     onHoverChange: (String?, Boolean) -> Unit,
     relatedDevicesMap: Map<String, Boolean> = emptyMap()
 ) {
-    val isHoverHighlightActive = (hoveredDeviceId != null || hoveredPortInfo != null) && RenderingConfig.hoverHighlightEnabled
+    val isHoverHighlightActive = hoveredDeviceId != null || hoveredPortInfo != null
     
     devices.forEach { device ->
         val screenPosition = CoordinateTransformer.transformPosition(

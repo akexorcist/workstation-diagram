@@ -5,27 +5,17 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Device(
     val id: String,
-    val name: String,
-    val model: String,
+    val description: String,
+    val title: String,
+    val subtitle: String? = null,
     val type: String,
     val category: DeviceCategory,
     val position: Position,
     val size: Size,
     val ports: List<Port>,
-    val specifications: DeviceSpecifications
+    val specifications: List<InformationItem> = emptyList(),
+    val url: String? = null
 )
-
-@Serializable
-enum class DeviceType {
-    LAPTOP,
-    MONITOR,
-    DOCKING_STATION,
-    USB_HUB,
-    GAMING_CONSOLE,
-    CAMERA,
-    AUDIO_DEVICE,
-    STORAGE
-}
 
 @Serializable
 enum class DeviceCategory {
@@ -87,6 +77,23 @@ data class DeviceSpecifications(
     val modelNumber: String? = null,
     val technicalSpecs: Map<String, String> = emptyMap(),
     val url: String? = null
+)
+
+@Serializable
+data class InformationItem(
+    val key: String,
+    val value: String
+)
+
+@Serializable
+data class DeviceSpecification(
+    val type: String,
+    val title: String,
+    val subtitle: String? = null,
+    val website: String? = null,
+    val image: String,
+    val description: String,
+    val information: List<InformationItem> = emptyList()
 )
 
 @Serializable

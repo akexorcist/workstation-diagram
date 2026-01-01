@@ -197,13 +197,13 @@ private fun DeviceListItem(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = device.name,
+                    text = device.description,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
                     color = WorkstationTheme.themeColor.text
                 )
                 Text(
-                    text = device.model,
+                    text = device.title,
                     style = MaterialTheme.typography.bodySmall,
                     color = WorkstationTheme.themeColor.onSurfaceSecondary
                 )

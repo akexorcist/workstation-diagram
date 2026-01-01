@@ -116,7 +116,7 @@ fun DeviceNode(
                     )
                     
                     Text(
-                        text = device.name,
+                        text = device.type,
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontSize = MaterialTheme.typography.titleMedium.fontSize * zoom * RenderingConfig.deviceTextTitleScale,
                             lineHeight = MaterialTheme.typography.titleMedium.lineHeight * zoom * RenderingConfig.deviceTextLineHeightScale
@@ -125,7 +125,7 @@ fun DeviceNode(
                     )
                     Spacer(modifier = Modifier.height(2.dp * zoom))
                     Text(
-                        text = device.model,
+                        text = device.title,
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontSize = MaterialTheme.typography.bodyMedium.fontSize * zoom * RenderingConfig.deviceTextBodyScale,
                             lineHeight = MaterialTheme.typography.bodyMedium.lineHeight * zoom * RenderingConfig.deviceTextLineHeightScale,

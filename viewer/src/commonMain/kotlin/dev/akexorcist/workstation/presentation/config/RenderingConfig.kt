@@ -2,7 +2,6 @@ package dev.akexorcist.workstation.presentation.config
 
 object RenderingConfig {
     const val defaultDeviceBorderRadius: Float = 8f
-    const val defaultDeviceBorderThickness: Float = 2f
     const val deviceTextPadding: Float = 16f
     const val deviceTextTitleScale: Float = 1f
     const val deviceTextBodyScale: Float = 0.85f
@@ -28,7 +27,6 @@ object RenderingConfig {
     const val portCapsuleDeviceSidePadding: Float = 4f
     const val portDeviceOverlap: Float = 5.5f
     
-    // Hover highlight configuration
     const val hoverHighlightEnabled: Boolean = true
     const val unrelatedDeviceOpacity: Float = 0.1f
     const val unrelatedConnectionOpacity: Float = 0.2f
