@@ -31,7 +31,7 @@ A standalone Kotlin Multiplatform validator application that validates `workstat
 #### ✅ **Can Be Directly Reused**
 
 1. **Data Models** (`data/model/`)
-   - `Device.kt` - All device types and enums
+   - `Device.kt` - All device labels and enums
    - `Connection.kt` - Connection models
    - `Layout.kt` - WorkstationLayout structure
    - **Status**: ✅ 100% reusable
@@ -140,7 +140,7 @@ data class WorkstationLayout
 data class Device
 data class Port
 data class Connection
-enum class DeviceType
+enum class DeviceLabel
 enum class PortType
 // ... all model classes
 ```

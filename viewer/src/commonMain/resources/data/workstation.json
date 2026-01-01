@@ -23,9 +23,8 @@
     {
       "id": "office-laptop",
       "description": "MacBook Pro 14\" 2021",
-      "title": "Office Laptop",
-      "subtitle": "MacBook Pro",
-      "type": "Laptop",
+      "title": "MacBook Pro",
+      "label": "Office Laptop",
       "category": "CENTRAL_DEVICE",
       "position": {
         "x": 100,
@@ -59,9 +58,8 @@
     {
       "id": "personal-laptop",
       "description": "MacBook Pro 14\" 2023",
-      "title": "Personal Laptop",
-      "subtitle": "MacBook Pro",
-      "type": "Laptop",
+      "title": "MacBook Pro",
+      "label": "Personal Laptop",
       "category": "CENTRAL_DEVICE",
       "position": {
         "x": 100,
@@ -95,9 +93,8 @@
     {
       "id": "usb-docking-station",
       "description": "Docking Station with Thunderbolt",
-      "title": "USB Docking Station",
-      "subtitle": "Dell WD19TBS",
-      "type": "Docking Station",
+      "title": "Dell WD19TBS",
+      "label": "USB Docking Station",
       "category": "HUB",
       "position": {
         "x": 500,
@@ -184,9 +181,8 @@
     {
       "id": "primary-monitor",
       "description": "27\" QHD 120Hz IPS Monitor",
-      "title": "Primary Monitor",
-      "subtitle": "Dell UltraSharp U2724D",
-      "type": "Monitor",
+      "title": "Dell UltraSharp U2724D",
+      "label": "Primary Monitor",
       "category": "HUB",
       "position": {
         "x": 1800,

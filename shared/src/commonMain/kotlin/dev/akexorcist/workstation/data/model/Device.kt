@@ -7,8 +7,7 @@ data class Device(
     val id: String,
     val description: String,
     val title: String,
-    val subtitle: String? = null,
-    val type: String,
+    val label: String,
     val category: DeviceCategory,
     val position: Position,
     val size: Size,
@@ -54,28 +53,9 @@ enum class DeviceSide {
 }
 
 @Serializable
-data class DeviceSpecifications(
-    val manufacturer: String? = null,
-    val modelNumber: String? = null,
-    val technicalSpecs: Map<String, String> = emptyMap(),
-    val url: String? = null
-)
-
-@Serializable
 data class InformationItem(
     val key: String,
     val value: String
-)
-
-@Serializable
-data class DeviceSpecification(
-    val type: String,
-    val title: String,
-    val subtitle: String? = null,
-    val website: String? = null,
-    val image: String,
-    val description: String,
-    val information: List<InformationItem> = emptyList()
 )
 
 @Serializable

@@ -6,28 +6,17 @@ This document lists all valid enum values that the validator must recognize. The
 
 ---
 
-## DeviceType
+## DeviceLabel
 
-Valid values for `device.type`:
-
-```
-LAPTOP
-MONITOR
-DOCKING_STATION
-USB_HUB
-GAMING_CONSOLE
-CAMERA
-AUDIO_DEVICE
-STORAGE
-```
+The `device.label` field is no longer strictly validated. Users are free to use any string value that best describes the device type or category.
 
 ### Usage Examples
 
 ```json
-{ "type": "LAPTOP" }          // ✅ Valid
-{ "type": "MONITOR" }         // ✅ Valid
-{ "type": "laptop" }          // ❌ Invalid (lowercase)
-{ "type": "Desktop" }         // ❌ Invalid (not in list)
+{ "label": "Laptop" }                   // ✅ Valid
+{ "label": "4K Gaming Monitor" }        // ✅ Valid
+{ "label": "Docking Station" }          // ✅ Valid
+{ "label": "Wireless Headphones" }      // ✅ Valid
 ```
 
 ---
@@ -231,10 +220,8 @@ If an unknown enum value is encountered:
 ## Enum Validation Pseudo-Code
 
 ```python
-VALID_DEVICE_TYPES = {
-    "LAPTOP", "MONITOR", "DOCKING_STATION", "USB_HUB",
-    "GAMING_CONSOLE", "CAMERA", "AUDIO_DEVICE", "STORAGE"
-}
+# Device labels are no longer strictly validated
+# The following sets define allowed values for other enums
 
 VALID_DEVICE_CATEGORIES = {
     "HUB", "PERIPHERAL", "CENTRAL_DEVICE"
@@ -280,7 +267,7 @@ If new enum values are added in future versions:
 
 | Enum | Values | Used In | Case Sensitive |
 |------|--------|---------|----------------|
-| DeviceType | 8 values | `device.type` | ✅ Yes |
+| DeviceLabel | Any string | `device.label` | ❌ No |
 | DeviceCategory | 3 values | `device.category` | ✅ Yes |
 | PortType | 13 values | `port.type` | ✅ Yes |
 | PortDirection | 3 values | `port.direction` | ✅ Yes |

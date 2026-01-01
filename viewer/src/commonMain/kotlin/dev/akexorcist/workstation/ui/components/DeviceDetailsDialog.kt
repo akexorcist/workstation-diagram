@@ -151,7 +151,7 @@ fun DeviceDetailsDialog(
                             modifier = Modifier.padding(vertical = 8.dp)
                         ) {
                             Text(
-                                text = device.type,
+                                text = device.label,
                                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Medium,
