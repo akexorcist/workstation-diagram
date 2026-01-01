@@ -45,9 +45,6 @@ fun DeviceNode(
     device: Device,
     screenPosition: Offset,
     screenSize: androidx.compose.ui.geometry.Size,
-    isSelected: Boolean,
-    isHovered: Boolean,
-    isFiltered: Boolean,
     isRelatedToHoveredDevice: Boolean = true,
     onClick: () -> Unit,
     onHoverChange: (Boolean) -> Unit,
@@ -55,31 +52,31 @@ fun DeviceNode(
 ) {
     val deviceColor = getDeviceColor(device.category)
     val zoom = screenSize.width / device.size.width
-    
+
     // Apply opacity for hover effect - only when not related to hovered device
     val opacityMultiplier = if (isRelatedToHoveredDevice) 1f else RenderingConfig.unrelatedDeviceOpacity
 
     val backgroundColor by animateColorAsState(
-        targetValue = getDeviceBackgroundColor(deviceColor, isHovered, isSelected, opacityMultiplier),
+        targetValue = getDeviceBackgroundColor(deviceColor, opacityMultiplier),
         animationSpec = tween(durationMillis = 200),
         label = "backgroundColor"
     )
 
     Box(modifier = modifier) {
         Box(
-        modifier = Modifier
-            .offset {
-                IntOffset(
-                    screenPosition.x.toInt(),
-                    screenPosition.y.toInt()
+            modifier = Modifier
+                .offset {
+                    IntOffset(
+                        screenPosition.x.toInt(),
+                        screenPosition.y.toInt()
+                    )
+                }
+                .size(screenSize.width.dp, screenSize.height.dp)
+                .background(
+                    color = backgroundColor,
+                    shape = RoundedCornerShape(RenderingConfig.defaultDeviceBorderRadius.dp)
                 )
-            }
-            .size(screenSize.width.dp, screenSize.height.dp)
-            .background(
-                color = backgroundColor,
-                shape = RoundedCornerShape(RenderingConfig.defaultDeviceBorderRadius.dp)
-            )
-            .pointerInput(Unit) {
+                .pointerInput(Unit) {
                     awaitPointerEventScope {
                         while (true) {
                             val event = awaitPointerEvent()
@@ -87,6 +84,7 @@ fun DeviceNode(
                                 PointerEventType.Enter -> {
                                     onHoverChange(true)
                                 }
+
                                 PointerEventType.Exit -> {
                                     onHoverChange(false)
                                 }
@@ -102,7 +100,7 @@ fun DeviceNode(
         ) {
             if (screenSize.width >= RenderingConfig.deviceTextMinWidthToShow * zoom) {
                 val paddingScaled = (RenderingConfig.deviceTextPadding * zoom).dp
-                
+
                 Column(
                     modifier = Modifier
                         .padding(start = paddingScaled, end = paddingScaled)
@@ -114,7 +112,7 @@ fun DeviceNode(
                         animationSpec = tween(durationMillis = 200),
                         label = "textColor"
                     )
-                    
+
                     Text(
                         text = device.label,
                         style = MaterialTheme.typography.titleMedium.copy(
@@ -124,20 +122,21 @@ fun DeviceNode(
                         color = textColor
                     )
                     Spacer(modifier = Modifier.height(2.dp * zoom))
-                    Text(
-                        text = device.title,
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontSize = MaterialTheme.typography.bodyMedium.fontSize * zoom * RenderingConfig.deviceTextBodyScale,
-                            lineHeight = MaterialTheme.typography.bodyMedium.lineHeight * zoom * RenderingConfig.deviceTextLineHeightScale,
-                        ),
-                        color = textColor // Using the same animated textColor
-                    )
+                    if (!device.title.isNullOrEmpty()) {
+                        Text(
+                            text = device.title,
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontSize = MaterialTheme.typography.bodyMedium.fontSize * zoom * RenderingConfig.deviceTextBodyScale,
+                                lineHeight = MaterialTheme.typography.bodyMedium.lineHeight * zoom * RenderingConfig.deviceTextLineHeightScale,
+                            ),
+                            color = textColor
+                        )
+                    }
                 }
             }
         }
     }
 }
-
 
 
 @Composable
@@ -151,12 +150,8 @@ private fun getDeviceColor(category: DeviceCategory): Color {
 
 private fun getDeviceBackgroundColor(
     deviceColor: Color,
-    isHovered: Boolean,
-    isSelected: Boolean,
-    opacityMultiplier: Float = 1f
+    opacityMultiplier: Float,
 ): Color {
-    // Apply opacity multiplier for hover effect
     val alpha = deviceColor.alpha * opacityMultiplier
     return deviceColor.copy(alpha = alpha)
 }
-

@@ -27,10 +27,8 @@ fun DeviceList(
     zoom: Float,
     panOffset: dev.akexorcist.workstation.data.model.Offset,
     viewportSize: Size,
-    selectedDeviceId: String?,
     hoveredDeviceId: String?,
     hoveredPortInfo: String? = null,
-    filteredDeviceIds: Set<String>,
     onDeviceClick: (String) -> Unit,
     onHoverChange: (String?, Boolean) -> Unit,
     relatedDevicesMap: Map<String, Boolean> = emptyMap()
@@ -53,9 +51,6 @@ fun DeviceList(
                 device = device,
                 screenPosition = screenPosition,
                 screenSize = screenSize,
-                isSelected = device.id == selectedDeviceId,
-                isHovered = device.id == hoveredDeviceId,
-                isFiltered = device.id in filteredDeviceIds,
                 isRelatedToHoveredDevice = isRelatedToHoveredDevice,
                 onClick = { onDeviceClick(device.id) },
                 onHoverChange = { isHovered ->

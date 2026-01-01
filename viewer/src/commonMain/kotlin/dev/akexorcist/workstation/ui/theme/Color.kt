@@ -34,13 +34,13 @@ object ThemeColor {
     // Blue colors
     val Blue50 = Color(0xFFE3F2FD)
     val Blue100 = Color(0xFFBBDEFB)
-    val DimBlue500 = Color(0xFF3B4FBE)
+    val DimBlue500 = Color(0xFF30419A)
     
     // Teal colors
     val Teal50 = Color(0xFFE0F2F1)
     val Teal100 = Color(0xFFB2DFDB)
     val Teal500 = Color(0xFF009688)
-    val DimTeal500 = Color(0xFF408687)
+    val DimTeal500 = Color(0xFF377474)
     
     // Pink colors
     val Pink50 = Color(0xFFFCE4EC)
@@ -57,7 +57,7 @@ object ThemeColor {
     
     // Amber colors
     val Amber100 = Color(0xFFFFECB3)
-    val DimAmber500 = Color(0xFFFBBC4F)
+    val DimAmber500 = Color(0xFFFAAA20)
     
     // Basic colors
     val White = Color.White
@@ -175,9 +175,9 @@ val darkContentColor = ContentColor(
             disabledContentColor = ThemeColor.Gray600
         )
     },
-    hub = ThemeColor.DimTeal500.copy(alpha = 0.7f),
-    peripheral = ThemeColor.DimAmber500.copy(alpha = 0.7f),
-    centralDevice = ThemeColor.DimBlue500.copy(alpha = 0.7f),
+    hub = ThemeColor.DimTeal500,
+    peripheral = ThemeColor.DimAmber500,
+    centralDevice = ThemeColor.DimBlue500,
     connection = ConnectionLineComponent(
         inputActiveColor = ThemeColor.DimIndigo500,
         inputInactiveColor = ThemeColor.DimIndigo500.copy(alpha = 0.25f),

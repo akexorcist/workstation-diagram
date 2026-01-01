@@ -206,10 +206,8 @@ fun DiagramCanvas(
                 zoom = zoom,
                 panOffset = uiState.panOffset,
                 viewportSize = viewportSize,
-                selectedDeviceId = uiState.selectedDeviceId,
                 hoveredDeviceId = uiState.hoveredDeviceId,
                 hoveredPortInfo = uiState.hoveredPortInfo,
-                filteredDeviceIds = uiState.filteredDeviceIds,
                 onDeviceClick = onDeviceClick,
                 onHoverChange = onHoverDevice,
                 relatedDevicesMap = relatedDevicesMap

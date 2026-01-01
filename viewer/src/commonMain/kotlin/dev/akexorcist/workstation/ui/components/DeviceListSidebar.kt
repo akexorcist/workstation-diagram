@@ -193,11 +193,11 @@ private fun DeviceListItem(
                     .background(categoryColor, RoundedCornerShape(2.dp))
             )
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(8.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = device.description,
+                    text = device.label,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
                     color = WorkstationTheme.themeColor.text
