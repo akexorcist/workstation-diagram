@@ -3,8 +3,8 @@
     "title": "Akexorcist Workstation",
     "date": "2025-12-31",
     "canvasSize": {
-      "width": 1920,
-      "height": 1080
+      "width": 3000,
+      "height": 2000
     },
     "version": "1.0",
     "theme": {
@@ -12,7 +12,7 @@
     },
     "viewport": {
       "minZoom": 0.5,
-      "maxZoom": 3.5
+      "maxZoom": 1.5
     },
     "grid": {
       "size": 20.0,
@@ -22,77 +22,256 @@
   "devices": [
     {
       "id": "office-laptop",
-      "name": "MacBook Pro 14\" 2021",
-      "model": "MacBook Pro",
+      "description": "MacBook Pro 14\" 2021",
+      "title": "Office Laptop",
+      "subtitle": "MacBook Pro",
       "type": "Laptop",
       "category": "CENTRAL_DEVICE",
       "position": {
         "x": 100,
-        "y": 100
+        "y": 800
       },
       "size": {
         "width": 200,
-        "height": 150
+        "height": 70
       },
       "ports": [
         {
           "id": "office-laptop-thunderbolt",
           "name": "Thunderbolt 3",
-          "type": "USB_C",
-          "direction": "OUTPUT",
+          "direction": "INPUT",
           "position": {
             "side": "RIGHT",
-            "position": 50
+            "position": 30
           }
         }
       ],
-      "specifications": {
-        "manufacturer": "Apple",
-        "modelNumber": "MacBook Pro 14\" 2021",
-        "technicalSpecs": {
-          "chip": "Apple M1 Pro",
-          "memory": "32GB",
-          "storage": "512GB",
-          "display": "14.2\" Liquid Retina XDR"
-        },
-        "url": "https://support.apple.com/kb/SP854"
-      }
+      "url": "https://support.apple.com/kb/SP854",
+      "specifications": [
+        { "key": "Chip", "value": "Apple M1 Pro\n10-core CPU with 8 performance cores and 2 efficiency cores\n14-core GPU\n16-core Neural Engine\n200GB/s memory bandwidth" },
+        { "key": "Memory", "value": "32GB" },
+        { "key": "Storage", "value": "512GB" },
+        { "key": "Display", "value": "14.2\" Liquid Retina XDR" },
+        { "key": "Manufacturer", "value": "Apple" },
+        { "key": "Model Number", "value": "MacBook Pro 14\" 2021" }
+      ]
+    },
+    {
+      "id": "personal-laptop",
+      "description": "MacBook Pro 14\" 2023",
+      "title": "Personal Laptop",
+      "subtitle": "MacBook Pro",
+      "type": "Laptop",
+      "category": "CENTRAL_DEVICE",
+      "position": {
+        "x": 100,
+        "y": 900
+      },
+      "size": {
+        "width": 200,
+        "height": 70
+      },
+      "ports": [
+        {
+          "id": "personal-laptop-thunderbolt",
+          "name": "Thunderbolt 3",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 30
+          }
+        }
+      ],
+      "url": "https://support.apple.com/kb/SP889",
+      "specifications": [
+        { "key": "Chip", "value": "Apple M2 Pro\n12-core CPU with 8 performance cores and 4 efficiency cores\n19-core GPU\n16-core Neural Engine\n200GB/s memory bandwidth" },
+        { "key": "Memory", "value": "32GB" },
+        { "key": "Storage", "value": "512GB" },
+        { "key": "Display", "value": "14.2\" Liquid Retina XDR" },
+        { "key": "Manufacturer", "value": "Apple" },
+        { "key": "Model Number", "value": "MacBook Pro 14\" 2023" }
+      ]
     },
     {
       "id": "usb-docking-station",
-      "name": "Docking Station with Thunderbolt",
-      "model": "Dell Thunderbolt Dock",
+      "description": "Docking Station with Thunderbolt",
+      "title": "USB Docking Station",
+      "subtitle": "Dell WD19TBS",
       "type": "Docking Station",
       "category": "HUB",
       "position": {
-        "x": 400,
-        "y": 200
+        "x": 500,
+        "y": 700
       },
       "size": {
         "width": 180,
-        "height": 100
+        "height": 400
       },
       "ports": [
         {
           "id": "dock-thunderbolt-in-1",
           "name": "",
-          "type": "USB_C",
-          "direction": "INPUT",
+          "direction": "OUTPUT",
           "position": {
             "side": "LEFT",
+            "position": 130
+          }
+        },
+        {
+          "id": "dock-thunderbolt-in-2",
+          "name": "",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 230
+          }
+        },
+        {
+          "id": "dock-usbc-out-1",
+          "name": "USB-C 3.2 Gen2",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
             "position": 20
+          }
+        },
+        {
+          "id": "dock-dp-out-1",
+          "name": "DisplayPort",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 340
+          }
+        },
+        {
+          "id": "dock-usba-in-1",
+          "name": "USB-A 2.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 60
+          }
+        },
+        {
+          "id": "dock-usba-in-2",
+          "name": "USB-A 3.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 80
+          }
+        },
+        {
+          "id": "dock-usba-out-1",
+          "name": "USB-A 3.0",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 100
           }
         }
       ],
-      "specifications": {
-        "manufacturer": "Dell",
-        "modelNumber": "WD19TBS",
-        "technicalSpecs": {
-          "power": "Up to 130W power delivery",
-          "displaySupport": "Up to 8K @ 60Hz"
+      "url": "https://www.dell.com/support/manuals/en-us/dell-wd19tbs-dock/wd19tbs_user_guide/docking-specifications",
+      "specifications": [
+        { "key": "Display Support with Thunderbolt input", "value": "For a HBR2* PC, 3 x FHD @ 60Hz, 3 x QHD @ 60Hz, 2 x 4K @ 30Hz\nFor a HBR3 PC, 4 x FHD @ 60Hz, 4 x QHD @ 60Hz, 2 x 4K @ 60Hz" },
+        { "key": "Max Resolution", "value": "5K @ 60Hz with HBR2/HBR3, Thunderbolt systems\n8K @ 60Hz with HBR3,Thunderbolt systems supporting Display Stream Compression" },
+        { "key": "Power", "value": "Up to 130W power delivery" },
+        { "key": "Manufacturer", "value": "Dell" },
+        { "key": "Model Number", "value": "WD19TBS" }
+      ]
+    },
+    {
+      "id": "primary-monitor",
+      "description": "27\" QHD 120Hz IPS Monitor",
+      "title": "Primary Monitor",
+      "subtitle": "Dell UltraSharp U2724D",
+      "type": "Monitor",
+      "category": "HUB",
+      "position": {
+        "x": 1800,
+        "y": 1000
+      },
+      "size": {
+        "width": 180,
+        "height": 300
+      },
+      "ports": [
+        {
+          "id": "primary-monitor-dp-in",
+          "name": "DisplayPort",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40
+          }
         },
-        "url": "https://www.dell.com/support/manuals/en-us/dell-wd19tbs-dock/wd19tbs_user_guide/docking-specifications"
-      }
+        {
+          "id": "primary-monitor-hdmi-in",
+          "name": "HDMI 2.1",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 80
+          }
+        },
+        {
+          "id": "primary-monitor-usbc-out",
+          "name": "USB-C 3.2 Gen2",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 120
+          }
+        },
+        {
+          "id": "primary-monitor-aux-out",
+          "name": "Audio Line Out",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 160
+          }
+        },
+        {
+          "id": "primary-monitor-usba-in-1",
+          "name": "USB-A 3.2",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40
+          }
+        },
+        {
+          "id": "primary-monitor-usbc-in",
+          "name": "USB-C 3.2 Gen2",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 80
+          }
+        },
+        {
+          "id": "primary-monitor-usba-in-2",
+          "name": "USB-A 3.2",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 120
+          }
+        }
+      ],
+      "url": "https://www.dell.com/support/home/en-us/product-support/product/u2724d-monitor/overview",
+      "specifications": [
+        { "key": "Screen Size", "value": "27\"" },
+        { "key": "Maximum Resolution", "value": "2,560 x 1,440 @ 120Hz" },
+        { "key": "Panel Technology", "value": "IPS Black Technology" },
+        { "key": "Brightness", "value": "350 cd/m² (typical)" },
+        { "key": "Color Gamut", "value": "100% sRGB, 100% BT.709, 98% Display P3, 98% DCI-P3, Delta E < 2 (average)" },
+        { "key": "Response Time", "value": "8 ms (Normal), 5 ms (Fast)" },
+        { "key": "Manufacturer", "value": "Dell" },
+        { "key": "Model Number", "value": "U2724D" }
+      ]
     }
   ],
   "connections": [
@@ -102,6 +281,20 @@
       "sourcePortId": "office-laptop-thunderbolt",
       "targetDeviceId": "usb-docking-station",
       "targetPortId": "dock-thunderbolt-in-1"
+    },
+    {
+      "id": "conn-2",
+      "sourceDeviceId": "personal-laptop",
+      "sourcePortId": "personal-laptop-thunderbolt",
+      "targetDeviceId": "usb-docking-station",
+      "targetPortId": "dock-thunderbolt-in-2"
+    },
+    {
+      "id": "conn-3",
+      "sourceDeviceId": "usb-docking-station",
+      "sourcePortId": "dock-dp-out-1",
+      "targetDeviceId": "primary-monitor",
+      "targetPortId": "primary-monitor-dp-in"
     }
   ]
 }

@@ -28,27 +28,9 @@ enum class DeviceCategory {
 data class Port(
     val id: String,
     val name: String,
-    val type: PortType,
     val direction: PortDirection,
     val position: PortPosition
 )
-
-@Serializable
-enum class PortType {
-    USB_C,
-    USB_A_2_0,
-    USB_A_3_0,
-    USB_A_3_1,
-    USB_A_3_2,
-    HDMI,
-    HDMI_2_1,
-    DISPLAY_PORT,
-    MINI_HDMI,
-    MICRO_HDMI,
-    ETHERNET,
-    AUX,
-    POWER
-}
 
 @Serializable
 enum class PortDirection {

@@ -209,44 +209,10 @@ private fun DeviceSpecificationsTable(device: Device) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Display specifications
         device.specifications.forEach { item ->
             DeviceSpecificationRow(
                 label = item.key,
                 value = item.value
-            )
-        }
-
-        // Always show port-related information
-        if (device.ports.any { it.direction == dev.akexorcist.workstation.data.model.PortDirection.INPUT }) {
-            val inputPorts = device.ports.filter { it.direction == dev.akexorcist.workstation.data.model.PortDirection.INPUT }
-            DeviceSpecificationRow(
-                label = "Computer Connections",
-                value = "${inputPorts.size}"
-            )
-        }
-
-        val deviceInterfacePorts = device.ports.filter {
-            it.direction == dev.akexorcist.workstation.data.model.PortDirection.OUTPUT &&
-                    it.type != dev.akexorcist.workstation.data.model.PortType.POWER
-        }
-        if (deviceInterfacePorts.isNotEmpty()) {
-            deviceInterfacePorts.groupBy { it.type }.forEach { (portType, ports) ->
-                val portTypeFormatted = portType.name.replace("_", "-")
-                DeviceSpecificationRow(
-                    label = "Device Interface",
-                    value = "$portTypeFormatted ${if (ports.size > 1) "x ${ports.size}" else ""}"
-                )
-            }
-        }
-
-        val powerPorts = device.ports.filter {
-            it.type == dev.akexorcist.workstation.data.model.PortType.POWER
-        }
-        if (powerPorts.isNotEmpty()) {
-            DeviceSpecificationRow(
-                label = "Power Interface",
-                value = "Power ${if (powerPorts.size > 1) "x ${powerPorts.size}" else ""}"
             )
         }
     }

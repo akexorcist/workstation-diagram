@@ -1,7 +1,5 @@
 package dev.akexorcist.workstation.utils
 
-import dev.akexorcist.workstation.data.model.Connection
-import dev.akexorcist.workstation.data.model.Device
 import dev.akexorcist.workstation.data.model.WorkstationLayout
 
 /**
