@@ -9,6 +9,14 @@
     "version": "1.0",
     "theme": {
       "isDark": true
+    },
+    "viewport": {
+      "minZoom": 0.5,
+      "maxZoom": 3.5
+    },
+    "grid": {
+      "size": 20.0,
+      "majorLineInterval": 5
     }
   },
   "devices": [
