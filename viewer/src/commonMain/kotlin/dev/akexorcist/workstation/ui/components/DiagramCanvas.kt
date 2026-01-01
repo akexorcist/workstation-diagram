@@ -185,7 +185,7 @@ fun DiagramCanvas(
                 viewportSize = viewportSize,
                 routedConnectionMap = routedConnectionMap,
                 selectedConnectionId = uiState.selectedConnectionId,
-                isAnimationEnabled = RenderingConfig.connectionAnimationEnabled,
+                isAnimationEnabled = uiState.connectionAnimationEnabled,
                 hoveredDeviceId = uiState.hoveredDeviceId,
                 hoveredPortInfo = uiState.hoveredPortInfo,
                 relatedConnectionsMap = relatedConnectionsMap
