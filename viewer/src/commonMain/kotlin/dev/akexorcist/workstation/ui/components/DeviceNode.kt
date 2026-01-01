@@ -122,7 +122,7 @@ fun DeviceNode(
                         color = textColor
                     )
                     Spacer(modifier = Modifier.height(2.dp * zoom))
-                    if (!device.title.isNullOrEmpty()) {
+                    if (device.title.isNotEmpty()) {
                         Text(
                             text = device.title,
                             style = MaterialTheme.typography.bodyMedium.copy(
