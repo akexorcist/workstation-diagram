@@ -7,7 +7,7 @@ data class Device(
     val id: String,
     val name: String,
     val model: String,
-    val type: DeviceType,
+    val type: String,
     val category: DeviceCategory,
     val position: Position,
     val size: Size,

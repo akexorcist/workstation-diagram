@@ -97,7 +97,6 @@ This document defines the validation rules for `workstation.json` files to ensur
 - ✅ **MUST** have `sourcePortId` (references existing port on source device)
 - ✅ **MUST** have `targetDeviceId` (references existing device)
 - ✅ **MUST** have `targetPortId` (references existing port on target device)
-- ✅ **MUST** have `connectionType` object
 
 ### Connection ID
 - ✅ **MUST** be unique across all connections
@@ -119,8 +118,20 @@ This document defines the validation rules for `workstation.json` files to ensur
 ```json
 {
   "connections": [
-    { "id": "conn-1", "sourcePortId": "usb-c-1", ... },
-    { "id": "conn-2", "sourcePortId": "usb-c-2", ... }
+    { 
+      "id": "conn-1", 
+      "sourceDeviceId": "laptop",
+      "sourcePortId": "usb-c-1",
+      "targetDeviceId": "hub",
+      "targetPortId": "usb-in-1" 
+    },
+    { 
+      "id": "conn-2", 
+      "sourceDeviceId": "laptop",
+      "sourcePortId": "usb-c-2",
+      "targetDeviceId": "hub", 
+      "targetPortId": "usb-in-2"
+    }
   ]
 }
 ```
@@ -129,8 +140,20 @@ This document defines the validation rules for `workstation.json` files to ensur
 ```json
 {
   "connections": [
-    { "id": "conn-1", "sourcePortId": "usb-c-1", ... },
-    { "id": "conn-2", "sourcePortId": "usb-c-1", ... }  // ❌ Same port used twice!
+    { 
+      "id": "conn-1", 
+      "sourceDeviceId": "laptop",
+      "sourcePortId": "usb-c-1",
+      "targetDeviceId": "hub",
+      "targetPortId": "usb-in-1" 
+    },
+    { 
+      "id": "conn-2", 
+      "sourceDeviceId": "laptop",
+      "sourcePortId": "usb-c-1",  // ❌ Same port used twice!
+      "targetDeviceId": "monitor", 
+      "targetPortId": "usb-in-1"
+    }
   ]
 }
 ```
@@ -144,8 +167,6 @@ This document defines the validation rules for `workstation.json` files to ensur
 - ⚠️ OUTPUT → OUTPUT (technically allowed but unusual)
 
 ### Connection Type
-- ✅ **MUST** have `name` field (string)
-- ✅ **MUST** have `category` field (DATA, VIDEO, AUDIO, POWER, or NETWORK)
 
 ---
 

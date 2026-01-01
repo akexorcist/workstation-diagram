@@ -1,3 +1,5 @@
+import org.jetbrains.compose.resources.ResourcesExtension
+
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.compose.multiplatform)
@@ -9,8 +11,14 @@ kotlin {
 
     jvm()
 
-    js {
-        browser()
+    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+    wasmJs {
+        outputModuleName.set("workstation")
+        browser {
+            commonWebpackConfig {
+                outputFileName = "workstation.js"
+            }
+        }
         binaries.executable()
     }
 
@@ -45,22 +53,32 @@ kotlin {
             }
         }
 
-        val jsMain by getting {
+        val wasmJsMain by getting {
             dependencies {
-                implementation(compose.html.core)
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.components.resources)
+                implementation(compose.ui)
+                implementation(compose.runtime)
             }
         }
     }
 }
 
 compose {
-    experimental {
-        web.application {}
-    }
-    
     desktop {
         application {
             mainClass = "dev.akexorcist.workstation.MainKt"
         }
     }
+    resources {
+        publicResClass = true
+        packageOfResClass = "com.akexorcist.workstation.diagram.resources"
+        generateResClass = ResourcesExtension.ResourceClassGeneration.Auto
+    }
+}
+
+// Configure the resource processing for wasmJs
+tasks.named("wasmJsProcessResources") {
+    (this as ProcessResources).duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }

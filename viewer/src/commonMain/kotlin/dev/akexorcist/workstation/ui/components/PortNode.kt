@@ -121,7 +121,7 @@ fun CapsulePortNode(
             }
             
             Text(
-                text = getShortPortName(port),
+                text = port.name,
                 color = textColor,
                 fontWeight = FontWeight.Bold,
                 fontSize = textSizeSp,
@@ -142,22 +142,4 @@ private fun getPortDirectionColor(direction: PortDirection): Color {
         PortDirection.OUTPUT -> WorkstationTheme.themeColor.connection.outputActiveColor
         PortDirection.BIDIRECTIONAL -> WorkstationTheme.themeColor.connection.inputActiveColor.copy(alpha = 0.7f)
     }
-}
-
-private fun getShortPortName(port: Port): String {
-    return port.name
-        .replace(" Input", "")
-        .replace(" Output", "")
-        .replace(" Port", "")
-        .replace("Thunderbolt", "TB")
-        .replace("DisplayPort", "DP")
-}
-
-private fun getShortPortName(portName: String): String {
-    return portName
-        .replace(" Input", "")
-        .replace(" Output", "")
-        .replace(" Port", "")
-        .replace("Thunderbolt", "TB")
-        .replace("DisplayPort", "DP")
 }

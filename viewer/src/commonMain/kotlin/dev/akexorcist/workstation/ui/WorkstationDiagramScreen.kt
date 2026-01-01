@@ -193,7 +193,6 @@ fun WorkstationDiagramScreen(
                             viewModel.loadLayout()
                         }
                     },
-                    isDarkTheme = uiState.isDarkTheme,
                     modifier = Modifier.fillMaxSize()
                 )
             }

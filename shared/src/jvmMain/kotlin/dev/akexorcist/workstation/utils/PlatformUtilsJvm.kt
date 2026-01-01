@@ -12,10 +12,6 @@ actual fun openUrl(url: String) {
     }
 }
 
-actual fun getCurrentDate(): String {
-    return LocalDate.now().toString()
-}
-
 actual fun readResourceFile(path: String): String {
     // Remove leading slash if present, as ClassLoader.getResourceAsStream doesn't expect it
     val resourcePath = path.removePrefix("/")

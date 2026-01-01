@@ -9,31 +9,7 @@ data class Connection(
     val sourcePortId: String,
     val targetDeviceId: String,
     val targetPortId: String,
-    val connectionType: ConnectionType,
-    val cableSpecification: CableSpecification? = null,
     val routingPoints: List<Point>? = null
-)
-
-@Serializable
-data class ConnectionType(
-    val name: String,
-    val category: ConnectionCategory
-)
-
-@Serializable
-enum class ConnectionCategory {
-    DATA,
-    VIDEO,
-    AUDIO,
-    POWER,
-    NETWORK
-}
-
-@Serializable
-data class CableSpecification(
-    val length: String? = null,
-    val brand: String? = null,
-    val notes: String? = null
 )
 
 @Serializable

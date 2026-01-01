@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
@@ -7,8 +9,8 @@ kotlin {
     jvmToolchain(17)
 
     jvm()
-
-    js {
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
         browser()
         binaries.executable()
     }
@@ -27,8 +29,5 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-
-        val jvmMain by getting
-        val jsMain by getting
     }
 }

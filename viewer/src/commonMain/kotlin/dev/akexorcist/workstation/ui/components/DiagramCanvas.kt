@@ -1,6 +1,5 @@
 package dev.akexorcist.workstation.ui.components
 
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,8 +34,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import dev.akexorcist.workstation.data.model.ConnectionCategory
-import dev.akexorcist.workstation.data.model.DeviceSide
 import dev.akexorcist.workstation.data.model.Port
 import dev.akexorcist.workstation.presentation.WorkstationUiState
 import dev.akexorcist.workstation.presentation.config.RenderingConfig
@@ -190,20 +186,18 @@ fun DiagramCanvas(
                 hoveredPortInfo = uiState.hoveredPortInfo,
                 relatedConnectionsMap = relatedConnectionsMap
             )
-            
-            if (layout != null) {
-                PortsOverlay(
-                    layout = layout,
-                    canvasSize = canvasSize,
-                    zoom = zoom,
-                    panOffset = uiState.panOffset,
-                    viewportSize = viewportSize,
-                    hoveredDeviceId = uiState.hoveredDeviceId,
-                    hoveredPortInfo = uiState.hoveredPortInfo,
-                    relatedPortsMap = relatedPortsMap,
-                    onHoverPort = onHoverPort
-                )
-            }
+
+            PortsOverlay(
+                layout = layout,
+                canvasSize = canvasSize,
+                zoom = zoom,
+                panOffset = uiState.panOffset,
+                viewportSize = viewportSize,
+                hoveredDeviceId = uiState.hoveredDeviceId,
+                hoveredPortInfo = uiState.hoveredPortInfo,
+                relatedPortsMap = relatedPortsMap,
+                onHoverPort = onHoverPort
+            )
 
             DeviceList(
                 devices = layout.devices,
@@ -1021,7 +1015,7 @@ private fun createCurvedPath(points: List<Offset>, cornerRadius: Float): Path {
             
             // Draw the curve
             path.lineTo(curveStart.x, curveStart.y)
-            path.quadraticBezierTo(
+            path.quadraticTo(
                 controlPoint.x, controlPoint.y,
                 curveEnd.x, curveEnd.y
             )
@@ -1118,17 +1112,8 @@ private fun PortsOverlay(
 }
 
 private fun getEstimatedPortWidth(port: Port, zoom: Float): Float {
-    // Get simple estimate of text width with basic character counting
-    val shortName = port.name
-        .replace(" Input", "")
-        .replace(" Output", "")
-        .replace(" Port", "")
-        .replace("Thunderbolt", "TB")
-        .replace("DisplayPort", "DP")
-    
-    // Scale the base container width and character width directly with zoom
     val baseWidth = RenderingConfig.portCapsuleBaseWidth * zoom
-    val charWidth = shortName.length * RenderingConfig.portCapsuleWidthPerChar * zoom
+    val charWidth = port.name.length * RenderingConfig.portCapsuleWidthPerChar * zoom
     val innerPaddingWidth = RenderingConfig.portCapsuleHorizontalPadding * 2 * zoom
     
     val standardSidePadding = RenderingConfig.portCapsuleSidePadding * zoom
