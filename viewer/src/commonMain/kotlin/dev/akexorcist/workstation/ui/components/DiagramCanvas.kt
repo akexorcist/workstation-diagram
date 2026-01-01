@@ -1,5 +1,11 @@
 package dev.akexorcist.workstation.ui.components
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -14,12 +20,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.StampedPathEffectStyle
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
@@ -127,7 +138,7 @@ fun DiagramCanvas(
                 viewportSize = viewportSize,
                 routedConnectionMap = routedConnectionMap,
                 selectedConnectionId = uiState.selectedConnectionId,
-                drawPortDots = false // Don't draw port dots, we're using capsule ports instead
+                isAnimationEnabled = RenderingConfig.connectionAnimationEnabled
             )
 
             DeviceList(
@@ -167,11 +178,27 @@ private fun ConnectionCanvas(
     zoom: Float,
     panOffset: dev.akexorcist.workstation.data.model.Offset,
     canvasSize: dev.akexorcist.workstation.data.model.Size,
-    viewportSize: androidx.compose.ui.geometry.Size,
+    viewportSize: Size,
     routedConnectionMap: Map<String, RoutedConnection>,
     selectedConnectionId: String?,
-    drawPortDots: Boolean = false // Add parameter to control port circle rendering
+    isAnimationEnabled: Boolean = RenderingConfig.connectionAnimationEnabled // Parameter to enable/disable animation
 ) {
+    val phase = if (isAnimationEnabled) {
+        val infiniteTransition = rememberInfiniteTransition()
+        infiniteTransition.animateFloat(
+            initialValue = 1f,
+            targetValue = 0f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(
+                    durationMillis = RenderingConfig.connectionAnimationDuration,
+                    easing = LinearEasing
+                ),
+                repeatMode = RepeatMode.Restart
+            )
+        )
+    } else {
+        mutableStateOf(0f)
+    }
     val connectionTheme = WorkstationTheme.themeColor.connection
     val hubColor = WorkstationTheme.themeColor.hub
     val peripheralColor = WorkstationTheme.themeColor.peripheral
@@ -315,47 +342,21 @@ private fun ConnectionCanvas(
                             }
                         }
                         
+                        // Always use active colors for the foreground path
                         val (startForegroundColor, endForegroundColor) = when {
                             sourceDirection == dev.akexorcist.workstation.data.model.PortDirection.OUTPUT &&
                             targetDirection == dev.akexorcist.workstation.data.model.PortDirection.INPUT -> {
-                                val outputFg = when {
-                                    isSelected -> connectionTheme.outputActiveColor
-                                    isHovered -> connectionTheme.outputActiveColor.copy(alpha = 0.7f)
-                                    else -> connectionTheme.outputInactiveColor
-                                }
-                                val inputFg = when {
-                                    isSelected -> connectionTheme.inputActiveColor
-                                    isHovered -> connectionTheme.inputActiveColor.copy(alpha = 0.7f)
-                                    else -> connectionTheme.inputInactiveColor
-                                }
-                                Pair(outputFg, inputFg)
+                                // Output to Input
+                                Pair(connectionTheme.outputActiveColor, connectionTheme.inputActiveColor)
                             }
                             sourceDirection == dev.akexorcist.workstation.data.model.PortDirection.INPUT &&
                             targetDirection == dev.akexorcist.workstation.data.model.PortDirection.OUTPUT -> {
-                                val inputFg = when {
-                                    isSelected -> connectionTheme.inputActiveColor
-                                    isHovered -> connectionTheme.inputActiveColor.copy(alpha = 0.7f)
-                                    else -> connectionTheme.inputInactiveColor
-                                }
-                                val outputFg = when {
-                                    isSelected -> connectionTheme.outputActiveColor
-                                    isHovered -> connectionTheme.outputActiveColor.copy(alpha = 0.7f)
-                                    else -> connectionTheme.outputInactiveColor
-                                }
-                                Pair(inputFg, outputFg)
+                                // Input to Output
+                                Pair(connectionTheme.inputActiveColor, connectionTheme.outputActiveColor)
                             }
                             else -> {
-                                val inputFg = when {
-                                    isSelected -> connectionTheme.inputActiveColor
-                                    isHovered -> connectionTheme.inputActiveColor.copy(alpha = 0.7f)
-                                    else -> connectionTheme.inputInactiveColor
-                                }
-                                val outputFg = when {
-                                    isSelected -> connectionTheme.outputActiveColor
-                                    isHovered -> connectionTheme.outputActiveColor.copy(alpha = 0.7f)
-                                    else -> connectionTheme.outputInactiveColor
-                                }
-                                Pair(inputFg, outputFg)
+                                // Default case - either both are the same or unknown
+                                Pair(connectionTheme.inputActiveColor, connectionTheme.outputActiveColor)
                             }
                         }
                         
@@ -365,51 +366,9 @@ private fun ConnectionCanvas(
                             endBackgroundColor = endBackgroundColor,
                             startForegroundColor = startForegroundColor,
                             endForegroundColor = endForegroundColor,
-                            zoom = zoom
-                        )
-                    }
-                }
-            }
-        }
-
-        // Only draw port circles if drawPortDots is true
-        if (drawPortDots) {
-            layout.devices.forEach { device ->
-                device.ports.forEach { port ->
-                    val portPosition = calculatePortScreenPosition(
-                        device, port, layout.metadata, canvasSize, zoom, panOffset
-                    )
-                    val portSize = 8f * zoom
-                    val portRadius = portSize / 2 + 2 // Include background radius for visibility check
-    
-                    // Only draw ports that are visible in the viewport
-                    if (isPortVisibleInViewport(portPosition, portRadius, viewportSize)) {
-                        val portColor = when (port.type) {
-                            dev.akexorcist.workstation.data.model.PortType.USB_C -> ThemeColor.DimBlue500
-                            dev.akexorcist.workstation.data.model.PortType.USB_A_2_0,
-                            dev.akexorcist.workstation.data.model.PortType.USB_A_3_0,
-                            dev.akexorcist.workstation.data.model.PortType.USB_A_3_1,
-                            dev.akexorcist.workstation.data.model.PortType.USB_A_3_2 -> hubColor
-                            dev.akexorcist.workstation.data.model.PortType.HDMI,
-                            dev.akexorcist.workstation.data.model.PortType.HDMI_2_1,
-                            dev.akexorcist.workstation.data.model.PortType.DISPLAY_PORT,
-                            dev.akexorcist.workstation.data.model.PortType.MINI_HDMI,
-                            dev.akexorcist.workstation.data.model.PortType.MICRO_HDMI -> peripheralColor
-                            dev.akexorcist.workstation.data.model.PortType.ETHERNET -> ThemeColor.Purple500
-                            dev.akexorcist.workstation.data.model.PortType.AUX -> ThemeColor.Pink500
-                            dev.akexorcist.workstation.data.model.PortType.POWER -> ThemeColor.DimAmber500
-                        }
-    
-                        drawCircle(
-                            color = portColor.copy(alpha = 0.3f),
-                            radius = portSize / 2 + 2,
-                            center = portPosition
-                        )
-    
-                        drawCircle(
-                            color = portColor,
-                            radius = portSize / 2,
-                            center = portPosition
+                            zoom = zoom,
+                            phase = phase.value,
+                            isAnimationEnabled = isAnimationEnabled
                         )
                     }
                 }
@@ -603,13 +562,15 @@ private fun calculateOrthogonalPath(
     return path
 }
 
-private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawGradientConnectionPath(
+private fun DrawScope.drawGradientConnectionPath(
     path: List<Offset>,
     startBackgroundColor: Color,
     endBackgroundColor: Color, 
     startForegroundColor: Color,
     endForegroundColor: Color,
-    zoom: Float
+    zoom: Float,
+    phase: Float = 0f,
+    isAnimationEnabled: Boolean = true
 ) {
     if (path.size < 2) return
     
@@ -620,7 +581,7 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawGradientConnect
     val segmentLengths = mutableListOf<Float>()
     
     for (i in 0 until path.size - 1) {
-        val length = androidx.compose.ui.geometry.Offset(
+        val length = Offset(
             path[i+1].x - path[i].x,
             path[i+1].y - path[i].y
         ).getDistance()
@@ -628,62 +589,65 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawGradientConnect
         totalPathLength += length
     }
     
-    // Create a Path object to draw the entire connection path at once
-    val backgroundPath = androidx.compose.ui.graphics.Path()
-    backgroundPath.moveTo(path.first().x, path.first().y)
+    // Create a curved path for background
+    val backgroundPath = createCurvedPath(path, RenderingConfig.connectionCornerRadius * zoom)
     
-    for (i in 1 until path.size) {
-        backgroundPath.lineTo(path[i].x, path[i].y)
-    }
-    
-    // Create a single gradient brush for the entire path
     val backgroundBrush = Brush.linearGradient(
         colors = listOf(startBackgroundColor, endBackgroundColor),
         start = path.first(),
         end = path.last()
     )
-    
-    // Draw the entire path at once with proper joins to prevent overlapping circles at corners
     drawPath(
         path = backgroundPath,
         brush = backgroundBrush,
-        style = androidx.compose.ui.graphics.drawscope.Stroke(
+        style = Stroke(
             width = backgroundWidth,
             cap = StrokeCap.Round,
             join = StrokeJoin.Round
         )
     )
     
-    val dotRadius = RenderingConfig.connectionDotLength * zoom
-    val dotGap = RenderingConfig.connectionDotGap * zoom
-    val dotStep = dotRadius * 2 + dotGap
+    // Create a curved path for foreground
+    val foregroundPath = createCurvedPath(path, RenderingConfig.connectionCornerRadius * zoom)
     
-    val totalLength = calculatePathLength(path)
-    val dotsCount = (totalLength / dotStep).toInt() + 1
-    
-    if (dotsCount >= 2) {
-        val adjustedStep = totalLength / (dotsCount - 1)
-        
-        for (i in 0 until dotsCount) {
-            val distance = i * adjustedStep
-            if (distance > totalLength) break
-            
-            val dotPosition = getPointAtDistance(path, distance)
-            val fraction = distance / totalLength
-            
-            val dotColor = androidx.compose.ui.graphics.lerp(
-                startForegroundColor,
-                endForegroundColor,
-                fraction
-            )
-            
-            drawCircle(
-                color = dotColor,
-                radius = dotRadius,
-                center = dotPosition
-            )
-        }
+    // Create oval path for stamped effect
+    val ovalWidth = foregroundWidth * 0.9f 
+    val ovalHeight = ovalWidth  
+    val ovalPath = Path().apply {
+        addOval(Rect(
+            -ovalWidth / 2f,
+            -ovalHeight / 2f,
+            ovalWidth / 2f,
+            ovalHeight / 2f
+        ))
     }
+    
+    val stampSpacing = ovalWidth * RenderingConfig.connectionAnimationStampSpacing
+    val lineCornerRadius = ovalWidth / 2f
+    
+    val foregroundBrush = Brush.linearGradient(
+        colors = listOf(startForegroundColor, endForegroundColor),
+        start = path.first(),
+        end = path.last()
+    )
+    drawPath(
+        path = foregroundPath,
+        brush = foregroundBrush,
+        style = Stroke(
+            width = foregroundWidth,
+            pathEffect = PathEffect.chainPathEffect(
+                outer = PathEffect.stampedPathEffect(
+                    shape = ovalPath,
+                    style = StampedPathEffectStyle.Translate,
+                    phase = phase * RenderingConfig.connectionAnimationPhaseScale * zoom,
+                    advance = stampSpacing,
+                ),
+                inner = PathEffect.cornerPathEffect(lineCornerRadius),
+            ),
+            cap = StrokeCap.Round,
+            join = StrokeJoin.Round
+        )
+    )
 }
 
 private fun calculatePathLength(path: List<Offset>): Float {
@@ -870,6 +834,106 @@ private fun virtualToScreen(
 ): Offset {
     val position = dev.akexorcist.workstation.data.model.Position(virtualX, virtualY)
     return CoordinateTransformer.transformPosition(position, metadata, canvasSize, zoom, panOffset)
+}
+
+/**
+ * Creates a path with rounded corners using Bezier curves
+ * @param points List of points that form the path
+ * @param cornerRadius Radius for the rounded corners
+ * @return Path object with Bezier curves for corners
+ */
+private fun createCurvedPath(points: List<Offset>, cornerRadius: Float): Path {
+    if (points.size < 2) return Path()
+    
+    val path = Path()
+    path.moveTo(points[0].x, points[0].y)
+
+    // If only two points, just draw a straight line
+    if (points.size == 2) {
+        path.lineTo(points[1].x, points[1].y)
+        return path
+    }
+    
+    // First segment - always a line from start to first corner
+    val firstPoint = points[0]
+    val firstCorner = points[1]
+    
+    // Calculate distance from start to first corner
+    val firstSegmentLength = kotlin.math.sqrt(
+        (firstCorner.x - firstPoint.x) * (firstCorner.x - firstPoint.x) +
+        (firstCorner.y - firstPoint.y) * (firstCorner.y - firstPoint.y)
+    )
+    
+    // If the first segment is shorter than cornerRadius*2, use half the length as cornerRadius
+    val firstCornerRadius = kotlin.math.min(cornerRadius, firstSegmentLength / 2)
+    
+    // Calculate the point where the curve should start
+    val firstCurveStart = Offset(
+        firstPoint.x + (firstCorner.x - firstPoint.x) * (1 - firstCornerRadius / firstSegmentLength),
+        firstPoint.y + (firstCorner.y - firstPoint.y) * (1 - firstCornerRadius / firstSegmentLength)
+    )
+    
+    // Draw line from start to the curve start point
+    path.lineTo(firstCurveStart.x, firstCurveStart.y)
+    
+    // Process each corner point except the first and last
+    for (i in 1 until points.size - 1) {
+        val prev = points[i - 1]
+        val current = points[i]
+        val next = points[i + 1]
+        
+        // Calculate incoming and outgoing vectors
+        val incomingX = current.x - prev.x
+        val incomingY = current.y - prev.y
+        val outgoingX = next.x - current.x
+        val outgoingY = next.y - current.y
+        
+        // Calculate lengths of incoming and outgoing segments
+        val incomingLength = kotlin.math.sqrt(incomingX * incomingX + incomingY * incomingY)
+        val outgoingLength = kotlin.math.sqrt(outgoingX * outgoingX + outgoingY * outgoingY)
+        
+        // Limit corner radius based on segment lengths
+        val maxRadius = kotlin.math.min(incomingLength, outgoingLength) / 2
+        val actualCornerRadius = kotlin.math.min(cornerRadius, maxRadius)
+        
+        // Only proceed if we have a valid radius and non-zero segments
+        if (actualCornerRadius > 0 && incomingLength > 0 && outgoingLength > 0) {
+            // Normalize incoming and outgoing vectors
+            val incomingNormX = incomingX / incomingLength
+            val incomingNormY = incomingY / incomingLength
+            val outgoingNormX = outgoingX / outgoingLength
+            val outgoingNormY = outgoingY / outgoingLength
+            
+            // Calculate start and end points of the curve
+            val curveStart = Offset(
+                current.x - incomingNormX * actualCornerRadius,
+                current.y - incomingNormY * actualCornerRadius
+            )
+            
+            val curveEnd = Offset(
+                current.x + outgoingNormX * actualCornerRadius,
+                current.y + outgoingNormY * actualCornerRadius
+            )
+            
+            // Calculate control points for the curve
+            val controlPoint = current
+            
+            // Draw the curve
+            path.lineTo(curveStart.x, curveStart.y)
+            path.quadraticBezierTo(
+                controlPoint.x, controlPoint.y,
+                curveEnd.x, curveEnd.y
+            )
+        } else {
+            // If we can't create a curve, just draw a straight line to the point
+            path.lineTo(current.x, current.y)
+        }
+    }
+    
+    // Final segment - from last curve to end point
+    path.lineTo(points.last().x, points.last().y)
+    
+    return path
 }
 
 @Composable
