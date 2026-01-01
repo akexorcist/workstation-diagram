@@ -57,7 +57,7 @@ object ThemeColor {
     
     // Amber colors
     val Amber100 = Color(0xFFFFECB3)
-    val DimAmber500 = Color(0xFFFAAA20)
+    val DimAmber500 = Color(0xFFC2954C)
     
     // Basic colors
     val White = Color.White
