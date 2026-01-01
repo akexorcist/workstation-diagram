@@ -33,6 +33,7 @@ fun CapsulePortNode(
     
     val innerPaddingDp = (RenderingConfig.portCapsuleHorizontalPadding * zoom).dp
     val sidePaddingDp = (RenderingConfig.portCapsuleSidePadding * zoom).dp
+    val deviceSidePaddingDp = (RenderingConfig.portCapsuleDeviceSidePadding * zoom).dp
     val textSizeSp = (RenderingConfig.portCapsuleFontSize * zoom).sp
     val capsuleHeightDp = (RenderingConfig.portCapsuleHeight * zoom).dp
     
@@ -70,6 +71,17 @@ fun CapsulePortNode(
             contentAlignment = boxAlignment,
             modifier = Modifier.fillMaxSize()
         ) {
+            val startPadding = when(clipEdge) {
+                "right" -> deviceSidePaddingDp
+                "top", "bottom" -> if (boxAlignment == Alignment.CenterStart) deviceSidePaddingDp else sidePaddingDp
+                else -> sidePaddingDp
+            }
+            val endPadding = when(clipEdge) {
+                "left" -> deviceSidePaddingDp
+                "top", "bottom" -> if (boxAlignment == Alignment.CenterEnd) deviceSidePaddingDp else sidePaddingDp
+                else -> sidePaddingDp
+            }
+            
             Text(
                 text = getShortPortName(port),
                 color = Color.White,
@@ -79,7 +91,7 @@ fun CapsulePortNode(
                 softWrap = false,
                 overflow = TextOverflow.Visible,
                 lineHeight = textSizeSp,
-                modifier = Modifier.padding(start = sidePaddingDp, end = sidePaddingDp, top = 0.dp, bottom = 0.dp)
+                modifier = Modifier.padding(start = startPadding, end = endPadding, top = 0.dp, bottom = 0.dp)
             )
         }
     }

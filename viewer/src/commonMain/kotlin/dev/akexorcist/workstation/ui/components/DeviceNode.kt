@@ -11,10 +11,17 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.ui.Alignment
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,48 +64,23 @@ fun DeviceNode(
         label = "backgroundColor"
     )
 
-    val borderColor by animateColorAsState(
-        targetValue = getDeviceBorderColor(deviceColor, isHovered, isSelected),
-        animationSpec = tween(durationMillis = 200),
-        label = "borderColor"
-    )
-
-    val borderWidth by animateDpAsState(
-        targetValue = getDeviceBorderWidth(isHovered, isSelected, screenSize).dp,
-        animationSpec = tween(durationMillis = 200),
-        label = "borderWidth"
-    )
-
-    val scale by animateFloatAsState(
-        targetValue = if (isSelected) 1.02f else 1f,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessMedium
-        ),
-        label = "scale"
-    )
+    val borderColor = getDeviceBorderColor(deviceColor, isHovered, isSelected)
 
     Box(modifier = modifier) {
         Box(
-            modifier = Modifier
-                .offset {
-                    IntOffset(
-                        screenPosition.x.toInt(),
-                        screenPosition.y.toInt()
-                    )
-                }
-                .size(screenSize.width.dp, screenSize.height.dp)
-                .scale(scale)
-                .background(
-                    color = backgroundColor,
-                    shape = RoundedCornerShape(RenderingConfig.defaultDeviceBorderRadius.dp)
+        modifier = Modifier
+            .offset {
+                IntOffset(
+                    screenPosition.x.toInt(),
+                    screenPosition.y.toInt()
                 )
-                .border(
-                    width = borderWidth,
-                    color = borderColor,
-                    shape = RoundedCornerShape(RenderingConfig.defaultDeviceBorderRadius.dp)
-                )
-                .pointerInput(Unit) {
+            }
+            .size(screenSize.width.dp, screenSize.height.dp)
+            .background(
+                color = backgroundColor,
+                shape = RoundedCornerShape(RenderingConfig.defaultDeviceBorderRadius.dp)
+            )
+            .pointerInput(Unit) {
                     awaitPointerEventScope {
                         while (true) {
                             val event = awaitPointerEvent()
@@ -118,13 +100,39 @@ fun DeviceNode(
                     indication = null,
                     onClick = onClick
                 )
-        )
-
-
+        ) {
+            if (screenSize.width >= RenderingConfig.deviceTextMinWidthToShow * zoom) {
+                val paddingScaled = (RenderingConfig.deviceTextPadding * zoom).dp
+                
+                Column(
+                    modifier = Modifier
+                        .padding(start = paddingScaled, end = paddingScaled)
+                        .align(Alignment.CenterStart)
+                ) {
+                    Text(
+                        text = device.name,
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontSize = MaterialTheme.typography.titleMedium.fontSize * zoom * RenderingConfig.deviceTextTitleScale,
+                            lineHeight = MaterialTheme.typography.titleMedium.lineHeight * zoom * RenderingConfig.deviceTextLineHeightScale
+                        ),
+                        color = WorkstationTheme.themeColor.text
+                    )
+                    Spacer(modifier = Modifier.height(2.dp * zoom))
+                    Text(
+                        text = device.model,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontSize = MaterialTheme.typography.bodyMedium.fontSize * zoom * RenderingConfig.deviceTextBodyScale,
+                            lineHeight = MaterialTheme.typography.bodyMedium.lineHeight * zoom * RenderingConfig.deviceTextLineHeightScale,
+                        ),
+                        color = WorkstationTheme.themeColor.text
+                    )
+                }
+            }
+        }
     }
 }
 
-// Helper functions for styling and positioning
+
 
 @Composable
 private fun getDeviceColor(category: DeviceCategory): Color {
@@ -140,11 +148,7 @@ private fun getDeviceBackgroundColor(
     isHovered: Boolean,
     isSelected: Boolean
 ): Color {
-    return when {
-        isSelected -> deviceColor.copy(alpha = 0.4f)
-        isHovered -> deviceColor.copy(alpha = 0.3f)
-        else -> deviceColor.copy(alpha = 0.2f)
-    }
+    return deviceColor
 }
 
 @Composable
@@ -153,23 +157,8 @@ private fun getDeviceBorderColor(
     isHovered: Boolean,
     isSelected: Boolean
 ): Color {
-    return when {
-        isSelected -> WorkstationTheme.themeColor.onPrimary
-        isHovered -> deviceColor.copy(alpha = 1f)
-        else -> deviceColor
-    }
+    return deviceColor
 }
 
-private fun getDeviceBorderWidth(
-    isHovered: Boolean,
-    isSelected: Boolean,
-    screenSize: androidx.compose.ui.geometry.Size
-): Float {
-    val baseThickness = RenderingConfig.defaultDeviceBorderThickness
-    return when {
-        isSelected -> baseThickness * 2
-        isHovered -> baseThickness * 1.5f
-        else -> baseThickness
-    }
-}
+
 

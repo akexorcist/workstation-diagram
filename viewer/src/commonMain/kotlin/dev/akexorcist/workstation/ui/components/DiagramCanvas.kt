@@ -140,6 +140,16 @@ fun DiagramCanvas(
                 selectedConnectionId = uiState.selectedConnectionId,
                 isAnimationEnabled = RenderingConfig.connectionAnimationEnabled
             )
+            
+            if (layout != null) {
+                PortsOverlay(
+                    layout = layout,
+                    canvasSize = canvasSize,
+                    zoom = zoom,
+                    panOffset = uiState.panOffset,
+                    viewportSize = viewportSize
+                )
+            }
 
             DeviceList(
                 devices = layout.devices,
@@ -154,17 +164,6 @@ fun DiagramCanvas(
                 onDeviceClick = onDeviceClick,
                 onHoverChange = onHoverDevice
             )
-            
-            // Add capsule port overlays
-            if (layout != null) {
-                PortsOverlay(
-                    layout = layout,
-                    canvasSize = canvasSize,
-                    zoom = zoom,
-                    panOffset = uiState.panOffset,
-                    viewportSize = viewportSize
-                )
-            }
         }
     }
 }
@@ -1016,11 +1015,9 @@ private fun getEstimatedPortWidth(port: Port, zoom: Float): Float {
     val charWidth = shortName.length * RenderingConfig.portCapsuleWidthPerChar * zoom
     val innerPaddingWidth = RenderingConfig.portCapsuleHorizontalPadding * 2 * zoom
     
-    // Add consistent side padding that's the same for all ports
-    val sidePadding = RenderingConfig.portCapsuleSidePadding * 2 * zoom // Both left and right sides
-    
-    // Return the total width with consistent side padding
-    return baseWidth + charWidth + innerPaddingWidth + sidePadding
+    val standardSidePadding = RenderingConfig.portCapsuleSidePadding * zoom
+    val deviceSidePadding = RenderingConfig.portCapsuleDeviceSidePadding * zoom
+    return baseWidth + charWidth + innerPaddingWidth + standardSidePadding + deviceSidePadding
 }
 
 
