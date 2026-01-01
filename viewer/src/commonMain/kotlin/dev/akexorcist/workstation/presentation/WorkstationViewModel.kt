@@ -3,6 +3,7 @@ package dev.akexorcist.workstation.presentation
 import dev.akexorcist.workstation.data.model.*
 import dev.akexorcist.workstation.data.repository.LoadResult
 import dev.akexorcist.workstation.data.repository.WorkstationRepository
+import dev.akexorcist.workstation.data.repository.WorkstationRepositoryImpl
 import dev.akexorcist.workstation.presentation.config.InteractionConfig
 import dev.akexorcist.workstation.presentation.config.StateManagementConfig
 import dev.akexorcist.workstation.presentation.config.ViewportConfig
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class WorkstationViewModel(
-    private val repository: WorkstationRepository = dev.akexorcist.workstation.data.repository.WorkstationRepositoryImpl()
+    private val repository: WorkstationRepository = WorkstationRepositoryImpl()
 ) {
     private val _uiState = MutableStateFlow(WorkstationUiState(isLoading = true))
     val uiState: StateFlow<WorkstationUiState> = _uiState.asStateFlow()
