@@ -85,7 +85,8 @@ enum class DeviceSide {
 data class DeviceSpecifications(
     val manufacturer: String? = null,
     val modelNumber: String? = null,
-    val technicalSpecs: Map<String, String> = emptyMap()
+    val technicalSpecs: Map<String, String> = emptyMap(),
+    val url: String? = null
 )
 
 @Serializable

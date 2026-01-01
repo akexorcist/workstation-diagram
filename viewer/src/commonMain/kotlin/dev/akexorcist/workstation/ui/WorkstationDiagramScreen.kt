@@ -46,8 +46,7 @@ import dev.akexorcist.workstation.data.model.Size
 import dev.akexorcist.workstation.presentation.WorkstationViewModel
 import dev.akexorcist.workstation.ui.components.DiagramCanvas
 import dev.akexorcist.workstation.ui.components.ControlPanel
-import dev.akexorcist.workstation.ui.components.ConnectionDetailPanel
-import dev.akexorcist.workstation.ui.components.DeviceDetailPanel
+import dev.akexorcist.workstation.ui.components.DeviceDetailsDialog
 import dev.akexorcist.workstation.ui.components.DeviceListSidebar
 import dev.akexorcist.workstation.ui.components.HudToggleButton
 import dev.akexorcist.workstation.ui.states.ErrorState
@@ -296,47 +295,16 @@ fun WorkstationDiagramScreen(
             )
         }
 
-        // Device detail panel (bottom overlay)
+        // Device details dialog
         val layout = uiState.layout
-        if (uiState.selectedDeviceId != null && layout != null) {
+        if (layout != null && uiState.selectedDeviceId != null) {
             val selectedDevice = layout.devices.find { it.id == uiState.selectedDeviceId }
             if (selectedDevice != null) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    DeviceDetailPanel(
-                        device = selectedDevice,
-                        onClose = { viewModel.deselectAll() }
-                    )
-                }
-            }
-        }
-
-        // Connection detail panel (bottom overlay)
-        if (uiState.selectedConnectionId != null && layout != null) {
-            val selectedConnection = layout.connections.find { it.id == uiState.selectedConnectionId }
-            if (selectedConnection != null) {
-                val sourceDevice = layout.devices.find { it.id == selectedConnection.sourceDeviceId }
-                val targetDevice = layout.devices.find { it.id == selectedConnection.targetDeviceId }
-
-                if (sourceDevice != null && targetDevice != null) {
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    ) {
-                        ConnectionDetailPanel(
-                            connection = selectedConnection,
-                            sourceDeviceName = sourceDevice.name,
-                            targetDeviceName = targetDevice.name,
-                            onClose = { viewModel.deselectAll() }
-                        )
-                    }
-                }
+                DeviceDetailsDialog(
+                    isVisible = true,
+                    device = selectedDevice,
+                    onDismissRequest = { viewModel.deselectAll() }
+                )
             }
         }
     }
