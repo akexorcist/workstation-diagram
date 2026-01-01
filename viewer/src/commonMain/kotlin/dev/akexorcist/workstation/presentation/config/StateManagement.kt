@@ -9,8 +9,17 @@ object StateManagementConfig {
     // To center, we need to shift right by half sidebar width (150px) and down by half control panel height (30px)
     val initialPan: Offset = Offset(150f, 30f)
 
-    fun validateZoom(zoom: Float): Float {
-        return zoom.coerceIn(InteractionConfig.minZoom, InteractionConfig.maxZoom)
+    /**
+     * Validates and constrains zoom level based on provided viewport config or fallback values.
+     * 
+     * @param zoom The desired zoom level
+     * @param viewportConfig Optional viewport config from workstation.json with min/max zoom constraints
+     * @return Validated zoom level constrained between minimum and maximum allowed values
+     */
+    fun validateZoom(zoom: Float, viewportConfig: dev.akexorcist.workstation.data.model.ViewportConfig? = null): Float {
+        val minZoom = viewportConfig?.minZoom ?: InteractionConfig.minZoom
+        val maxZoom = viewportConfig?.maxZoom ?: InteractionConfig.maxZoom
+        return zoom.coerceIn(minZoom, maxZoom)
     }
 
     fun validatePan(pan: Offset, canvasSize: Size): Offset {

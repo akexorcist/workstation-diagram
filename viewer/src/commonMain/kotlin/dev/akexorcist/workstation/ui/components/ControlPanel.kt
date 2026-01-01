@@ -19,6 +19,19 @@ import dev.akexorcist.workstation.presentation.config.InteractionConfig
 import dev.akexorcist.workstation.ui.theme.WorkstationTheme
 import dev.akexorcist.workstation.utils.defaultShadow
 
+/**
+ * Control panel component that displays zoom slider and action buttons.
+ *
+ * @param zoom Current zoom level
+ * @param onZoomChange Callback when zoom level changes
+ * @param onReset Callback to reset zoom and pan to default
+ * @param connectionAnimationEnabled Whether connection animations are enabled
+ * @param onConnectionAnimationToggle Callback to toggle connection animations
+ * @param isDarkTheme Whether dark theme is enabled
+ * @param onThemeToggle Callback to toggle theme
+ * @param viewportConfig Configuration from workstation.json that defines zoom constraints
+ * @param modifier Modifier for styling
+ */
 @Composable
 fun ControlPanel(
     zoom: Float,
@@ -28,6 +41,7 @@ fun ControlPanel(
     onConnectionAnimationToggle: (Boolean) -> Unit,
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit,
+    viewportConfig: dev.akexorcist.workstation.data.model.ViewportConfig? = null,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -58,7 +72,7 @@ fun ControlPanel(
                 Slider(
                     value = zoom,
                     onValueChange = onZoomChange,
-                    valueRange = InteractionConfig.minZoom..InteractionConfig.maxZoom,
+                    valueRange = (viewportConfig?.minZoom ?: InteractionConfig.minZoom)..(viewportConfig?.maxZoom ?: InteractionConfig.maxZoom),
                     colors = SliderDefaults.colors(
                         thumbColor = WorkstationTheme.themeColor.primary,
                         activeTrackColor = WorkstationTheme.themeColor.primary.copy(alpha = 0.7f),

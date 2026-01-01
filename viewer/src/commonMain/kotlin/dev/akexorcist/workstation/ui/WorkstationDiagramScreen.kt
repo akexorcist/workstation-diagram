@@ -267,7 +267,8 @@ fun WorkstationDiagramScreen(
                         connectionAnimationEnabled = uiState.connectionAnimationEnabled,
                         onConnectionAnimationToggle = { viewModel.toggleConnectionAnimation() },
                         isDarkTheme = uiState.isDarkTheme,
-                        onThemeToggle = viewModel::toggleTheme
+                        onThemeToggle = viewModel::toggleTheme,
+                        viewportConfig = uiState.layout?.metadata?.viewport
                     )
                 }
     

@@ -48,8 +48,14 @@ class WorkstationViewModel(
         }
     }
 
+    /**
+     * Handles zoom level changes while respecting viewport constraints from workstation.json.
+     * 
+     * @param zoom The desired zoom level
+     */
     fun handleZoomChange(zoom: Float) {
-        val validatedZoom = StateManagementConfig.validateZoom(zoom)
+        val viewportConfig = _uiState.value.layout?.metadata?.viewport
+        val validatedZoom = StateManagementConfig.validateZoom(zoom, viewportConfig)
         _uiState.value = _uiState.value.copy(zoom = validatedZoom)
         updateDiagramState()
     }
@@ -57,12 +63,18 @@ class WorkstationViewModel(
     /**
      * Zoom towards a specific point on screen (typically viewport center)
      * This keeps the point under the cursor/center fixed during zoom
+     * while respecting zoom constraints from workstation.json configuration.
+     *
+     * @param newZoom The desired new zoom level
+     * @param screenPoint The screen point to maintain position during zoom
+     * @param canvasSize The current canvas size
      */
     fun handleZoomChangeAtPoint(newZoom: Float, screenPoint: Offset, canvasSize: Size) {
         val oldZoom = _uiState.value.zoom
         val oldPan = _uiState.value.panOffset
+        val viewportConfig = _uiState.value.layout?.metadata?.viewport
         
-        val validatedZoom = StateManagementConfig.validateZoom(newZoom)
+        val validatedZoom = StateManagementConfig.validateZoom(newZoom, viewportConfig)
         
         // Calculate the world position at the screen point before zoom
         // screenPoint = worldPos * oldZoom + oldPan
@@ -143,8 +155,13 @@ class WorkstationViewModel(
         updateDiagramState()
     }
 
+    /**
+     * Resets the zoom level to the default zoom value from the workstation.json configuration
+     * or to the application default if no configuration is available.
+     */
     fun resetZoom() {
-        _uiState.value = _uiState.value.copy(zoom = ViewportConfig.defaultZoom)
+        val defaultZoom = _uiState.value.layout?.metadata?.viewport?.defaultZoom ?: ViewportConfig.defaultZoom
+        _uiState.value = _uiState.value.copy(zoom = defaultZoom)
         updateDiagramState()
     }
 
