@@ -25,6 +25,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.akexorcist.workstation.data.model.Device
@@ -36,6 +38,7 @@ import dev.akexorcist.workstation.ui.theme.WorkstationTheme
 fun DeviceListSidebar(
     uiState: WorkstationUiState,
     onDeviceClick: (String) -> Unit,
+    onHoverDevice: (String?, Boolean) -> Unit = { _, _ -> },
     onHomeClick: () -> Unit,
     onGithubClick: () -> Unit,
     isInstructionExpanded: Boolean,
@@ -84,7 +87,9 @@ fun DeviceListSidebar(
                 isExpanded = isDeviceListExpanded,
                 onExpandChange = onDeviceListExpandChange,
                 selectedDeviceId = uiState.selectedDeviceId,
+                hoveredDeviceId = uiState.hoveredDeviceId,
                 onDeviceClick = onDeviceClick,
+                onHoverDevice = onHoverDevice
             )
         }
     }
@@ -96,7 +101,9 @@ private fun DeviceListSection(
     isExpanded: Boolean,
     onExpandChange: (Boolean) -> Unit,
     selectedDeviceId: String?,
+    hoveredDeviceId: String? = null,
     onDeviceClick: (String) -> Unit,
+    onHoverDevice: (String?, Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier
 ) {
     CollapsibleSection(
@@ -117,7 +124,11 @@ private fun DeviceListSection(
                     DeviceListItem(
                         device = device,
                         isSelected = device.id == selectedDeviceId,
-                        onClick = { onDeviceClick(device.id) }
+                        isHovered = device.id == hoveredDeviceId,
+                        onClick = { onDeviceClick(device.id) },
+                        onHover = { deviceId, isHovered ->
+                            onHoverDevice(deviceId, isHovered)
+                        }
                     )
                 }
             }
@@ -129,12 +140,14 @@ private fun DeviceListSection(
 private fun DeviceListItem(
     device: Device,
     isSelected: Boolean,
-    onClick: () -> Unit
+    isHovered: Boolean = false,
+    onClick: () -> Unit,
+    onHover: (String, Boolean) -> Unit = { _, _ -> }
 ) {
-    val backgroundColor = if (isSelected) {
-        WorkstationTheme.themeColor.surfaceVariant
-    } else {
-        WorkstationTheme.themeColor.surface
+    val backgroundColor = when {
+        isSelected -> WorkstationTheme.themeColor.surfaceVariant
+        isHovered -> WorkstationTheme.themeColor.surfaceVariant.copy(alpha = 0.5f)
+        else -> WorkstationTheme.themeColor.surface
     }
 
     val categoryColor = when (device.category) {
@@ -150,6 +163,21 @@ private fun DeviceListItem(
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
             .background(backgroundColor)
+            .pointerInput(Unit) {
+                awaitPointerEventScope {
+                    while (true) {
+                        val event = awaitPointerEvent()
+                        when (event.type) {
+                            PointerEventType.Enter -> {
+                                onHover(device.id, true)
+                            }
+                            PointerEventType.Exit -> {
+                                onHover(device.id, false)
+                            }
+                        }
+                    }
+                }
+            }
     ) {
         Row(
             modifier = Modifier

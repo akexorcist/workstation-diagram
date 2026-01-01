@@ -196,6 +196,14 @@ class WorkstationViewModel(
             hoveredConnectionId = if (isHovered) connectionId else null
         )
     }
+    
+    fun handlePortHover(portInfo: String?, isHovered: Boolean) {
+        // When a port is hovered, we clear any device hover state to avoid conflicts
+        _uiState.value = _uiState.value.copy(
+            hoveredPortInfo = if (isHovered) portInfo else null,
+            hoveredDeviceId = if (isHovered) null else _uiState.value.hoveredDeviceId
+        )
+    }
 
     fun toggleInstructionExpanded() {
         _uiState.value = _uiState.value.copy(

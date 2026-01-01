@@ -1,5 +1,6 @@
 package dev.akexorcist.workstation.ui.components
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +47,7 @@ import dev.akexorcist.workstation.routing.RoutingConfig
 import dev.akexorcist.workstation.ui.theme.ThemeColor
 import dev.akexorcist.workstation.ui.theme.WorkstationTheme
 import dev.akexorcist.workstation.utils.CoordinateTransformer
+import dev.akexorcist.workstation.utils.DeviceConnectionInfo
 
 /**
  * Hybrid Compose-First Diagram Canvas
@@ -60,6 +63,7 @@ fun DiagramCanvas(
     onPanChange: (dev.akexorcist.workstation.data.model.Offset) -> Unit,
     onHoverDevice: (String?, Boolean) -> Unit = { _, _ -> },
     onHoverConnection: (String?, Boolean) -> Unit = { _, _ -> },
+    onHoverPort: (String?, Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier
 ) {
     val accumulatedDrag = remember { mutableStateOf(Offset.Zero) }
@@ -78,6 +82,49 @@ fun DiagramCanvas(
     }
     val routedConnectionMap = remember(routedConnections) {
         routedConnections.associateBy { it.connectionId }
+    }
+
+
+    val relatedDevicesMap = remember(uiState.hoveredDeviceId, uiState.hoveredPortInfo, uiState.layout) {
+        if (uiState.layout != null && RenderingConfig.hoverHighlightEnabled) {
+            if (uiState.hoveredDeviceId != null) {
+                DeviceConnectionInfo.getRelatedDevicesMap(uiState.hoveredDeviceId, uiState.layout)
+            } else if (uiState.hoveredPortInfo != null) {
+                DeviceConnectionInfo.getRelatedDevicesForPort(uiState.hoveredPortInfo, uiState.layout)
+            } else {
+                emptyMap()
+            }
+        } else {
+            emptyMap()
+        }
+    }
+    
+    val relatedConnectionsMap = remember(uiState.hoveredDeviceId, uiState.hoveredPortInfo, uiState.layout) {
+        if (uiState.layout != null && RenderingConfig.hoverHighlightEnabled) {
+            if (uiState.hoveredDeviceId != null) {
+                DeviceConnectionInfo.getRelatedConnectionsMap(uiState.hoveredDeviceId, uiState.layout)
+            } else if (uiState.hoveredPortInfo != null) {
+                DeviceConnectionInfo.getRelatedConnectionsForPort(uiState.hoveredPortInfo, uiState.layout)
+            } else {
+                emptyMap()
+            }
+        } else {
+            emptyMap()
+        }
+    }
+    
+    val relatedPortsMap = remember(uiState.hoveredDeviceId, uiState.hoveredPortInfo, uiState.layout) {
+        if (uiState.layout != null && RenderingConfig.hoverHighlightEnabled) {
+            if (uiState.hoveredDeviceId != null) {
+                DeviceConnectionInfo.getRelatedPortsMap(uiState.hoveredDeviceId, uiState.layout)
+            } else if (uiState.hoveredPortInfo != null) {
+                DeviceConnectionInfo.getRelatedPortsForPort(uiState.hoveredPortInfo, uiState.layout)
+            } else {
+                emptyMap()
+            }
+        } else {
+            emptyMap()
+        }
     }
 
     var actualSize by remember { mutableStateOf(Size(1280f, 720f)) }
@@ -138,7 +185,10 @@ fun DiagramCanvas(
                 viewportSize = viewportSize,
                 routedConnectionMap = routedConnectionMap,
                 selectedConnectionId = uiState.selectedConnectionId,
-                isAnimationEnabled = RenderingConfig.connectionAnimationEnabled
+                isAnimationEnabled = RenderingConfig.connectionAnimationEnabled,
+                hoveredDeviceId = uiState.hoveredDeviceId,
+                hoveredPortInfo = uiState.hoveredPortInfo,
+                relatedConnectionsMap = relatedConnectionsMap
             )
             
             if (layout != null) {
@@ -147,7 +197,11 @@ fun DiagramCanvas(
                     canvasSize = canvasSize,
                     zoom = zoom,
                     panOffset = uiState.panOffset,
-                    viewportSize = viewportSize
+                    viewportSize = viewportSize,
+                    hoveredDeviceId = uiState.hoveredDeviceId,
+                    hoveredPortInfo = uiState.hoveredPortInfo,
+                    relatedPortsMap = relatedPortsMap,
+                    onHoverPort = onHoverPort
                 )
             }
 
@@ -160,9 +214,11 @@ fun DiagramCanvas(
                 viewportSize = viewportSize,
                 selectedDeviceId = uiState.selectedDeviceId,
                 hoveredDeviceId = uiState.hoveredDeviceId,
+                hoveredPortInfo = uiState.hoveredPortInfo,
                 filteredDeviceIds = uiState.filteredDeviceIds,
                 onDeviceClick = onDeviceClick,
-                onHoverChange = onHoverDevice
+                onHoverChange = onHoverDevice,
+                relatedDevicesMap = relatedDevicesMap
             )
         }
     }
@@ -180,8 +236,39 @@ private fun ConnectionCanvas(
     viewportSize: Size,
     routedConnectionMap: Map<String, RoutedConnection>,
     selectedConnectionId: String?,
-    isAnimationEnabled: Boolean = RenderingConfig.connectionAnimationEnabled // Parameter to enable/disable animation
+    isAnimationEnabled: Boolean = RenderingConfig.connectionAnimationEnabled,
+    hoveredDeviceId: String? = null,
+    hoveredPortInfo: String? = null,
+    relatedConnectionsMap: Map<String, Boolean> = emptyMap()
 ) {
+
+    val opacityTargets = remember { mutableMapOf<String, Float>() }
+    val currentOpacities = remember { mutableMapOf<String, Float>() }
+    
+
+    val animationClock = rememberInfiniteTransition()
+    val animationTick = animationClock.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(200),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+    
+    val animationTickValue = animationTick.value
+    
+    fun getAnimatedOpacity(key: String, targetValue: Float): Float {
+        opacityTargets[key] = targetValue
+        val current = currentOpacities[key] ?: 1f
+        val newValue = if (current == targetValue) {
+            current
+        } else {
+            current + (targetValue - current) * 0.1f
+        }
+        currentOpacities[key] = newValue
+        return newValue
+    }
     val phase = if (isAnimationEnabled) {
         val infiniteTransition = rememberInfiniteTransition()
         infiniteTransition.animateFloat(
@@ -205,6 +292,8 @@ private fun ConnectionCanvas(
     val hoveredConnectionId: String? = null
     
     val deviceMap = layout.devices.associateBy { it.id }
+    
+    val isHoverHighlightActive = (hoveredDeviceId != null || hoveredPortInfo != null) && RenderingConfig.hoverHighlightEnabled
 
     Canvas(modifier = Modifier.fillMaxSize()) {
         val visibleConnections = layout.connections.filter { connection ->
@@ -359,12 +448,25 @@ private fun ConnectionCanvas(
                             }
                         }
                         
+                        // Apply opacity for unrelated connections during hover
+                        val isRelated = !isHoverHighlightActive || relatedConnectionsMap[connection.id] == true
+                        
+                        // Get the current animated opacity value for this connection
+                        val targetOpacity = if (isRelated) 1f else RenderingConfig.unrelatedConnectionOpacity
+                        val connectionKey = "connection-${connection.id}"
+                        val opacityMultiplier = getAnimatedOpacity(connectionKey, targetOpacity)
+                        
+                        val adjustedStartBg = startBackgroundColor.copy(alpha = startBackgroundColor.alpha * opacityMultiplier)
+                        val adjustedEndBg = endBackgroundColor.copy(alpha = endBackgroundColor.alpha * opacityMultiplier)
+                        val adjustedStartFg = startForegroundColor.copy(alpha = startForegroundColor.alpha * opacityMultiplier)
+                        val adjustedEndFg = endForegroundColor.copy(alpha = endForegroundColor.alpha * opacityMultiplier)
+                        
                         drawGradientConnectionPath(
                             path = path,
-                            startBackgroundColor = startBackgroundColor,
-                            endBackgroundColor = endBackgroundColor,
-                            startForegroundColor = startForegroundColor,
-                            endForegroundColor = endForegroundColor,
+                            startBackgroundColor = adjustedStartBg,
+                            endBackgroundColor = adjustedEndBg,
+                            startForegroundColor = adjustedStartFg,
+                            endForegroundColor = adjustedEndFg,
                             zoom = zoom,
                             phase = phase.value,
                             isAnimationEnabled = isAnimationEnabled
@@ -941,8 +1043,14 @@ private fun PortsOverlay(
     canvasSize: dev.akexorcist.workstation.data.model.Size,
     zoom: Float,
     panOffset: dev.akexorcist.workstation.data.model.Offset,
-    viewportSize: androidx.compose.ui.geometry.Size
+    viewportSize: androidx.compose.ui.geometry.Size,
+    hoveredDeviceId: String? = null,
+    hoveredPortInfo: String? = null,
+    relatedPortsMap: Map<String, Boolean> = emptyMap(),
+    onHoverPort: (String?, Boolean) -> Unit = { _, _ -> }
 ) {
+    val isHoverHighlightActive = (hoveredDeviceId != null || hoveredPortInfo != null) && RenderingConfig.hoverHighlightEnabled
+    
     // Render each port with its own width based on content
     layout.devices.forEach { device ->
         device.ports.forEach { port ->
@@ -981,13 +1089,21 @@ private fun PortsOverlay(
                 }
             }
             
+            // Check if port is related to hovered device
+            val portKey = "${device.id}:${port.id}"
+            val isRelatedToHoveredDevice = !isHoverHighlightActive || relatedPortsMap[portKey] == true
+            
             // Only render if the port is in the viewport
             val portCheckRadius = kotlin.math.max(capsuleWidth, capsuleHeight)
             if (isPortVisibleInViewport(portPosition, portCheckRadius, viewportSize)) {
                 CapsulePortNode(
                     port = port,
+                    deviceId = device.id,
                     zoom = zoom,
                     clipEdge = clipEdge,
+                    isRelatedToHoveredDevice = isRelatedToHoveredDevice,
+                    isHovered = "${device.id}:${port.id}" == hoveredPortInfo,
+                    onHoverChange = onHoverPort,
                     modifier = Modifier
                         .offset(
                             x = adjustedPosition.x.dp,

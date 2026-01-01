@@ -26,5 +26,11 @@ object RenderingConfig {
     const val portCapsuleHorizontalPadding: Float = 2f
     const val portCapsuleSidePadding: Float = 6f
     const val portCapsuleDeviceSidePadding: Float = 4f
-    const val portDeviceOverlap: Float = 6f
+    const val portDeviceOverlap: Float = 5.5f
+    
+    // Hover highlight configuration
+    const val hoverHighlightEnabled: Boolean = true
+    const val unrelatedDeviceOpacity: Float = 0.1f
+    const val unrelatedConnectionOpacity: Float = 0.2f
+    const val unrelatedPortOpacity: Float = 0.1f
 }

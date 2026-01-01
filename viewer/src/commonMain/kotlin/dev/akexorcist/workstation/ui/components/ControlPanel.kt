@@ -51,7 +51,7 @@ fun ControlPanel(
                         .align(Alignment.End)
                         .offset(x = (-2).dp, y = 8.dp),
                     text = "x${(zoom * 10).toInt() / 10f} Zoom",
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = WorkstationTheme.themeColor.text,
                 )
 
@@ -67,13 +67,13 @@ fun ControlPanel(
                 )
             }
 
-            // Row containing toggle buttons below the slider
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Reset Button
+
                 FilledIconButton(
                     onClick = onReset,
                     modifier = Modifier.size(40.dp),
@@ -91,7 +91,7 @@ fun ControlPanel(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                // Connection Animation Toggle Button
+
                 FilledIconToggleButton(
                     checked = connectionAnimationEnabled,
                     onCheckedChange = onConnectionAnimationToggle,
@@ -112,7 +112,7 @@ fun ControlPanel(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                // Theme Toggle Button
+
                 FilledIconToggleButton(
                     checked = isDarkTheme,
                     onCheckedChange = { onThemeToggle() },

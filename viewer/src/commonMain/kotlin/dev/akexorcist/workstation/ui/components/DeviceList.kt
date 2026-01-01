@@ -12,6 +12,7 @@ import androidx.compose.ui.geometry.Size
 import dev.akexorcist.workstation.data.model.Device
 import dev.akexorcist.workstation.data.model.LayoutMetadata
 import dev.akexorcist.workstation.data.model.Position
+import dev.akexorcist.workstation.presentation.config.RenderingConfig
 import dev.akexorcist.workstation.utils.CoordinateTransformer
 
 /**
@@ -28,20 +29,25 @@ fun DeviceList(
     viewportSize: Size,
     selectedDeviceId: String?,
     hoveredDeviceId: String?,
+    hoveredPortInfo: String? = null,
     filteredDeviceIds: Set<String>,
     onDeviceClick: (String) -> Unit,
-    onHoverChange: (String?, Boolean) -> Unit
+    onHoverChange: (String?, Boolean) -> Unit,
+    relatedDevicesMap: Map<String, Boolean> = emptyMap()
 ) {
+    val isHoverHighlightActive = (hoveredDeviceId != null || hoveredPortInfo != null) && RenderingConfig.hoverHighlightEnabled
+    
     devices.forEach { device ->
-        // Calculate screen position
         val screenPosition = CoordinateTransformer.transformPosition(
             device.position, metadata, canvasSize, zoom, panOffset
         )
         val screenSize = CoordinateTransformer.transformSize(
             device.size, metadata, canvasSize, zoom
         )
+        
+        val isRelatedToHoveredDevice = !isHoverHighlightActive || relatedDevicesMap[device.id] == true
 
-        // Viewport culling - only render if visible
+
         if (isRectVisible(screenPosition, screenSize, viewportSize)) {
             DeviceNode(
                 device = device,
@@ -50,6 +56,7 @@ fun DeviceList(
                 isSelected = device.id == selectedDeviceId,
                 isHovered = device.id == hoveredDeviceId,
                 isFiltered = device.id in filteredDeviceIds,
+                isRelatedToHoveredDevice = isRelatedToHoveredDevice,
                 onClick = { onDeviceClick(device.id) },
                 onHoverChange = { isHovered ->
                     onHoverChange(device.id, isHovered)

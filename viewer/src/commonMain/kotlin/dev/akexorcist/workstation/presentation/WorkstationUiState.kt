@@ -8,6 +8,7 @@ data class WorkstationUiState(
     val selectedConnectionId: String? = null,
     val hoveredDeviceId: String? = null,
     val hoveredConnectionId: String? = null,
+    val hoveredPortInfo: String? = null, // Format: "deviceId:portId"
     val zoom: Float = 1.0f,
     val panOffset: Offset = Offset.Zero,
     val isDarkTheme: Boolean = true,

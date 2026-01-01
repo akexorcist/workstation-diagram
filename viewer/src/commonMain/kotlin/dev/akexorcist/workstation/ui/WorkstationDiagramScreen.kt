@@ -215,6 +215,7 @@ fun WorkstationDiagramScreen(
                     onPanChange = viewModel::handlePanChange,
                     onHoverDevice = { deviceId, isHovered -> viewModel.handleDeviceHover(deviceId, isHovered) },
                     onHoverConnection = { connectionId, isHovered -> viewModel.handleConnectionHover(connectionId, isHovered) },
+                    onHoverPort = { portInfo, isHovered -> viewModel.handlePortHover(portInfo, isHovered) },
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -276,6 +277,7 @@ fun WorkstationDiagramScreen(
                     DeviceListSidebar(
                         uiState = uiState,
                         onDeviceClick = viewModel::handleDeviceClick,
+                        onHoverDevice = { deviceId, isHovered -> viewModel.handleDeviceHover(deviceId, isHovered) },
                         onHomeClick = { openUrl("https://akexorcist.dev/") },
                         onGithubClick = { openUrl("https://github.com/akexorcist") },
                         isInstructionExpanded = uiState.isInstructionExpanded,

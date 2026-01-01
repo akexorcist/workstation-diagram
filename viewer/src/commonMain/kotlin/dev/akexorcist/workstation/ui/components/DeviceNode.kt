@@ -48,20 +48,22 @@ fun DeviceNode(
     isSelected: Boolean,
     isHovered: Boolean,
     isFiltered: Boolean,
+    isRelatedToHoveredDevice: Boolean = true,
     onClick: () -> Unit,
     onHoverChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val deviceColor = getDeviceColor(device.category)
     val zoom = screenSize.width / device.size.width
+    
+    // Apply opacity for hover effect - only when not related to hovered device
+    val opacityMultiplier = if (isRelatedToHoveredDevice) 1f else RenderingConfig.unrelatedDeviceOpacity
 
     val backgroundColor by animateColorAsState(
-        targetValue = getDeviceBackgroundColor(deviceColor, isHovered, isSelected),
+        targetValue = getDeviceBackgroundColor(deviceColor, isHovered, isSelected, opacityMultiplier),
         animationSpec = tween(durationMillis = 200),
         label = "backgroundColor"
     )
-
-
 
     Box(modifier = modifier) {
         Box(
@@ -106,13 +108,20 @@ fun DeviceNode(
                         .padding(start = paddingScaled, end = paddingScaled)
                         .align(Alignment.CenterStart)
                 ) {
+                    // Animate the text color for smooth opacity transitions
+                    val textColor by animateColorAsState(
+                        targetValue = WorkstationTheme.themeColor.text.copy(alpha = opacityMultiplier),
+                        animationSpec = tween(durationMillis = 200),
+                        label = "textColor"
+                    )
+                    
                     Text(
                         text = device.name,
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontSize = MaterialTheme.typography.titleMedium.fontSize * zoom * RenderingConfig.deviceTextTitleScale,
                             lineHeight = MaterialTheme.typography.titleMedium.lineHeight * zoom * RenderingConfig.deviceTextLineHeightScale
                         ),
-                        color = WorkstationTheme.themeColor.text
+                        color = textColor
                     )
                     Spacer(modifier = Modifier.height(2.dp * zoom))
                     Text(
@@ -121,7 +130,7 @@ fun DeviceNode(
                             fontSize = MaterialTheme.typography.bodyMedium.fontSize * zoom * RenderingConfig.deviceTextBodyScale,
                             lineHeight = MaterialTheme.typography.bodyMedium.lineHeight * zoom * RenderingConfig.deviceTextLineHeightScale,
                         ),
-                        color = WorkstationTheme.themeColor.text
+                        color = textColor // Using the same animated textColor
                     )
                 }
             }
@@ -143,10 +152,11 @@ private fun getDeviceColor(category: DeviceCategory): Color {
 private fun getDeviceBackgroundColor(
     deviceColor: Color,
     isHovered: Boolean,
-    isSelected: Boolean
+    isSelected: Boolean,
+    opacityMultiplier: Float = 1f
 ): Color {
-    return deviceColor
+    // Apply opacity multiplier for hover effect
+    val alpha = deviceColor.alpha * opacityMultiplier
+    return deviceColor.copy(alpha = alpha)
 }
-
-
 
