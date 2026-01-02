@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import dev.akexorcist.workstation.data.model.Device
 import dev.akexorcist.workstation.data.model.LayoutMetadata
@@ -82,7 +83,6 @@ fun DiagramCanvas(
         routedConnections.associateBy { it.connectionId }
     }
 
-
     val relatedDevicesMap = remember(uiState.hoveredDeviceId, uiState.hoveredPortInfo, uiState.layout) {
         if (uiState.layout != null) {
             if (uiState.hoveredDeviceId != null) {
@@ -128,7 +128,7 @@ fun DiagramCanvas(
     var actualSize by remember { mutableStateOf(Size(1280f, 720f)) }
 
     // Calculate density based on platform
-    val density = androidx.compose.ui.platform.LocalDensity.current.density
+    val density = LocalDensity.current.density
 
     Box(
         modifier = modifier

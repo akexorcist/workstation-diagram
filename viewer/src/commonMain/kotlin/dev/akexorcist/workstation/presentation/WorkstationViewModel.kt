@@ -41,14 +41,12 @@ class WorkstationViewModel(
     fun loadLayout() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
-
             when (val result = repository.loadLayout()) {
                 is LoadResult.Success -> {
                     _uiState.value = _uiState.value.copy(
                         layout = result.layout,
                         isLoading = false
                     )
-                    updateDiagramState()
                 }
 
                 is LoadResult.PartialSuccess -> {
@@ -57,7 +55,6 @@ class WorkstationViewModel(
                         isLoading = false,
                         errorMessage = "Loaded with warnings: ${result.errors.joinToString(", ")}"
                     )
-                    updateDiagramState()
                 }
 
                 is LoadResult.Error -> {
@@ -67,6 +64,9 @@ class WorkstationViewModel(
                     )
                 }
             }
+        }
+        if (_uiState.value.layout != null) {
+            updateDiagramState()
         }
     }
 

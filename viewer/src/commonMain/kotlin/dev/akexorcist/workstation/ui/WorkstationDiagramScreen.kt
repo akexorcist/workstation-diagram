@@ -150,11 +150,6 @@ fun WorkstationDiagramScreen(
                             )
                             true
                         }
-                        // Escape: Deselect all
-                        keyEvent.key == Key.Escape -> {
-                            viewModel.deselectAll()
-                            true
-                        }
 
                         else -> false
                     }
