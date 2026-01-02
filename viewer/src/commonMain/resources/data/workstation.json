@@ -47,12 +47,30 @@
       ],
       "url": "https://support.apple.com/kb/SP854",
       "specifications": [
-        { "key": "Chip", "value": "Apple M1 Pro\n10-core CPU with 8 performance cores and 2 efficiency cores\n14-core GPU\n16-core Neural Engine\n200GB/s memory bandwidth" },
-        { "key": "Memory", "value": "32GB" },
-        { "key": "Storage", "value": "512GB" },
-        { "key": "Display", "value": "14.2\" Liquid Retina XDR" },
-        { "key": "Manufacturer", "value": "Apple" },
-        { "key": "Model Number", "value": "MacBook Pro 14\" 2021" }
+        {
+          "key": "Chip",
+          "value": "Apple M1 Pro\n10-core CPU with 8 performance cores and 2 efficiency cores\n14-core GPU\n16-core Neural Engine\n200GB/s memory bandwidth"
+        },
+        {
+          "key": "Memory",
+          "value": "32GB"
+        },
+        {
+          "key": "Storage",
+          "value": "512GB"
+        },
+        {
+          "key": "Display",
+          "value": "14.2\" Liquid Retina XDR"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Apple"
+        },
+        {
+          "key": "Model Number",
+          "value": "MacBook Pro 14\" 2021"
+        }
       ]
     },
     {
@@ -82,12 +100,30 @@
       ],
       "url": "https://support.apple.com/kb/SP889",
       "specifications": [
-        { "key": "Chip", "value": "Apple M2 Pro\n12-core CPU with 8 performance cores and 4 efficiency cores\n19-core GPU\n16-core Neural Engine\n200GB/s memory bandwidth" },
-        { "key": "Memory", "value": "32GB" },
-        { "key": "Storage", "value": "512GB" },
-        { "key": "Display", "value": "14.2\" Liquid Retina XDR" },
-        { "key": "Manufacturer", "value": "Apple" },
-        { "key": "Model Number", "value": "MacBook Pro 14\" 2023" }
+        {
+          "key": "Chip",
+          "value": "Apple M2 Pro\n12-core CPU with 8 performance cores and 4 efficiency cores\n19-core GPU\n16-core Neural Engine\n200GB/s memory bandwidth"
+        },
+        {
+          "key": "Memory",
+          "value": "32GB"
+        },
+        {
+          "key": "Storage",
+          "value": "512GB"
+        },
+        {
+          "key": "Display",
+          "value": "14.2\" Liquid Retina XDR"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Apple"
+        },
+        {
+          "key": "Model Number",
+          "value": "MacBook Pro 14\" 2023"
+        }
       ]
     },
     {
@@ -129,7 +165,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "position": 20
+            "position": 40
           }
         },
         {
@@ -138,7 +174,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "position": 340
+            "position": 80
           }
         },
         {
@@ -147,35 +183,59 @@
           "direction": "INPUT",
           "position": {
             "side": "RIGHT",
-            "position": 60
+            "position": 160
           }
         },
         {
           "id": "dock-usba-in-2",
-          "name": "USB-A 3.0",
+          "name": "USB-C 3.2 Gen 2",
           "direction": "INPUT",
           "position": {
             "side": "RIGHT",
-            "position": 80
+            "position": 360
           }
         },
         {
           "id": "dock-usba-out-1",
           "name": "USB-A 3.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 260
+          }
+        },
+        {
+          "id": "dock-usba-out-2",
+          "name": "USB-A 3.0",
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "position": 100
+            "position": 220
           }
         }
       ],
       "url": "https://www.dell.com/support/manuals/en-us/dell-wd19tbs-dock/wd19tbs_user_guide/docking-specifications",
       "specifications": [
-        { "key": "Display Support with Thunderbolt input", "value": "For a HBR2* PC, 3 x FHD @ 60Hz, 3 x QHD @ 60Hz, 2 x 4K @ 30Hz\nFor a HBR3 PC, 4 x FHD @ 60Hz, 4 x QHD @ 60Hz, 2 x 4K @ 60Hz" },
-        { "key": "Max Resolution", "value": "5K @ 60Hz with HBR2/HBR3, Thunderbolt systems\n8K @ 60Hz with HBR3,Thunderbolt systems supporting Display Stream Compression" },
-        { "key": "Power", "value": "Up to 130W power delivery" },
-        { "key": "Manufacturer", "value": "Dell" },
-        { "key": "Model Number", "value": "WD19TBS" }
+        {
+          "key": "Display Support with Thunderbolt input",
+          "value": "For a HBR2* PC, 3 x FHD @ 60Hz, 3 x QHD @ 60Hz, 2 x 4K @ 30Hz\nFor a HBR3 PC, 4 x FHD @ 60Hz, 4 x QHD @ 60Hz, 2 x 4K @ 60Hz"
+        },
+        {
+          "key": "Max Resolution",
+          "value": "5K @ 60Hz with HBR2/HBR3, Thunderbolt systems\n8K @ 60Hz with HBR3,Thunderbolt systems supporting Display Stream Compression"
+        },
+        {
+          "key": "Power",
+          "value": "Up to 130W power delivery"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Dell"
+        },
+        {
+          "key": "Model Number",
+          "value": "WD19TBS"
+        }
       ]
     },
     {
@@ -186,7 +246,7 @@
       "category": "HUB",
       "position": {
         "x": 1800,
-        "y": 1000
+        "y": 900
       },
       "size": {
         "width": 180,
@@ -259,16 +319,776 @@
       ],
       "url": "https://www.dell.com/support/home/en-us/product-support/product/u2724d-monitor/overview",
       "specifications": [
-        { "key": "Screen Size", "value": "27\"" },
-        { "key": "Maximum Resolution", "value": "2,560 x 1,440 @ 120Hz" },
-        { "key": "Panel Technology", "value": "IPS Black Technology" },
-        { "key": "Brightness", "value": "350 cd/m² (typical)" },
-        { "key": "Color Gamut", "value": "100% sRGB, 100% BT.709, 98% Display P3, 98% DCI-P3, Delta E < 2 (average)" },
-        { "key": "Response Time", "value": "8 ms (Normal), 5 ms (Fast)" },
-        { "key": "Manufacturer", "value": "Dell" },
-        { "key": "Model Number", "value": "U2724D" }
+        {
+          "key": "Screen Size",
+          "value": "27\""
+        },
+        {
+          "key": "Maximum Resolution",
+          "value": "2,560 x 1,440 @ 120Hz"
+        },
+        {
+          "key": "Panel Technology",
+          "value": "IPS Black Technology"
+        },
+        {
+          "key": "Brightness",
+          "value": "350 cd/m² (typical)"
+        },
+        {
+          "key": "Color Gamut",
+          "value": "100% sRGB, 100% BT.709, 98% Display P3, 98% DCI-P3, Delta E < 2 (average)"
+        },
+        {
+          "key": "Response Time",
+          "value": "8 ms (Normal), 5 ms (Fast)"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Dell"
+        },
+        {
+          "key": "Model Number",
+          "value": "U2724D"
+        }
+      ]
+    },
+    {
+      "id": "secondary-monitor",
+      "description": "15.6\" FHD 1080P Portable Monitor",
+      "title": "Arzopa A1",
+      "label": "Secondary Monitor",
+      "category": "HUB",
+      "position": {
+        "x": 1800,
+        "y": 680
+      },
+      "size": {
+        "width": 180,
+        "height": 200
+      },
+      "ports": [
+        {
+          "id": "secondary-monitor-usbc-in-1",
+          "name": "USB-C",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 30
+          }
+        },
+        {
+          "id": "secondary-monitor-usbc-in-2",
+          "name": "USB-C",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 60
+          }
+        },
+        {
+          "id": "secondary-monitor-mini-hdmi-in",
+          "name": "Mini HDMI",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 160
+          }
+        }
+      ],
+      "url": "https://www.arzopa.com/products/a1-15-6-fhd-1080p-portable-monitor",
+      "specifications": [
+        {
+          "key": "Screen Size",
+          "value": "15.6\""
+        },
+        {
+          "key": "Panel Type",
+          "value": "IPS"
+        },
+        {
+          "key": "Resolution",
+          "value": "1,920 x 1,080 px"
+        },
+        {
+          "key": "Refresh Rate",
+          "value": "60Hz"
+        },
+        {
+          "key": "Brightness",
+          "value": "250 cd/m²"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Arzopa"
+        },
+        {
+          "key": "Model Number",
+          "value": "A1"
+        }
+      ]
+    },
+    {
+      "id": "pc-desktop",
+      "description": "Custom Gaming PC",
+      "title": "",
+      "label": "PC Desktop",
+      "category": "CENTRAL_DEVICE",
+      "position": {
+        "x": 100,
+        "y": 1400
+      },
+      "size": {
+        "width": 180,
+        "height": 200
+      },
+      "ports": [
+        {
+          "id": "pc-hdmi-out",
+          "name": "HDMI 2.1",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40
+          }
+        },
+        {
+          "id": "pc-dp-out",
+          "name": "DisplayPort",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 80
+          }
+        },
+        {
+          "id": "pc-usba-in-1",
+          "name": "USB-A 3.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 120
+          }
+        },
+        {
+          "id": "pc-usba-in-2",
+          "name": "USB-A 3.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 160
+          }
+        }
+      ],
+      "url": null,
+      "specifications": [
+        {
+          "key": "OS",
+          "value": "Windows 11"
+        },
+        {
+          "key": "CPU",
+          "value": "Intel Core i5-11400F"
+        },
+        {
+          "key": "GPU",
+          "value": "ASUS ROG Strix GTX 1080 Ti"
+        },
+        {
+          "key": "Memory",
+          "value": "G.SKILL Trident Z RGB DDR4 3,200MHz 8GB x 2"
+        },
+        {
+          "key": "Storage",
+          "value": "WD BLACK SN750 500GB SSD PCIe NVMe M.2 2280 x 2"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Custom Built"
+        },
+        {
+          "key": "Model Number",
+          "value": "N/A"
+        }
+      ]
+    },
+    {
+      "id": "hdmi-switcher",
+      "description": "HDMI 2.1 Switch, 2 In 1 Out",
+      "title": "UGREEN CM561",
+      "label": "HDMI Switcher",
+      "category": "HUB",
+      "position": {
+        "x": 500,
+        "y": 1200
+      },
+      "size": {
+        "width": 160,
+        "height": 160
+      },
+      "ports": [
+        {
+          "id": "hdmi-switcher-in-1",
+          "name": "HDMI 2.1",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40
+          }
+        },
+        {
+          "id": "hdmi-switcher-in-2",
+          "name": "HDMI 2.1",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 80
+          }
+        },
+        {
+          "id": "hdmi-switcher-in-3",
+          "name": "HDMI 2.1",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 120
+          }
+        },
+        {
+          "id": "hdmi-switcher-out",
+          "name": "HDMI 2.1",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 80
+          }
+        }
+      ],
+      "url": "https://www.amazon.com/UGREEN-Switcher-Splitter-Supports-Compatible/dp/B09S5YS68P",
+      "specifications": [
+        { "key": "Chipset", "value": "PI3HDX12221 + EN8F156S14" },
+        { "key": "HDMI Input", "value": "2 x HDMI 2.1" },
+        { "key": "HDMI Output", "value": "1 x HDMI 2.1" },
+        { "key": "Supported Resolutions", "value": "8K@60, 4K@144, 2K@240, 1080P@240" },
+        { "key": "Power Supply", "value": "USB-C" },
+        { "key": "Manufacturer", "value": "UGREEN" },
+        { "key": "Model Number", "value": "CM561" }
+      ]
+    },
+    {
+      "id": "gaming-console-1",
+      "description": "Nintendo Switch Splatoon 2 Bundle Edition",
+      "title": "Nintendo Switch",
+      "label": "Gaming Console",
+      "category": "CENTRAL_DEVICE",
+      "position": {
+        "x": 100,
+        "y": 1160
+      },
+      "size": {
+        "width": 200,
+        "height": 70
+      },
+      "ports": [
+        {
+          "id": "gaming-console-1-hdmi",
+          "name": "HDMI 2.1",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 30
+          }
+        }
+      ],
+      "url": "https://www.nintendo.com/us/switch/system/",
+      "specifications": [
+        { "key": "Model", "value": "HAC-001 (First Revision)" },
+        { "key": "Display", "value": "6.2-inch LCD Screen, 1280 x 720" },
+        { "key": "CPU/GPU", "value": "NVIDIA Custom Tegra processor" },
+        { "key": "Memory", "value": "4 GB LPDDR4 SDRAM" },
+        { "key": "Storage", "value": "32 GB eMMC" },
+        { "key": "Video Output", "value": "Up to 1080p via HDMI in TV mode" },
+        { "key": "Manufacturer", "value": "Nintendo" },
+        { "key": "Model Number", "value": "HAC-001" }
+      ]
+    },
+    {
+      "id": "gaming-console-2",
+      "description": "PlayStation 5 Disk Edition with Final Fantasy XVI Limited Cover",
+      "title": "PlayStation 5",
+      "label": "Gaming Console",
+      "category": "CENTRAL_DEVICE",
+      "position": {
+        "x": 100,
+        "y": 1250
+      },
+      "size": {
+        "width": 200,
+        "height": 70
+      },
+      "ports": [
+        {
+          "id": "gaming-console-2-hdmi",
+          "name": "HDMI 2.1",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 30
+          }
+        }
+      ],
+      "url": "https://www.playstation.com/en-th/ps5/",
+      "specifications": [
+        { "key": "Model", "value": "CFI-1118A (2021 Revision)" },
+        { "key": "CPU", "value": "x86-64-AMD Ryzen™ Zen2, 8 cores/16 threads" },
+        { "key": "GPU", "value": "AMD Radeon™ RDNA-based graphics engine" },
+        { "key": "Memory", "value": "GDDR6 16 GB" },
+        { "key": "Storage", "value": "825 GB SSD" },
+        { "key": "Blu-Ray Disc Drive", "value": "Yes" },
+        { "key": "AV output", "value": "HDMI Out Port, Support of 4K 120Hz TVs, 8K TVs" },
+        { "key": "Manufacturer", "value": "Sony" },
+        { "key": "Model Number", "value": "CFI-1118A" }
+      ]
+    },
+    {
+      "id": "usb-c-switcher",
+      "description": "2-Port USB-C Gen 2 Sharing Switch with Power Pass-through",
+      "title": "ATEN US3342",
+      "label": "USB-C Switcher",
+      "category": "HUB",
+      "position": {
+        "x": 1000,
+        "y": 1100
+      },
+      "size": {
+        "width": 150,
+        "height": 120
+      },
+      "ports": [
+        {
+          "id": "usb-c-switcher-dock",
+          "name": "USB-C 3.2 Gen2",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 30
+          }
+        },
+        {
+          "id": "usb-c-switcher-pc",
+          "name": "USB-C 3.2 Gen2",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 90
+          }
+        },
+        {
+          "id": "usb-c-switcher-webcam",
+          "name": "USB-A 3.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 30
+          }
+        },
+        {
+          "id": "usb-c-switcher-monitor",
+          "name": "USB-C 3.2 Gen2",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 60
+          }
+        },
+        {
+          "id": "usb-c-switcher-microphone",
+          "name": "USB-A 2.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 90
+          }
+        }
+      ],
+      "url": "https://www.aten.com/global/en/products/usb-solutions/docks-and-switches/us3342/",
+      "specifications": [
+        { "key": "Computer Connections", "value": "2" },
+        { "key": "Computer Interface", "value": "USB 3.2 Gen 2 Type-C Female (Black) x 2" },
+        { "key": "Device Interface", "value": "USB 3.2 Gen 2 Type-A Female (Blue) × 3\nUSB 3.2 Gen 2 Type-C Female (black) x 1" },
+        { "key": "Power Interface", "value": "USB Type-C Female x 1, supports USB PD3.0" },
+        { "key": "Housing", "value": "Aluminum" },
+        { "key": "Manufacturer", "value": "ATEN" },
+        { "key": "Model Number", "value": "US3342" }
+      ]
+    },
+    {
+      "id": "digital-camera",
+      "description": "E-mount camera with APS-C Sensor",
+      "title": "Sony α6000",
+      "label": "Digital Camera",
+      "category": "PERIPHERAL",
+      "position": {
+        "x": 1000,
+        "y": 500
+      },
+      "size": {
+        "width": 180,
+        "height": 80
+      },
+      "ports": [
+        {
+          "id": "digital-camera-power",
+          "name": "Battery",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 30
+          }
+        },
+        {
+          "id": "digital-camera-hdmi",
+          "name": "Micro HDMI",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 30
+          }
+        }
+      ],
+      "url": "https://www.sony.co.th/th/electronics/interchangeable-lens-cameras/ilce-6000-body-kit",
+      "specifications": [
+        { "key": "Lens Mount", "value": "Sony E-mount lenses" },
+        { "key": "Sensor", "value": "APS-C type (23.5 x 15.6mm)" },
+        { "key": "Number of pixels (Effective)", "value": "24.3MP" },
+        { "key": "Viewfinder", "value": "0.39\"-type electronic viewfinder (color)" },
+        { "key": "LCD Screen", "value": "3.0\" wide type TFT LCD" },
+        { "key": "Manufacturer", "value": "Sony" },
+        { "key": "Model Number", "value": "ILCE-6000" }
+      ]
+    },
+    {
+      "id": "hdmi-to-webcam",
+      "description": "Turn your camera into a webcam",
+      "title": "Elgato Cam Link 4K",
+      "label": "HDMI To Webcam",
+      "category": "PERIPHERAL",
+      "position": {
+        "x": 1000,
+        "y": 600
+      },
+      "size": {
+        "width": 180,
+        "height": 80
+      },
+      "ports": [
+        {
+          "id": "hdmi-to-webcam-in",
+          "name": "HDMI",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 30
+          }
+        },
+        {
+          "id": "hdmi-to-webcam-out",
+          "name": "USB-A 3.0",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 30
+          }
+        }
+      ],
+      "url": "https://www.elgato.com/ww/en/p/cam-link-4k",
+      "specifications": [
+        { "key": "Input", "value": "HDMI (unencrypted)" },
+        { "key": "Supported Resolutions", "value": "3840x2160 up to p30\n1920x1080 up to p60 / i60" },
+        { "key": "Dimensions", "value": "8.1 x 1.2 x 3.1 cm" },
+        { "key": "Manufacturer", "value": "Elgato" },
+        { "key": "Model Number", "value": "Cam Link 4K" }
+      ]
+    },
+    {
+      "id": "stream-deck",
+      "description": "15 customizable LCD keys to control apps and platforms",
+      "title": "Elgato Stream Deck MK.2",
+      "label": "Stream Deck",
+      "category": "PERIPHERAL",
+      "position": {
+        "x": 1000,
+        "y": 820
+      },
+      "size": {
+        "width": 180,
+        "height": 80
+      },
+      "ports": [
+        {
+          "id": "stream-deck-usb",
+          "name": "USB-C",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40
+          }
+        }
+      ],
+      "url": "https://www.elgato.com/ww/en/p/stream-deck-mk2-black",
+      "specifications": [
+        { "key": "Keys", "value": "15 customizable LCD keys" },
+        { "key": "Interface", "value": "USB 2.0" },
+        { "key": "Dimensions", "value": "118 x 84 x 25 mm" },
+        { "key": "Weight", "value": "145 g without stand" },
+        { "key": "Manufacturer", "value": "Elgato" },
+        { "key": "Model Number", "value": "Stream Deck MK.2" }
+      ]
+    },
+    {
+      "id": "external-ssd",
+      "description": "Portable Storage High-performance USB-C external SSD",
+      "title": "Seagate Fast SSD 512GB",
+      "label": "External SSD",
+      "category": "PERIPHERAL",
+      "position": {
+        "x": 1000,
+        "y": 920
+      },
+      "size": {
+        "width": 180,
+        "height": 80
+      },
+      "ports": [
+        {
+          "id": "external-ssd-usbc",
+          "name": "USB-C",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40
+          }
+        }
+      ],
+      "url": "https://www.seagate.com/as/en/support/external-hard-drives/portable-hard-drives/fast-ssd/",
+      "specifications": [
+        { "key": "Capacity", "value": "500GB" },
+        { "key": "Interface", "value": "USB 3.0" },
+        { "key": "Read/Write Speed", "value": "Up to 540/500 MB/s" },
+        { "key": "Dimensions", "value": "94 x 79 x 9.0 mm" },
+        { "key": "Weight", "value": "82 g" },
+        { "key": "Manufacturer", "value": "Seagate" }
+      ]
+    },
+    {
+      "id": "usb-hub",
+      "description": "Mini 3-in-1 USB Hub",
+      "title": "ORICO MINI-U32",
+      "label": "USB Hub",
+      "category": "HUB",
+      "position": {
+        "x": 1000,
+        "y": 1470
+      },
+      "size": {
+        "width": 160,
+        "height": 200
+      },
+      "ports": [
+        {
+          "id": "usb-hub-in",
+          "name": "USB-A 3.0",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 90
+          }
+        },
+        {
+          "id": "usb-hub-out-1",
+          "name": "USB-A 2.0",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40
+          }
+        },
+        {
+          "id": "usb-hub-out-2",
+          "name": "USB-A 2.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 100
+          }
+        },
+        {
+          "id": "usb-hub-out-3",
+          "name": "USB-A 2.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 160
+          }
+        }
+      ],
+      "url": "https://www.orico.cc/usmobile/product/detail/id/7415",
+      "specifications": [
+        { "key": "Material", "value": "ABS" },
+        { "key": "Input Interface", "value": "USB 3.0" },
+        { "key": "Output Interface", "value": "USB 3.0 x 1, USB 2.0 x 2" },
+        { "key": "Transmission Rate", "value": "5Gbps (USB 3.0), 480Mbps (USB 2.0)" },
+        { "key": "Power", "value": "5V 0.5A" },
+        { "key": "Manufacturer", "value": "ORICO" },
+        { "key": "Model Number", "value": "MINI-U32" }
+      ]
+    },
+    {
+      "id": "usb-power-adapter",
+      "description": "6 USB Port Qualcomm Quick Charge 3.0 Desktop Charger",
+      "title": "Aukey PA-T11",
+      "label": "USB Power Adapter",
+      "category": "HUB",
+      "position": {
+        "x": 1800,
+        "y": 480
+      },
+      "size": {
+        "width": 180,
+        "height": 160
+      },
+      "ports": [
+        {
+          "id": "usb-power-adapter-camera",
+          "name": "USB-A",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 50
+          }
+        },
+        {
+          "id": "usb-power-adapter-monitor",
+          "name": "USB-A",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 120
+          }
+        },
+        {
+          "id": "usb-power-adapter-led-lamp",
+          "name": "USB-A",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40
+          }
+        },
+        {
+          "id": "usb-power-adapter-wireless-charger",
+          "name": "USB-A",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 80
+          }
+        },
+        {
+          "id": "usb-power-adapter-speaker",
+          "name": "USB-A",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 120
+          }
+        }
+      ],
+      "url": "https://aukey.com.my/products/pa-t11-6-usb-port-qualcomm-quick-charge-3-0-desktop-charger",
+      "specifications": [
+        { "key": "Technology", "value": "Quick Charge 3.0, AiPower" },
+        { "key": "Input", "value": "100-240V" },
+        { "key": "Output (AiPower)", "value": "5V 2.4A per port" },
+        { "key": "Output (Quick Charge 3.0)", "value": "3.6V-6.5V 3A | 6.5V-9V 2A | 9V-12V 1.5A" },
+        { "key": "Dimensions", "value": "9.4 x 6 x 2.5 cm" },
+        { "key": "Manufacturer", "value": "Aukey" },
+        { "key": "Model Number", "value": "PA-T11" }
+      ]
+    },
+    {
+      "id": "usb-dac",
+      "description": "Hi-Res Certified DAC for PC and PlayStation",
+      "title": "SteelSeries GameDAC Gen2",
+      "label": "USB DAC",
+      "category": "HUB",
+      "position": {
+        "x": 1800,
+        "y": 1320
+      },
+      "size": {
+        "width": 150,
+        "height": 160
+      },
+      "ports": [
+        {
+          "id": "usb-dac-monitor",
+          "name": "Audio Line In",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40
+          }
+        },
+        {
+          "id": "usb-dac-dock",
+          "name": "USB-C",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 80
+          }
+        },
+        {
+          "id": "usb-dac-usb-hub",
+          "name": "USB-C",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 120
+          }
+        },
+        {
+          "id": "usb-dac-speaker",
+          "name": "AUX",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40
+          }
+        },
+        {
+          "id": "usb-dac-headphone",
+          "name": "AUX",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 80
+          }
+        }
+      ],
+      "url": "https://steelseries.com/gaming-accessories/gamedac-gen-2",
+      "specifications": [
+        { "key": "Connections", "value": "2x USB-C System Connections, 1x Line-in, 1x Line-out" },
+        { "key": "Digital-to-analog converter", "value": "ESS Sabre 9218PQ40" },
+        { "key": "Max Audio Format", "value": "96 kHz, 24 bit" },
+        { "key": "Frequency Response", "value": "5-40,000 Hz" },
+        { "key": "Signal-to-noise ratio", "value": "111 dB" },
+        { "key": "Manufacturer", "value": "SteelSeries" },
+        { "key": "Model Number", "value": "GameDAC Gen 2" }
       ]
     }
+
+
   ],
   "connections": [
     {
@@ -291,6 +1111,118 @@
       "sourcePortId": "dock-dp-out-1",
       "targetDeviceId": "primary-monitor",
       "targetPortId": "primary-monitor-dp-in"
+    },
+    {
+      "id": "conn-4",
+      "sourceDeviceId": "usb-docking-station",
+      "sourcePortId": "dock-usbc-out-1",
+      "targetDeviceId": "secondary-monitor",
+      "targetPortId": "secondary-monitor-usbc-in-2"
+    },
+    {
+      "id": "conn-5",
+      "sourceDeviceId": "pc-desktop",
+      "sourcePortId": "pc-dp-out",
+      "targetDeviceId": "secondary-monitor",
+      "targetPortId": "secondary-monitor-mini-hdmi-in"
+    },
+    {
+      "id": "conn-6",
+      "sourceDeviceId": "pc-desktop",
+      "sourcePortId": "pc-hdmi-out",
+      "targetDeviceId": "hdmi-switcher",
+      "targetPortId": "hdmi-switcher-in-3"
+    },
+    {
+      "id": "conn-7",
+      "sourceDeviceId": "hdmi-switcher",
+      "sourcePortId": "hdmi-switcher-out",
+      "targetDeviceId": "primary-monitor",
+      "targetPortId": "primary-monitor-hdmi-in"
+    },
+    {
+      "id": "conn-8",
+      "sourceDeviceId": "gaming-console-1",
+      "sourcePortId": "gaming-console-1-hdmi",
+      "targetDeviceId": "hdmi-switcher",
+      "targetPortId": "hdmi-switcher-in-1"
+    },
+    {
+      "id": "conn-9",
+      "sourceDeviceId": "gaming-console-2",
+      "sourcePortId": "gaming-console-2-hdmi",
+      "targetDeviceId": "hdmi-switcher",
+      "targetPortId": "hdmi-switcher-in-2"
+    },
+    {
+      "id": "conn-10",
+      "sourceDeviceId": "pc-desktop",
+      "sourcePortId": "pc-usba-in-1",
+      "targetDeviceId": "usb-c-switcher",
+      "targetPortId": "usb-c-switcher-pc"
+    },
+    {
+      "id": "conn-11",
+      "sourceDeviceId": "usb-docking-station",
+      "sourcePortId": "dock-usba-in-2",
+      "targetDeviceId": "usb-c-switcher",
+      "targetPortId": "usb-c-switcher-dock"
+    },
+    {
+      "id": "conn-12",
+      "sourceDeviceId": "digital-camera",
+      "sourcePortId": "digital-camera-hdmi",
+      "targetDeviceId": "hdmi-to-webcam",
+      "targetPortId": "hdmi-to-webcam-in"
+    },
+    {
+      "id": "conn-13",
+      "sourceDeviceId": "hdmi-to-webcam",
+      "sourcePortId": "hdmi-to-webcam-out",
+      "targetDeviceId": "usb-c-switcher",
+      "targetPortId": "usb-c-switcher-webcam"
+    },
+    {
+      "id": "conn-14",
+      "sourceDeviceId": "stream-deck",
+      "sourcePortId": "stream-deck-usb",
+      "targetDeviceId": "usb-docking-station",
+      "targetPortId": "dock-usba-in-1"
+    },
+    {
+      "id": "conn-15",
+      "sourceDeviceId": "external-ssd",
+      "sourcePortId": "external-ssd-usbc",
+      "targetDeviceId": "usb-docking-station",
+      "targetPortId": "dock-usba-out-1"
+    },
+    {
+      "id": "conn-16",
+      "sourceDeviceId": "pc-desktop",
+      "sourcePortId": "pc-usba-in-2",
+      "targetDeviceId": "usb-hub",
+      "targetPortId": "usb-hub-in"
+    },
+    {
+      "id": "conn-17",
+      "sourceDeviceId": "primary-monitor",
+      "sourcePortId": "primary-monitor-aux-out",
+      "targetDeviceId": "usb-dac",
+      "targetPortId": "usb-dac-monitor"
+    },
+    {
+      "id": "conn-18",
+      "sourceDeviceId": "usb-dac",
+      "sourcePortId": "usb-dac-dock",
+      "targetDeviceId": "usb-docking-station",
+      "targetPortId": "dock-usba-out-2"
+    },
+    {
+      "id": "conn-19",
+      "sourceDeviceId": "usb-hub",
+      "sourcePortId": "usb-hub-out-1",
+      "targetDeviceId": "usb-dac",
+      "targetPortId": "usb-dac-usb-hub"
     }
   ]
 }
