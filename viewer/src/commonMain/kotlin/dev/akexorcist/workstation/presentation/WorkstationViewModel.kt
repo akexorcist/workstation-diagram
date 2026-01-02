@@ -1,5 +1,7 @@
 package dev.akexorcist.workstation.presentation
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dev.akexorcist.workstation.data.model.*
 import dev.akexorcist.workstation.data.repository.LoadResult
 import dev.akexorcist.workstation.data.repository.WorkstationRepository
@@ -8,42 +10,55 @@ import dev.akexorcist.workstation.presentation.config.InteractionConfig
 import dev.akexorcist.workstation.presentation.config.StateManagementConfig
 import dev.akexorcist.workstation.presentation.config.ViewportConfig
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class WorkstationViewModel(
     private val repository: WorkstationRepository = WorkstationRepositoryImpl()
-) {
+) : ViewModel() {
     private val _uiState = MutableStateFlow(WorkstationUiState(isLoading = true))
-    val uiState: StateFlow<WorkstationUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<WorkstationUiState> = _uiState.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        WorkstationUiState(isLoading = true)
+    )
 
     private val _diagramState = MutableStateFlow(DiagramState())
-    val diagramState: StateFlow<DiagramState> = _diagramState.asStateFlow()
+    val diagramState: StateFlow<DiagramState> = _diagramState.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        DiagramState()
+    )
 
-    suspend fun loadLayout() {
-        _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+    fun loadLayout() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
 
-        when (val result = repository.loadLayout()) {
-            is LoadResult.Success -> {
-                _uiState.value = _uiState.value.copy(
-                    layout = result.layout,
-                    isLoading = false
-                )
-                updateDiagramState()
-            }
-            is LoadResult.PartialSuccess -> {
-                _uiState.value = _uiState.value.copy(
-                    layout = result.layout,
-                    isLoading = false,
-                    errorMessage = "Loaded with warnings: ${result.errors.joinToString(", ")}"
-                )
-                updateDiagramState()
-            }
-            is LoadResult.Error -> {
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    errorMessage = result.message
-                )
+            when (val result = repository.loadLayout()) {
+                is LoadResult.Success -> {
+                    _uiState.value = _uiState.value.copy(
+                        layout = result.layout,
+                        isLoading = false
+                    )
+                    updateDiagramState()
+                }
+                is LoadResult.PartialSuccess -> {
+                    _uiState.value = _uiState.value.copy(
+                        layout = result.layout,
+                        isLoading = false,
+                        errorMessage = "Loaded with warnings: ${result.errors.joinToString(", ")}"
+                    )
+                    updateDiagramState()
+                }
+                is LoadResult.Error -> {
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage = result.message
+                    )
+                }
             }
         }
     }
