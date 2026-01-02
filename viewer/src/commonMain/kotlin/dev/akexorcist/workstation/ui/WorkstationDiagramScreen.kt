@@ -1,24 +1,21 @@
 package dev.akexorcist.workstation.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.ui.draw.alpha
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,6 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -40,14 +38,14 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import dev.akexorcist.workstation.data.model.Offset
-import dev.akexorcist.workstation.data.model.Size
 import dev.akexorcist.workstation.presentation.WorkstationViewModel
-import dev.akexorcist.workstation.ui.components.DiagramCanvas
 import dev.akexorcist.workstation.ui.components.ControlPanel
 import dev.akexorcist.workstation.ui.components.DeviceDetailsDialog
 import dev.akexorcist.workstation.ui.components.DeviceListSidebar
+import dev.akexorcist.workstation.ui.components.DiagramCanvas
 import dev.akexorcist.workstation.ui.components.HudToggleButton
 import dev.akexorcist.workstation.ui.states.ErrorState
 import dev.akexorcist.workstation.ui.states.LoadingState
@@ -98,10 +96,8 @@ fun WorkstationDiagramScreen(
                             // Zoom towards viewport center (full window)
                             val viewportCenterX = canvasSize.width / 2f
                             val viewportCenterY = canvasSize.height / 2f
-                            val centerPoint = dev.akexorcist.workstation.data.model.Offset(viewportCenterX, viewportCenterY)
-                            val layoutCanvasSize = uiState.layout?.metadata?.canvasSize
-                                ?: dev.akexorcist.workstation.data.model.Size(canvasSize.width, canvasSize.height)
-                            viewModel.handleZoomChangeAtPoint(uiState.zoom + 0.1f, centerPoint, layoutCanvasSize)
+                            val centerPoint = Offset(viewportCenterX, viewportCenterY)
+                            viewModel.handleZoomChangeAtPoint(uiState.zoom + 0.1f, centerPoint)
                             true
                         }
                         // Zoom Out: Ctrl/Cmd + Minus
@@ -110,16 +106,14 @@ fun WorkstationDiagramScreen(
                             // Zoom towards viewport center (full window)
                             val viewportCenterX = canvasSize.width / 2f
                             val viewportCenterY = canvasSize.height / 2f
-                            val centerPoint = dev.akexorcist.workstation.data.model.Offset(viewportCenterX, viewportCenterY)
-                            val layoutCanvasSize = uiState.layout?.metadata?.canvasSize
-                                ?: dev.akexorcist.workstation.data.model.Size(canvasSize.width, canvasSize.height)
-                            viewModel.handleZoomChangeAtPoint(uiState.zoom - 0.1f, centerPoint, layoutCanvasSize)
+                            val centerPoint = Offset(viewportCenterX, viewportCenterY)
+                            viewModel.handleZoomChangeAtPoint(uiState.zoom - 0.1f, centerPoint)
                             true
                         }
                         // Pan: Arrow keys
                         keyEvent.key == Key.DirectionUp -> {
                             viewModel.handlePanChange(
-                                dev.akexorcist.workstation.data.model.Offset(
+                                Offset(
                                     x = uiState.panOffset.x,
                                     y = uiState.panOffset.y + 20f
                                 )
@@ -129,7 +123,7 @@ fun WorkstationDiagramScreen(
 
                         keyEvent.key == Key.DirectionDown -> {
                             viewModel.handlePanChange(
-                                dev.akexorcist.workstation.data.model.Offset(
+                                Offset(
                                     x = uiState.panOffset.x,
                                     y = uiState.panOffset.y - 20f
                                 )
@@ -139,7 +133,7 @@ fun WorkstationDiagramScreen(
 
                         keyEvent.key == Key.DirectionLeft -> {
                             viewModel.handlePanChange(
-                                dev.akexorcist.workstation.data.model.Offset(
+                                Offset(
                                     x = uiState.panOffset.x + 20f,
                                     y = uiState.panOffset.y
                                 )
@@ -149,7 +143,7 @@ fun WorkstationDiagramScreen(
 
                         keyEvent.key == Key.DirectionRight -> {
                             viewModel.handlePanChange(
-                                dev.akexorcist.workstation.data.model.Offset(
+                                Offset(
                                     x = uiState.panOffset.x - 20f,
                                     y = uiState.panOffset.y
                                 )
@@ -179,7 +173,6 @@ fun WorkstationDiagramScreen(
             uiState.isLoading -> {
                 LoadingState(
                     message = "Loading workstation data...",
-                    isDarkTheme = uiState.isDarkTheme,
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -200,7 +193,6 @@ fun WorkstationDiagramScreen(
             uiState.layout == null -> {
                 LoadingState(
                     message = "No data available",
-                    isDarkTheme = uiState.isDarkTheme,
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -209,10 +201,8 @@ fun WorkstationDiagramScreen(
                 DiagramCanvas(
                     uiState = uiState,
                     onDeviceClick = viewModel::handleDeviceClick,
-                    onConnectionClick = viewModel::handleConnectionClick,
                     onPanChange = viewModel::handlePanChange,
                     onHoverDevice = { deviceId, isHovered -> viewModel.handleDeviceHover(deviceId, isHovered) },
-                    onHoverConnection = { connectionId, isHovered -> viewModel.handleConnectionHover(connectionId, isHovered) },
                     onHoverPort = { portInfo, isHovered -> viewModel.handlePortHover(portInfo, isHovered) },
                     modifier = Modifier.fillMaxSize()
                 )
@@ -255,9 +245,7 @@ fun WorkstationDiagramScreen(
                             val viewportCenterX = canvasSize.width / 2f
                             val viewportCenterY = canvasSize.height / 2f
                             val centerPoint = Offset(viewportCenterX, viewportCenterY)
-                            val layoutCanvasSize = uiState.layout?.metadata?.canvasSize
-                                ?: Size(canvasSize.width, canvasSize.height)
-                            viewModel.handleZoomChangeAtPoint(newZoom, centerPoint, layoutCanvasSize)
+                            viewModel.handleZoomChangeAtPoint(newZoom, centerPoint)
                         },
                         onReset = {
                             viewModel.resetZoom()

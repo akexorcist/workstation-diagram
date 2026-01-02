@@ -1,18 +1,10 @@
 package dev.akexorcist.workstation.ui.components
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import dev.akexorcist.workstation.data.model.Device
 import dev.akexorcist.workstation.data.model.LayoutMetadata
-import dev.akexorcist.workstation.data.model.Position
-import dev.akexorcist.workstation.presentation.config.RenderingConfig
 import dev.akexorcist.workstation.utils.CoordinateTransformer
 
 /**

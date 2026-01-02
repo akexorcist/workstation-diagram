@@ -150,12 +150,12 @@ class AStarPathfinder(
                     val existingDirection = GridDirection.fromPoints(p1, p2)
                     
                     // Higher penalty for parallel paths
-                    if (!direction.isPerpendicular(existingDirection)) {
-                        cost += penalty * 2.0f
+                    cost = if (!direction.isPerpendicular(existingDirection)) {
+                        cost + (penalty * 2.0f)
                     } else {
-                        cost += penalty
+                        cost + penalty
                     }
-                    
+
                     // Extremely high penalty for same direction conflicts
                     if (direction == existingDirection) {
                         cost += penalty * 10.0f

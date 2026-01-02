@@ -34,7 +34,6 @@ fun CapsulePortNode(
     zoom: Float,
     clipEdge: String? = null,
     isRelatedToHoveredDevice: Boolean = true,
-    isHovered: Boolean = false,
     density: Float = 1f,
     onHoverChange: (String, Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier

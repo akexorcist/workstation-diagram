@@ -20,12 +20,6 @@ class PathDensityTracker(
         val bottom: Int
     )
 
-    fun reset() {
-        deviceBoundaries.clear()
-        densityMap.forEach { it.fill(0f) }
-        pathCounts.forEach { it.fill(0) }
-    }
-
     fun registerDevice(device: Device, gridCellSize: Float) {
         val left = (device.position.x / gridCellSize).toInt()
         val top = (device.position.y / gridCellSize).toInt()

@@ -2,8 +2,8 @@ package dev.akexorcist.workstation.routing
 
 import kotlin.math.abs
 import kotlin.math.ceil
-import kotlin.math.min
 import kotlin.math.max
+import kotlin.math.min
 
 data class GridPoint(val x: Int, val y: Int) {
     fun manhattanDistanceTo(other: GridPoint): Int = abs(x - other.x) + abs(y - other.y)
@@ -19,13 +19,6 @@ data class GridPoint(val x: Int, val y: Int) {
 
 enum class GridDirection {
     NORTH, SOUTH, EAST, WEST;
-
-    fun isOpposite(other: GridDirection): Boolean = when (this) {
-        NORTH -> other == SOUTH
-        SOUTH -> other == NORTH
-        EAST -> other == WEST
-        WEST -> other == EAST
-    }
 
     fun isPerpendicular(other: GridDirection): Boolean =
         (isVertical() && other.isHorizontal()) || (isHorizontal() && other.isVertical())
@@ -65,36 +58,6 @@ class GridCell(val x: Int, val y: Int) {
         occupancy.getOrPut(direction) { mutableSetOf() }.add(connectionId)
         densityValue += 1.0f
     }
-
-    fun release(connectionId: String, direction: GridDirection) {
-        occupancy[direction]?.apply {
-            remove(connectionId)
-            if (isEmpty()) occupancy.remove(direction)
-        }
-    }
-
-    fun releaseAll(connectionId: String) {
-        val hadConnection = occupancy.values.any { it.contains(connectionId) }
-        GridDirection.entries.forEach { release(connectionId, it) }
-        if (hadConnection) {
-            densityValue = densityValue.coerceAtLeast(0f)
-        }
-    }
-    
-    fun getDensity(): Float = densityValue
-    
-    fun increaseDensity(value: Float) {
-        densityValue += value
-    }
-    
-    fun resetDensity() {
-        densityValue = 0f
-    }
-    
-    fun isOccupied(): Boolean = occupancy.values.any { it.isNotEmpty() }
-    fun getOccupancy(): Map<GridDirection, Set<String>> = occupancy.mapValues { it.value.toSet() }
-    fun getConnectionIds(): Set<String> = occupancy.values.flatten().toSet()
-    fun getOccupancyCount(): Int = occupancy.values.sumOf { it.size }
 }
 
 class RoutingGrid(val width: Int, val height: Int, val cellSize: Float) {
@@ -192,33 +155,11 @@ class RoutingGrid(val width: Int, val height: Int, val cellSize: Float) {
         }
     }
 
-    fun releasePath(connectionId: String) {
-        cells.forEach { row -> row.forEach { it.releaseAll(connectionId) } }
-    }
-
     fun getNeighbors(point: GridPoint): List<Pair<GridPoint, GridDirection>> = buildList {
         if (point.y > 0) add(GridPoint(point.x, point.y - 1) to GridDirection.NORTH)
         if (point.y < height - 1) add(GridPoint(point.x, point.y + 1) to GridDirection.SOUTH)
         if (point.x > 0) add(GridPoint(point.x - 1, point.y) to GridDirection.WEST)
         if (point.x < width - 1) add(GridPoint(point.x + 1, point.y) to GridDirection.EAST)
-    }
-
-    fun clearOccupancy() = cells.forEach { row -> 
-        row.forEach { cell ->
-            cell.getConnectionIds().forEach { cell.releaseAll(it) }
-            cell.resetDensity()
-        }
-    }
-
-    fun reset() {
-        deviceRegions.clear()
-        cells.forEach { row -> row.forEachIndexed { y, cell ->
-            if (row.indexOf(cell) in 0 until width && y in 0 until height) {
-                blocked[row.indexOf(cell)][y] = false
-            }
-            cell.releaseAll("")
-            cell.resetDensity()
-        }}
     }
     
     fun findDeviceCorridor(source: GridPoint, target: GridPoint): Pair<GridPoint, GridPoint>? {
@@ -247,10 +188,10 @@ class RoutingGrid(val width: Int, val height: Int, val cellSize: Float) {
         var bottommost = 0
         
         for (region in relevantDevices) {
-            if (region.right < maxX && region.right > leftmostRight) {
+            if (region.right in (leftmostRight + 1)..<maxX) {
                 leftmostRight = region.right
             }
-            if (region.left > minX && region.left < rightmostLeft) {
+            if (region.left in (minX + 1)..<rightmostLeft) {
                 rightmostLeft = region.left
             }
             if (region.bottom > bottommost) {
@@ -272,14 +213,4 @@ class RoutingGrid(val width: Int, val height: Int, val cellSize: Float) {
         
         return corridorTop to corridorBottom
     }
-    
-    fun getCellDensity(point: GridPoint): Float =
-        getCell(point)?.getDensity() ?: 0f
-        
-    fun increaseCellDensity(point: GridPoint, value: Float) {
-        getCell(point)?.increaseDensity(value)
-    }
-    
-    fun getCellOccupancyCount(point: GridPoint): Int =
-        getCell(point)?.getOccupancyCount() ?: 0
 }

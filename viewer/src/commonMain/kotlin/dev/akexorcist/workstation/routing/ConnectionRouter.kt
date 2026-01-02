@@ -41,10 +41,10 @@ class ConnectionRouter(private val config: RoutingConfig = RoutingConfig) {
         val gridWidth = (virtualCanvasSize.width / config.gridCellSize).toInt().coerceAtLeast(1)
         val gridHeight = (virtualCanvasSize.height / config.gridCellSize).toInt().coerceAtLeast(1)
         val grid = RoutingGrid(gridWidth, gridHeight, config.gridCellSize)
-        
+
         // Create density tracker for path distribution
         val densityTracker = PathDensityTracker(gridWidth, gridHeight, config)
-        
+
         // Create device lookup map
         val deviceMap = devices.associateBy { it.id }
         
@@ -56,10 +56,10 @@ class ConnectionRouter(private val config: RoutingConfig = RoutingConfig) {
             } else {
                 device.size.width to device.size.height
             }
-            
+
             // Mark as obstacle with configured clearance
             grid.markDeviceObstacle(device.position.x, device.position.y, width, height, config.deviceClearance)
-            
+
             // Register in density tracker
             densityTracker.registerDevice(device, config.gridCellSize)
         }
@@ -72,17 +72,14 @@ class ConnectionRouter(private val config: RoutingConfig = RoutingConfig) {
             }
         }
         
-        // Create pathfinder with grid and density tracker
-        val pathfinder = AStarPathfinder(grid, densityTracker, config)
-        
         // Track existing paths for conflict avoidance
         val existingPaths = mutableMapOf<String, List<GridPoint>>()
-        
+
         // Route connections in order of distance (shortest first)
         val results = connections
             .sortedBy { calculateConnectionDistance(it, deviceMap) }
             .map { connection ->
-                routeConnection(connection, deviceMap, grid, pathfinder, densityTracker, existingPaths).also { routed ->
+                routeConnection(connection, deviceMap, grid, densityTracker, existingPaths).also { routed ->
                     // Record successful paths for future routing
                     if (routed.success) {
                         existingPaths[connection.id] = routed.waypoints
@@ -109,7 +106,6 @@ class ConnectionRouter(private val config: RoutingConfig = RoutingConfig) {
         connection: Connection,
         deviceMap: Map<String, Device>,
         grid: RoutingGrid,
-        pathfinder: AStarPathfinder,
         densityTracker: PathDensityTracker,
         existingPaths: Map<String, List<GridPoint>>
     ): RoutedConnection {
@@ -415,10 +411,5 @@ class ConnectionRouter(private val config: RoutingConfig = RoutingConfig) {
         }
         
         return uniqueList
-    }
-    
-    // Clear cache when needed
-    fun clearCache() {
-        routingCache = null
     }
 }

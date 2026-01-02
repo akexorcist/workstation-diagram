@@ -22,7 +22,7 @@ object StateManagementConfig {
         return zoom.coerceIn(minZoom, maxZoom)
     }
 
-    fun validatePan(pan: Offset, canvasSize: Size): Offset {
+    fun validatePan(pan: Offset): Offset {
         return pan
     }
 }

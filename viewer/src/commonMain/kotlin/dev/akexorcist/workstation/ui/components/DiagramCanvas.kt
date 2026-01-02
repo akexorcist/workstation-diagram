@@ -34,7 +34,11 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
+import dev.akexorcist.workstation.data.model.Device
+import dev.akexorcist.workstation.data.model.LayoutMetadata
 import dev.akexorcist.workstation.data.model.Port
+import dev.akexorcist.workstation.data.model.PortDirection
+import dev.akexorcist.workstation.data.model.Position
 import dev.akexorcist.workstation.presentation.WorkstationUiState
 import dev.akexorcist.workstation.presentation.config.RenderingConfig
 import dev.akexorcist.workstation.routing.ConnectionRouter
@@ -55,10 +59,8 @@ import dev.akexorcist.workstation.utils.DeviceConnectionInfo
 fun DiagramCanvas(
     uiState: WorkstationUiState,
     onDeviceClick: (String) -> Unit,
-    onConnectionClick: (String) -> Unit,
     onPanChange: (dev.akexorcist.workstation.data.model.Offset) -> Unit,
     onHoverDevice: (String?, Boolean) -> Unit = { _, _ -> },
-    onHoverConnection: (String?, Boolean) -> Unit = { _, _ -> },
     onHoverPort: (String?, Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier
 ) {
@@ -94,7 +96,7 @@ fun DiagramCanvas(
             emptyMap()
         }
     }
-    
+
     val relatedConnectionsMap = remember(uiState.hoveredDeviceId, uiState.hoveredPortInfo, uiState.layout) {
         if (uiState.layout != null) {
             if (uiState.hoveredDeviceId != null) {
@@ -108,7 +110,7 @@ fun DiagramCanvas(
             emptyMap()
         }
     }
-    
+
     val relatedPortsMap = remember(uiState.hoveredDeviceId, uiState.hoveredPortInfo, uiState.layout) {
         if (uiState.layout != null) {
             if (uiState.hoveredDeviceId != null) {
@@ -124,10 +126,10 @@ fun DiagramCanvas(
     }
 
     var actualSize by remember { mutableStateOf(Size(1280f, 720f)) }
-    
+
     // Calculate density based on platform
     val density = androidx.compose.ui.platform.LocalDensity.current.density
-    
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -238,23 +240,9 @@ private fun ConnectionCanvas(
     hoveredPortInfo: String? = null,
     relatedConnectionsMap: Map<String, Boolean> = emptyMap()
 ) {
-
     val opacityTargets = remember { mutableMapOf<String, Float>() }
     val currentOpacities = remember { mutableMapOf<String, Float>() }
-    
 
-    val animationClock = rememberInfiniteTransition()
-    val animationTick = animationClock.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(200),
-            repeatMode = RepeatMode.Reverse
-        )
-    )
-    
-    val animationTickValue = animationTick.value
-    
     fun getAnimatedOpacity(key: String, targetValue: Float): Float {
         opacityTargets[key] = targetValue
         val current = currentOpacities[key] ?: 1f
@@ -266,6 +254,7 @@ private fun ConnectionCanvas(
         currentOpacities[key] = newValue
         return newValue
     }
+
     val phase = if (isAnimationEnabled) {
         val infiniteTransition = rememberInfiniteTransition()
         infiniteTransition.animateFloat(
@@ -284,9 +273,9 @@ private fun ConnectionCanvas(
     }
     val connectionTheme = WorkstationTheme.themeColor.connection
     val hoveredConnectionId: String? = null
-    
+
     val deviceMap = layout.devices.associateBy { it.id }
-    
+
     val isHoverHighlightActive = hoveredDeviceId != null || hoveredPortInfo != null
 
     Canvas(modifier = Modifier.fillMaxSize()) {
@@ -305,7 +294,7 @@ private fun ConnectionCanvas(
                     val targetPosition = calculatePortScreenPosition(
                         targetDevice, targetPort, layout.metadata, canvasSize, zoom, panOffset
                     )
-                    
+
                     val routedConnection = routedConnectionMap[connection.id]
                     if (routedConnection != null) {
                         val path = routedConnection.virtualWaypoints.map { (vx, vy) ->
@@ -344,45 +333,39 @@ private fun ConnectionCanvas(
                     )
 
                     val routedConnection = routedConnectionMap[connection.id]
-                    
+
                     if (routedConnection != null && !routedConnection.success) {
                         val failedLineColor = ThemeColor.Pink500.copy(alpha = RoutingConfig.failedRouteAlpha)
                         val failedStrokeWidth = RenderingConfig.connectionWidth * zoom * RoutingConfig.failedRouteWidthMultiplier
-                        
+
                         val path = routedConnection.virtualWaypoints.map { (vx, vy) ->
                             virtualToScreen(vx, vy, layout.metadata, canvasSize, zoom, panOffset)
                         }
-                        
+
                         for (i in 0 until path.size - 1) {
                             drawLine(
-                                color = failedLineColor, 
-                                start = path[i], 
-                                end = path[i + 1], 
+                                color = failedLineColor,
+                                start = path[i],
+                                end = path[i + 1],
                                 strokeWidth = failedStrokeWidth,
                                 cap = StrokeCap.Round
                             )
                         }
-                    } 
-                    else {
-                        val path = if (routedConnection != null) {
-                            routedConnection.virtualWaypoints.map { (vx, vy) ->
-                                virtualToScreen(vx, vy, layout.metadata, canvasSize, zoom, panOffset)
-                            }
-                        } else {
-                            calculateOrthogonalPath(
-                                sourcePosition, targetPosition,
-                                sourcePort.position.side, targetPort.position.side, zoom
-                            )
-                        }
-                        
+                    } else {
+                        val path = routedConnection?.virtualWaypoints?.map { (vx, vy) ->
+                            virtualToScreen(vx, vy, layout.metadata, canvasSize, zoom, panOffset)
+                        } ?: calculateOrthogonalPath(
+                            sourcePosition, targetPosition,
+                            sourcePort.position.side, targetPort.position.side, zoom
+                        )
+
                         val isSelected = connection.id == selectedConnectionId
                         val isHovered = connection.id == hoveredConnectionId
                         val sourceDirection = sourcePort.direction
                         val targetDirection = targetPort.direction
-                        
-                        val (startBackgroundColor, endBackgroundColor) = when {
-                            sourceDirection == dev.akexorcist.workstation.data.model.PortDirection.OUTPUT &&
-                            targetDirection == dev.akexorcist.workstation.data.model.PortDirection.INPUT -> {
+
+                        val (startBackgroundColor, endBackgroundColor) = when (sourceDirection) {
+                            PortDirection.OUTPUT if targetDirection == PortDirection.INPUT -> {
                                 val outputBg = when {
                                     isSelected -> connectionTheme.outputBackgroundActiveColor
                                     isHovered -> connectionTheme.outputBackgroundActiveColor.copy(alpha = 0.7f)
@@ -395,8 +378,7 @@ private fun ConnectionCanvas(
                                 }
                                 Pair(outputBg, inputBg)
                             }
-                            sourceDirection == dev.akexorcist.workstation.data.model.PortDirection.INPUT &&
-                            targetDirection == dev.akexorcist.workstation.data.model.PortDirection.OUTPUT -> {
+                            PortDirection.INPUT if targetDirection == PortDirection.OUTPUT -> {
                                 val inputBg = when {
                                     isSelected -> connectionTheme.inputBackgroundActiveColor
                                     isHovered -> connectionTheme.inputBackgroundActiveColor.copy(alpha = 0.7f)
@@ -423,16 +405,14 @@ private fun ConnectionCanvas(
                                 Pair(inputBg, outputBg)
                             }
                         }
-                        
+
                         // Always use active colors for the foreground path
-                        val (startForegroundColor, endForegroundColor) = when {
-                            sourceDirection == dev.akexorcist.workstation.data.model.PortDirection.OUTPUT &&
-                            targetDirection == dev.akexorcist.workstation.data.model.PortDirection.INPUT -> {
+                        val (startForegroundColor, endForegroundColor) = when (sourceDirection) {
+                            PortDirection.OUTPUT if targetDirection == PortDirection.INPUT -> {
                                 // Output to Input
                                 Pair(connectionTheme.outputActiveColor, connectionTheme.inputActiveColor)
                             }
-                            sourceDirection == dev.akexorcist.workstation.data.model.PortDirection.INPUT &&
-                            targetDirection == dev.akexorcist.workstation.data.model.PortDirection.OUTPUT -> {
+                            PortDirection.INPUT if targetDirection == PortDirection.OUTPUT -> {
                                 // Input to Output
                                 Pair(connectionTheme.inputActiveColor, connectionTheme.outputActiveColor)
                             }
@@ -441,20 +421,20 @@ private fun ConnectionCanvas(
                                 Pair(connectionTheme.inputActiveColor, connectionTheme.outputActiveColor)
                             }
                         }
-                        
+
                         // Apply opacity for unrelated connections during hover
                         val isRelated = !isHoverHighlightActive || relatedConnectionsMap[connection.id] == true
-                        
+
                         // Get the current animated opacity value for this connection
                         val targetOpacity = if (isRelated) 1f else RenderingConfig.unrelatedConnectionOpacity
                         val connectionKey = "connection-${connection.id}"
                         val opacityMultiplier = getAnimatedOpacity(connectionKey, targetOpacity)
-                        
+
                         val adjustedStartBg = startBackgroundColor.copy(alpha = startBackgroundColor.alpha * opacityMultiplier)
                         val adjustedEndBg = endBackgroundColor.copy(alpha = endBackgroundColor.alpha * opacityMultiplier)
                         val adjustedStartFg = startForegroundColor.copy(alpha = startForegroundColor.alpha * opacityMultiplier)
                         val adjustedEndFg = endForegroundColor.copy(alpha = endForegroundColor.alpha * opacityMultiplier)
-                        
+
                         drawGradientConnectionPath(
                             path = path,
                             startBackgroundColor = adjustedStartBg,
@@ -463,7 +443,6 @@ private fun ConnectionCanvas(
                             endForegroundColor = adjustedEndFg,
                             zoom = zoom,
                             phase = phase.value,
-                            isAnimationEnabled = isAnimationEnabled
                         )
                     }
                 }
@@ -472,44 +451,18 @@ private fun ConnectionCanvas(
     }
 }
 
-private fun isRectVisibleInViewport(
-    position: Offset,
-    size: androidx.compose.ui.geometry.Size,
-    viewportSize: androidx.compose.ui.geometry.Size
-): Boolean {
-    val rectLeft = position.x
-    val rectRight = position.x + size.width
-    val rectTop = position.y
-    val rectBottom = position.y + size.height
-
-    val cullingMargin = 50f
-    
-    val viewportLeft = -cullingMargin
-    val viewportRight = viewportSize.width + cullingMargin
-    val viewportTop = -cullingMargin
-    val viewportBottom = viewportSize.height + cullingMargin
-
-    return rectLeft < viewportRight &&
-            rectRight > viewportLeft &&
-            rectTop < viewportBottom &&
-            rectBottom > viewportTop
-}
-
-
-
-
 // Helper functions for port position calculation
 private fun calculatePortScreenPosition(
-    device: dev.akexorcist.workstation.data.model.Device,
-    port: dev.akexorcist.workstation.data.model.Port,
-    metadata: dev.akexorcist.workstation.data.model.LayoutMetadata,
+    device: Device,
+    port: Port,
+    metadata: LayoutMetadata,
     canvasSize: dev.akexorcist.workstation.data.model.Size,
     zoom: Float,
     panOffset: dev.akexorcist.workstation.data.model.Offset
 ): Offset {
     val virtualPortX: Float
     val virtualPortY: Float
-    
+
     when (port.position.side) {
         dev.akexorcist.workstation.data.model.DeviceSide.TOP -> {
             val portPosition = when {
@@ -517,37 +470,40 @@ private fun calculatePortScreenPosition(
                 port.position.position > device.size.width -> device.size.width
                 else -> port.position.position
             }
-            
+
             virtualPortX = device.position.x + portPosition
             virtualPortY = device.position.y
         }
+
         dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
             val portPosition = when {
                 port.position.position < 0 -> 0f
                 port.position.position > device.size.width -> device.size.width
                 else -> port.position.position
             }
-            
+
             virtualPortX = device.position.x + portPosition
             virtualPortY = device.position.y + device.size.height
         }
+
         dev.akexorcist.workstation.data.model.DeviceSide.LEFT -> {
             val portPosition = when {
                 port.position.position < 0 -> 0f
                 port.position.position > device.size.height -> device.size.height
                 else -> port.position.position
             }
-            
+
             virtualPortX = device.position.x
             virtualPortY = device.position.y + portPosition
         }
+
         dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
             val portPosition = when {
                 port.position.position < 0 -> 0f
                 port.position.position > device.size.height -> device.size.height
                 else -> port.position.position
             }
-            
+
             virtualPortX = device.position.x + device.size.width
             virtualPortY = device.position.y + portPosition
         }
@@ -558,26 +514,27 @@ private fun calculatePortScreenPosition(
     var gridY = (virtualPortY / gridCellSize).toInt()
 
     val deviceGridLeft = (device.position.x / gridCellSize).toInt()
-    val deviceGridRight = ((device.position.x + device.size.width) / gridCellSize).toInt()
     val deviceGridTop = (device.position.y / gridCellSize).toInt()
-    val deviceGridBottom = ((device.position.y + device.size.height) / gridCellSize).toInt()
 
     when (port.position.side) {
         dev.akexorcist.workstation.data.model.DeviceSide.TOP -> {
             if (gridY >= deviceGridTop) gridY = deviceGridTop - 1
         }
+
         dev.akexorcist.workstation.data.model.DeviceSide.LEFT -> {
             if (gridX >= deviceGridLeft) gridX = deviceGridLeft - 1
         }
+
         dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM,
-        dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {}
+        dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
+        }
     }
 
     val snappedVirtualX = gridX * gridCellSize + (gridCellSize / 2f)
     val snappedVirtualY = gridY * gridCellSize + (gridCellSize / 2f)
 
     // Transform snapped virtual position to screen space
-    val snappedVirtual = dev.akexorcist.workstation.data.model.Position(snappedVirtualX, snappedVirtualY)
+    val snappedVirtual = Position(snappedVirtualX, snappedVirtualY)
     val screenPos = CoordinateTransformer.transformPosition(
         snappedVirtual,
         metadata,
@@ -604,10 +561,13 @@ private fun calculateOrthogonalPath(
     val startExit = when (startSide) {
         dev.akexorcist.workstation.data.model.DeviceSide.TOP ->
             Offset(start.x, start.y - extensionDistance)
+
         dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM ->
             Offset(start.x, start.y + extensionDistance)
+
         dev.akexorcist.workstation.data.model.DeviceSide.LEFT ->
             Offset(start.x - extensionDistance, start.y)
+
         dev.akexorcist.workstation.data.model.DeviceSide.RIGHT ->
             Offset(start.x + extensionDistance, start.y)
     }
@@ -615,10 +575,13 @@ private fun calculateOrthogonalPath(
     val endEntry = when (endSide) {
         dev.akexorcist.workstation.data.model.DeviceSide.TOP ->
             Offset(end.x, end.y - extensionDistance)
+
         dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM ->
             Offset(end.x, end.y + extensionDistance)
+
         dev.akexorcist.workstation.data.model.DeviceSide.LEFT ->
             Offset(end.x - extensionDistance, end.y)
+
         dev.akexorcist.workstation.data.model.DeviceSide.RIGHT ->
             Offset(end.x + extensionDistance, end.y)
     }
@@ -642,6 +605,7 @@ private fun calculateOrthogonalPath(
                 path.add(Offset(endEntry.x, midY))
             }
         }
+
         else -> {
             if (isHorizontalStart) {
                 path.add(Offset(startExit.x, endEntry.y))
@@ -660,33 +624,32 @@ private fun calculateOrthogonalPath(
 private fun DrawScope.drawGradientConnectionPath(
     path: List<Offset>,
     startBackgroundColor: Color,
-    endBackgroundColor: Color, 
+    endBackgroundColor: Color,
     startForegroundColor: Color,
     endForegroundColor: Color,
     zoom: Float,
     phase: Float = 0f,
-    isAnimationEnabled: Boolean = true
 ) {
     if (path.size < 2) return
-    
+
     val backgroundWidth = RenderingConfig.connectionBackgroundWidth * zoom
     val foregroundWidth = RenderingConfig.connectionForegroundWidth * zoom
-    
+
     var totalPathLength = 0f
     val segmentLengths = mutableListOf<Float>()
-    
+
     for (i in 0 until path.size - 1) {
         val length = Offset(
-            path[i+1].x - path[i].x,
-            path[i+1].y - path[i].y
+            path[i + 1].x - path[i].x,
+            path[i + 1].y - path[i].y
         ).getDistance()
         segmentLengths.add(length)
         totalPathLength += length
     }
-    
+
     // Create a curved path for background
     val backgroundPath = createCurvedPath(path, RenderingConfig.connectionCornerRadius * zoom)
-    
+
     val backgroundBrush = Brush.linearGradient(
         colors = listOf(startBackgroundColor, endBackgroundColor),
         start = path.first(),
@@ -701,25 +664,27 @@ private fun DrawScope.drawGradientConnectionPath(
             join = StrokeJoin.Round
         )
     )
-    
+
     // Create a curved path for foreground
     val foregroundPath = createCurvedPath(path, RenderingConfig.connectionCornerRadius * zoom)
-    
+
     // Create oval path for stamped effect
-    val ovalWidth = foregroundWidth * 0.9f 
-    val ovalHeight = ovalWidth  
+    val ovalWidth = foregroundWidth * 0.9f
+    val ovalHeight = ovalWidth
     val ovalPath = Path().apply {
-        addOval(Rect(
-            -ovalWidth / 2f,
-            -ovalHeight / 2f,
-            ovalWidth / 2f,
-            ovalHeight / 2f
-        ))
+        addOval(
+            Rect(
+                -ovalWidth / 2f,
+                -ovalHeight / 2f,
+                ovalWidth / 2f,
+                ovalHeight / 2f
+            )
+        )
     }
-    
+
     val stampSpacing = ovalWidth * RenderingConfig.connectionAnimationStampSpacing
     val lineCornerRadius = ovalWidth / 2f
-    
+
     val foregroundBrush = Brush.linearGradient(
         colors = listOf(startForegroundColor, endForegroundColor),
         start = path.first(),
@@ -745,76 +710,17 @@ private fun DrawScope.drawGradientConnectionPath(
     )
 }
 
-private fun calculatePathLength(path: List<Offset>): Float {
-    var length = 0f
-    for (i in 0 until path.size - 1) {
-        val start = path[i]
-        val end = path[i + 1]
-        length += kotlin.math.sqrt(
-            (end.x - start.x) * (end.x - start.x) + 
-            (end.y - start.y) * (end.y - start.y)
-        )
-    }
-    return length
-}
-
-private fun getPointAtDistance(path: List<Offset>, distance: Float): Offset {
-    if (distance <= 0f) return path.first()
-    
-    var distanceSoFar = 0f
-    
-    for (i in 0 until path.size - 1) {
-        val start = path[i]
-        val end = path[i + 1]
-        
-        val segmentLength = kotlin.math.sqrt(
-            (end.x - start.x) * (end.x - start.x) + 
-            (end.y - start.y) * (end.y - start.y)
-        )
-        
-        if (distanceSoFar + segmentLength >= distance) {
-            // This segment contains our point
-            val remainingDistance = distance - distanceSoFar
-            val ratio = remainingDistance / segmentLength
-            
-            return Offset(
-                x = start.x + (end.x - start.x) * ratio,
-                y = start.y + (end.y - start.y) * ratio
-            )
-        }
-        
-        distanceSoFar += segmentLength
-    }
-    
-    return path.last() // If we somehow exceeded the path length
-}
-
-private fun calculatePathLengthToPoint(path: List<Offset>, pointIndex: Int): Float {
-    var length = 0f
-    for (i in 0 until pointIndex) {
-        if (i + 1 < path.size) {
-            val start = path[i]
-            val end = path[i + 1]
-            length += kotlin.math.sqrt(
-                (end.x - start.x) * (end.x - start.x) + 
-                (end.y - start.y) * (end.y - start.y)
-            )
-        }
-    }
-    return length
-}
-
 /**
  * Check if any segment of a path is visible in the viewport with culling margin.
  */
 private fun isPathVisible(
     path: List<Offset>,
-    viewportSize: androidx.compose.ui.geometry.Size
+    viewportSize: Size
 ): Boolean {
     if (path.isEmpty()) return false
-    
+
     val cullingMargin = 50f
-    
+
     val viewportLeft = -cullingMargin
     val viewportRight = viewportSize.width + cullingMargin
     val viewportTop = -cullingMargin
@@ -823,12 +729,12 @@ private fun isPathVisible(
     for (i in 0 until path.size - 1) {
         val start = path[i]
         val end = path[i + 1]
-        
+
         if (isLineSegmentVisible(start, end, viewportLeft, viewportRight, viewportTop, viewportBottom)) {
             return true
         }
     }
-    
+
     return false
 }
 
@@ -841,26 +747,27 @@ private fun isLineSegmentVisible(
     viewportBottom: Float
 ): Boolean {
     if (isPointInViewport(start, viewportLeft, viewportRight, viewportTop, viewportBottom) ||
-        isPointInViewport(end, viewportLeft, viewportRight, viewportTop, viewportBottom)) {
+        isPointInViewport(end, viewportLeft, viewportRight, viewportTop, viewportBottom)
+    ) {
         return true
     }
-    
+
     if (lineIntersectsVerticalLine(start, end, viewportLeft, viewportTop, viewportBottom)) {
         return true
     }
-    
+
     if (lineIntersectsVerticalLine(start, end, viewportRight, viewportTop, viewportBottom)) {
         return true
     }
-    
+
     if (lineIntersectsHorizontalLine(start, end, viewportTop, viewportLeft, viewportRight)) {
         return true
     }
-    
+
     if (lineIntersectsHorizontalLine(start, end, viewportBottom, viewportLeft, viewportRight)) {
         return true
     }
-    
+
     return false
 }
 
@@ -871,8 +778,8 @@ private fun isPointInViewport(
     viewportTop: Float,
     viewportBottom: Float
 ): Boolean {
-    return point.x >= viewportLeft && point.x <= viewportRight &&
-           point.y >= viewportTop && point.y <= viewportBottom
+    return point.x in viewportLeft..viewportRight &&
+            point.y >= viewportTop && point.y <= viewportBottom
 }
 
 private fun lineIntersectsVerticalLine(
@@ -888,9 +795,9 @@ private fun lineIntersectsVerticalLine(
         } else {
             return false
         }
-        
+
         val y = start.y + t * (end.y - start.y)
-        return y >= yMin && y <= yMax
+        return y in yMin..yMax
     }
     return false
 }
@@ -908,9 +815,9 @@ private fun lineIntersectsHorizontalLine(
         } else {
             return false
         }
-        
+
         val x = start.x + t * (end.x - start.x)
-        return x >= xMin && x <= xMax
+        return x in xMin..xMax
     }
     return false
 }
@@ -922,12 +829,12 @@ private fun dev.akexorcist.workstation.data.model.Offset.toComposeOffset(): Offs
 private fun virtualToScreen(
     virtualX: Float,
     virtualY: Float,
-    metadata: dev.akexorcist.workstation.data.model.LayoutMetadata,
+    metadata: LayoutMetadata,
     canvasSize: dev.akexorcist.workstation.data.model.Size,
     zoom: Float,
     panOffset: dev.akexorcist.workstation.data.model.Offset
 ): Offset {
-    val position = dev.akexorcist.workstation.data.model.Position(virtualX, virtualY)
+    val position = Position(virtualX, virtualY)
     return CoordinateTransformer.transformPosition(position, metadata, canvasSize, zoom, panOffset)
 }
 
@@ -939,7 +846,7 @@ private fun virtualToScreen(
  */
 private fun createCurvedPath(points: List<Offset>, cornerRadius: Float): Path {
     if (points.size < 2) return Path()
-    
+
     val path = Path()
     path.moveTo(points[0].x, points[0].y)
 
@@ -948,49 +855,49 @@ private fun createCurvedPath(points: List<Offset>, cornerRadius: Float): Path {
         path.lineTo(points[1].x, points[1].y)
         return path
     }
-    
+
     // First segment - always a line from start to first corner
     val firstPoint = points[0]
     val firstCorner = points[1]
-    
+
     // Calculate distance from start to first corner
     val firstSegmentLength = kotlin.math.sqrt(
         (firstCorner.x - firstPoint.x) * (firstCorner.x - firstPoint.x) +
-        (firstCorner.y - firstPoint.y) * (firstCorner.y - firstPoint.y)
+                (firstCorner.y - firstPoint.y) * (firstCorner.y - firstPoint.y)
     )
-    
+
     // If the first segment is shorter than cornerRadius*2, use half the length as cornerRadius
     val firstCornerRadius = kotlin.math.min(cornerRadius, firstSegmentLength / 2)
-    
+
     // Calculate the point where the curve should start
     val firstCurveStart = Offset(
         firstPoint.x + (firstCorner.x - firstPoint.x) * (1 - firstCornerRadius / firstSegmentLength),
         firstPoint.y + (firstCorner.y - firstPoint.y) * (1 - firstCornerRadius / firstSegmentLength)
     )
-    
+
     // Draw line from start to the curve start point
     path.lineTo(firstCurveStart.x, firstCurveStart.y)
-    
+
     // Process each corner point except the first and last
     for (i in 1 until points.size - 1) {
         val prev = points[i - 1]
         val current = points[i]
         val next = points[i + 1]
-        
+
         // Calculate incoming and outgoing vectors
         val incomingX = current.x - prev.x
         val incomingY = current.y - prev.y
         val outgoingX = next.x - current.x
         val outgoingY = next.y - current.y
-        
+
         // Calculate lengths of incoming and outgoing segments
         val incomingLength = kotlin.math.sqrt(incomingX * incomingX + incomingY * incomingY)
         val outgoingLength = kotlin.math.sqrt(outgoingX * outgoingX + outgoingY * outgoingY)
-        
+
         // Limit corner radius based on segment lengths
         val maxRadius = kotlin.math.min(incomingLength, outgoingLength) / 2
         val actualCornerRadius = kotlin.math.min(cornerRadius, maxRadius)
-        
+
         // Only proceed if we have a valid radius and non-zero segments
         if (actualCornerRadius > 0 && incomingLength > 0 && outgoingLength > 0) {
             // Normalize incoming and outgoing vectors
@@ -998,21 +905,21 @@ private fun createCurvedPath(points: List<Offset>, cornerRadius: Float): Path {
             val incomingNormY = incomingY / incomingLength
             val outgoingNormX = outgoingX / outgoingLength
             val outgoingNormY = outgoingY / outgoingLength
-            
+
             // Calculate start and end points of the curve
             val curveStart = Offset(
                 current.x - incomingNormX * actualCornerRadius,
                 current.y - incomingNormY * actualCornerRadius
             )
-            
+
             val curveEnd = Offset(
                 current.x + outgoingNormX * actualCornerRadius,
                 current.y + outgoingNormY * actualCornerRadius
             )
-            
+
             // Calculate control points for the curve
             val controlPoint = current
-            
+
             // Draw the curve
             path.lineTo(curveStart.x, curveStart.y)
             path.quadraticTo(
@@ -1024,10 +931,10 @@ private fun createCurvedPath(points: List<Offset>, cornerRadius: Float): Path {
             path.lineTo(current.x, current.y)
         }
     }
-    
+
     // Final segment - from last curve to end point
     path.lineTo(points.last().x, points.last().y)
-    
+
     return path
 }
 
@@ -1045,49 +952,52 @@ private fun PortsOverlay(
     onHoverPort: (String?, Boolean) -> Unit = { _, _ -> }
 ) {
     val isHoverHighlightActive = hoveredDeviceId != null || hoveredPortInfo != null
-    
+
     // Render each port with its own width based on content
     layout.devices.forEach { device ->
         device.ports.forEach { port ->
             val portPosition = calculatePortScreenPosition(
                 device, port, layout.metadata, canvasSize, zoom, panOffset
             )
-            
+
             // Use fixed height that scales with zoom for consistency
             val capsuleHeight = RenderingConfig.portCapsuleHeight * zoom
-            
+
             // Calculate individual width for this port based on its content
             val capsuleWidth = getEstimatedPortWidth(port, zoom)
-            
+
             // Determine clip edge and position based on device side
             val clipEdge: String
-            
+
             val overlap = RenderingConfig.portDeviceOverlap * zoom
-            
+
             val adjustedPosition = when (port.position.side) {
                 dev.akexorcist.workstation.data.model.DeviceSide.LEFT -> {
                     clipEdge = "right"
                     val deviceEdgeX = portPosition.x
                     Offset(deviceEdgeX - capsuleWidth + overlap, portPosition.y - capsuleHeight / 2)
                 }
+
                 dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
                     clipEdge = "left"
                     Offset(portPosition.x - overlap, portPosition.y - capsuleHeight / 2)
                 }
+
                 dev.akexorcist.workstation.data.model.DeviceSide.TOP -> {
                     clipEdge = "bottom"
                     Offset(portPosition.x - capsuleWidth / 2, portPosition.y - capsuleHeight + overlap)
                 }
+
                 dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
                     clipEdge = "top"
                     Offset(portPosition.x - capsuleWidth / 2, portPosition.y - overlap)
                 }
             }
-            
+
             // Check if port is related to hovered device
             val portKey = "${device.id}:${port.id}"
             val isRelatedToHoveredDevice = !isHoverHighlightActive || relatedPortsMap[portKey] == true
-            
+
             // Only render if the port is in the viewport
             val portCheckRadius = kotlin.math.max(capsuleWidth, capsuleHeight)
             if (isPortVisibleInViewport(portPosition, portCheckRadius, viewportSize)) {
@@ -1097,7 +1007,6 @@ private fun PortsOverlay(
                     zoom = zoom,
                     clipEdge = clipEdge,
                     isRelatedToHoveredDevice = isRelatedToHoveredDevice,
-                    isHovered = "${device.id}:${port.id}" == hoveredPortInfo,
                     density = density,
                     onHoverChange = onHoverPort,
                     modifier = Modifier
@@ -1117,12 +1026,11 @@ private fun getEstimatedPortWidth(port: Port, zoom: Float): Float {
     val baseWidth = RenderingConfig.portCapsuleBaseWidth * zoom
     val charWidth = port.name.length * RenderingConfig.portCapsuleWidthPerChar * zoom
     val innerPaddingWidth = RenderingConfig.portCapsuleHorizontalPadding * 2 * zoom
-    
+
     val standardSidePadding = RenderingConfig.portCapsuleSidePadding * zoom
     val deviceSidePadding = RenderingConfig.portCapsuleDeviceSidePadding * zoom
     return baseWidth + charWidth + innerPaddingWidth + standardSidePadding + deviceSidePadding
 }
-
 
 
 /**
@@ -1134,7 +1042,7 @@ private fun isPortVisibleInViewport(
     viewportSize: Size
 ): Boolean {
     val cullingMargin = 50f
-    
+
     val viewportLeft = -cullingMargin
     val viewportRight = viewportSize.width + cullingMargin
     val viewportTop = -cullingMargin

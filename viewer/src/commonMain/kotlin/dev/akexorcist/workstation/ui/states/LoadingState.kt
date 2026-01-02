@@ -14,7 +14,6 @@ import dev.akexorcist.workstation.ui.theme.WorkstationTheme
 @Composable
 fun LoadingState(
     message: String = "Loading workstation data...",
-    isDarkTheme: Boolean,
     modifier: Modifier = Modifier
 ) {
     Box(

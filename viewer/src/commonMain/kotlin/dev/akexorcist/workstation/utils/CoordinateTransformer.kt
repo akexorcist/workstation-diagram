@@ -38,7 +38,7 @@ object CoordinateTransformer {
      * @return Screen position ready for rendering
      */
     fun transformPosition(
-        dataPosition: dev.akexorcist.workstation.data.model.Position,
+        dataPosition: Position,
         metadata: LayoutMetadata,
         actualCanvasSize: dev.akexorcist.workstation.data.model.Size,
         zoom: Float,

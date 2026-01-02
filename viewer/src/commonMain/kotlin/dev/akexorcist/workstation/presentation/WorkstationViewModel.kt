@@ -2,17 +2,22 @@ package dev.akexorcist.workstation.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.akexorcist.workstation.data.model.*
+import dev.akexorcist.workstation.data.model.Connection
+import dev.akexorcist.workstation.data.model.Device
+import dev.akexorcist.workstation.data.model.DeviceSide
+import dev.akexorcist.workstation.data.model.Offset
+import dev.akexorcist.workstation.data.model.Point
+import dev.akexorcist.workstation.data.model.Port
+import dev.akexorcist.workstation.data.model.Position
+import dev.akexorcist.workstation.data.model.Size
 import dev.akexorcist.workstation.data.repository.LoadResult
 import dev.akexorcist.workstation.data.repository.WorkstationRepository
 import dev.akexorcist.workstation.data.repository.WorkstationRepositoryImpl
-import dev.akexorcist.workstation.presentation.config.InteractionConfig
 import dev.akexorcist.workstation.presentation.config.StateManagementConfig
 import dev.akexorcist.workstation.presentation.config.ViewportConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -45,6 +50,7 @@ class WorkstationViewModel(
                     )
                     updateDiagramState()
                 }
+
                 is LoadResult.PartialSuccess -> {
                     _uiState.value = _uiState.value.copy(
                         layout = result.layout,
@@ -53,6 +59,7 @@ class WorkstationViewModel(
                     )
                     updateDiagramState()
                 }
+
                 is LoadResult.Error -> {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
@@ -64,50 +71,34 @@ class WorkstationViewModel(
     }
 
     /**
-     * Handles zoom level changes while respecting viewport constraints from workstation.json.
-     * 
-     * @param zoom The desired zoom level
-     */
-    fun handleZoomChange(zoom: Float) {
-        val viewportConfig = _uiState.value.layout?.metadata?.viewport
-        val validatedZoom = StateManagementConfig.validateZoom(zoom, viewportConfig)
-        _uiState.value = _uiState.value.copy(zoom = validatedZoom)
-        updateDiagramState()
-    }
-    
-    /**
      * Zoom towards a specific point on screen (typically viewport center)
      * This keeps the point under the cursor/center fixed during zoom
      * while respecting zoom constraints from workstation.json configuration.
      *
      * @param newZoom The desired new zoom level
      * @param screenPoint The screen point to maintain position during zoom
-     * @param canvasSize The current canvas size
      */
-    fun handleZoomChangeAtPoint(newZoom: Float, screenPoint: Offset, canvasSize: Size) {
+    fun handleZoomChangeAtPoint(newZoom: Float, screenPoint: Offset) {
         val oldZoom = _uiState.value.zoom
         val oldPan = _uiState.value.panOffset
         val viewportConfig = _uiState.value.layout?.metadata?.viewport
-        
+
         val validatedZoom = StateManagementConfig.validateZoom(newZoom, viewportConfig)
-        
+
         // Calculate the world position at the screen point before zoom
         // screenPoint = worldPos * oldZoom + oldPan
         // worldPos = (screenPoint - oldPan) / oldZoom
         val worldX = (screenPoint.x - oldPan.x) / oldZoom
         val worldY = (screenPoint.y - oldPan.y) / oldZoom
-        
+
         // After zoom, we want the same world position to be at the same screen point
         // screenPoint = worldPos * newZoom + newPan
         // newPan = screenPoint - worldPos * newZoom
         val newPanX = screenPoint.x - (worldX * validatedZoom)
         val newPanY = screenPoint.y - (worldY * validatedZoom)
-        
-        val validatedPan = StateManagementConfig.validatePan(
-            Offset(newPanX, newPanY),
-            canvasSize
-        )
-        
+
+        val validatedPan = StateManagementConfig.validatePan(Offset(newPanX, newPanY))
+
         _uiState.value = _uiState.value.copy(
             zoom = validatedZoom,
             panOffset = validatedPan
@@ -116,8 +107,7 @@ class WorkstationViewModel(
     }
 
     fun handlePanChange(offset: Offset) {
-        val canvasSize = _uiState.value.layout?.metadata?.canvasSize ?: ViewportConfig.defaultCanvasSize
-        val validatedPan = StateManagementConfig.validatePan(offset, canvasSize)
+        val validatedPan = StateManagementConfig.validatePan(offset)
         _uiState.value = _uiState.value.copy(panOffset = validatedPan)
         updateDiagramState()
     }
@@ -126,14 +116,6 @@ class WorkstationViewModel(
         _uiState.value = _uiState.value.copy(
             selectedDeviceId = deviceId,
             selectedConnectionId = null
-        )
-        updateDiagramState()
-    }
-
-    fun handleConnectionClick(connectionId: String) {
-        _uiState.value = _uiState.value.copy(
-            selectedConnectionId = connectionId,
-            selectedDeviceId = null
         )
         updateDiagramState()
     }
@@ -150,26 +132,6 @@ class WorkstationViewModel(
         _uiState.value = _uiState.value.copy(isDarkTheme = !_uiState.value.isDarkTheme)
     }
 
-    fun searchDevices(query: String) {
-        _uiState.value = _uiState.value.copy(searchQuery = query)
-
-        val layout = _uiState.value.layout ?: return
-        val filteredIds = if (query.isBlank()) {
-            emptySet()
-        } else {
-            layout.devices
-                .filter { device ->
-                    device.description.contains(query, ignoreCase = true) ||
-                    device.title.contains(query, ignoreCase = true)
-                }
-                .map { it.id }
-                .toSet()
-        }
-
-        _uiState.value = _uiState.value.copy(filteredDeviceIds = filteredIds)
-        updateDiagramState()
-    }
-
     /**
      * Resets the zoom level to the default zoom value from the workstation.json configuration
      * or to the application default if no configuration is available.
@@ -178,10 +140,6 @@ class WorkstationViewModel(
         val defaultZoom = _uiState.value.layout?.metadata?.viewport?.defaultZoom ?: ViewportConfig.defaultZoom
         _uiState.value = _uiState.value.copy(zoom = defaultZoom)
         updateDiagramState()
-    }
-
-    fun resetPan() {
-        centerViewportOnDevices()
     }
 
     fun centerViewportOnDevices(viewportWidth: Float = _uiState.value.viewportSize.width, viewportHeight: Float = _uiState.value.viewportSize.height) {
@@ -223,12 +181,6 @@ class WorkstationViewModel(
         )
     }
 
-    fun handleConnectionHover(connectionId: String?, isHovered: Boolean) {
-        _uiState.value = _uiState.value.copy(
-            hoveredConnectionId = if (isHovered) connectionId else null
-        )
-    }
-    
     fun handlePortHover(portInfo: String?, isHovered: Boolean) {
         // When a port is hovered, we clear any device hover state to avoid conflicts
         _uiState.value = _uiState.value.copy(
@@ -281,7 +233,7 @@ class WorkstationViewModel(
             val targetDevice = layout.devices.find { it.id == connection.targetDeviceId }
 
             val path = if (sourceDevice != null && targetDevice != null) {
-                calculateStraightPath(connection, sourceDevice, targetDevice, zoom, pan)
+                calculateStraightPath(connection, sourceDevice, targetDevice)
             } else {
                 emptyList()
             }
@@ -355,8 +307,6 @@ class WorkstationViewModel(
         connection: Connection,
         sourceDevice: Device,
         targetDevice: Device,
-        zoom: Float,
-        pan: Offset
     ): List<Point> {
         val sourcePort = sourceDevice.ports.find { it.id == connection.sourcePortId }
         val targetPort = targetDevice.ports.find { it.id == connection.targetPortId }
@@ -389,6 +339,7 @@ class WorkstationViewModel(
                     deviceRect.top
                 )
             }
+
             DeviceSide.BOTTOM -> {
                 val positionX = when {
                     port.position.position < 0 -> 0f
@@ -400,6 +351,7 @@ class WorkstationViewModel(
                     deviceRect.bottom
                 )
             }
+
             DeviceSide.LEFT -> {
                 val positionY = when {
                     port.position.position < 0 -> 0f
@@ -411,6 +363,7 @@ class WorkstationViewModel(
                     deviceRect.top + positionY
                 )
             }
+
             DeviceSide.RIGHT -> {
                 val positionY = when {
                     port.position.position < 0 -> 0f
