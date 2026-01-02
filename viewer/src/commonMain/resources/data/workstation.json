@@ -245,7 +245,7 @@
       "label": "Primary Monitor",
       "category": "HUB",
       "position": {
-        "x": 1800,
+        "x": 1500,
         "y": 900
       },
       "size": {
@@ -282,7 +282,7 @@
         },
         {
           "id": "primary-monitor-aux-out",
-          "name": "Audio Line Out",
+          "name": "AUX",
           "direction": "OUTPUT",
           "position": {
             "side": "LEFT",
@@ -291,7 +291,7 @@
         },
         {
           "id": "primary-monitor-usba-in-1",
-          "name": "USB-A 3.2",
+          "name": "USB-A 2.0",
           "direction": "INPUT",
           "position": {
             "side": "RIGHT",
@@ -309,7 +309,7 @@
         },
         {
           "id": "primary-monitor-usba-in-2",
-          "name": "USB-A 3.2",
+          "name": "USB-C 3.2 Gen2",
           "direction": "INPUT",
           "position": {
             "side": "RIGHT",
@@ -360,7 +360,7 @@
       "label": "Secondary Monitor",
       "category": "HUB",
       "position": {
-        "x": 1800,
+        "x": 1500,
         "y": 680
       },
       "size": {
@@ -748,7 +748,7 @@
         },
         {
           "id": "usb-c-switcher-pc",
-          "name": "USB-C 3.2 Gen2",
+          "name": "USB-C",
           "direction": "OUTPUT",
           "position": {
             "side": "LEFT",
@@ -1136,7 +1136,7 @@
       "label": "USB Power Adapter",
       "category": "HUB",
       "position": {
-        "x": 1800,
+        "x": 1500,
         "y": 480
       },
       "size": {
@@ -1229,7 +1229,7 @@
       "label": "USB DAC",
       "category": "HUB",
       "position": {
-        "x": 1800,
+        "x": 1500,
         "y": 1320
       },
       "size": {
@@ -1239,7 +1239,7 @@
       "ports": [
         {
           "id": "usb-dac-monitor",
-          "name": "Audio Line In",
+          "name": "AUX",
           "direction": "INPUT",
           "position": {
             "side": "LEFT",
@@ -1322,7 +1322,7 @@
       "label": "Speaker",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2400,
+        "x": 2000,
         "y": 680
       },
       "size": {
@@ -1341,7 +1341,7 @@
         },
         {
           "id": "speaker-aux",
-          "name": "Audio Line In",
+          "name": "AUX",
           "direction": "INPUT",
           "position": {
             "side": "LEFT",
@@ -1400,7 +1400,7 @@
       "label": "Gaming Headset",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2400,
+        "x": 2000,
         "y": 1350
       },
       "size": {
@@ -1461,7 +1461,7 @@
       "label": "Microphone",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2400,
+        "x": 2000,
         "y": 840
       },
       "size": {
@@ -1534,7 +1534,7 @@
       "label": "HDMI Capture",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2400,
+        "x": 2000,
         "y": 940
       },
       "size": {
@@ -1571,7 +1571,7 @@
       "label": "Android Device",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2400,
+        "x": 2000,
         "y": 1040
       },
       "size": {
@@ -1612,7 +1612,7 @@
       "label": "Microphone",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2400,
+        "x": 2000,
         "y": 1220
       },
       "size": {
@@ -1652,7 +1652,7 @@
       "label": "LED Light Bar",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2400,
+        "x": 2000,
         "y": 480
       },
       "size": {
@@ -1689,7 +1689,7 @@
       "label": "Wireless Charger",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2400,
+        "x": 2000,
         "y": 580
       },
       "size": {
@@ -1724,7 +1724,7 @@
       "label": "USB Dongle",
       "category": "PERIPHERAL",
       "position": {
-        "x": 1800,
+        "x": 1500,
         "y": 1530
       },
       "size": {
@@ -1764,7 +1764,7 @@
       "label": "USB Dongle",
       "category": "PERIPHERAL",
       "position": {
-        "x": 1800,
+        "x": 1500,
         "y": 1630
       },
       "size": {

@@ -13,8 +13,8 @@ object RoutingConfig {
 
     // Pathfinding Costs
     var gridMoveCost: Float = 1f
-    var crossingPenalty: Float = 5f
-    var turnPenalty: Float = 8.0f
+    var crossingPenalty: Float = 10f
+    var turnPenalty: Float = 4f
     var pathRepulsionFactor: Float = 4f
     var pathDensityPenalty: Float = 3f
     var distributionFactor: Float = 6f
@@ -24,7 +24,7 @@ object RoutingConfig {
     var removeZigzags: Boolean = true
 
     // Performance and Limits
-    var maxPathfindingIterations: Int = 10000
+    var maxPathfindingIterations: Int = 20000
     var enableCaching: Boolean = true
 
     // Failed Route Visualization
