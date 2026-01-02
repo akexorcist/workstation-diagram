@@ -70,18 +70,8 @@ fun DiagramCanvas(
     val panOffsetRef = remember { mutableStateOf(uiState.panOffset) }
     panOffsetRef.value = uiState.panOffset
 
-    val routedConnections = remember(uiState.layout) {
-        if (uiState.layout != null) {
-            val layout = uiState.layout
-            val virtualCanvas = layout.metadata.virtualCanvas ?: layout.metadata.canvasSize
-            ConnectionRouter().routeConnections(layout.devices, layout.connections, virtualCanvas)
-        } else {
-            emptyList()
-        }
-    }
-    val routedConnectionMap = remember(routedConnections) {
-        routedConnections.associateBy { it.connectionId }
-    }
+    val routedConnections = uiState.routedConnections
+    val routedConnectionMap = uiState.routedConnectionMap
 
     val relatedDevicesMap = remember(uiState.hoveredDeviceId, uiState.hoveredPortInfo, uiState.layout) {
         if (uiState.layout != null) {

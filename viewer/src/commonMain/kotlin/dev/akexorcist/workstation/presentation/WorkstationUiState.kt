@@ -1,6 +1,7 @@
 package dev.akexorcist.workstation.presentation
 
 import dev.akexorcist.workstation.data.model.*
+import dev.akexorcist.workstation.routing.RoutedConnection
 
 data class WorkstationUiState(
     val layout: WorkstationLayout? = null,
@@ -8,10 +9,10 @@ data class WorkstationUiState(
     val selectedConnectionId: String? = null,
     val hoveredDeviceId: String? = null,
     val hoveredConnectionId: String? = null,
-    val hoveredPortInfo: String? = null, // Format: "deviceId:portId"
+    val hoveredPortInfo: String? = null,
     val zoom: Float = 1.0f,
     val panOffset: Offset = Offset.Zero,
-    val viewportSize: Size = Size(1920f, 1080f), // Default size, will be updated with actual viewport dimensions
+    val viewportSize: Size = Size(1920f, 1080f),
     val isDarkTheme: Boolean = true,
     val searchQuery: String = "",
     val filteredDeviceIds: Set<String> = emptySet(),
@@ -19,7 +20,9 @@ data class WorkstationUiState(
     val errorMessage: String? = null,
     val isInstructionExpanded: Boolean = false,
     val isDeviceListExpanded: Boolean = true,
-    val connectionAnimationEnabled: Boolean = true
+    val connectionAnimationEnabled: Boolean = true,
+    val routedConnections: List<RoutedConnection> = emptyList(),
+    val routedConnectionMap: Map<String, RoutedConnection> = emptyMap()
 )
 
 data class DiagramState(

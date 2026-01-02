@@ -10,11 +10,13 @@ import dev.akexorcist.workstation.data.model.Point
 import dev.akexorcist.workstation.data.model.Port
 import dev.akexorcist.workstation.data.model.Position
 import dev.akexorcist.workstation.data.model.Size
+import dev.akexorcist.workstation.data.model.WorkstationLayout
 import dev.akexorcist.workstation.data.repository.LoadResult
 import dev.akexorcist.workstation.data.repository.WorkstationRepository
 import dev.akexorcist.workstation.data.repository.WorkstationRepositoryImpl
 import dev.akexorcist.workstation.presentation.config.StateManagementConfig
 import dev.akexorcist.workstation.presentation.config.ViewportConfig
+import dev.akexorcist.workstation.routing.ConnectionRouter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -43,17 +45,16 @@ class WorkstationViewModel(
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
             when (val result = repository.loadLayout()) {
                 is LoadResult.Success -> {
-                    _uiState.value = _uiState.value.copy(
-                        layout = result.layout,
-                        isLoading = false
+                    processLayoutWithConnections(
+                        result.layout, 
+                        null
                     )
                 }
 
                 is LoadResult.PartialSuccess -> {
-                    _uiState.value = _uiState.value.copy(
-                        layout = result.layout,
-                        isLoading = false,
-                        errorMessage = "Loaded with warnings: ${result.errors.joinToString(", ")}"
+                    processLayoutWithConnections(
+                        result.layout, 
+                        "Loaded with warnings: ${result.errors.joinToString(", ")}"
                     )
                 }
 
@@ -65,8 +66,33 @@ class WorkstationViewModel(
                 }
             }
         }
-        if (_uiState.value.layout != null) {
-            updateDiagramState()
+    }
+    
+    private fun processLayoutWithConnections(
+        layout: WorkstationLayout,
+        errorMessage: String?
+    ) {
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.Default) {
+            val connectionRouter = ConnectionRouter()
+            val virtualCanvas = layout.metadata.virtualCanvas ?: layout.metadata.canvasSize
+            val routedConnections = connectionRouter.routeConnections(
+                devices = layout.devices,
+                connections = layout.connections,
+                virtualCanvasSize = virtualCanvas
+            )
+            
+            val routedConnectionMap = routedConnections.associateBy { it.connectionId }
+            
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                _uiState.value = _uiState.value.copy(
+                    layout = layout,
+                    isLoading = false,
+                    errorMessage = errorMessage,
+                    routedConnections = routedConnections,
+                    routedConnectionMap = routedConnectionMap
+                )
+                updateDiagramState()
+            }
         }
     }
 
