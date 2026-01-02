@@ -125,6 +125,9 @@ fun DiagramCanvas(
 
     var actualSize by remember { mutableStateOf(Size(1280f, 720f)) }
     
+    // Calculate density based on platform
+    val density = androidx.compose.ui.platform.LocalDensity.current.density
+    
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -196,6 +199,7 @@ fun DiagramCanvas(
                 hoveredDeviceId = uiState.hoveredDeviceId,
                 hoveredPortInfo = uiState.hoveredPortInfo,
                 relatedPortsMap = relatedPortsMap,
+                density = density,
                 onHoverPort = onHoverPort
             )
 
@@ -208,6 +212,7 @@ fun DiagramCanvas(
                 viewportSize = viewportSize,
                 hoveredDeviceId = uiState.hoveredDeviceId,
                 hoveredPortInfo = uiState.hoveredPortInfo,
+                density = density,
                 onDeviceClick = onDeviceClick,
                 onHoverChange = onHoverDevice,
                 relatedDevicesMap = relatedDevicesMap
@@ -1036,6 +1041,7 @@ private fun PortsOverlay(
     hoveredDeviceId: String? = null,
     hoveredPortInfo: String? = null,
     relatedPortsMap: Map<String, Boolean> = emptyMap(),
+    density: Float = 1f,
     onHoverPort: (String?, Boolean) -> Unit = { _, _ -> }
 ) {
     val isHoverHighlightActive = hoveredDeviceId != null || hoveredPortInfo != null
@@ -1092,14 +1098,15 @@ private fun PortsOverlay(
                     clipEdge = clipEdge,
                     isRelatedToHoveredDevice = isRelatedToHoveredDevice,
                     isHovered = "${device.id}:${port.id}" == hoveredPortInfo,
+                    density = density,
                     onHoverChange = onHoverPort,
                     modifier = Modifier
                         .offset(
-                            x = adjustedPosition.x.dp,
-                            y = adjustedPosition.y.dp
+                            x = (adjustedPosition.x / density).dp,
+                            y = (adjustedPosition.y / density).dp
                         )
                         // We only need to set a minimum width, the height will be determined by the content
-                        .width(capsuleWidth.dp)
+                        .width((capsuleWidth / density).dp)
                 )
             }
         }

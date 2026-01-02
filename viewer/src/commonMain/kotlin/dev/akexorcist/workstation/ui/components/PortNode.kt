@@ -35,6 +35,7 @@ fun CapsulePortNode(
     clipEdge: String? = null,
     isRelatedToHoveredDevice: Boolean = true,
     isHovered: Boolean = false,
+    density: Float = 1f,
     onHoverChange: (String, Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier
 ) {
@@ -56,10 +57,10 @@ fun CapsulePortNode(
         label = "portTextColor"
     )
     
-    val sidePaddingDp = (RenderingConfig.portCapsuleSidePadding * zoom).dp
-    val deviceSidePaddingDp = (RenderingConfig.portCapsuleDeviceSidePadding * zoom).dp
-    val textSizeSp = (RenderingConfig.portCapsuleFontSize * zoom).sp
-    val capsuleHeightDp = (RenderingConfig.portCapsuleHeight * zoom).dp
+    val sidePaddingDp = (RenderingConfig.portCapsuleSidePadding * zoom / density).dp
+    val deviceSidePaddingDp = (RenderingConfig.portCapsuleDeviceSidePadding * zoom / density).dp
+    val textSizeSp = (RenderingConfig.portCapsuleFontSize * zoom / density).sp
+    val capsuleHeightDp = (RenderingConfig.portCapsuleHeight * zoom / density).dp
     
     val cornerRadius = (capsuleHeightDp.value / 2).dp
     

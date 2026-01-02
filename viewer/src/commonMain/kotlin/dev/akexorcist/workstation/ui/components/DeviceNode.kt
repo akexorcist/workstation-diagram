@@ -48,6 +48,7 @@ fun DeviceNode(
     isRelatedToHoveredDevice: Boolean = true,
     onClick: () -> Unit,
     onHoverChange: (Boolean) -> Unit,
+    density: Float = 1f,
     modifier: Modifier = Modifier
 ) {
     val deviceColor = getDeviceColor(device.category)
@@ -71,10 +72,13 @@ fun DeviceNode(
                         screenPosition.y.toInt()
                     )
                 }
-                .size(screenSize.width.dp, screenSize.height.dp)
+                .size(
+                    width = (screenSize.width / density).dp,
+                    height = (screenSize.height / density).dp
+                )
                 .background(
                     color = backgroundColor,
-                    shape = RoundedCornerShape(RenderingConfig.defaultDeviceBorderRadius.dp)
+                    shape = RoundedCornerShape((RenderingConfig.defaultDeviceBorderRadius / density).dp)
                 )
                 .pointerInput(Unit) {
                     awaitPointerEventScope {
@@ -99,7 +103,7 @@ fun DeviceNode(
                 )
         ) {
             if (screenSize.width >= RenderingConfig.deviceTextMinWidthToShow * zoom) {
-                val paddingScaled = (RenderingConfig.deviceTextPadding * zoom).dp
+                val paddingScaled = (RenderingConfig.deviceTextPadding * zoom / density).dp
 
                 Column(
                     modifier = Modifier
@@ -116,18 +120,18 @@ fun DeviceNode(
                     Text(
                         text = device.label,
                         style = MaterialTheme.typography.titleMedium.copy(
-                            fontSize = MaterialTheme.typography.titleMedium.fontSize * zoom * RenderingConfig.deviceTextTitleScale,
-                            lineHeight = MaterialTheme.typography.titleMedium.lineHeight * zoom * RenderingConfig.deviceTextLineHeightScale
+                            fontSize = MaterialTheme.typography.titleMedium.fontSize * zoom * RenderingConfig.deviceTextTitleScale / density,
+                            lineHeight = MaterialTheme.typography.titleMedium.lineHeight * zoom * RenderingConfig.deviceTextLineHeightScale / density
                         ),
                         color = textColor
                     )
-                    Spacer(modifier = Modifier.height(2.dp * zoom))
+                    Spacer(modifier = Modifier.height((2f * zoom / density).dp))
                     if (device.title.isNotEmpty()) {
                         Text(
                             text = device.title,
                             style = MaterialTheme.typography.bodyMedium.copy(
-                                fontSize = MaterialTheme.typography.bodyMedium.fontSize * zoom * RenderingConfig.deviceTextBodyScale,
-                                lineHeight = MaterialTheme.typography.bodyMedium.lineHeight * zoom * RenderingConfig.deviceTextLineHeightScale,
+                                fontSize = MaterialTheme.typography.bodyMedium.fontSize * zoom * RenderingConfig.deviceTextBodyScale / density,
+                                lineHeight = MaterialTheme.typography.bodyMedium.lineHeight * zoom * RenderingConfig.deviceTextLineHeightScale / density,
                             ),
                             color = textColor
                         )

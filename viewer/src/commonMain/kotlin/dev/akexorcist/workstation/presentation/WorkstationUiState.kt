@@ -11,6 +11,7 @@ data class WorkstationUiState(
     val hoveredPortInfo: String? = null, // Format: "deviceId:portId"
     val zoom: Float = 1.0f,
     val panOffset: Offset = Offset.Zero,
+    val viewportSize: Size = Size(1920f, 1080f), // Default size, will be updated with actual viewport dimensions
     val isDarkTheme: Boolean = true,
     val searchQuery: String = "",
     val filteredDeviceIds: Set<String> = emptySet(),

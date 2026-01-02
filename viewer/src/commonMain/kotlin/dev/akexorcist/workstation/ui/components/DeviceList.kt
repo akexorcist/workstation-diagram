@@ -29,6 +29,7 @@ fun DeviceList(
     viewportSize: Size,
     hoveredDeviceId: String?,
     hoveredPortInfo: String? = null,
+    density: Float = 1f,
     onDeviceClick: (String) -> Unit,
     onHoverChange: (String?, Boolean) -> Unit,
     relatedDevicesMap: Map<String, Boolean> = emptyMap()
@@ -52,6 +53,7 @@ fun DeviceList(
                 screenPosition = screenPosition,
                 screenSize = screenSize,
                 isRelatedToHoveredDevice = isRelatedToHoveredDevice,
+                density = density,
                 onClick = { onDeviceClick(device.id) },
                 onHoverChange = { isHovered ->
                     onHoverChange(device.id, isHovered)

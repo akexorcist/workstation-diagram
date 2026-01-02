@@ -169,7 +169,7 @@ class WorkstationViewModel(
         centerViewportOnDevices()
     }
 
-    fun centerViewportOnDevices(viewportWidth: Float = 1920f, viewportHeight: Float = 1080f) {
+    fun centerViewportOnDevices(viewportWidth: Float = _uiState.value.viewportSize.width, viewportHeight: Float = _uiState.value.viewportSize.height) {
         val layout = _uiState.value.layout ?: return
         if (layout.devices.isEmpty()) {
             _uiState.value = _uiState.value.copy(panOffset = StateManagementConfig.initialPan)
