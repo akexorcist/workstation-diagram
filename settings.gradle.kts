@@ -2,6 +2,7 @@ rootProject.name = "workstation"
 
 include(":shared")
 include(":viewer")
+include(":editor")
 
 pluginManagement {
     repositories {

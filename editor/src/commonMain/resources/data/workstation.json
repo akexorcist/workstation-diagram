@@ -28,7 +28,7 @@
       "category": "CENTRAL_DEVICE",
       "position": {
         "x": 100,
-        "y": 800
+        "y": 810
       },
       "size": {
         "width": 200,
@@ -147,7 +147,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "LEFT",
-            "position": 130
+            "position": 140
           }
         },
         {
@@ -156,7 +156,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "LEFT",
-            "position": 230
+            "position": 240
           }
         },
         {
@@ -1807,11 +1807,11 @@
       "routingPoints": [
         {
           "x": 385.0,
-          "y": 835.0
+          "y": 845.0
         },
         {
           "x": 425.0,
-          "y": 835.0
+          "y": 845.0
         }
       ]
     },

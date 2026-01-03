@@ -16,8 +16,7 @@ import dev.akexorcist.workstation.data.repository.WorkstationRepository
 import dev.akexorcist.workstation.data.repository.WorkstationRepositoryImpl
 import dev.akexorcist.workstation.presentation.config.StateManagementConfig
 import dev.akexorcist.workstation.presentation.config.ViewportConfig
-import dev.akexorcist.workstation.routing.ConnectionRouter
-import dev.akexorcist.workstation.routing.GridPoint
+import dev.akexorcist.workstation.routing.ConnectionPathConverter
 import dev.akexorcist.workstation.routing.RoutedConnection
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -75,13 +74,9 @@ class WorkstationViewModel(
         errorMessage: String?
     ) {
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.Default) {
-            val router = ConnectionRouter()
-            val virtualCanvas = layout.metadata.virtualCanvas ?: layout.metadata.canvasSize
-            
-            val routedConnections = router.routeConnections(
+            val routedConnections = ConnectionPathConverter.convertConnections(
                 devices = layout.devices,
-                connections = layout.connections,
-                virtualCanvasSize = virtualCanvas
+                connections = layout.connections
             )
             
             val routedConnectionMap = routedConnections.associateBy { it.connectionId }

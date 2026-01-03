@@ -35,3 +35,4 @@ object RenderingConfig {
     const val failedRouteAlpha: Float = 0.8f
     const val failedRouteWidthMultiplier: Float = 1.5f
 }
+
