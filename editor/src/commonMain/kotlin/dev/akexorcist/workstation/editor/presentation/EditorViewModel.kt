@@ -286,17 +286,9 @@ class EditorViewModel(
         )
     }
 
-    fun setHoveredLineSegment(connectionId: String?, segmentIndex: Int?) {
+    fun setSelectedLineSegment(connectionId: String?, segmentIndex: Int?) {
         _uiState.value = _uiState.value.copy(
-            hoveredLineSegment = if (connectionId != null && segmentIndex != null) {
-                Pair(connectionId, segmentIndex)
-            } else null
-        )
-    }
-
-    fun setDraggingLineSegment(connectionId: String?, segmentIndex: Int?) {
-        _uiState.value = _uiState.value.copy(
-            draggingLineSegment = if (connectionId != null && segmentIndex != null) {
+            selectedLineSegment = if (connectionId != null && segmentIndex != null) {
                 Pair(connectionId, segmentIndex)
             } else null
         )

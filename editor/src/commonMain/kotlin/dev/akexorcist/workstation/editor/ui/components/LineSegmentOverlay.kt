@@ -1,7 +1,6 @@
 package dev.akexorcist.workstation.editor.ui.components
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -33,9 +32,6 @@ fun LineSegmentOverlay(
     panOffset: DataOffset,
     uiState: EditorUiState,
     onHoverSegment: (String?, Int?) -> Unit,
-    onDragStart: (String, Int) -> Unit,
-    onDrag: (String, Int, DataOffset, Boolean) -> Unit,
-    onDragEnd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val density = LocalDensity.current
@@ -44,18 +40,8 @@ fun LineSegmentOverlay(
     
     var currentHoveredSegment by remember { mutableStateOf<Pair<String, Int>?>(null) }
     var currentSegmentOrientation by remember { mutableStateOf<SegmentOrientation?>(null) }
-    var isDragging by remember { mutableStateOf(false) }
     
-    val hoveredSegment = uiState.hoveredLineSegment
-    val draggingSegment = uiState.draggingLineSegment
-    
-    LaunchedEffect(draggingSegment) {
-        if (draggingSegment == null && hoveredSegment != null) {
-            currentHoveredSegment = null
-            currentSegmentOrientation = null
-            onHoverSegment(null, null)
-        }
-    }
+    val selectedSegment = uiState.selectedLineSegment
     
     val cursorIcon = remember(currentSegmentOrientation) {
         when (currentSegmentOrientation) {
@@ -69,73 +55,11 @@ fun LineSegmentOverlay(
         modifier = modifier
             .fillMaxSize()
             .pointerInput(layout, routedConnectionMap, canvasSize, zoom, panOffset) {
-                detectDragGestures(
-                    onDragStart = { offset ->
-                        val currentHovered = hoveredSegment
-                        if (currentHovered != null) {
-                            val segmentInfo = findSegmentAtPoint(
-                                offset,
-                                layout,
-                                routedConnectionMap,
-                                canvasSize,
-                                zoom,
-                                panOffset
-                            )
-                            if (segmentInfo != null && segmentInfo.first == currentHovered) {
-                                isDragging = true
-                                onDragStart(segmentInfo.first.first, segmentInfo.first.second)
-                            }
-                        }
-                    },
-                    onDrag = { change, dragAmount ->
-                        val currentDragging = draggingSegment
-                        if (currentDragging != null) {
-                            change.consume()
-                            val segmentInfo = findSegmentAtPoint(
-                                change.position,
-                                layout,
-                                routedConnectionMap,
-                                canvasSize,
-                                zoom,
-                                panOffset
-                            )
-                            if (segmentInfo != null) {
-                                val constrainedDelta = constrainDragToCrossAxis(
-                                    dragAmount,
-                                    segmentInfo.second
-                                )
-                                onDrag(
-                                    currentDragging.first,
-                                    currentDragging.second,
-                                    DataOffset(x = constrainedDelta.x, y = constrainedDelta.y),
-                                    segmentInfo.second == SegmentOrientation.HORIZONTAL
-                                )
-                            }
-                        }
-                    },
-                    onDragEnd = {
-                        val currentDragging = draggingSegment
-                        val wasDraggingSegment = currentDragging != null
-                        isDragging = false
-                        if (wasDraggingSegment) {
-                            onDragEnd()
-                        }
-                    },
-                    onDragCancel = {
-                        val currentDragging = draggingSegment
-                        val wasDraggingSegment = currentDragging != null
-                        isDragging = false
-                        if (wasDraggingSegment) {
-                            onDragEnd()
-                        }
-                    }
-                )
-            }
-            .pointerInput(layout, routedConnectionMap, canvasSize, zoom, panOffset, isDragging, draggingSegment) {
                 awaitPointerEventScope {
                     while (true) {
                         val event = awaitPointerEvent()
-                        if (isDragging || draggingSegment != null) continue
+                        // Skip hover detection during active pointer press (dragging)
+                        if (event.changes.any { it.pressed }) continue
                         
                         val pointerPosition = event.changes.firstOrNull()?.position ?: continue
                         
@@ -167,13 +91,13 @@ fun LineSegmentOverlay(
             .pointerHoverIcon(cursorIcon)
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
-            if (hoveredSegment != null) {
-                val routedConnection = routedConnectionMap[hoveredSegment.first] ?: return@Canvas
+            if (selectedSegment != null) {
+                val routedConnection = routedConnectionMap[selectedSegment.first] ?: return@Canvas
                 val virtualWaypoints = routedConnection.virtualWaypoints
                 
-                if (virtualWaypoints.size >= 2 && hoveredSegment.second < virtualWaypoints.size - 1) {
-                    val startIndex = hoveredSegment.second
-                    val endIndex = hoveredSegment.second + 1
+                if (virtualWaypoints.size >= 2 && selectedSegment.second < virtualWaypoints.size - 1) {
+                    val startIndex = selectedSegment.second
+                    val endIndex = selectedSegment.second + 1
                     
                     val startWaypoint = virtualWaypoints[startIndex]
                     val endWaypoint = virtualWaypoints[endIndex]
@@ -206,12 +130,12 @@ fun LineSegmentOverlay(
     }
 }
 
-private enum class SegmentOrientation {
+internal enum class SegmentOrientation {
     HORIZONTAL,
     VERTICAL
 }
 
-private fun findSegmentAtPoint(
+internal fun findSegmentAtPoint(
     point: Offset,
     layout: dev.akexorcist.workstation.data.model.WorkstationLayout,
     routedConnectionMap: Map<String, RoutedConnection>,
@@ -297,7 +221,7 @@ private fun calculateDistanceToSegment(point: Offset, segmentStart: Offset, segm
     )
 }
 
-private fun constrainDragToCrossAxis(
+internal fun constrainDragToCrossAxis(
     dragDelta: Offset,
     orientation: SegmentOrientation
 ): Offset {

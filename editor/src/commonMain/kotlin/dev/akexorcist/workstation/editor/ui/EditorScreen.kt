@@ -85,9 +85,9 @@ fun EditorScreen(
                 EditorCanvas(
                     uiState = uiState,
                     onPanChange = viewModel::handlePanChange,
-                    onHoverSegment = viewModel::setHoveredLineSegment,
+                    onHoverSegment = viewModel::setSelectedLineSegment,
                     onDragStartSegment = { connectionId, segmentIndex ->
-                        viewModel.setDraggingLineSegment(connectionId, segmentIndex)
+                        viewModel.setSelectedLineSegment(connectionId, segmentIndex)
                     },
                     onDragSegment = { connectionId, segmentIndex, dragDelta, isHorizontal ->
                         val canvasSize = CoordinateTransformer.canvasSize(
@@ -104,7 +104,8 @@ fun EditorScreen(
                         )
                     },
                     onDragEndSegment = {
-                        viewModel.setDraggingLineSegment(null, null)
+                        // Keep the segment selected after drag ends (it's still hovered/selected)
+                        // Only clear if user moves away from segment
                     },
                     modifier = Modifier.fillMaxSize()
                 )
