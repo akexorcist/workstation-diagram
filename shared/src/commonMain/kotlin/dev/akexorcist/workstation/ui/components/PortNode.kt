@@ -34,24 +34,34 @@ fun CapsulePortNode(
     zoom: Float,
     clipEdge: String? = null,
     isRelatedToHoveredDevice: Boolean = true,
+    isSelected: Boolean = false,
     density: Float = 1f,
     onHoverChange: (String, Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier
 ) {
-    val capsuleColor = getPortDirectionColor(port.direction)
-    
+    val baseCapsuleColor = getPortDirectionColor(port.direction)
     val opacityMultiplier = if (isRelatedToHoveredDevice) 1f else RenderingConfig.unrelatedPortOpacity
     
+    val finalCapsuleColor = if (isSelected) {
+        WorkstationTheme.themeColor.primary
+    } else {
+        baseCapsuleColor.copy(alpha = baseCapsuleColor.alpha * opacityMultiplier)
+    }
 
     val adjustedCapsuleColor by animateColorAsState(
-        targetValue = capsuleColor.copy(alpha = capsuleColor.alpha * opacityMultiplier),
+        targetValue = finalCapsuleColor,
         animationSpec = tween(durationMillis = 200),
         label = "capsuleColor"
     )
     
+    val finalTextColor = if (isSelected) {
+        WorkstationTheme.themeColor.onPrimary
+    } else {
+        WorkstationTheme.themeColor.text.copy(alpha = opacityMultiplier)
+    }
 
     val textColor by animateColorAsState(
-        targetValue = WorkstationTheme.themeColor.text.copy(alpha = opacityMultiplier),
+        targetValue = finalTextColor,
         animationSpec = tween(durationMillis = 200),
         label = "portTextColor"
     )

@@ -1,9 +1,0 @@
-{
-  "rules": [
-    "no useless code comment for the code that can explain by itself",
-    "Think twice, review twice",
-    "Make it most perfect code than ever as a great legendary software engineer in kotlin multiplatform",
-    "Let me commit the code change manually",
-    "Please keep the docs up-to-date when any changes applied"
-  ]
-}

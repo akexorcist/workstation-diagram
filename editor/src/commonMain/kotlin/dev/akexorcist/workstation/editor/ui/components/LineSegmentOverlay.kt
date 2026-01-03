@@ -32,6 +32,7 @@ fun LineSegmentOverlay(
     panOffset: DataOffset,
     uiState: EditorUiState,
     onHoverSegment: (String?, Int?) -> Unit,
+    onHoverPort: ((String?, String?) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val density = LocalDensity.current
@@ -54,35 +55,55 @@ fun LineSegmentOverlay(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .pointerInput(layout, routedConnectionMap, canvasSize, zoom, panOffset) {
+            .pointerInput(layout, routedConnectionMap, canvasSize, zoom, panOffset, onHoverPort) {
                 awaitPointerEventScope {
                     while (true) {
                         val event = awaitPointerEvent()
-                        // Skip hover detection during active pointer press (dragging)
                         if (event.changes.any { it.pressed }) continue
                         
                         val pointerPosition = event.changes.firstOrNull()?.position ?: continue
                         
-                        val segmentInfo = findSegmentAtPoint(
-                            pointerPosition,
-                            layout,
-                            routedConnectionMap,
-                            canvasSize,
-                            zoom,
-                            panOffset
-                        )
+                        val portInfo = if (onHoverPort != null) {
+                            findPortAtPoint(
+                                pointerPosition,
+                                layout,
+                                canvasSize,
+                                zoom,
+                                panOffset
+                            )
+                        } else null
                         
-                        if (segmentInfo != null) {
-                            if (currentHoveredSegment != segmentInfo.first || currentSegmentOrientation != segmentInfo.second) {
-                                currentHoveredSegment = segmentInfo.first
-                                currentSegmentOrientation = segmentInfo.second
-                                onHoverSegment(segmentInfo.first.first, segmentInfo.first.second)
-                            }
-                        } else {
+                        if (portInfo != null) {
+                            onHoverPort?.invoke(portInfo.first, portInfo.second)
                             if (currentHoveredSegment != null) {
                                 currentHoveredSegment = null
                                 currentSegmentOrientation = null
                                 onHoverSegment(null, null)
+                            }
+                        } else {
+                            onHoverPort?.invoke(null, null)
+                            
+                            val segmentInfo = findSegmentAtPoint(
+                                pointerPosition,
+                                layout,
+                                routedConnectionMap,
+                                canvasSize,
+                                zoom,
+                                panOffset
+                            )
+                            
+                            if (segmentInfo != null) {
+                                if (currentHoveredSegment != segmentInfo.first || currentSegmentOrientation != segmentInfo.second) {
+                                    currentHoveredSegment = segmentInfo.first
+                                    currentSegmentOrientation = segmentInfo.second
+                                    onHoverSegment(segmentInfo.first.first, segmentInfo.first.second)
+                                }
+                            } else {
+                                if (currentHoveredSegment != null) {
+                                    currentHoveredSegment = null
+                                    currentSegmentOrientation = null
+                                    onHoverSegment(null, null)
+                                }
                             }
                         }
                     }

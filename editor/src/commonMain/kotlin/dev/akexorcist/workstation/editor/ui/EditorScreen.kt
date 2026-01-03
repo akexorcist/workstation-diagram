@@ -107,10 +107,30 @@ fun EditorScreen(
                         )
                     },
                     onDragEndSegment = {
-                        // Clear drag state in viewmodel
                         viewModel.clearSegmentDragState()
-                        // Keep the segment selected after drag ends (it's still hovered/selected)
-                        // Only clear if user moves away from segment
+                    },
+                    onHoverPort = viewModel::setSelectedPort,
+                    onDragStartPort = { deviceId, portId ->
+                        viewModel.setSelectedPort(deviceId, portId)
+                    },
+                    onDragPort = { deviceId, portId, dragDelta, isHorizontal ->
+                        val canvasSize = CoordinateTransformer.canvasSize(
+                            width = canvasSize.width,
+                            height = canvasSize.height
+                        )
+                        viewModel.updatePortPosition(
+                            deviceId = deviceId,
+                            portId = portId,
+                            screenDragDelta = androidx.compose.ui.geometry.Offset(
+                                x = dragDelta.x,
+                                y = dragDelta.y
+                            ),
+                            canvasSize = canvasSize,
+                            isHorizontal = isHorizontal
+                        )
+                    },
+                    onDragEndPort = {
+                        viewModel.clearPortDragState()
                     },
                     modifier = Modifier.fillMaxSize()
                 )

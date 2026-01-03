@@ -21,6 +21,7 @@ data class EditorUiState(
     val selectedRoutingPoint: Pair<String, Int>? = null,
     val draggingRoutingPoint: Pair<String, Int>? = null,
     val hoveredRoutingPoint: Pair<String, Int>? = null,
-    val selectedLineSegment: Pair<String, Int>? = null
+    val selectedLineSegment: Pair<String, Int>? = null,
+    val selectedPort: Pair<String, String>? = null
 )
 

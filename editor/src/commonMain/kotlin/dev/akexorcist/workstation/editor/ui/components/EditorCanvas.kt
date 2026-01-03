@@ -24,9 +24,13 @@ import dev.akexorcist.workstation.ui.components.DeviceList
 import dev.akexorcist.workstation.ui.components.PortsOverlay
 import dev.akexorcist.workstation.editor.ui.components.RoutingPointNodes
 import dev.akexorcist.workstation.editor.ui.components.LineSegmentOverlay
+import dev.akexorcist.workstation.editor.ui.components.PortOverlay
 import dev.akexorcist.workstation.editor.ui.components.findSegmentAtPoint
+import dev.akexorcist.workstation.editor.ui.components.findPortAtPoint
 import dev.akexorcist.workstation.editor.ui.components.constrainDragToCrossAxis
+import dev.akexorcist.workstation.editor.ui.components.constrainPortDragToEdge
 import dev.akexorcist.workstation.editor.ui.components.SegmentOrientation
+import dev.akexorcist.workstation.data.model.DeviceSide
 
 @Composable
 fun EditorCanvas(
@@ -36,6 +40,10 @@ fun EditorCanvas(
     onDragStartSegment: (String, Int) -> Unit,
     onDragSegment: (String, Int, DataOffset, Boolean) -> Unit,
     onDragEndSegment: () -> Unit,
+    onHoverPort: (String?, String?) -> Unit,
+    onDragStartPort: (String, String) -> Unit,
+    onDragPort: (String, String, DataOffset, Boolean) -> Unit,
+    onDragEndPort: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val accumulatedDrag = remember { mutableStateOf(Offset.Zero) }
@@ -58,9 +66,8 @@ fun EditorCanvas(
                 )
             }
             .pointerInput(
-                // Only include keys that should trigger gesture detector recreation
-                // Don't include panOffset - it changes during drag and would interrupt the gesture
                 uiState.selectedLineSegment,
+                uiState.selectedPort,
                 uiState.zoom,
                 actualSize.width,
                 actualSize.height
@@ -70,22 +77,47 @@ fun EditorCanvas(
                     height = actualSize.height
                 )
                 
-                // Capture current state values - these are captured once when pointerInput is created
-                // We'll read fresh values from uiState inside the gesture handlers
                 var dragStartPan = Offset.Zero
+                var isDraggingPort = false
                 var isDraggingSegment = false
+                var accumulatedPortDrag = Offset.Zero
                 var accumulatedSegmentDrag = Offset.Zero
+                var portDragInfo: Pair<String, String>? = null
+                var portDeviceSide: DeviceSide? = null
                 var segmentDragInfo: Pair<Pair<String, Int>, SegmentOrientation>? = null
                 
                 detectDragGestures(
                     onDragStart = { offset ->
-                        // Read fresh state values at drag start
+                        val currentSelectedPort = uiState.selectedPort
                         val currentSelectedSegment = uiState.selectedLineSegment
                         val currentRoutedConnectionMap = uiState.routedConnectionMap
                         val currentZoom = uiState.zoom
                         val currentPanOffset = uiState.panOffset
                         
-                        // Check if we're starting a drag on a line segment
+                        if (currentSelectedPort != null) {
+                            val portInfo = findPortAtPoint(
+                                offset,
+                                layout,
+                                canvasSize,
+                                currentZoom,
+                                currentPanOffset
+                            )
+                            
+                            if (portInfo != null && portInfo.first == currentSelectedPort.first && portInfo.second == currentSelectedPort.second) {
+                                val device = layout.devices.find { it.id == portInfo.first } ?: return@detectDragGestures
+                                val port = device.ports.find { it.id == portInfo.second } ?: return@detectDragGestures
+                                
+                                isDraggingPort = true
+                                portDragInfo = portInfo
+                                portDeviceSide = port.position.side
+                                accumulatedPortDrag = Offset.Zero
+                                isDraggingSegment = false
+                                segmentDragInfo = null
+                                onDragStartPort(portInfo.first, portInfo.second)
+                                return@detectDragGestures
+                            }
+                        }
+                        
                         if (currentSelectedSegment != null) {
                             val segmentInfo = findSegmentAtPoint(
                                 offset,
@@ -97,89 +129,118 @@ fun EditorCanvas(
                             )
                             
                             if (segmentInfo != null && segmentInfo.first == currentSelectedSegment) {
-                                // Start dragging line segment
                                 isDraggingSegment = true
                                 segmentDragInfo = segmentInfo
                                 accumulatedSegmentDrag = Offset.Zero
+                                isDraggingPort = false
+                                portDragInfo = null
+                                portDeviceSide = null
                                 onDragStartSegment(segmentInfo.first.first, segmentInfo.first.second)
-                            } else {
-                                // Start viewport pan
-                                isDraggingSegment = false
-                                segmentDragInfo = null
-                                dragStartPan = Offset(panOffsetRef.value.x, panOffsetRef.value.y)
-                                accumulatedDrag.value = Offset.Zero
+                                return@detectDragGestures
                             }
-                        } else {
-                            // Start viewport pan
-                            isDraggingSegment = false
-                            segmentDragInfo = null
-                            dragStartPan = Offset(panOffsetRef.value.x, panOffsetRef.value.y)
-                            accumulatedDrag.value = Offset.Zero
                         }
+                        
+                        isDraggingPort = false
+                        isDraggingSegment = false
+                        portDragInfo = null
+                        portDeviceSide = null
+                        segmentDragInfo = null
+                        dragStartPan = Offset(panOffsetRef.value.x, panOffsetRef.value.y)
+                        accumulatedDrag.value = Offset.Zero
                     },
                     onDrag = { change, dragAmount ->
-                        val currentSegmentDragInfo = segmentDragInfo
-                        if (isDraggingSegment && currentSegmentDragInfo != null) {
-                            // Handle line segment drag - accumulate delta
+                        if (isDraggingPort && portDragInfo != null && portDeviceSide != null) {
                             change.consume()
                             
-                            // Constrain to cross-axis and accumulate
-                            val constrainedDelta = constrainDragToCrossAxis(
+                            val constrainedDelta = constrainPortDragToEdge(
                                 dragAmount,
-                                currentSegmentDragInfo.second
+                                portDeviceSide!!
                             )
                             
-                            accumulatedSegmentDrag = Offset(
-                                x = accumulatedSegmentDrag.x + constrainedDelta.x,
-                                y = accumulatedSegmentDrag.y + constrainedDelta.y
+                            accumulatedPortDrag = Offset(
+                                x = accumulatedPortDrag.x + constrainedDelta.x,
+                                y = accumulatedPortDrag.y + constrainedDelta.y
                             )
                             
-                            // Apply accumulated drag to update the segment
-                            onDragSegment(
-                                currentSegmentDragInfo.first.first,
-                                currentSegmentDragInfo.first.second,
+                            val isHorizontal = portDeviceSide == DeviceSide.TOP || portDeviceSide == DeviceSide.BOTTOM
+                            
+                            onDragPort(
+                                portDragInfo!!.first,
+                                portDragInfo!!.second,
                                 DataOffset(
-                                    x = accumulatedSegmentDrag.x,
-                                    y = accumulatedSegmentDrag.y
+                                    x = accumulatedPortDrag.x,
+                                    y = accumulatedPortDrag.y
                                 ),
-                                currentSegmentDragInfo.second == SegmentOrientation.HORIZONTAL
+                                isHorizontal
                             )
                         } else {
-                            // Handle viewport pan
-                            change.consume()
-                            accumulatedDrag.value = Offset(
-                                x = accumulatedDrag.value.x + dragAmount.x,
-                                y = accumulatedDrag.value.y + dragAmount.y
-                            )
-                            onPanChange(
-                                DataOffset(
-                                    x = dragStartPan.x + accumulatedDrag.value.x,
-                                    y = dragStartPan.y + accumulatedDrag.value.y
+                            val currentSegmentDragInfo = segmentDragInfo
+                            if (isDraggingSegment && currentSegmentDragInfo != null) {
+                                change.consume()
+                                
+                                val constrainedDelta = constrainDragToCrossAxis(
+                                    dragAmount,
+                                    currentSegmentDragInfo.second
                                 )
-                            )
+                                
+                                accumulatedSegmentDrag = Offset(
+                                    x = accumulatedSegmentDrag.x + constrainedDelta.x,
+                                    y = accumulatedSegmentDrag.y + constrainedDelta.y
+                                )
+                                
+                                onDragSegment(
+                                    currentSegmentDragInfo.first.first,
+                                    currentSegmentDragInfo.first.second,
+                                    DataOffset(
+                                        x = accumulatedSegmentDrag.x,
+                                        y = accumulatedSegmentDrag.y
+                                    ),
+                                    currentSegmentDragInfo.second == SegmentOrientation.HORIZONTAL
+                                )
+                            } else {
+                                change.consume()
+                                accumulatedDrag.value = Offset(
+                                    x = accumulatedDrag.value.x + dragAmount.x,
+                                    y = accumulatedDrag.value.y + dragAmount.y
+                                )
+                                onPanChange(
+                                    DataOffset(
+                                        x = dragStartPan.x + accumulatedDrag.value.x,
+                                        y = dragStartPan.y + accumulatedDrag.value.y
+                                    )
+                                )
+                            }
                         }
                     },
                     onDragEnd = {
-                        if (isDraggingSegment) {
-                            // End line segment drag - final update
+                        if (isDraggingPort) {
+                            isDraggingPort = false
+                            accumulatedPortDrag = Offset.Zero
+                            portDragInfo = null
+                            portDeviceSide = null
+                            onDragEndPort()
+                        } else if (isDraggingSegment) {
                             isDraggingSegment = false
                             accumulatedSegmentDrag = Offset.Zero
                             segmentDragInfo = null
                             onDragEndSegment()
                         } else {
-                            // End viewport pan
                             accumulatedDrag.value = Offset.Zero
                         }
                     },
                     onDragCancel = {
-                        if (isDraggingSegment) {
-                            // Cancel line segment drag
+                        if (isDraggingPort) {
+                            isDraggingPort = false
+                            accumulatedPortDrag = Offset.Zero
+                            portDragInfo = null
+                            portDeviceSide = null
+                            onDragEndPort()
+                        } else if (isDraggingSegment) {
                             isDraggingSegment = false
                             accumulatedSegmentDrag = Offset.Zero
                             segmentDragInfo = null
                             onDragEndSegment()
                         } else {
-                            // Cancel viewport pan
                             accumulatedDrag.value = Offset.Zero
                         }
                     }
@@ -207,6 +268,15 @@ fun EditorCanvas(
             relatedConnectionsMap = emptyMap()
         )
 
+        PortOverlay(
+            layout = layout,
+            canvasSize = canvasSize,
+            zoom = zoom,
+            panOffset = uiState.panOffset,
+            uiState = uiState,
+            onHoverPort = onHoverPort
+        )
+
         LineSegmentOverlay(
             layout = layout,
             routedConnectionMap = uiState.routedConnectionMap,
@@ -214,7 +284,8 @@ fun EditorCanvas(
             zoom = zoom,
             panOffset = uiState.panOffset,
             uiState = uiState,
-            onHoverSegment = onHoverSegment
+            onHoverSegment = onHoverSegment,
+            onHoverPort = onHoverPort
         )
 
         RoutingPointNodes(
@@ -235,7 +306,8 @@ fun EditorCanvas(
             hoveredPortInfo = uiState.hoveredPortInfo,
             relatedPortsMap = emptyMap(),
             density = density,
-            onHoverPort = { _, _ -> }
+            onHoverPort = { _, _ -> },
+            selectedPort = uiState.selectedPort
         )
 
         DeviceList(

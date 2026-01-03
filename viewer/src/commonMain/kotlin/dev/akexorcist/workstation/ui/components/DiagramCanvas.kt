@@ -1040,7 +1040,8 @@ fun PortsOverlay(
     hoveredPortInfo: String? = null,
     relatedPortsMap: Map<String, Boolean> = emptyMap(),
     density: Float = 1f,
-    onHoverPort: (String?, Boolean) -> Unit = { _, _ -> }
+    onHoverPort: (String?, Boolean) -> Unit = { _, _ -> },
+    selectedPort: Pair<String, String>? = null
 ) {
     val isHoverHighlightActive = hoveredDeviceId != null || hoveredPortInfo != null
 
@@ -1088,6 +1089,7 @@ fun PortsOverlay(
             // Check if port is related to hovered device
             val portKey = "${device.id}:${port.id}"
             val isRelatedToHoveredDevice = !isHoverHighlightActive || relatedPortsMap[portKey] == true
+            val isSelected = selectedPort != null && selectedPort.first == device.id && selectedPort.second == port.id
 
             // Only render if the port is in the viewport
             val portCheckRadius = kotlin.math.max(capsuleWidth, capsuleHeight)
@@ -1098,6 +1100,7 @@ fun PortsOverlay(
                     zoom = zoom,
                     clipEdge = clipEdge,
                     isRelatedToHoveredDevice = isRelatedToHoveredDevice,
+                    isSelected = isSelected,
                     density = density,
                     onHoverChange = onHoverPort,
                     modifier = Modifier

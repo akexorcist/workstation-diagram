@@ -271,6 +271,136 @@ class EditorViewModel(
         dragStartSegmentIndex = -1
     }
     
+    private var originalPortPosition: Float? = null
+    private var dragStartDeviceId: String? = null
+    private var dragStartPortId: String? = null
+    
+    fun clearPortDragState() {
+        originalPortPosition = null
+        dragStartDeviceId = null
+        dragStartPortId = null
+    }
+    
+    fun updatePortPosition(
+        deviceId: String,
+        portId: String,
+        screenDragDelta: ComposeOffset,
+        canvasSize: dev.akexorcist.workstation.data.model.Size,
+        isHorizontal: Boolean
+    ) {
+        val layout = _uiState.value.layout ?: return
+        val device = layout.devices.find { it.id == deviceId } ?: return
+        val port = device.ports.find { it.id == portId } ?: return
+        
+        val metadata = layout.metadata
+        val zoom = _uiState.value.zoom
+        val virtualDelta = screenDeltaToVirtualDelta(screenDragDelta, metadata, canvasSize, zoom)
+        
+        val constrainedDelta = if (isHorizontal) {
+            Offset(virtualDelta.x, 0f)
+        } else {
+            Offset(0f, virtualDelta.y)
+        }
+        
+        if (dragStartDeviceId != deviceId || dragStartPortId != portId) {
+            originalPortPosition = port.position.position
+            dragStartDeviceId = deviceId
+            dragStartPortId = portId
+        }
+        
+        val originalPosition = originalPortPosition ?: port.position.position
+        
+        val newPosition = if (isHorizontal) {
+            originalPosition + constrainedDelta.x
+        } else {
+            originalPosition + constrainedDelta.y
+        }
+        
+        val clampedPosition = when (port.position.side) {
+            dev.akexorcist.workstation.data.model.DeviceSide.TOP,
+            dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
+                val halfWidth = device.size.width / 2f
+                newPosition.coerceIn(-halfWidth, halfWidth)
+            }
+            dev.akexorcist.workstation.data.model.DeviceSide.LEFT,
+            dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
+                val halfHeight = device.size.height / 2f
+                newPosition.coerceIn(-halfHeight, halfHeight)
+            }
+        }
+        
+        val gridConfig = metadata.grid
+        val gridSize = gridConfig?.size ?: 20f
+        val gridEnabled = gridConfig?.enabled ?: true
+        
+        val finalPosition = if (gridEnabled) {
+            snapToGrid(clampedPosition, gridSize)
+        } else {
+            clampedPosition
+        }
+        
+        val updatedPort = port.copy(
+            position = port.position.copy(position = finalPosition)
+        )
+        
+        val updatedPorts = device.ports.map { if (it.id == portId) updatedPort else it }
+        val updatedDevice = device.copy(ports = updatedPorts)
+        val updatedDevices = layout.devices.map { if (it.id == deviceId) updatedDevice else it }
+        var updatedLayout = layout.copy(devices = updatedDevices)
+        
+        val oldPortVirtualPos = calculatePortPosition(device, port)
+        val newPortVirtualPos = calculatePortPosition(updatedDevice, updatedPort)
+        
+        val portDeltaX = newPortVirtualPos.first - oldPortVirtualPos.first
+        val portDeltaY = newPortVirtualPos.second - oldPortVirtualPos.second
+        
+        val isPortHorizontal = port.position.side == dev.akexorcist.workstation.data.model.DeviceSide.TOP || 
+                               port.position.side == dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM
+        
+        val updatedConnections = updatedLayout.connections.map { connection ->
+            val routingPoints = connection.routingPoints ?: return@map connection
+            if (routingPoints.isEmpty()) return@map connection
+            
+            val updatedRoutingPoints = routingPoints.toMutableList()
+            var needsUpdate = false
+            
+            if (connection.sourceDeviceId == deviceId && connection.sourcePortId == portId) {
+                val firstPoint = routingPoints[0]
+                val newPoint = if (isPortHorizontal) {
+                    Point(x = firstPoint.x + portDeltaX, y = firstPoint.y)
+                } else {
+                    Point(x = firstPoint.x, y = firstPoint.y + portDeltaY)
+                }
+                updatedRoutingPoints[0] = newPoint
+                needsUpdate = true
+            }
+            
+            if (connection.targetDeviceId == deviceId && connection.targetPortId == portId) {
+                val lastIndex = updatedRoutingPoints.size - 1
+                val lastPoint = routingPoints[lastIndex]
+                val newPoint = if (isPortHorizontal) {
+                    Point(x = lastPoint.x + portDeltaX, y = lastPoint.y)
+                } else {
+                    Point(x = lastPoint.x, y = lastPoint.y + portDeltaY)
+                }
+                updatedRoutingPoints[lastIndex] = newPoint
+                needsUpdate = true
+            }
+            
+            if (needsUpdate) {
+                connection.copy(routingPoints = updatedRoutingPoints)
+            } else {
+                connection
+            }
+        }
+        
+        updatedLayout = updatedLayout.copy(connections = updatedConnections)
+        
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.Main.immediate) {
+            updateLayoutWithConnections(updatedLayout)
+        }
+    }
+    
     private fun snapToGrid(value: Float, gridSize: Float): Float {
         return kotlin.math.round(value / gridSize) * gridSize
     }
@@ -374,6 +504,14 @@ class EditorViewModel(
         _uiState.value = _uiState.value.copy(
             selectedLineSegment = if (connectionId != null && segmentIndex != null) {
                 Pair(connectionId, segmentIndex)
+            } else null
+        )
+    }
+    
+    fun setSelectedPort(deviceId: String?, portId: String?) {
+        _uiState.value = _uiState.value.copy(
+            selectedPort = if (deviceId != null && portId != null) {
+                Pair(deviceId, portId)
             } else null
         )
     }

@@ -28,7 +28,7 @@
       "category": "CENTRAL_DEVICE",
       "position": {
         "x": 100,
-        "y": 810
+        "y": 800
       },
       "size": {
         "width": 200,
@@ -41,7 +41,7 @@
           "direction": "INPUT",
           "position": {
             "side": "RIGHT",
-            "position": 30
+            "position": 40
           }
         }
       ],
@@ -94,7 +94,7 @@
           "direction": "INPUT",
           "position": {
             "side": "RIGHT",
-            "position": 30
+            "position": 40
           }
         }
       ],
@@ -374,7 +374,7 @@
           "direction": "INPUT",
           "position": {
             "side": "LEFT",
-            "position": 30
+            "position": 40
           }
         },
         {
@@ -617,7 +617,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "position": 30
+            "position": 40
           }
         }
       ],
@@ -665,7 +665,7 @@
       "category": "CENTRAL_DEVICE",
       "position": {
         "x": 100,
-        "y": 1250
+        "y": 1240
       },
       "size": {
         "width": 200,
@@ -678,7 +678,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "position": 30
+            "position": 40
           }
         }
       ],
@@ -743,7 +743,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "LEFT",
-            "position": 30
+            "position": 40
           }
         },
         {
@@ -752,7 +752,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "LEFT",
-            "position": 90
+            "position": 80
           }
         },
         {
@@ -761,7 +761,7 @@
           "direction": "INPUT",
           "position": {
             "side": "RIGHT",
-            "position": 30
+            "position": 40
           }
         },
         {
@@ -779,7 +779,7 @@
           "direction": "INPUT",
           "position": {
             "side": "RIGHT",
-            "position": 90
+            "position": 80
           }
         }
       ],
@@ -836,7 +836,7 @@
           "direction": "INPUT",
           "position": {
             "side": "RIGHT",
-            "position": 30
+            "position": 40
           }
         },
         {
@@ -845,7 +845,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "LEFT",
-            "position": 30
+            "position": 40
           }
         }
       ],
@@ -902,7 +902,7 @@
           "direction": "INPUT",
           "position": {
             "side": "LEFT",
-            "position": 30
+            "position": 40
           }
         },
         {
@@ -911,7 +911,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "position": 30
+            "position": 40
           }
         }
       ],
@@ -1053,7 +1053,7 @@
       "category": "HUB",
       "position": {
         "x": 1000,
-        "y": 1470
+        "y": 1480
       },
       "size": {
         "width": 160,
@@ -1066,7 +1066,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "LEFT",
-            "position": 90
+            "position": 80
           }
         },
         {
@@ -1150,7 +1150,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "LEFT",
-            "position": 50
+            "position": 40
           }
         },
         {
@@ -1336,7 +1336,7 @@
           "direction": "INPUT",
           "position": {
             "side": "LEFT",
-            "position": 30
+            "position": 40
           }
         },
         {
@@ -1401,7 +1401,7 @@
       "category": "PERIPHERAL",
       "position": {
         "x": 2000,
-        "y": 1350
+        "y": 1360
       },
       "size": {
         "width": 220,
@@ -1414,7 +1414,7 @@
           "direction": "INPUT",
           "position": {
             "side": "LEFT",
-            "position": 50
+            "position": 40
           }
         }
       ],
@@ -1554,14 +1554,38 @@
       ],
       "url": "https://www.elgato.com/us/en/p/game-capture-hd60-x",
       "specifications": [
-        { "key": "Input", "value": "HDMI (unencrypted)" },
-        { "key": "Output", "value": "HDMI (lag-free passthrough) up to 2160p60, 1440p120, 1080p240" },
-        { "key": "Capture Resolutions", "value": "2160p30, 1440p60, 1080p60, 1080p30" },
-        { "key": "HDR", "value": "HDR10 passthrough & capture" },
-        { "key": "Dimensions", "value": "112 x 72 x 18 mm" },
-        { "key": "Weight", "value": "91 g" },
-        { "key": "Manufacturer", "value": "Elgato" },
-        { "key": "Model Number", "value": "HD60 X" }
+        {
+          "key": "Input",
+          "value": "HDMI (unencrypted)"
+        },
+        {
+          "key": "Output",
+          "value": "HDMI (lag-free passthrough) up to 2160p60, 1440p120, 1080p240"
+        },
+        {
+          "key": "Capture Resolutions",
+          "value": "2160p30, 1440p60, 1080p60, 1080p30"
+        },
+        {
+          "key": "HDR",
+          "value": "HDR10 passthrough & capture"
+        },
+        {
+          "key": "Dimensions",
+          "value": "112 x 72 x 18 mm"
+        },
+        {
+          "key": "Weight",
+          "value": "91 g"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Elgato"
+        },
+        {
+          "key": "Model Number",
+          "value": "HD60 X"
+        }
       ]
     },
     {
@@ -1591,18 +1615,54 @@
       ],
       "url": "https://www.gsmarena.com/oppo_a18-12591.php",
       "specifications": [
-        { "key": "CPU", "value": "Mediatek MT6769 Helio G85" },
-        { "key": "GPU", "value": "Mali-G52 MC2" },
-        { "key": "Display", "value": "IPS LCD, 90Hz, 6.56\" (20:9) 720 x 1612 px" },
-        { "key": "OS", "value": "Android 13, upgradable to Android 14" },
-        { "key": "Memory", "value": "4GB" },
-        { "key": "Storage", "value": "128GB eMMC 5.1" },
-        { "key": "USB", "value": "USB Type-C 2.0" },
-        { "key": "Battery", "value": "Li-Po 5000 mAh" },
-        { "key": "Dimensions", "value": "163.7 x 75 x 8.2 mm" },
-        { "key": "Weight", "value": "188 g" },
-        { "key": "Manufacturer", "value": "OPPO" },
-        { "key": "Model Number", "value": "A18 (CPH2591)" }
+        {
+          "key": "CPU",
+          "value": "Mediatek MT6769 Helio G85"
+        },
+        {
+          "key": "GPU",
+          "value": "Mali-G52 MC2"
+        },
+        {
+          "key": "Display",
+          "value": "IPS LCD, 90Hz, 6.56\" (20:9) 720 x 1612 px"
+        },
+        {
+          "key": "OS",
+          "value": "Android 13, upgradable to Android 14"
+        },
+        {
+          "key": "Memory",
+          "value": "4GB"
+        },
+        {
+          "key": "Storage",
+          "value": "128GB eMMC 5.1"
+        },
+        {
+          "key": "USB",
+          "value": "USB Type-C 2.0"
+        },
+        {
+          "key": "Battery",
+          "value": "Li-Po 5000 mAh"
+        },
+        {
+          "key": "Dimensions",
+          "value": "163.7 x 75 x 8.2 mm"
+        },
+        {
+          "key": "Weight",
+          "value": "188 g"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "OPPO"
+        },
+        {
+          "key": "Model Number",
+          "value": "A18 (CPH2591)"
+        }
       ]
     },
     {
@@ -1632,17 +1692,50 @@
       ],
       "url": "https://www.shure.com/en-US/products/microphones/mv7",
       "specifications": [
-        { "key": "Type", "value": "Dynamic (moving coil)" },
-        { "key": "Polar Pattern", "value": "Unidirectional (cardioid)" },
-        { "key": "A/D Converter", "value": "16 or 24-bit, 44.1 or 48 kHz" },
-        { "key": "Frequency Response", "value": "50 Hz to 16,000 Hz" },
-        { "key": "Microphone Sensitivity", "value": "-38 dBV/Pa" },
-        { "key": "Connector Type", "value": "Micro-B USB and XLR" },
-        { "key": "Housing", "value": "All-metal construction" },
-        { "key": "Dimensions", "value": "Length 53.6 mm; Diameter 66.5 mm" },
-        { "key": "Weight", "value": "0.55 kg" },
-        { "key": "Manufacturer", "value": "Shure" },
-        { "key": "Model Number", "value": "MV7" }
+        {
+          "key": "Type",
+          "value": "Dynamic (moving coil)"
+        },
+        {
+          "key": "Polar Pattern",
+          "value": "Unidirectional (cardioid)"
+        },
+        {
+          "key": "A/D Converter",
+          "value": "16 or 24-bit, 44.1 or 48 kHz"
+        },
+        {
+          "key": "Frequency Response",
+          "value": "50 Hz to 16,000 Hz"
+        },
+        {
+          "key": "Microphone Sensitivity",
+          "value": "-38 dBV/Pa"
+        },
+        {
+          "key": "Connector Type",
+          "value": "Micro-B USB and XLR"
+        },
+        {
+          "key": "Housing",
+          "value": "All-metal construction"
+        },
+        {
+          "key": "Dimensions",
+          "value": "Length 53.6 mm; Diameter 66.5 mm"
+        },
+        {
+          "key": "Weight",
+          "value": "0.55 kg"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Shure"
+        },
+        {
+          "key": "Model Number",
+          "value": "MV7"
+        }
       ]
     },
     {
@@ -1672,14 +1765,38 @@
       ],
       "url": "https://www.baseus.com/products/i-wok-monitor-light-bar",
       "specifications": [
-        { "key": "Material", "value": "Aluminum" },
-        { "key": "Wattage", "value": "5W" },
-        { "key": "Voltage", "value": "5V" },
-        { "key": "Switch Style", "value": "Touch" },
-        { "key": "Dimensions", "value": "2.59 x 17.71 x 3.62 in" },
-        { "key": "Weight", "value": "1.61 pounds" },
-        { "key": "Manufacturer", "value": "Baseus" },
-        { "key": "Model Number", "value": "I-Wok Monitor Light Bar" }
+        {
+          "key": "Material",
+          "value": "Aluminum"
+        },
+        {
+          "key": "Wattage",
+          "value": "5W"
+        },
+        {
+          "key": "Voltage",
+          "value": "5V"
+        },
+        {
+          "key": "Switch Style",
+          "value": "Touch"
+        },
+        {
+          "key": "Dimensions",
+          "value": "2.59 x 17.71 x 3.62 in"
+        },
+        {
+          "key": "Weight",
+          "value": "1.61 pounds"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Baseus"
+        },
+        {
+          "key": "Model Number",
+          "value": "I-Wok Monitor Light Bar"
+        }
       ]
     },
     {
@@ -1709,12 +1826,30 @@
       ],
       "url": "https://www.ikea.com/us/en/p/nordmaerke-wireless-charger-textile-gray-10491658/",
       "specifications": [
-        { "key": "Input", "value": "5.0V DC, 2.0A USB Type-C" },
-        { "key": "Output power", "value": "36 dBµA/m at 3m" },
-        { "key": "Operating frequency", "value": "110.3KHz – 148 KHz" },
-        { "key": "Compatibility", "value": "Qi 1.2.4BPP" },
-        { "key": "Manufacturer", "value": "IKEA" },
-        { "key": "Model Number", "value": "NORDMÄRKE" }
+        {
+          "key": "Input",
+          "value": "5.0V DC, 2.0A USB Type-C"
+        },
+        {
+          "key": "Output power",
+          "value": "36 dBµA/m at 3m"
+        },
+        {
+          "key": "Operating frequency",
+          "value": "110.3KHz – 148 KHz"
+        },
+        {
+          "key": "Compatibility",
+          "value": "Qi 1.2.4BPP"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "IKEA"
+        },
+        {
+          "key": "Model Number",
+          "value": "NORDMÄRKE"
+        }
       ]
     },
     {
@@ -1725,7 +1860,7 @@
       "category": "PERIPHERAL",
       "position": {
         "x": 1500,
-        "y": 1530
+        "y": 1520
       },
       "size": {
         "width": 160,
@@ -1744,17 +1879,50 @@
       ],
       "url": "https://www.logitechg.com/en-us/products/gaming-mice/pro-x-superlight-wireless-mouse.910-005878.html",
       "specifications": [
-        { "key": "Microprocessor", "value": "32-bit ARM" },
-        { "key": "Sensor", "value": "HERO" },
-        { "key": "Resolution", "value": "100 – 25,600 dpi" },
-        { "key": "Max. acceleration", "value": ">40 g" },
-        { "key": "Max. speed", "value": "400 IPS" },
-        { "key": "USB report rate", "value": "1 ms (1000 Hz)" },
-        { "key": "Battery Life", "value": "Constant motion: 70h" },
-        { "key": "Dimensions", "value": "125 x 63.5 x 40 mm" },
-        { "key": "Weight", "value": "63 g" },
-        { "key": "Manufacturer", "value": "Logitech" },
-        { "key": "Model Number", "value": "G Pro X Superlight" }
+        {
+          "key": "Microprocessor",
+          "value": "32-bit ARM"
+        },
+        {
+          "key": "Sensor",
+          "value": "HERO"
+        },
+        {
+          "key": "Resolution",
+          "value": "100 – 25,600 dpi"
+        },
+        {
+          "key": "Max. acceleration",
+          "value": ">40 g"
+        },
+        {
+          "key": "Max. speed",
+          "value": "400 IPS"
+        },
+        {
+          "key": "USB report rate",
+          "value": "1 ms (1000 Hz)"
+        },
+        {
+          "key": "Battery Life",
+          "value": "Constant motion: 70h"
+        },
+        {
+          "key": "Dimensions",
+          "value": "125 x 63.5 x 40 mm"
+        },
+        {
+          "key": "Weight",
+          "value": "63 g"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Logitech"
+        },
+        {
+          "key": "Model Number",
+          "value": "G Pro X Superlight"
+        }
       ]
     },
     {
@@ -1765,7 +1933,7 @@
       "category": "PERIPHERAL",
       "position": {
         "x": 1500,
-        "y": 1630
+        "y": 1640
       },
       "size": {
         "width": 160,
@@ -1784,18 +1952,40 @@
       ],
       "url": "https://www.logitech.com/en-us/products/mice/logi-bolt-usb-receiver.956-000007.html",
       "specifications": [
-        { "key": "Dimensions", "value": "6.11 x 14.4 x 18.65 mm" },
-        { "key": "Weight", "value": "1.68 g" },
-        { "key": "Connectivity", "value": "USB Type-A" },
-        { "key": "Wireless Protocol", "value": "Bluetooth Low Energy" },
-        { "key": "Range", "value": "Up to 10 meters" },
-        { "key": "Compatibility", "value": "Logi Bolt enabled devices" },
-        { "key": "Manufacturer", "value": "Logitech" },
-        { "key": "Model Number", "value": "Logi Bolt" }
+        {
+          "key": "Dimensions",
+          "value": "6.11 x 14.4 x 18.65 mm"
+        },
+        {
+          "key": "Weight",
+          "value": "1.68 g"
+        },
+        {
+          "key": "Connectivity",
+          "value": "USB Type-A"
+        },
+        {
+          "key": "Wireless Protocol",
+          "value": "Bluetooth Low Energy"
+        },
+        {
+          "key": "Range",
+          "value": "Up to 10 meters"
+        },
+        {
+          "key": "Compatibility",
+          "value": "Logi Bolt enabled devices"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Logitech"
+        },
+        {
+          "key": "Model Number",
+          "value": "Logi Bolt"
+        }
       ]
     }
-
-
   ],
   "connections": [
     {
@@ -1806,12 +1996,12 @@
       "targetPortId": "dock-thunderbolt-in-1",
       "routingPoints": [
         {
-          "x": 385.0,
-          "y": 845.0
+          "x": 380.0,
+          "y": 840.0
         },
         {
-          "x": 425.0,
-          "y": 845.0
+          "x": 420.0,
+          "y": 840.0
         }
       ]
     },
@@ -1823,12 +2013,12 @@
       "targetPortId": "dock-thunderbolt-in-2",
       "routingPoints": [
         {
-          "x": 385.0,
-          "y": 935.0
+          "x": 380.0,
+          "y": 940.0
         },
         {
-          "x": 425.0,
-          "y": 935.0
+          "x": 420.0,
+          "y": 940.0
         }
       ]
     },
@@ -1840,16 +2030,16 @@
       "targetPortId": "primary-monitor-dp-in",
       "routingPoints": [
         {
-          "x": 765.0,
-          "y": 785.0
+          "x": 760.0,
+          "y": 780.0
         },
         {
-          "x": 1445.0,
-          "y": 785.0
+          "x": 1440.0,
+          "y": 780.0
         },
         {
-          "x": 1445.0,
-          "y": 945.0
+          "x": 1440.0,
+          "y": 940.0
         }
       ]
     },
@@ -1861,16 +2051,16 @@
       "targetPortId": "secondary-monitor-usbc-in-2",
       "routingPoints": [
         {
-          "x": 765.0,
-          "y": 745.0
+          "x": 760.0,
+          "y": 740.0
         },
         {
-          "x": 1465.0,
-          "y": 745.0
+          "x": 1460.0,
+          "y": 740.0
         },
         {
-          "x": 1465.0,
-          "y": 735.0
+          "x": 1460.0,
+          "y": 740.0
         }
       ]
     },
@@ -1882,16 +2072,16 @@
       "targetPortId": "secondary-monitor-mini-hdmi-in",
       "routingPoints": [
         {
-          "x": 365.0,
-          "y": 1485.0
+          "x": 360.0,
+          "y": 1480.0
         },
         {
-          "x": 1505.0,
-          "y": 1485.0
+          "x": 1500.0,
+          "y": 1480.0
         },
         {
-          "x": 1505.0,
-          "y": 845.0
+          "x": 1500.0,
+          "y": 840.0
         }
       ]
     },
@@ -1903,20 +2093,20 @@
       "targetPortId": "hdmi-switcher-in-3",
       "routingPoints": [
         {
-          "x": 365.0,
-          "y": 1445.0
+          "x": 360.0,
+          "y": 1440.0
         },
         {
-          "x": 365.0,
-          "y": 1405.0
+          "x": 360.0,
+          "y": 1400.0
         },
         {
-          "x": 465.0,
-          "y": 1405.0
+          "x": 460.0,
+          "y": 1400.0
         },
         {
-          "x": 465.0,
-          "y": 1325.0
+          "x": 460.0,
+          "y": 1320.0
         }
       ]
     },
@@ -1928,16 +2118,16 @@
       "targetPortId": "primary-monitor-hdmi-in",
       "routingPoints": [
         {
-          "x": 765.0,
-          "y": 1305.0
+          "x": 760.0,
+          "y": 1300.0
         },
         {
-          "x": 1485.0,
-          "y": 1305.0
+          "x": 1480.0,
+          "y": 1300.0
         },
         {
-          "x": 1485.0,
-          "y": 985.0
+          "x": 1480.0,
+          "y": 980.0
         }
       ]
     },
@@ -1949,20 +2139,20 @@
       "targetPortId": "hdmi-switcher-in-1",
       "routingPoints": [
         {
-          "x": 385.0,
-          "y": 1195.0
+          "x": 380.0,
+          "y": 1200.0
         },
         {
-          "x": 385.0,
-          "y": 1265.0
+          "x": 380.0,
+          "y": 1260.0
         },
         {
-          "x": 445.0,
-          "y": 1265.0
+          "x": 440.0,
+          "y": 1260.0
         },
         {
-          "x": 445.0,
-          "y": 1245.0
+          "x": 440.0,
+          "y": 1240.0
         }
       ]
     },
@@ -1974,16 +2164,16 @@
       "targetPortId": "hdmi-switcher-in-2",
       "routingPoints": [
         {
-          "x": 385.0,
-          "y": 1285.0
+          "x": 380.0,
+          "y": 1280.0
         },
         {
-          "x": 425.0,
-          "y": 1285.0
+          "x": 420.0,
+          "y": 1280.0
         },
         {
-          "x": 425.0,
-          "y": 1275.0
+          "x": 420.0,
+          "y": 1280.0
         }
       ]
     },
@@ -1995,16 +2185,16 @@
       "targetPortId": "usb-c-switcher-pc",
       "routingPoints": [
         {
-          "x": 365.0,
-          "y": 1535.0
+          "x": 360.0,
+          "y": 1540.0
         },
         {
-          "x": 925.0,
-          "y": 1535.0
+          "x": 920.0,
+          "y": 1540.0
         },
         {
-          "x": 925.0,
-          "y": 1195.0
+          "x": 920.0,
+          "y": 1200.0
         }
       ]
     },
@@ -2016,16 +2206,16 @@
       "targetPortId": "usb-c-switcher-dock",
       "routingPoints": [
         {
-          "x": 765.0,
-          "y": 1065.0
+          "x": 760.0,
+          "y": 1060.0
         },
         {
-          "x": 945.0,
-          "y": 1065.0
+          "x": 940.0,
+          "y": 1060.0
         },
         {
-          "x": 945.0,
-          "y": 1135.0
+          "x": 940.0,
+          "y": 1140.0
         }
       ]
     },
@@ -2037,12 +2227,12 @@
       "targetPortId": "hdmi-to-webcam-in",
       "routingPoints": [
         {
-          "x": 925.0,
-          "y": 535.0
+          "x": 920.0,
+          "y": 540.0
         },
         {
-          "x": 925.0,
-          "y": 635.0
+          "x": 920.0,
+          "y": 640.0
         }
       ]
     },
@@ -2054,16 +2244,16 @@
       "targetPortId": "usb-c-switcher-webcam",
       "routingPoints": [
         {
-          "x": 1265.0,
-          "y": 645.0
+          "x": 1260.0,
+          "y": 640.0
         },
         {
-          "x": 1255.0,
-          "y": 645.0
+          "x": 1260.0,
+          "y": 640.0
         },
         {
-          "x": 1255.0,
-          "y": 1135.0
+          "x": 1260.0,
+          "y": 1140.0
         }
       ]
     },
@@ -2075,12 +2265,12 @@
       "targetPortId": "dock-usba-in-1",
       "routingPoints": [
         {
-          "x": 925.0,
-          "y": 865.0
+          "x": 920.0,
+          "y": 860.0
         },
         {
-          "x": 765.0,
-          "y": 865.0
+          "x": 760.0,
+          "y": 860.0
         }
       ]
     },
@@ -2092,12 +2282,12 @@
       "targetPortId": "dock-usba-out-1",
       "routingPoints": [
         {
-          "x": 925.0,
-          "y": 965.0
+          "x": 920.0,
+          "y": 960.0
         },
         {
-          "x": 765.0,
-          "y": 965.0
+          "x": 760.0,
+          "y": 960.0
         }
       ]
     },
@@ -2109,12 +2299,12 @@
       "targetPortId": "usb-hub-in",
       "routingPoints": [
         {
-          "x": 365.0,
-          "y": 1565.0
+          "x": 360.0,
+          "y": 1560.0
         },
         {
-          "x": 925.0,
-          "y": 1565.0
+          "x": 920.0,
+          "y": 1560.0
         }
       ]
     },
@@ -2126,12 +2316,12 @@
       "targetPortId": "usb-dac-monitor",
       "routingPoints": [
         {
-          "x": 1425.0,
-          "y": 1065.0
+          "x": 1420.0,
+          "y": 1060.0
         },
         {
-          "x": 1425.0,
-          "y": 1365.0
+          "x": 1420.0,
+          "y": 1360.0
         }
       ]
     },
@@ -2143,16 +2333,16 @@
       "targetPortId": "dock-usba-out-2",
       "routingPoints": [
         {
-          "x": 1425.0,
-          "y": 1425.0
+          "x": 1420.0,
+          "y": 1420.0
         },
         {
-          "x": 765.0,
-          "y": 1425.0
+          "x": 760.0,
+          "y": 1420.0
         },
         {
-          "x": 765.0,
-          "y": 1025.0
+          "x": 760.0,
+          "y": 1020.0
         }
       ]
     },
@@ -2164,16 +2354,16 @@
       "targetPortId": "usb-dac-usb-hub",
       "routingPoints": [
         {
-          "x": 1245.0,
-          "y": 1515.0
+          "x": 1240.0,
+          "y": 1520.0
         },
         {
-          "x": 1445.0,
-          "y": 1515.0
+          "x": 1440.0,
+          "y": 1520.0
         },
         {
-          "x": 1445.0,
-          "y": 1445.0
+          "x": 1440.0,
+          "y": 1440.0
         }
       ]
     },
@@ -2185,20 +2375,20 @@
       "targetPortId": "usb-power-adapter-speaker",
       "routingPoints": [
         {
-          "x": 1925.0,
-          "y": 715.0
+          "x": 1920.0,
+          "y": 720.0
         },
         {
-          "x": 1825.0,
-          "y": 715.0
+          "x": 1820.0,
+          "y": 720.0
         },
         {
-          "x": 1825.0,
-          "y": 645.0
+          "x": 1820.0,
+          "y": 640.0
         },
         {
-          "x": 1825.0,
-          "y": 605.0
+          "x": 1820.0,
+          "y": 600.0
         }
       ]
     },
@@ -2210,16 +2400,16 @@
       "targetPortId": "usb-dac-speaker",
       "routingPoints": [
         {
-          "x": 1925.0,
-          "y": 745.0
+          "x": 1920.0,
+          "y": 740.0
         },
         {
-          "x": 1735.0,
-          "y": 745.0
+          "x": 1740.0,
+          "y": 740.0
         },
         {
-          "x": 1735.0,
-          "y": 1365.0
+          "x": 1740.0,
+          "y": 1360.0
         }
       ]
     },
@@ -2231,16 +2421,16 @@
       "targetPortId": "usb-dac-headphone",
       "routingPoints": [
         {
-          "x": 1925.0,
-          "y": 1405.0
+          "x": 1920.0,
+          "y": 1400.0
         },
         {
-          "x": 1735.0,
-          "y": 1405.0
+          "x": 1740.0,
+          "y": 1400.0
         },
         {
-          "x": 1735.0,
-          "y": 1395.0
+          "x": 1740.0,
+          "y": 1400.0
         }
       ]
     },
@@ -2252,12 +2442,12 @@
       "targetPortId": "primary-monitor-usba-in-1",
       "routingPoints": [
         {
-          "x": 1925.0,
-          "y": 885.0
+          "x": 1920.0,
+          "y": 880.0
         },
         {
-          "x": 1785.0,
-          "y": 885.0
+          "x": 1780.0,
+          "y": 880.0
         }
       ]
     },
@@ -2269,12 +2459,12 @@
       "targetPortId": "primary-monitor-usbc-in",
       "routingPoints": [
         {
-          "x": 1925.0,
-          "y": 985.0
+          "x": 1920.0,
+          "y": 980.0
         },
         {
-          "x": 1785.0,
-          "y": 985.0
+          "x": 1780.0,
+          "y": 980.0
         }
       ]
     },
@@ -2286,16 +2476,16 @@
       "targetPortId": "primary-monitor-usba-in-2",
       "routingPoints": [
         {
-          "x": 1925.0,
-          "y": 1085.0
+          "x": 1920.0,
+          "y": 1080.0
         },
         {
-          "x": 1785.0,
-          "y": 1085.0
+          "x": 1780.0,
+          "y": 1080.0
         },
         {
-          "x": 1785.0,
-          "y": 1025.0
+          "x": 1780.0,
+          "y": 1020.0
         }
       ]
     },
@@ -2307,16 +2497,16 @@
       "targetPortId": "usb-c-switcher-microphone",
       "routingPoints": [
         {
-          "x": 1925.0,
-          "y": 1265.0
+          "x": 1920.0,
+          "y": 1260.0
         },
         {
-          "x": 1225.0,
-          "y": 1265.0
+          "x": 1220.0,
+          "y": 1260.0
         },
         {
-          "x": 1225.0,
-          "y": 1195.0
+          "x": 1220.0,
+          "y": 1200.0
         }
       ]
     },
@@ -2328,12 +2518,12 @@
       "targetPortId": "usb-power-adapter-led-lamp",
       "routingPoints": [
         {
-          "x": 1925.0,
-          "y": 525.0
+          "x": 1920.0,
+          "y": 520.0
         },
         {
-          "x": 1785.0,
-          "y": 525.0
+          "x": 1780.0,
+          "y": 520.0
         }
       ]
     },
@@ -2345,16 +2535,16 @@
       "targetPortId": "usb-power-adapter-wireless-charger",
       "routingPoints": [
         {
-          "x": 1925.0,
-          "y": 625.0
+          "x": 1920.0,
+          "y": 620.0
         },
         {
-          "x": 1805.0,
-          "y": 625.0
+          "x": 1800.0,
+          "y": 620.0
         },
         {
-          "x": 1805.0,
-          "y": 565.0
+          "x": 1800.0,
+          "y": 560.0
         }
       ]
     },
@@ -2366,16 +2556,16 @@
       "targetPortId": "usb-hub-out-2",
       "routingPoints": [
         {
-          "x": 1425.0,
-          "y": 1575.0
+          "x": 1420.0,
+          "y": 1580.0
         },
         {
-          "x": 1245.0,
-          "y": 1575.0
+          "x": 1240.0,
+          "y": 1580.0
         },
         {
-          "x": 1245.0,
-          "y": 1565.0
+          "x": 1240.0,
+          "y": 1560.0
         }
       ]
     },
@@ -2387,16 +2577,16 @@
       "targetPortId": "usb-hub-out-3",
       "routingPoints": [
         {
-          "x": 1425.0,
-          "y": 1675.0
+          "x": 1420.0,
+          "y": 1680.0
         },
         {
-          "x": 1265.0,
-          "y": 1675.0
+          "x": 1260.0,
+          "y": 1680.0
         },
         {
-          "x": 1265.0,
-          "y": 1635.0
+          "x": 1260.0,
+          "y": 1640.0
         }
       ]
     },
@@ -2408,12 +2598,12 @@
       "targetPortId": "usb-power-adapter-camera",
       "routingPoints": [
         {
-          "x": 1265.0,
-          "y": 535.0
+          "x": 1260.0,
+          "y": 540.0
         },
         {
-          "x": 1425.0,
-          "y": 535.0
+          "x": 1420.0,
+          "y": 540.0
         }
       ]
     },
@@ -2425,12 +2615,12 @@
       "targetPortId": "usb-power-adapter-monitor",
       "routingPoints": [
         {
-          "x": 1425.0,
-          "y": 715.0
+          "x": 1420.0,
+          "y": 720.0
         },
         {
-          "x": 1425.0,
-          "y": 605.0
+          "x": 1420.0,
+          "y": 600.0
         }
       ]
     },
@@ -2442,16 +2632,16 @@
       "targetPortId": "usb-c-switcher-monitor",
       "routingPoints": [
         {
-          "x": 1425.0,
-          "y": 1025.0
+          "x": 1420.0,
+          "y": 1020.0
         },
         {
-          "x": 1235.0,
-          "y": 1025.0
+          "x": 1240.0,
+          "y": 1020.0
         },
         {
-          "x": 1235.0,
-          "y": 1165.0
+          "x": 1240.0,
+          "y": 1160.0
         }
       ]
     }
