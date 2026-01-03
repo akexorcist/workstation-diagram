@@ -8,16 +8,17 @@ object RoutingConfig {
     // Clearance and Extension
     var deviceClearance: Float = 10f
     var portClearance: Float = 15f
-    var portExtension: Float = 80f
+    var portExtension: Float = 70f
     var minPathSpacing: Float = 20f
 
     // Pathfinding Costs
     var gridMoveCost: Float = 1f
     var crossingPenalty: Float = 10f
-    var turnPenalty: Float = 4f
+    var turnPenalty: Float = 15f
     var pathRepulsionFactor: Float = 4f
     var pathDensityPenalty: Float = 3f
     var distributionFactor: Float = 6f
+    var portProximityPenalty: Float = 20f
     
     // Path Quality
     var simplifyPath: Boolean = true

@@ -109,9 +109,10 @@ class AStarPathfinder(
                 val repulsionCost = calculateRepulsionCost(neighbor, existingPaths)
                 val densityCost = densityTracker?.getDensityCost(neighbor) ?: 0f
                 val distributionCost = calculateDistributionCost(neighbor, start, end)
+                val portProximityCost = grid.getPortProximityCost(neighbor, emptySet(), config)
                 
                 val tentativeG = current.gCost + moveCost + crossingCost + turnCost + 
-                                 repulsionCost + densityCost + distributionCost
+                                 repulsionCost + densityCost + distributionCost + portProximityCost
                 
                 if (tentativeG < (gScores[neighbor] ?: Float.MAX_VALUE)) {
                     directionsFrom[neighbor] = direction

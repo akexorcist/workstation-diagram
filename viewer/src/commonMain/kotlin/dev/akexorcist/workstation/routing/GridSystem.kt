@@ -64,6 +64,15 @@ class RoutingGrid(val width: Int, val height: Int, val cellSize: Float) {
     private val blocked = Array(width) { BooleanArray(height) }
     private val cells = Array(width) { x -> Array(height) { y -> GridCell(x, y) } }
     private val deviceRegions = mutableListOf<DeviceRegion>()
+    private val portPositions = mutableListOf<GridPoint>()
+    private val portExtensionRegions = mutableListOf<PortExtensionRegion>()
+    
+    data class PortExtensionRegion(
+        val start: GridPoint,
+        val end: GridPoint,
+        val direction: GridDirection,
+        val clearance: Int
+    )
 
     data class DeviceRegion(
         val left: Int, 
@@ -114,7 +123,10 @@ class RoutingGrid(val width: Int, val height: Int, val cellSize: Float) {
         val centerX = (portX / cellSize).toInt()
         val centerY = (portY / cellSize).toInt()
         
-        val radiusInt = radius.toInt() + 1
+        val portGridPoint = GridPoint(centerX, centerY)
+        portPositions.add(portGridPoint)
+        
+        val radiusInt = (radius + 0.5f).toInt().coerceAtLeast(1)
         
         val x1 = (centerX - radiusInt).coerceAtLeast(0)
         val y1 = (centerY - radiusInt).coerceAtLeast(0)
@@ -132,6 +144,133 @@ class RoutingGrid(val width: Int, val height: Int, val cellSize: Float) {
                         blocked[x][y] = true
                     }
                 }
+            }
+        }
+    }
+    
+    fun markPortExtensionObstacle(
+        portX: Float,
+        portY: Float,
+        extensionDirection: GridDirection,
+        extensionLength: Float,
+        clearance: Float
+    ) {
+        val portGridX = (portX / cellSize).toInt()
+        val portGridY = (portY / cellSize).toInt()
+        val extensionCells = (extensionLength / cellSize).toInt().coerceAtLeast(1)
+        val clearanceCells = (clearance / cellSize).toInt().coerceAtLeast(1)
+        
+        val (startX, startY, endX, endY) = when (extensionDirection) {
+            GridDirection.NORTH -> {
+                val endGridY = (portGridY - extensionCells).coerceAtLeast(0)
+                listOf(portGridX, portGridY, portGridX, endGridY)
+            }
+            GridDirection.SOUTH -> {
+                val endGridY = (portGridY + extensionCells).coerceAtMost(height - 1)
+                listOf(portGridX, portGridY, portGridX, endGridY)
+            }
+            GridDirection.EAST -> {
+                val endGridX = (portGridX + extensionCells).coerceAtMost(width - 1)
+                listOf(portGridX, portGridY, endGridX, portGridY)
+            }
+            GridDirection.WEST -> {
+                val endGridX = (portGridX - extensionCells).coerceAtLeast(0)
+                listOf(portGridX, portGridY, endGridX, portGridY)
+            }
+        }
+        
+        val startXVal = startX
+        val startYVal = startY
+        val endXVal = endX
+        val endYVal = endY
+        
+        val minX = min(startXVal, endXVal) - clearanceCells
+        val maxX = max(startXVal, endXVal) + clearanceCells
+        val minY = min(startYVal, endYVal) - clearanceCells
+        val maxY = max(startYVal, endYVal) + clearanceCells
+        
+        for (x in minX.coerceAtLeast(0)..maxX.coerceAtMost(width - 1)) {
+            for (y in minY.coerceAtLeast(0)..maxY.coerceAtMost(height - 1)) {
+                if (x in 0 until width && y in 0 until height) {
+                    val isInExtensionArea = when (extensionDirection) {
+                        GridDirection.NORTH, GridDirection.SOUTH -> {
+                            val alongExtension = y in min(startYVal, endYVal)..max(startYVal, endYVal)
+                            val withinClearance = kotlin.math.abs(x - startXVal) <= clearanceCells
+                            alongExtension && withinClearance
+                        }
+                        GridDirection.EAST, GridDirection.WEST -> {
+                            val alongExtension = x in min(startXVal, endXVal)..max(startXVal, endXVal)
+                            val withinClearance = kotlin.math.abs(y - startYVal) <= clearanceCells
+                            alongExtension && withinClearance
+                        }
+                    }
+                    
+                    if (isInExtensionArea) {
+                        blocked[x][y] = true
+                    }
+                }
+            }
+        }
+        
+        val startGrid = GridPoint(startXVal, startYVal)
+        val endGrid = GridPoint(endXVal, endYVal)
+        portExtensionRegions.add(
+            PortExtensionRegion(
+                start = startGrid,
+                end = endGrid,
+                direction = extensionDirection,
+                clearance = clearanceCells
+            )
+        )
+    }
+    
+    fun getPortProximityCost(point: GridPoint, excludedPortIds: Set<String> = emptySet(), config: RoutingConfig): Float {
+        var totalCost = 0f
+        val clearanceCells = (config.portClearance / cellSize).toInt().coerceAtLeast(1)
+        
+        portPositions.forEach { portPos ->
+            val distance = point.manhattanDistanceTo(portPos)
+            if (distance <= clearanceCells * 2) {
+                val proximityFactor = (clearanceCells * 2 - distance).toFloat() / clearanceCells
+                totalCost += config.portProximityPenalty * proximityFactor
+            }
+        }
+        
+        portExtensionRegions.forEach { region ->
+            val distanceToExtension = distanceToExtensionRegion(point, region)
+            if (distanceToExtension <= region.clearance * 2) {
+                val proximityFactor = (region.clearance * 2 - distanceToExtension).toFloat() / region.clearance
+                totalCost += config.portProximityPenalty * proximityFactor * 0.5f
+            }
+        }
+        
+        return totalCost
+    }
+    
+    private fun distanceToExtensionRegion(point: GridPoint, region: PortExtensionRegion): Int {
+        val minX = min(region.start.x, region.end.x) - region.clearance
+        val maxX = max(region.start.x, region.end.x) + region.clearance
+        val minY = min(region.start.y, region.end.y) - region.clearance
+        val maxY = max(region.start.y, region.end.y) + region.clearance
+        
+        return when {
+            point.x in minX..maxX && point.y in minY..maxY -> 0
+            point.x < minX && point.y in minY..maxY -> minX - point.x
+            point.x > maxX && point.y in minY..maxY -> point.x - maxX
+            point.y < minY && point.x in minX..maxX -> minY - point.y
+            point.y > maxY && point.x in minX..maxX -> point.y - maxY
+            else -> {
+                val dx = when {
+                    point.x < minX -> minX - point.x
+                    point.x > maxX -> point.x - maxX
+                    else -> 0
+                }
+                val dy = when {
+                    point.y < minY -> minY - point.y
+                    point.y > maxY -> point.y - maxY
+                    else -> 0
+                }
+                dx + dy
             }
         }
     }
