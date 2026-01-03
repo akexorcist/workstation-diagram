@@ -189,6 +189,84 @@ class EditorViewModel(
         canvasSize: dev.akexorcist.workstation.data.model.Size,
         isHorizontal: Boolean = false
     ) {
+        val layout = _uiState.value.layout ?: return
+        val connection = layout.connections.find { it.id == connectionId } ?: return
+        val routedConnection = _uiState.value.routedConnectionMap[connectionId] ?: return
+        val virtualWaypoints = routedConnection.virtualWaypoints
+        
+        // Validate segment index (must be between routing points, not edge segments)
+        if (segmentIndex <= 0 || segmentIndex >= virtualWaypoints.size - 1) return
+        
+        // Convert screen delta to virtual delta
+        val metadata = layout.metadata
+        val zoom = _uiState.value.zoom
+        val virtualDelta = screenDeltaToVirtualDelta(screenDragDelta, metadata, canvasSize, zoom)
+        
+        // Constrain to cross-axis based on segment orientation
+        val constrainedDelta = if (isHorizontal) {
+            // Horizontal segment: only move vertically
+            Offset(0f, virtualDelta.y)
+        } else {
+            // Vertical segment: only move horizontally
+            Offset(virtualDelta.x, 0f)
+        }
+        
+        // virtualWaypoints structure: [sourcePort, routingPoint1, routingPoint2, ..., targetPort]
+        // Segment index i connects virtualWaypoints[i] to virtualWaypoints[i+1]
+        // For segment i, we need to move:
+        // - virtualWaypoints[i] (routing point at index i-1 in Connection.routingPoints)
+        // - virtualWaypoints[i+1] (routing point at index i in Connection.routingPoints)
+        
+        // Store original routing points at drag start
+        if (dragStartConnectionId != connectionId || dragStartSegmentIndex != segmentIndex) {
+            originalRoutingPoints = connection.routingPoints?.toList()
+            dragStartConnectionId = connectionId
+            dragStartSegmentIndex = segmentIndex
+        }
+        
+        val originalPoints = originalRoutingPoints ?: connection.routingPoints?.toList() ?: return
+        val routingPoints = originalPoints.toMutableList()
+        
+        // Update the start routing point using original position + accumulated delta
+        // (virtualWaypoints[i] corresponds to routingPoints[i-1])
+        if (segmentIndex > 0 && segmentIndex - 1 < routingPoints.size) {
+            val startPointIndex = segmentIndex - 1
+            routingPoints[startPointIndex] = Point(
+                x = originalPoints[startPointIndex].x + constrainedDelta.x,
+                y = originalPoints[startPointIndex].y + constrainedDelta.y
+            )
+        }
+        
+        // Update the end routing point using original position + accumulated delta
+        // (virtualWaypoints[i+1] corresponds to routingPoints[i])
+        if (segmentIndex < routingPoints.size) {
+            routingPoints[segmentIndex] = Point(
+                x = originalPoints[segmentIndex].x + constrainedDelta.x,
+                y = originalPoints[segmentIndex].y + constrainedDelta.y
+            )
+        }
+        
+        // Update the connection with new routing points
+        val updatedConnection = connection.copy(routingPoints = routingPoints)
+        val updatedConnections = layout.connections.map { if (it.id == connectionId) updatedConnection else it }
+        val updatedLayout = layout.copy(connections = updatedConnections)
+        
+        // Update layout and recalculate routed connections
+        // Use a coroutine to update asynchronously to avoid blocking the gesture
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.Main.immediate) {
+            updateLayoutWithConnections(updatedLayout)
+        }
+    }
+    
+    // Store original routing points at drag start
+    private var originalRoutingPoints: List<Point>? = null
+    private var dragStartConnectionId: String? = null
+    private var dragStartSegmentIndex: Int = -1
+    
+    fun clearSegmentDragState() {
+        originalRoutingPoints = null
+        dragStartConnectionId = null
+        dragStartSegmentIndex = -1
     }
     
     private fun updateLayoutWithConnections(updatedLayout: dev.akexorcist.workstation.data.model.WorkstationLayout) {
@@ -247,7 +325,7 @@ class EditorViewModel(
     }
 
     private fun screenDeltaToVirtualDelta(
-        screenDelta: Offset,
+        screenDelta: ComposeOffset,
         metadata: dev.akexorcist.workstation.data.model.LayoutMetadata,
         canvasSize: dev.akexorcist.workstation.data.model.Size,
         zoom: Float

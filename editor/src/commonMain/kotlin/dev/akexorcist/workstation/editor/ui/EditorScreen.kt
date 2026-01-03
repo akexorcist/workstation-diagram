@@ -98,12 +98,17 @@ fun EditorScreen(
                             connectionId = connectionId,
                             segmentIndex = segmentIndex,
                             screenPosition = androidx.compose.ui.geometry.Offset.Zero,
-                            screenDragDelta = androidx.compose.ui.geometry.Offset.Zero,
+                            screenDragDelta = androidx.compose.ui.geometry.Offset(
+                                x = dragDelta.x,
+                                y = dragDelta.y
+                            ),
                             canvasSize = canvasSize,
                             isHorizontal = isHorizontal
                         )
                     },
                     onDragEndSegment = {
+                        // Clear drag state in viewmodel
+                        viewModel.clearSegmentDragState()
                         // Keep the segment selected after drag ends (it's still hovered/selected)
                         // Only clear if user moves away from segment
                     },

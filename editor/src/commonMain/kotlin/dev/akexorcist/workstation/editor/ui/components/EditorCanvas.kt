@@ -74,6 +74,8 @@ fun EditorCanvas(
                 // We'll read fresh values from uiState inside the gesture handlers
                 var dragStartPan = Offset.Zero
                 var isDraggingSegment = false
+                var accumulatedSegmentDrag = Offset.Zero
+                var segmentDragInfo: Pair<Pair<String, Int>, SegmentOrientation>? = null
                 
                 detectDragGestures(
                     onDragStart = { offset ->
@@ -97,51 +99,51 @@ fun EditorCanvas(
                             if (segmentInfo != null && segmentInfo.first == currentSelectedSegment) {
                                 // Start dragging line segment
                                 isDraggingSegment = true
+                                segmentDragInfo = segmentInfo
+                                accumulatedSegmentDrag = Offset.Zero
                                 onDragStartSegment(segmentInfo.first.first, segmentInfo.first.second)
                             } else {
                                 // Start viewport pan
                                 isDraggingSegment = false
+                                segmentDragInfo = null
                                 dragStartPan = Offset(panOffsetRef.value.x, panOffsetRef.value.y)
                                 accumulatedDrag.value = Offset.Zero
                             }
                         } else {
                             // Start viewport pan
                             isDraggingSegment = false
+                            segmentDragInfo = null
                             dragStartPan = Offset(panOffsetRef.value.x, panOffsetRef.value.y)
                             accumulatedDrag.value = Offset.Zero
                         }
                     },
                     onDrag = { change, dragAmount ->
-                        if (isDraggingSegment) {
-                            // Handle line segment drag
+                        val currentSegmentDragInfo = segmentDragInfo
+                        if (isDraggingSegment && currentSegmentDragInfo != null) {
+                            // Handle line segment drag - accumulate delta
                             change.consume()
-                            // Read fresh state values during drag
-                            val currentSelectedSegment = uiState.selectedLineSegment
-                            val currentRoutedConnectionMap = uiState.routedConnectionMap
-                            val currentZoom = uiState.zoom
-                            val currentPanOffset = uiState.panOffset
                             
-                            val segmentInfo = findSegmentAtPoint(
-                                change.position,
-                                layout,
-                                currentRoutedConnectionMap,
-                                canvasSize,
-                                currentZoom,
-                                currentPanOffset
+                            // Constrain to cross-axis and accumulate
+                            val constrainedDelta = constrainDragToCrossAxis(
+                                dragAmount,
+                                currentSegmentDragInfo.second
                             )
                             
-                            if (segmentInfo != null && currentSelectedSegment != null) {
-                                val constrainedDelta = constrainDragToCrossAxis(
-                                    dragAmount,
-                                    segmentInfo.second
-                                )
-                                onDragSegment(
-                                    currentSelectedSegment.first,
-                                    currentSelectedSegment.second,
-                                    DataOffset(x = constrainedDelta.x, y = constrainedDelta.y),
-                                    segmentInfo.second == SegmentOrientation.HORIZONTAL
-                                )
-                            }
+                            accumulatedSegmentDrag = Offset(
+                                x = accumulatedSegmentDrag.x + constrainedDelta.x,
+                                y = accumulatedSegmentDrag.y + constrainedDelta.y
+                            )
+                            
+                            // Apply accumulated drag to update the segment
+                            onDragSegment(
+                                currentSegmentDragInfo.first.first,
+                                currentSegmentDragInfo.first.second,
+                                DataOffset(
+                                    x = accumulatedSegmentDrag.x,
+                                    y = accumulatedSegmentDrag.y
+                                ),
+                                currentSegmentDragInfo.second == SegmentOrientation.HORIZONTAL
+                            )
                         } else {
                             // Handle viewport pan
                             change.consume()
@@ -159,8 +161,10 @@ fun EditorCanvas(
                     },
                     onDragEnd = {
                         if (isDraggingSegment) {
-                            // End line segment drag
+                            // End line segment drag - final update
                             isDraggingSegment = false
+                            accumulatedSegmentDrag = Offset.Zero
+                            segmentDragInfo = null
                             onDragEndSegment()
                         } else {
                             // End viewport pan
@@ -171,6 +175,8 @@ fun EditorCanvas(
                         if (isDraggingSegment) {
                             // Cancel line segment drag
                             isDraggingSegment = false
+                            accumulatedSegmentDrag = Offset.Zero
+                            segmentDragInfo = null
                             onDragEndSegment()
                         } else {
                             // Cancel viewport pan

@@ -154,7 +154,14 @@ internal fun findSegmentAtPoint(
         
         if (virtualWaypoints.size < 2) return@forEach
         
+        // virtualWaypoints structure: [sourcePort, routingPoint1, routingPoint2, ..., targetPort]
+        // Segments: 0=sourcePort->routingPoint1 (edge), 1=routingPoint1->routingPoint2 (draggable), ...
+        // Last segment = routingPointN->targetPort (edge)
+        
         for (i in 0 until virtualWaypoints.size - 1) {
+            // Skip edge segments (first and last)
+            if (i == 0 || i == virtualWaypoints.size - 2) continue
+            
             val startWaypoint = virtualWaypoints[i]
             val endWaypoint = virtualWaypoints[i + 1]
             
@@ -176,20 +183,91 @@ internal fun findSegmentAtPoint(
             val start = Offset(startScreen.x, startScreen.y)
             val end = Offset(endScreen.x, endScreen.y)
             
-            if (isOrthogonalSegment(start, end)) {
-                val distance = calculateDistanceToSegment(point, start, end)
-                if (distance < hitThreshold && distance < closestDistance) {
-                    closestDistance = distance
-                    closestSegment = Pair(
-                        Pair(connection.id, i),
-                        if (start.y == end.y) SegmentOrientation.HORIZONTAL else SegmentOrientation.VERTICAL
-                    )
-                }
+            if (!isOrthogonalSegment(start, end)) continue
+            
+            val currentOrientation = if (start.y == end.y) SegmentOrientation.HORIZONTAL else SegmentOrientation.VERTICAL
+            
+            // Check if adjacent segments are in the same direction
+            val hasSameDirectionAdjacent = hasAdjacentSegmentInSameDirection(
+                virtualWaypoints,
+                i,
+                currentOrientation,
+                layout,
+                canvasSize,
+                zoom,
+                panOffset
+            )
+            
+            if (hasSameDirectionAdjacent) continue
+            
+            val distance = calculateDistanceToSegment(point, start, end)
+            if (distance < hitThreshold && distance < closestDistance) {
+                closestDistance = distance
+                closestSegment = Pair(
+                    Pair(connection.id, i),
+                    currentOrientation
+                )
             }
         }
     }
     
     return closestSegment
+}
+
+private fun hasAdjacentSegmentInSameDirection(
+    virtualWaypoints: List<Pair<Float, Float>>,
+    segmentIndex: Int,
+    currentOrientation: SegmentOrientation,
+    layout: dev.akexorcist.workstation.data.model.WorkstationLayout,
+    canvasSize: dev.akexorcist.workstation.data.model.Size,
+    zoom: Float,
+    panOffset: DataOffset
+): Boolean {
+    // Check previous segment
+    if (segmentIndex > 0) {
+        val prevStart = virtualWaypoints[segmentIndex - 1]
+        val prevEnd = virtualWaypoints[segmentIndex]
+        val prevStartScreen = CoordinateTransformer.transformPosition(
+            Position(prevStart.first, prevStart.second),
+            layout.metadata,
+            canvasSize,
+            zoom,
+            panOffset
+        )
+        val prevEndScreen = CoordinateTransformer.transformPosition(
+            Position(prevEnd.first, prevEnd.second),
+            layout.metadata,
+            canvasSize,
+            zoom,
+            panOffset
+        )
+        val prevOrientation = if (prevStartScreen.y == prevEndScreen.y) SegmentOrientation.HORIZONTAL else SegmentOrientation.VERTICAL
+        if (prevOrientation == currentOrientation) return true
+    }
+    
+    // Check next segment
+    if (segmentIndex < virtualWaypoints.size - 2) {
+        val nextStart = virtualWaypoints[segmentIndex + 1]
+        val nextEnd = virtualWaypoints[segmentIndex + 2]
+        val nextStartScreen = CoordinateTransformer.transformPosition(
+            Position(nextStart.first, nextStart.second),
+            layout.metadata,
+            canvasSize,
+            zoom,
+            panOffset
+        )
+        val nextEndScreen = CoordinateTransformer.transformPosition(
+            Position(nextEnd.first, nextEnd.second),
+            layout.metadata,
+            canvasSize,
+            zoom,
+            panOffset
+        )
+        val nextOrientation = if (nextStartScreen.y == nextEndScreen.y) SegmentOrientation.HORIZONTAL else SegmentOrientation.VERTICAL
+        if (nextOrientation == currentOrientation) return true
+    }
+    
+    return false
 }
 
 private fun isOrthogonalSegment(start: Offset, end: Offset): Boolean {
