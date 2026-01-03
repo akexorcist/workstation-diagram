@@ -137,20 +137,24 @@ class EditorViewModel(
     ): Pair<Float, Float> {
         return when (port.position.side) {
             dev.akexorcist.workstation.data.model.DeviceSide.TOP -> {
-                val positionX = port.position.position.coerceIn(0f, device.size.width)
-                device.position.x + positionX to device.position.y
+                val halfWidth = device.size.width / 2f
+                val portOffset = port.position.position.coerceIn(-halfWidth, halfWidth)
+                device.position.x + halfWidth + portOffset to device.position.y
             }
             dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
-                val positionX = port.position.position.coerceIn(0f, device.size.width)
-                device.position.x + positionX to device.position.y + device.size.height
+                val halfWidth = device.size.width / 2f
+                val portOffset = port.position.position.coerceIn(-halfWidth, halfWidth)
+                device.position.x + halfWidth + portOffset to device.position.y + device.size.height
             }
             dev.akexorcist.workstation.data.model.DeviceSide.LEFT -> {
-                val positionY = port.position.position.coerceIn(0f, device.size.height)
-                device.position.x to device.position.y + positionY
+                val halfHeight = device.size.height / 2f
+                val portOffset = port.position.position.coerceIn(-halfHeight, halfHeight)
+                device.position.x to device.position.y + halfHeight + portOffset
             }
             dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
-                val positionY = port.position.position.coerceIn(0f, device.size.height)
-                device.position.x + device.size.width to device.position.y + positionY
+                val halfHeight = device.size.height / 2f
+                val portOffset = port.position.position.coerceIn(-halfHeight, halfHeight)
+                device.position.x + device.size.width to device.position.y + halfHeight + portOffset
             }
         }
     }
@@ -194,30 +198,18 @@ class EditorViewModel(
         val routedConnection = _uiState.value.routedConnectionMap[connectionId] ?: return
         val virtualWaypoints = routedConnection.virtualWaypoints
         
-        // Validate segment index (must be between routing points, not edge segments)
         if (segmentIndex <= 0 || segmentIndex >= virtualWaypoints.size - 1) return
         
-        // Convert screen delta to virtual delta
         val metadata = layout.metadata
         val zoom = _uiState.value.zoom
         val virtualDelta = screenDeltaToVirtualDelta(screenDragDelta, metadata, canvasSize, zoom)
         
-        // Constrain to cross-axis based on segment orientation
         val constrainedDelta = if (isHorizontal) {
-            // Horizontal segment: only move vertically
             Offset(0f, virtualDelta.y)
         } else {
-            // Vertical segment: only move horizontally
             Offset(virtualDelta.x, 0f)
         }
         
-        // virtualWaypoints structure: [sourcePort, routingPoint1, routingPoint2, ..., targetPort]
-        // Segment index i connects virtualWaypoints[i] to virtualWaypoints[i+1]
-        // For segment i, we need to move:
-        // - virtualWaypoints[i] (routing point at index i-1 in Connection.routingPoints)
-        // - virtualWaypoints[i+1] (routing point at index i in Connection.routingPoints)
-        
-        // Store original routing points at drag start
         if (dragStartConnectionId != connectionId || dragStartSegmentIndex != segmentIndex) {
             originalRoutingPoints = connection.routingPoints?.toList()
             dragStartConnectionId = connectionId
@@ -227,38 +219,48 @@ class EditorViewModel(
         val originalPoints = originalRoutingPoints ?: connection.routingPoints?.toList() ?: return
         val routingPoints = originalPoints.toMutableList()
         
-        // Update the start routing point using original position + accumulated delta
-        // (virtualWaypoints[i] corresponds to routingPoints[i-1])
+        val gridConfig = metadata.grid
+        val gridSize = gridConfig?.size ?: 20f
+        val gridEnabled = gridConfig?.enabled ?: true
+        
         if (segmentIndex > 0 && segmentIndex - 1 < routingPoints.size) {
             val startPointIndex = segmentIndex - 1
-            routingPoints[startPointIndex] = Point(
-                x = originalPoints[startPointIndex].x + constrainedDelta.x,
-                y = originalPoints[startPointIndex].y + constrainedDelta.y
-            )
+            val newX = originalPoints[startPointIndex].x + constrainedDelta.x
+            val newY = originalPoints[startPointIndex].y + constrainedDelta.y
+            
+            routingPoints[startPointIndex] = if (gridEnabled) {
+                Point(
+                    x = snapToGrid(newX, gridSize),
+                    y = snapToGrid(newY, gridSize)
+                )
+            } else {
+                Point(x = newX, y = newY)
+            }
         }
         
-        // Update the end routing point using original position + accumulated delta
-        // (virtualWaypoints[i+1] corresponds to routingPoints[i])
         if (segmentIndex < routingPoints.size) {
-            routingPoints[segmentIndex] = Point(
-                x = originalPoints[segmentIndex].x + constrainedDelta.x,
-                y = originalPoints[segmentIndex].y + constrainedDelta.y
-            )
+            val newX = originalPoints[segmentIndex].x + constrainedDelta.x
+            val newY = originalPoints[segmentIndex].y + constrainedDelta.y
+            
+            routingPoints[segmentIndex] = if (gridEnabled) {
+                Point(
+                    x = snapToGrid(newX, gridSize),
+                    y = snapToGrid(newY, gridSize)
+                )
+            } else {
+                Point(x = newX, y = newY)
+            }
         }
         
-        // Update the connection with new routing points
         val updatedConnection = connection.copy(routingPoints = routingPoints)
         val updatedConnections = layout.connections.map { if (it.id == connectionId) updatedConnection else it }
         val updatedLayout = layout.copy(connections = updatedConnections)
         
-        // Update layout and recalculate routed connections
-        // Use a coroutine to update asynchronously to avoid blocking the gesture
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.Main.immediate) {
             updateLayoutWithConnections(updatedLayout)
         }
     }
     
-    // Store original routing points at drag start
     private var originalRoutingPoints: List<Point>? = null
     private var dragStartConnectionId: String? = null
     private var dragStartSegmentIndex: Int = -1
@@ -267,6 +269,10 @@ class EditorViewModel(
         originalRoutingPoints = null
         dragStartConnectionId = null
         dragStartSegmentIndex = -1
+    }
+    
+    private fun snapToGrid(value: Float, gridSize: Float): Float {
+        return kotlin.math.round(value / gridSize) * gridSize
     }
     
     private fun updateLayoutWithConnections(updatedLayout: dev.akexorcist.workstation.data.model.WorkstationLayout) {

@@ -348,47 +348,31 @@ private fun calculatePortScreenPosition(
 
     when (port.position.side) {
         DeviceSide.TOP -> {
-            val portPosition = when {
-                port.position.position < 0 -> 0f
-                port.position.position > device.size.width -> device.size.width
-                else -> port.position.position
-            }
-
-            virtualPortX = device.position.x + portPosition
+            val halfWidth = device.size.width / 2f
+            val portOffset = port.position.position.coerceIn(-halfWidth, halfWidth)
+            virtualPortX = device.position.x + halfWidth + portOffset
             virtualPortY = device.position.y
         }
 
         DeviceSide.BOTTOM -> {
-            val portPosition = when {
-                port.position.position < 0 -> 0f
-                port.position.position > device.size.width -> device.size.width
-                else -> port.position.position
-            }
-
-            virtualPortX = device.position.x + portPosition
+            val halfWidth = device.size.width / 2f
+            val portOffset = port.position.position.coerceIn(-halfWidth, halfWidth)
+            virtualPortX = device.position.x + halfWidth + portOffset
             virtualPortY = device.position.y + device.size.height
         }
 
         DeviceSide.LEFT -> {
-            val portPosition = when {
-                port.position.position < 0 -> 0f
-                port.position.position > device.size.height -> device.size.height
-                else -> port.position.position
-            }
-
+            val halfHeight = device.size.height / 2f
+            val portOffset = port.position.position.coerceIn(-halfHeight, halfHeight)
             virtualPortX = device.position.x
-            virtualPortY = device.position.y + portPosition
+            virtualPortY = device.position.y + halfHeight + portOffset
         }
 
         DeviceSide.RIGHT -> {
-            val portPosition = when {
-                port.position.position < 0 -> 0f
-                port.position.position > device.size.height -> device.size.height
-                else -> port.position.position
-            }
-
+            val halfHeight = device.size.height / 2f
+            val portOffset = port.position.position.coerceIn(-halfHeight, halfHeight)
             virtualPortX = device.position.x + device.size.width
-            virtualPortY = device.position.y + portPosition
+            virtualPortY = device.position.y + halfHeight + portOffset
         }
     }
 

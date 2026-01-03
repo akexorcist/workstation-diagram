@@ -143,7 +143,8 @@ internal fun findSegmentAtPoint(
     zoom: Float,
     panOffset: DataOffset
 ): Pair<Pair<String, Int>, SegmentOrientation>? {
-    val hitThreshold = 10f
+    val baseHitThreshold = 10f
+    val hitThreshold = baseHitThreshold / zoom.coerceAtLeast(0.1f)
     
     var closestSegment: Pair<Pair<String, Int>, SegmentOrientation>? = null
     var closestDistance = Float.MAX_VALUE
@@ -154,12 +155,7 @@ internal fun findSegmentAtPoint(
         
         if (virtualWaypoints.size < 2) return@forEach
         
-        // virtualWaypoints structure: [sourcePort, routingPoint1, routingPoint2, ..., targetPort]
-        // Segments: 0=sourcePort->routingPoint1 (edge), 1=routingPoint1->routingPoint2 (draggable), ...
-        // Last segment = routingPointN->targetPort (edge)
-        
         for (i in 0 until virtualWaypoints.size - 1) {
-            // Skip edge segments (first and last)
             if (i == 0 || i == virtualWaypoints.size - 2) continue
             
             val startWaypoint = virtualWaypoints[i]
@@ -187,21 +183,15 @@ internal fun findSegmentAtPoint(
             
             val currentOrientation = if (start.y == end.y) SegmentOrientation.HORIZONTAL else SegmentOrientation.VERTICAL
             
-            // Check if adjacent segments are in the same direction
-            val hasSameDirectionAdjacent = hasAdjacentSegmentInSameDirection(
-                virtualWaypoints,
-                i,
-                currentOrientation,
-                layout,
-                canvasSize,
-                zoom,
-                panOffset
-            )
-            
-            if (hasSameDirectionAdjacent) continue
-            
             val distance = calculateDistanceToSegment(point, start, end)
-            if (distance < hitThreshold && distance < closestDistance) {
+            
+            val effectiveHitThreshold = if (currentOrientation == SegmentOrientation.VERTICAL) {
+                hitThreshold * 1.5f
+            } else {
+                hitThreshold
+            }
+            
+            if (distance < effectiveHitThreshold && distance < closestDistance) {
                 closestDistance = distance
                 closestSegment = Pair(
                     Pair(connection.id, i),
