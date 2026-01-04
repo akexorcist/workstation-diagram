@@ -1799,7 +1799,7 @@
           "direction": "INPUT",
           "position": {
             "side": "LEFT",
-            "position": 0.0
+            "position": 40.0
           }
         }
       ],
@@ -2515,11 +2515,11 @@
       "routingPoints": [
         {
           "x": 1920.0,
-          "y": 580.0
+          "y": 620.0
         },
         {
           "x": 1880.0,
-          "y": 580.0
+          "y": 620.0
         },
         {
           "x": 1880.0,

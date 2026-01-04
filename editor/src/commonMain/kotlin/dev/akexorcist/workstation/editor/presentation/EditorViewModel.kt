@@ -66,7 +66,8 @@ class EditorViewModel(
             val routedConnections = processConnections(
                 devices = layoutWithSyncedPorts.devices,
                 connections = layoutWithSyncedPorts.connections,
-                virtualCanvasSize = virtualCanvas
+                virtualCanvasSize = virtualCanvas,
+                metadata = layout.metadata
             )
 
             val routedConnectionMap = routedConnections.associateBy { it.connectionId }
@@ -100,7 +101,8 @@ class EditorViewModel(
             val newSourcePortPosition = calculatePortPositionFromRoutingPoint(
                 device = sourceDevice,
                 port = sourcePort,
-                routingPoint = firstRoutingPoint
+                routingPoint = firstRoutingPoint,
+                metadata = layout.metadata
             )
             
             if (newSourcePortPosition != null && newSourcePortPosition != sourcePort.position.position) {
@@ -119,7 +121,8 @@ class EditorViewModel(
             val newTargetPortPosition = calculatePortPositionFromRoutingPoint(
                 device = targetDevice,
                 port = targetPort,
-                routingPoint = lastRoutingPoint
+                routingPoint = lastRoutingPoint,
+                metadata = layout.metadata
             )
             
             if (newTargetPortPosition != null && newTargetPortPosition != targetPort.position.position) {
@@ -142,18 +145,22 @@ class EditorViewModel(
     private fun calculatePortPositionFromRoutingPoint(
         device: dev.akexorcist.workstation.data.model.Device,
         port: dev.akexorcist.workstation.data.model.Port,
-        routingPoint: Point
+        routingPoint: Point,
+        metadata: dev.akexorcist.workstation.data.model.LayoutMetadata
     ): Float? {
+        val gridConfig = metadata.grid
+        val gridSize = gridConfig?.size ?: 20f
+        
         return when (port.position.side) {
             dev.akexorcist.workstation.data.model.DeviceSide.TOP,
             dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
                 val newPosition = routingPoint.x - device.position.x
-                newPosition.coerceIn(0f, device.size.width)
+                newPosition.coerceIn(gridSize, device.size.width - gridSize)
             }
             dev.akexorcist.workstation.data.model.DeviceSide.LEFT,
             dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
                 val newPosition = routingPoint.y - device.position.y
-                newPosition.coerceIn(0f, device.size.height)
+                newPosition.coerceIn(gridSize, device.size.height - gridSize)
             }
         }
     }
@@ -161,7 +168,8 @@ class EditorViewModel(
     private fun processConnections(
         devices: List<dev.akexorcist.workstation.data.model.Device>,
         connections: List<Connection>,
-        virtualCanvasSize: dev.akexorcist.workstation.data.model.Size
+        virtualCanvasSize: dev.akexorcist.workstation.data.model.Size,
+        metadata: dev.akexorcist.workstation.data.model.LayoutMetadata
     ): List<RoutedConnection> {
         // Only handle connections with manual routing points
         // Automatic routing is not available in editor
@@ -171,14 +179,15 @@ class EditorViewModel(
                 routingPoints != null && routingPoints.isNotEmpty()
             }
             .mapNotNull { connection ->
-                createRoutedConnectionFromManualPoints(connection, devices, virtualCanvasSize)
+                createRoutedConnectionFromManualPoints(connection, devices, virtualCanvasSize, metadata)
             }
     }
     
     private fun createRoutedConnectionFromManualPoints(
         connection: Connection,
         devices: List<dev.akexorcist.workstation.data.model.Device>,
-        virtualCanvasSize: dev.akexorcist.workstation.data.model.Size
+        virtualCanvasSize: dev.akexorcist.workstation.data.model.Size,
+        metadata: dev.akexorcist.workstation.data.model.LayoutMetadata
     ): RoutedConnection? {
         val routingPoints = connection.routingPoints ?: return null
         if (routingPoints.isEmpty()) return null
@@ -188,8 +197,8 @@ class EditorViewModel(
         val sourcePort = sourceDevice.ports.find { it.id == connection.sourcePortId } ?: return null
         val targetPort = targetDevice.ports.find { it.id == connection.targetPortId } ?: return null
         
-        val sourcePortVirtualPos = calculatePortPosition(sourceDevice, sourcePort)
-        val targetPortVirtualPos = calculatePortPosition(targetDevice, targetPort)
+        val sourcePortVirtualPos = calculatePortPosition(sourceDevice, sourcePort, metadata)
+        val targetPortVirtualPos = calculatePortPosition(targetDevice, targetPort, metadata)
         
         val virtualWaypoints = buildList {
             add(sourcePortVirtualPos)
@@ -210,23 +219,27 @@ class EditorViewModel(
     
     private fun calculatePortPosition(
         device: dev.akexorcist.workstation.data.model.Device,
-        port: dev.akexorcist.workstation.data.model.Port
+        port: dev.akexorcist.workstation.data.model.Port,
+        metadata: dev.akexorcist.workstation.data.model.LayoutMetadata
     ): Pair<Float, Float> {
+        val gridConfig = metadata.grid
+        val gridSize = gridConfig?.size ?: 20f
+        
         return when (port.position.side) {
             dev.akexorcist.workstation.data.model.DeviceSide.TOP -> {
-                val positionX = port.position.position.coerceIn(0f, device.size.width)
+                val positionX = port.position.position.coerceIn(gridSize, device.size.width - gridSize)
                 device.position.x + positionX to device.position.y
             }
             dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
-                val positionX = port.position.position.coerceIn(0f, device.size.width)
+                val positionX = port.position.position.coerceIn(gridSize, device.size.width - gridSize)
                 device.position.x + positionX to device.position.y + device.size.height
             }
             dev.akexorcist.workstation.data.model.DeviceSide.LEFT -> {
-                val positionY = port.position.position.coerceIn(0f, device.size.height)
+                val positionY = port.position.position.coerceIn(gridSize, device.size.height - gridSize)
                 device.position.x to device.position.y + positionY
             }
             dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
-                val positionY = port.position.position.coerceIn(0f, device.size.height)
+                val positionY = port.position.position.coerceIn(gridSize, device.size.height - gridSize)
                 device.position.x + device.size.width to device.position.y + positionY
             }
         }
@@ -389,20 +402,20 @@ class EditorViewModel(
             originalPosition + constrainedDelta.y
         }
         
-        val clampedPosition = when (port.position.side) {
-            dev.akexorcist.workstation.data.model.DeviceSide.TOP,
-            dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
-                newPosition.coerceIn(0f, device.size.width)
-            }
-            dev.akexorcist.workstation.data.model.DeviceSide.LEFT,
-            dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
-                newPosition.coerceIn(0f, device.size.height)
-            }
-        }
-        
         val gridConfig = metadata.grid
         val gridSize = gridConfig?.size ?: 20f
         val gridEnabled = gridConfig?.enabled ?: true
+        
+        val clampedPosition = when (port.position.side) {
+            dev.akexorcist.workstation.data.model.DeviceSide.TOP,
+            dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
+                newPosition.coerceIn(gridSize, device.size.width - gridSize)
+            }
+            dev.akexorcist.workstation.data.model.DeviceSide.LEFT,
+            dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
+                newPosition.coerceIn(gridSize, device.size.height - gridSize)
+            }
+        }
         
         val finalPosition = if (gridEnabled) {
             snapToGrid(clampedPosition, gridSize)
@@ -419,8 +432,8 @@ class EditorViewModel(
         val updatedDevices = layout.devices.map { if (it.id == deviceId) updatedDevice else it }
         var updatedLayout = layout.copy(devices = updatedDevices)
         
-        val oldPortVirtualPos = calculatePortPosition(device, port)
-        val newPortVirtualPos = calculatePortPosition(updatedDevice, updatedPort)
+        val oldPortVirtualPos = calculatePortPosition(device, port, metadata)
+        val newPortVirtualPos = calculatePortPosition(updatedDevice, updatedPort, metadata)
         
         val portDeltaX = newPortVirtualPos.first - oldPortVirtualPos.first
         val portDeltaY = newPortVirtualPos.second - oldPortVirtualPos.second
@@ -485,7 +498,8 @@ class EditorViewModel(
             val routedConnections = processConnections(
                 devices = layoutWithSyncedPorts.devices,
                 connections = layoutWithSyncedPorts.connections,
-                virtualCanvasSize = virtualCanvas
+                virtualCanvasSize = virtualCanvas,
+                metadata = updatedLayout.metadata
             )
 
             val routedConnectionMap = routedConnections.associateBy { it.connectionId }
