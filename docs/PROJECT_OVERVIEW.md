@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Workstation Diagram is a Kotlin Multiplatform application for visualizing and editing workstation hardware configurations. It allows users to create interactive diagrams showing how devices (laptops, monitors, hubs, peripherals) are connected via ports and cables.
+Workstation Diagram is a Kotlin Multiplatform application for visualizing and editing workstation hardware configurations. It allows users to view and create interactive diagrams showing how devices (laptops, monitors, hubs, peripherals) are connected via ports and cables.
 
 ---
 
@@ -17,15 +17,117 @@ The project consists of three main modules:
 
 ### 2. **viewer** Module
 - **Purpose**: Read-only visualization application
-- **Features**: Display workstation diagrams, viewport navigation (zoom/pan), device information
 - **Targets**: Desktop (JVM) and Web (WASM/JS)
 
 ### 3. **editor** Module
 - **Purpose**: Interactive editing application
-- **Features**: All viewer features plus editing capabilities
-- **Current Work**: Port position editing, connection line segment position editing
-- **Auto-generation**: Automatically generates connections when not available in JSON
 - **Targets**: Desktop (JVM) and Web (WASM/JS)
+
+---
+
+## Viewer Application
+
+### Purpose
+
+Read-only visualization application for displaying workstation diagrams. Users can view and explore hardware configurations without modifying them.
+
+### Features
+
+#### Core Visualization
+- Display workstation diagrams from JSON data
+- Render devices (laptops, monitors, hubs, peripherals) with visual representations
+- Render connections between devices with routing paths
+- Auto-routing display for connections (uses routing points from JSON or calculated paths)
+
+#### Viewport Navigation
+- Zoom in/out (mouse wheel, keyboard shortcuts, control panel)
+- Pan (mouse drag, arrow keys)
+- Zoom to specific points (maintains point position during zoom)
+- Center viewport on all devices (auto-centering on load)
+- Reset zoom to default value
+- Keyboard shortcuts:
+  - Ctrl/Cmd + Plus/Equals: Zoom in
+  - Ctrl/Cmd + Minus: Zoom out
+  - Arrow keys: Pan viewport
+
+#### Device Interaction
+- Device selection (click to select)
+- Device hover states (visual feedback on hover)
+- Device details dialog (shows device information when selected)
+- Device list sidebar (navigable list of all devices with filtering support)
+- Device search/filter (state support for filtering devices)
+
+#### UI Features
+- Instruction legend (color-coded device categories and connector types)
+- Header card (diagram title, date, external links)
+- Collapsible sections (instruction legend, device list)
+- UI panel visibility toggle (hide/show sidebar for focused viewing)
+- Theme switching (light/dark mode)
+- Connection animation toggle (enable/disable animated connections)
+
+### Data Handling
+- Loads `workstation.json` files
+- Read-only access (no save/export functionality)
+- Displays routing points from JSON
+- Calculates straight paths for connections without routing points
+
+---
+
+## Editor Application
+
+### Purpose
+
+Interactive editing application for creating and modifying workstation diagrams. Extends viewer capabilities with full editing functionality.
+
+### Features
+
+#### All Viewer Features
+- All visualization capabilities from the viewer
+- All viewport navigation features
+- Theme switching
+- Connection animation toggle
+
+#### Editing Capabilities
+- **Port Position Editing**: Adjust port positions on device edges interactively
+- **Connection Path Editing**: Manually edit connection routing points/waypoints
+- **Routing Point Management**: Select, drag, and modify routing points
+- **Line Segment Editing**: Select and edit connection line segments
+- **Device Selection**: Select devices for editing operations
+
+#### Auto-Generation
+- **Auto-routing**: Automatically generates routing points for connections when missing from JSON
+- **One-time Generation**: Auto-routed paths are saved and persist in the connection data
+- **Path Optimization**: Generated paths avoid device obstacles and optimize layout
+
+**Auto-Generation Behavior**:
+When a connection in the JSON lacks routing points:
+1. System detects missing routing information
+2. Auto-routing algorithm generates path (one-time operation)
+3. Path avoids device obstacles
+4. Path optimizes for minimal crossings and clean layout
+5. Auto-generated routing points are immediately saved to the Connection object
+
+**Important**: Once a connection has routing points (whether auto-generated or manually defined), it will never be auto-routed again. The routing points persist and can be manually edited by the user. All routing points (auto-generated or manual) are included when exporting to JSON.
+
+#### Export Functionality
+- Export edited diagrams to JSON format
+- Saves all routing points (manual and auto-generated)
+- Preserves device positions, port positions, and connection paths
+
+#### Editing State Management
+- Selected routing points
+- Dragging routing points
+- Hovered routing points
+- Selected line segments
+- Selected ports
+- Connection selection for editing
+
+### Data Handling
+- Loads `workstation.json` files
+- Reads and writes JSON data
+- Auto-generates routing points when missing
+- Syncs port positions with connections
+- Exports complete diagram data
 
 ---
 
@@ -43,7 +145,7 @@ The application uses a JSON-based data format (`workstation.json`) with the foll
 - **Connections**: Links between device ports
   - References source and target devices/ports
   - Optional routing points for manual path definition
-  - Auto-generated if routing points not provided
+  - Auto-generated if routing points not provided (editor only)
 
 - **Metadata**: Canvas configuration, viewport settings, grid settings
 
@@ -58,7 +160,7 @@ The application uses a JSON-based data format (`workstation.json`) with the foll
 
 Connections between devices can be:
 - **Manual Routing**: User-defined waypoints stored in JSON
-- **Auto Routing**: Automatically generated paths when manual routing not available
+- **Auto Routing**: Automatically generated paths when manual routing not available (editor only)
 - Routes avoid device obstacles and optimize pathfinding
 
 ### State Management
@@ -67,34 +169,6 @@ Connections between devices can be:
 - Reactive state with StateFlow
 - ViewModels manage UI state and business logic
 - State persists across viewport operations
-
----
-
-## Editor App Features
-
-The editor application extends the viewer with editing capabilities:
-
-### Current Capabilities
-- Visualize workstation diagrams (same as viewer)
-- Viewport navigation (zoom, pan)
-- Device and connection selection
-- Theme switching (light/dark)
-
-### In Development
-- **Port Position Editing**: Allow users to adjust port positions on devices
-- **Connection Path Editing**: Allow users to manually edit connection routing points
-- **Auto-connection Generation**: Automatically generate connections when missing from JSON
-
-### Auto-Generation Behavior
-
-When a connection in the JSON lacks routing points:
-1. System detects missing routing information
-2. Auto-routing algorithm generates path (one-time operation)
-3. Path avoids device obstacles
-4. Path optimizes for minimal crossings and clean layout
-5. Auto-generated routing points are immediately saved to the Connection object
-
-**Important**: Once a connection has routing points (whether auto-generated or manually defined), it will never be auto-routed again. The routing points persist and can be manually edited by the user. All routing points (auto-generated or manual) are included when exporting to JSON.
 
 ---
 
@@ -196,8 +270,9 @@ When working on this project:
 
 Key files to understand:
 - Data models: `shared/src/commonMain/kotlin/.../data/model/`
+- Viewer state: `viewer/src/commonMain/kotlin/.../presentation/WorkstationViewModel.kt`
 - Editor state: `editor/src/commonMain/kotlin/.../presentation/EditorViewModel.kt`
-- JSON structure: `editor/src/commonMain/resources/data/workstation.json`
+- JSON structure: `viewer/src/commonMain/resources/data/workstation.json` or `editor/src/commonMain/resources/data/workstation.json`
 - Documentation: `docs/` directory
 
 ---
@@ -210,4 +285,3 @@ For more detailed information:
 - [COORDINATE_SYSTEM.md](COORDINATE_SYSTEM.md) - Coordinate system details
 - [MANUAL_PATH_ROUTING_IMPLEMENTATION_PLAN.md](MANUAL_PATH_ROUTING_IMPLEMENTATION_PLAN.md) - Routing implementation
 - [WORKSTATION_JSON_VALIDATION_RULES.md](WORKSTATION_JSON_VALIDATION_RULES.md) - JSON validation rules
-
