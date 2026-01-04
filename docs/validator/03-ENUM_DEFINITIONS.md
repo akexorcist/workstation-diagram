@@ -27,22 +27,23 @@ Valid values for `device.category`:
 
 ```
 HUB
-PERIPHERAL
-CENTRAL_DEVICE
+DEVICE
+HOST
 ```
 
 ### Description
 
 - **HUB**: Devices that connect multiple other devices (docking stations, USB hubs)
-- **PERIPHERAL**: Accessory devices (monitors, storage, cameras)
-- **CENTRAL_DEVICE**: Primary devices (laptops, desktops, gaming consoles)
+- **DEVICE**: End-user devices (monitors, storage, cameras, peripherals)
+- **HOST**: Primary computing devices (laptops, desktops, gaming consoles)
 
 ### Usage Examples
 
 ```json
-{ "category": "CENTRAL_DEVICE" }    // ✅ Valid
-{ "category": "HUB" }               // ✅ Valid  
-{ "category": "Central" }           // ❌ Invalid (wrong format)
+{ "category": "HOST" }    // ✅ Valid
+{ "category": "HUB" }     // ✅ Valid  
+{ "category": "DEVICE" }  // ✅ Valid
+{ "category": "Host" }    // ❌ Invalid (wrong format)
 ```
 
 ---
@@ -224,7 +225,7 @@ If an unknown enum value is encountered:
 # The following sets define allowed values for other enums
 
 VALID_DEVICE_CATEGORIES = {
-    "HUB", "PERIPHERAL", "CENTRAL_DEVICE"
+    "HUB", "DEVICE", "HOST"
 }
 
 VALID_PORT_TYPES = {

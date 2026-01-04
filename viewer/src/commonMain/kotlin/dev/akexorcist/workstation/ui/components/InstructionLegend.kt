@@ -27,9 +27,9 @@ fun InstructionLegend(
     modifier: Modifier = Modifier
 ) {
     val legendItems = listOf(
-        LegendItem("Computer", WorkstationTheme.themeColor.centralDevice),
+        LegendItem("Host", WorkstationTheme.themeColor.host),
         LegendItem("Hub", WorkstationTheme.themeColor.hub),
-        LegendItem("Accessory", WorkstationTheme.themeColor.peripheral),
+        LegendItem("Device", WorkstationTheme.themeColor.device),
         LegendItem("Output Connector", WorkstationTheme.themeColor.connection.outputActiveColor),
         LegendItem("Input Connector", WorkstationTheme.themeColor.connection.inputActiveColor)
     )

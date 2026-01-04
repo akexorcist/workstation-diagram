@@ -5,7 +5,7 @@
       "description": "MacBook Pro 14\" 2021",
       "title": "MacBook Pro",
       "label": "Office Laptop",
-      "category": "CENTRAL_DEVICE",
+      "category": "HOST",
       "position": {
         "x": 100.0,
         "y": 800.0
@@ -58,7 +58,7 @@
       "description": "MacBook Pro 14\" 2023",
       "title": "MacBook Pro",
       "label": "Personal Laptop",
-      "category": "CENTRAL_DEVICE",
+      "category": "HOST",
       "position": {
         "x": 100.0,
         "y": 900.0
@@ -338,7 +338,7 @@
       "description": "15.6\" FHD 1080P Portable Monitor",
       "title": "Arzopa A1",
       "label": "Secondary Monitor",
-      "category": "HUB",
+      "category": "DEVICE",
       "position": {
         "x": 1500.0,
         "y": 680.0
@@ -413,7 +413,7 @@
       "description": "Custom Gaming PC",
       "title": "",
       "label": "PC Desktop",
-      "category": "CENTRAL_DEVICE",
+      "category": "HOST",
       "position": {
         "x": 100.0,
         "y": 1400.0
@@ -580,7 +580,7 @@
       "description": "Nintendo Switch Splatoon 2 Bundle Edition",
       "title": "Nintendo Switch",
       "label": "Gaming Console",
-      "category": "CENTRAL_DEVICE",
+      "category": "HOST",
       "position": {
         "x": 100.0,
         "y": 1160.0
@@ -641,7 +641,7 @@
       "description": "PlayStation 5 Disk Edition with Final Fantasy XVI Limited Cover",
       "title": "PlayStation 5",
       "label": "Gaming Console",
-      "category": "CENTRAL_DEVICE",
+      "category": "HOST",
       "position": {
         "x": 100.0,
         "y": 1240.0
@@ -799,7 +799,7 @@
       "description": "E-mount camera with APS-C Sensor",
       "title": "Sony α6000",
       "label": "Digital Camera",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1000.0,
         "y": 500.0
@@ -865,7 +865,7 @@
       "description": "Turn your camera into a webcam",
       "title": "Elgato Cam Link 4K",
       "label": "HDMI To Webcam",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1000.0,
         "y": 600.0
@@ -923,7 +923,7 @@
       "description": "15 customizable LCD keys to control apps and platforms",
       "title": "Elgato Stream Deck MK.2",
       "label": "Stream Deck",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1000.0,
         "y": 820.0
@@ -976,7 +976,7 @@
       "description": "Portable Storage High-performance USB-C external SSD",
       "title": "Seagate Fast SSD 512GB",
       "label": "External SSD",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1000.0,
         "y": 920.0
@@ -1299,7 +1299,7 @@
       "description": "Bluetooth Speaker",
       "title": "Bose SoundLink Mini SE",
       "label": "Speaker",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 2000.0,
         "y": 680.0
@@ -1377,7 +1377,7 @@
       "description": "Wired High-Fidelity Gaming Audio",
       "title": "SteelSeries Arctis Nova Pro",
       "label": "Gaming Headset",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 2000.0,
         "y": 1360.0
@@ -1438,7 +1438,7 @@
       "description": "Cardioid USB Gaming Microphone",
       "title": "NZXT Capsule",
       "label": "Microphone",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 2000.0,
         "y": 840.0
@@ -1511,7 +1511,7 @@
       "description": "Video Capture Device",
       "title": "Elgato HD60 X",
       "label": "HDMI Capture",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 2000.0,
         "y": 940.0
@@ -1572,7 +1572,7 @@
       "description": "Test device for app development",
       "title": "OPPO A18 (CPH2591)",
       "label": "Android Device",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 2000.0,
         "y": 1040.0
@@ -1649,7 +1649,7 @@
       "description": "Professional-quality USB dynamic microphone",
       "title": "Shure MV7",
       "label": "Microphone",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 2000.0,
         "y": 1220.0
@@ -1722,7 +1722,7 @@
       "description": "Monitor Light Bar for Computer",
       "title": "Baseus I-Wok Monitor Light Bar",
       "label": "LED Light Bar",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 2000.0,
         "y": 480.0
@@ -1783,7 +1783,7 @@
       "description": "Charging pad",
       "title": "IKEA NORDMÄRKE",
       "label": "Wireless Charger",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 2000.0,
         "y": 580.0
@@ -1836,7 +1836,7 @@
       "description": "USB wireless receiver for Wireless Gaming Mouse",
       "title": "Logitech G Pro X Superlight",
       "label": "USB Dongle",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1500.0,
         "y": 1520.0
@@ -1909,7 +1909,7 @@
       "description": "USB wireless receiver for Logi Bolt",
       "title": "Logi Bolt",
       "label": "USB Dongle",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1500.0,
         "y": 1640.0

@@ -135,7 +135,7 @@ This document defines the exact structure of `workstation.json` that the validat
   "name": "Main Laptop",
   "model": "MacBook Pro",
   "type": "LAPTOP",
-  "category": "CENTRAL_DEVICE",
+  "category": "HOST",
   "position": { "x": 100, "y": 200 },
   "size": { "width": 200, "height": 150 },
   "ports": [

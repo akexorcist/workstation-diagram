@@ -138,8 +138,8 @@ fun DeviceNode(
 private fun getDeviceColor(category: DeviceCategory): Color {
     return when (category) {
         DeviceCategory.HUB -> WorkstationTheme.themeColor.hub
-        DeviceCategory.PERIPHERAL -> WorkstationTheme.themeColor.peripheral
-        DeviceCategory.CENTRAL_DEVICE -> WorkstationTheme.themeColor.centralDevice
+        DeviceCategory.DEVICE -> WorkstationTheme.themeColor.device
+        DeviceCategory.HOST -> WorkstationTheme.themeColor.host
     }
 }
 

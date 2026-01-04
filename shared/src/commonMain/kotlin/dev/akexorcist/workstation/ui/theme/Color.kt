@@ -94,8 +94,8 @@ data class ContentColor(
     val outlinedButtonColors: @Composable () -> ButtonColors,
     val iconButtonColors: @Composable () -> IconButtonColors,
     val hub: Color,
-    val peripheral: Color,
-    val centralDevice: Color,
+    val device: Color,
+    val host: Color,
     val connection: ConnectionLineComponent,
 )
 
@@ -130,8 +130,8 @@ val lightContentColor = ContentColor(
         )
     },
     hub = ThemeColor.Teal100,
-    peripheral = ThemeColor.Amber100,
-    centralDevice = ThemeColor.Blue100,
+    device = ThemeColor.Amber100,
+    host = ThemeColor.Blue100,
     connection = ConnectionLineComponent(
         inputActiveColor = ThemeColor.Indigo100,
         inputInactiveColor = ThemeColor.Indigo100.copy(alpha = 0.25f),
@@ -176,8 +176,8 @@ val darkContentColor = ContentColor(
         )
     },
     hub = ThemeColor.DimTeal500,
-    peripheral = ThemeColor.DimAmber500,
-    centralDevice = ThemeColor.DimBlue500,
+    device = ThemeColor.DimAmber500,
+    host = ThemeColor.DimBlue500,
     connection = ConnectionLineComponent(
         inputActiveColor = ThemeColor.DimIndigo500,
         inputInactiveColor = ThemeColor.DimIndigo500.copy(alpha = 0.25f),

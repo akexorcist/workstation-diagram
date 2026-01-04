@@ -23,7 +23,7 @@ actual fun readResourceFile(path: String): String {
       "description": "MacBook Pro 14\" 2021",
       "title": "MacBook Pro",
       "label": "Office Laptop",
-      "category": "CENTRAL_DEVICE",
+      "category": "HOST",
       "position": {
         "x": 120.0,
         "y": 800.0
@@ -76,7 +76,7 @@ actual fun readResourceFile(path: String): String {
       "description": "MacBook Pro 14\" 2023",
       "title": "MacBook Pro",
       "label": "Personal Laptop",
-      "category": "CENTRAL_DEVICE",
+      "category": "HOST",
       "position": {
         "x": 120.0,
         "y": 900.0
@@ -431,7 +431,7 @@ actual fun readResourceFile(path: String): String {
       "description": "Custom Gaming PC",
       "title": "",
       "label": "PC Desktop",
-      "category": "CENTRAL_DEVICE",
+      "category": "HOST",
       "position": {
         "x": 160.0,
         "y": 1400.0
@@ -598,7 +598,7 @@ actual fun readResourceFile(path: String): String {
       "description": "Nintendo Switch Splatoon 2 Bundle Edition",
       "title": "Nintendo Switch",
       "label": "Gaming Console",
-      "category": "CENTRAL_DEVICE",
+      "category": "HOST",
       "position": {
         "x": 140.0,
         "y": 1140.0
@@ -659,7 +659,7 @@ actual fun readResourceFile(path: String): String {
       "description": "PlayStation 5 Disk Edition with Final Fantasy XVI Limited Cover",
       "title": "PlayStation 5",
       "label": "Gaming Console",
-      "category": "CENTRAL_DEVICE",
+      "category": "HOST",
       "position": {
         "x": 140.0,
         "y": 1240.0
@@ -817,7 +817,7 @@ actual fun readResourceFile(path: String): String {
       "description": "E-mount camera with APS-C Sensor",
       "title": "Sony α6000",
       "label": "Digital Camera",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 960.0,
         "y": 500.0
@@ -883,7 +883,7 @@ actual fun readResourceFile(path: String): String {
       "description": "Turn your camera into a webcam",
       "title": "Elgato Cam Link 4K",
       "label": "HDMI To Webcam",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 960.0,
         "y": 600.0
@@ -941,7 +941,7 @@ actual fun readResourceFile(path: String): String {
       "description": "15 customizable LCD keys to control apps and platforms",
       "title": "Elgato Stream Deck MK.2",
       "label": "Stream Deck",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 960.0,
         "y": 860.0
@@ -994,7 +994,7 @@ actual fun readResourceFile(path: String): String {
       "description": "Portable Storage High-performance USB-C external SSD",
       "title": "Seagate Fast SSD 512GB",
       "label": "External SSD",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 960.0,
         "y": 960.0
@@ -1317,7 +1317,7 @@ actual fun readResourceFile(path: String): String {
       "description": "Bluetooth Speaker",
       "title": "Bose SoundLink Mini SE",
       "label": "Speaker",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1860.0,
         "y": 680.0
@@ -1395,7 +1395,7 @@ actual fun readResourceFile(path: String): String {
       "description": "Wired High-Fidelity Gaming Audio",
       "title": "SteelSeries Arctis Nova Pro",
       "label": "Gaming Headset",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1860.0,
         "y": 1360.0
@@ -1456,7 +1456,7 @@ actual fun readResourceFile(path: String): String {
       "description": "Cardioid USB Gaming Microphone",
       "title": "NZXT Capsule",
       "label": "Microphone",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1860.0,
         "y": 840.0
@@ -1529,7 +1529,7 @@ actual fun readResourceFile(path: String): String {
       "description": "Video Capture Device",
       "title": "Elgato HD60 X",
       "label": "HDMI Capture",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1860.0,
         "y": 940.0
@@ -1590,7 +1590,7 @@ actual fun readResourceFile(path: String): String {
       "description": "Test device for app development",
       "title": "OPPO A18 (CPH2591)",
       "label": "Android Device",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1860.0,
         "y": 1040.0
@@ -1667,7 +1667,7 @@ actual fun readResourceFile(path: String): String {
       "description": "Professional-quality USB dynamic microphone",
       "title": "Shure MV7",
       "label": "Microphone",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1860.0,
         "y": 1220.0
@@ -1740,7 +1740,7 @@ actual fun readResourceFile(path: String): String {
       "description": "Monitor Light Bar for Computer",
       "title": "Baseus I-Wok Monitor Light Bar",
       "label": "LED Light Bar",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1860.0,
         "y": 480.0
@@ -1801,7 +1801,7 @@ actual fun readResourceFile(path: String): String {
       "description": "Charging pad",
       "title": "IKEA NORDMÄRKE",
       "label": "Wireless Charger",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1860.0,
         "y": 580.0
@@ -1854,7 +1854,7 @@ actual fun readResourceFile(path: String): String {
       "description": "USB wireless receiver for Wireless Gaming Mouse",
       "title": "Logitech G Pro X Superlight",
       "label": "USB Dongle",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1420.0,
         "y": 1500.0
@@ -1927,7 +1927,7 @@ actual fun readResourceFile(path: String): String {
       "description": "USB wireless receiver for Logi Bolt",
       "title": "Logi Bolt",
       "label": "USB Dongle",
-      "category": "PERIPHERAL",
+      "category": "DEVICE",
       "position": {
         "x": 1420.0,
         "y": 1600.0

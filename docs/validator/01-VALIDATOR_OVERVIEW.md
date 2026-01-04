@@ -197,7 +197,7 @@ See `02-DATA_MODEL_SPECIFICATION.md` for complete schema.
 The validator **MUST** recognize the same enum values:
 
 - **DeviceType**: LAPTOP, MONITOR, DOCKING_STATION, USB_HUB, STORAGE, etc.
-- **DeviceCategory**: CENTRAL_DEVICE, PERIPHERAL, HUB, etc.
+- **DeviceCategory**: HOST, DEVICE, HUB, etc.
 - **PortType**: USB_C, USB_A_3_0, HDMI, DISPLAY_PORT, etc.
 - **PortDirection**: INPUT, OUTPUT, BIDIRECTIONAL
 - **DeviceSide**: TOP, BOTTOM, LEFT, RIGHT

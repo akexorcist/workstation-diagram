@@ -145,8 +145,8 @@ fun DeviceDetailsDialog(
                             shape = RoundedCornerShape(4.dp),
                             color = when (device.category) {
                                 DeviceCategory.HUB -> WorkstationTheme.themeColor.hub
-                                DeviceCategory.PERIPHERAL -> WorkstationTheme.themeColor.peripheral
-                                DeviceCategory.CENTRAL_DEVICE -> WorkstationTheme.themeColor.centralDevice
+                                DeviceCategory.DEVICE -> WorkstationTheme.themeColor.device
+                                DeviceCategory.HOST -> WorkstationTheme.themeColor.host
                             },
                             modifier = Modifier.padding(vertical = 8.dp)
                         ) {

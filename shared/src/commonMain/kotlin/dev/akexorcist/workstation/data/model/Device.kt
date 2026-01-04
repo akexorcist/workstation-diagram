@@ -19,8 +19,8 @@ data class Device(
 @Serializable
 enum class DeviceCategory {
     HUB,
-    PERIPHERAL,
-    CENTRAL_DEVICE
+    DEVICE,
+    HOST
 }
 
 @Serializable

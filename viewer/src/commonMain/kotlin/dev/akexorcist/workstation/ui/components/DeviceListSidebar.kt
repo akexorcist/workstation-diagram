@@ -152,8 +152,8 @@ private fun DeviceListItem(
 
     val categoryColor = when (device.category) {
         DeviceCategory.HUB -> WorkstationTheme.themeColor.hub
-        DeviceCategory.PERIPHERAL -> WorkstationTheme.themeColor.peripheral
-        DeviceCategory.CENTRAL_DEVICE -> WorkstationTheme.themeColor.centralDevice
+        DeviceCategory.DEVICE -> WorkstationTheme.themeColor.device
+        DeviceCategory.HOST -> WorkstationTheme.themeColor.host
     }
 
     Box(
