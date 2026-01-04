@@ -27,7 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.akexorcist.workstation.ui.theme.WorkstationTheme
-import dev.akexorcist.workstation.utils.defaultShadow
+import dev.akexorcist.workstation.ui.utils.defaultShadow
 import kotlinx.datetime.LocalDate
 
 @Composable

@@ -14,12 +14,14 @@ import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.input.pointer.pointerInput
 import dev.akexorcist.workstation.data.model.Offset as DataOffset
+import dev.akexorcist.workstation.data.model.Size
+import dev.akexorcist.workstation.data.model.WorkstationLayout
 import dev.akexorcist.workstation.utils.CoordinateTransformer
 
 @Composable
 fun DeviceOverlay(
-    layout: dev.akexorcist.workstation.data.model.WorkstationLayout,
-    canvasSize: dev.akexorcist.workstation.data.model.Size,
+    layout: WorkstationLayout,
+    canvasSize: Size,
     zoom: Float,
     panOffset: DataOffset,
     onHoverDevice: (String?) -> Unit,
@@ -93,8 +95,8 @@ fun DeviceOverlay(
 
 internal fun findDeviceAtPoint(
     point: Offset,
-    layout: dev.akexorcist.workstation.data.model.WorkstationLayout,
-    canvasSize: dev.akexorcist.workstation.data.model.Size,
+    layout: WorkstationLayout,
+    canvasSize: Size,
     zoom: Float,
     panOffset: DataOffset
 ): String? {

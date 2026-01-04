@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.akexorcist.workstation.ui.theme.ThemeColor
 import dev.akexorcist.workstation.ui.theme.WorkstationTheme
-import dev.akexorcist.workstation.utils.defaultShadow
+import dev.akexorcist.workstation.ui.utils.defaultShadow
 
 @Composable
 fun ErrorState(

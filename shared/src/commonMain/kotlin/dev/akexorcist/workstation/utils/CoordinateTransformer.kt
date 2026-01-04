@@ -3,7 +3,9 @@ package dev.akexorcist.workstation.utils
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import dev.akexorcist.workstation.data.model.LayoutMetadata
+import dev.akexorcist.workstation.data.model.Offset as DataOffset
 import dev.akexorcist.workstation.data.model.Position
+import dev.akexorcist.workstation.data.model.Size as DataSize
 
 /**
  * Transforms coordinates between different coordinate systems:
@@ -40,9 +42,9 @@ object CoordinateTransformer {
     fun transformPosition(
         dataPosition: Position,
         metadata: LayoutMetadata,
-        actualCanvasSize: dev.akexorcist.workstation.data.model.Size,
+        actualCanvasSize: DataSize,
         zoom: Float,
-        panOffset: dev.akexorcist.workstation.data.model.Offset
+        panOffset: DataOffset
     ): Offset {
         // Step 1: Data space to world space
         val worldPosition = if (isVirtualCoordinates(metadata)) {
@@ -70,16 +72,16 @@ object CoordinateTransformer {
      * Transforms a size from data space to screen space
      */
     fun transformSize(
-        dataSize: dev.akexorcist.workstation.data.model.Size,
+        dataSize: DataSize,
         metadata: LayoutMetadata,
-        actualCanvasSize: dev.akexorcist.workstation.data.model.Size,
+        actualCanvasSize: DataSize,
         zoom: Float
     ): Size {
         val worldSize = if (isVirtualCoordinates(metadata)) {
             val virtualCanvas = metadata.virtualCanvas!!
             val scaleX = actualCanvasSize.width / virtualCanvas.width
             val scaleY = actualCanvasSize.height / virtualCanvas.height
-            dev.akexorcist.workstation.data.model.Size(
+            DataSize(
                 width = dataSize.width * scaleX,
                 height = dataSize.height * scaleY
             )
@@ -102,11 +104,11 @@ object CoordinateTransformer {
         width: Float,
         height: Float,
         metadata: LayoutMetadata? = null
-    ): dev.akexorcist.workstation.data.model.Size {
+    ): DataSize {
         return if (metadata != null && isVirtualCoordinates(metadata)) {
-            metadata.virtualCanvas ?: dev.akexorcist.workstation.data.model.Size(width, height)
+            metadata.virtualCanvas ?: DataSize(width, height)
         } else {
-            dev.akexorcist.workstation.data.model.Size(width, height)
+            DataSize(width, height)
         }
     }
     
@@ -116,8 +118,8 @@ object CoordinateTransformer {
     fun canvasSize(
         width: Float,
         height: Float
-    ): dev.akexorcist.workstation.data.model.Size {
-        return dev.akexorcist.workstation.data.model.Size(width, height)
+    ): DataSize {
+        return DataSize(width, height)
     }
 }
 

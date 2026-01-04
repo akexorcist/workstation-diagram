@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import dev.akexorcist.workstation.ui.theme.WorkstationTheme
-import dev.akexorcist.workstation.utils.defaultShadow
+import dev.akexorcist.workstation.ui.utils.defaultShadow
 
 
 @Composable

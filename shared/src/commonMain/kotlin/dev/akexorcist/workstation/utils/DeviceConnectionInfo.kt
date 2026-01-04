@@ -48,30 +48,32 @@ object DeviceConnectionInfo {
         }
 
         // Find all devices that are directly connected to the hovered device
-        val relatedDeviceIds = mutableSetOf<String>()
-        relatedDeviceIds.add(hoveredDeviceId) // Include the hovered device itself
-
+        val connectedDeviceIds = mutableSetOf<String>()
         layout.connections.forEach { connection ->
             if (connection.sourceDeviceId == hoveredDeviceId) {
-                relatedDeviceIds.add(connection.targetDeviceId)
+                connectedDeviceIds.add(connection.targetDeviceId)
             } else if (connection.targetDeviceId == hoveredDeviceId) {
-                relatedDeviceIds.add(connection.sourceDeviceId)
+                connectedDeviceIds.add(connection.sourceDeviceId)
             }
         }
-
+        
+        // Add the hovered device itself
+        connectedDeviceIds.add(hoveredDeviceId)
+        
+        // Create a map for all devices
         return layout.devices.associate { device ->
-            device.id to (device.id in relatedDeviceIds)
+            device.id to (device.id in connectedDeviceIds)
         }
     }
 
     /**
      * Creates a map of which ports are related to a hovered device.
-     * A port is considered related if it belongs to the hovered device or 
-     * to a device that is connected to the hovered device.
+     * A port is considered related if it belongs to the hovered device or
+     * is connected to any port on the hovered device.
      * 
      * @param hoveredDeviceId The ID of the device being hovered over, or null if no device is hovered
      * @param layout The current workstation layout containing all devices and connections
-     * @return Map of port info strings (format: "deviceId:portId") to a Boolean indicating if they are related
+     * @return Map of port identifiers (deviceId:portId) to a Boolean indicating if they are related
      */
     fun getRelatedPortsMap(
         hoveredDeviceId: String?,
@@ -81,33 +83,47 @@ object DeviceConnectionInfo {
             return emptyMap()
         }
 
-        val relatedDeviceIds = mutableSetOf<String>()
-        relatedDeviceIds.add(hoveredDeviceId)
-
+        // Get all ports on the hovered device
+        val hoveredDevice = layout.devices.find { it.id == hoveredDeviceId } ?: return emptyMap()
+        val hoveredDevicePorts = hoveredDevice.ports.map { it.id }.toSet()
+        
+        // Find all ports that are connected to the hovered device's ports
+        val connectedPortMap = mutableMapOf<String, Boolean>()
+        
+        // First, add all ports of the hovered device as related
+        hoveredDevicePorts.forEach { portId ->
+            connectedPortMap["$hoveredDeviceId:$portId"] = true
+        }
+        
+        // Then add all ports connected to the hovered device
         layout.connections.forEach { connection ->
             if (connection.sourceDeviceId == hoveredDeviceId) {
-                relatedDeviceIds.add(connection.targetDeviceId)
+                // This is a port on another device connected to the hovered device
+                connectedPortMap["${connection.targetDeviceId}:${connection.targetPortId}"] = true
             } else if (connection.targetDeviceId == hoveredDeviceId) {
-                relatedDeviceIds.add(connection.sourceDeviceId)
+                // This is a port on another device connected to the hovered device
+                connectedPortMap["${connection.sourceDeviceId}:${connection.sourcePortId}"] = true
             }
         }
-
-        val relatedPortsMap = mutableMapOf<String, Boolean>()
+        
+        // Create a complete map for all ports
+        val result = mutableMapOf<String, Boolean>()
+        
+        // Add all known ports (and mark them as related or not)
         layout.devices.forEach { device ->
             device.ports.forEach { port ->
-                val portInfo = "${device.id}:${port.id}"
-                relatedPortsMap[portInfo] = device.id in relatedDeviceIds
+                val portKey = "${device.id}:${port.id}"
+                result[portKey] = connectedPortMap.containsKey(portKey)
             }
         }
-
-        return relatedPortsMap
+        
+        return result
     }
-
+    
     /**
      * Creates a map of which connections are related to a hovered port.
-     * A connection is considered related if it uses the hovered port.
      * 
-     * @param hoveredPortInfo The port info string (format: "deviceId:portId"), or null if no port is hovered
+     * @param hoveredPortInfo The information about the hovered port (deviceId:portId), or null if no port is hovered
      * @param layout The current workstation layout containing all devices and connections
      * @return Map of connection IDs to a Boolean indicating if they are related to the hovered port
      */
@@ -118,27 +134,29 @@ object DeviceConnectionInfo {
         if (hoveredPortInfo == null) {
             return emptyMap()
         }
-
+        
+        // Parse the device ID and port ID from the hoveredPortInfo string (deviceId:portId)
         val parts = hoveredPortInfo.split(":")
         if (parts.size != 2) {
             return emptyMap()
         }
-
-        val (hoveredDeviceId, hoveredPortId) = parts
-
+        
+        val deviceId = parts[0]
+        val portId = parts[1]
+        
         return layout.connections.associate { connection ->
-            val isRelated = (connection.sourceDeviceId == hoveredDeviceId && connection.sourcePortId == hoveredPortId) ||
-                            (connection.targetDeviceId == hoveredDeviceId && connection.targetPortId == hoveredPortId)
+            val isRelated = (connection.sourceDeviceId == deviceId && connection.sourcePortId == portId) || 
+                            (connection.targetDeviceId == deviceId && connection.targetPortId == portId)
             connection.id to isRelated
         }
     }
-
+    
     /**
      * Creates a map of which devices are related to a hovered port.
-     * A device is considered related if it's the device that owns the hovered port or 
-     * is connected to that port by any connection.
+     * A device is considered related if it's the device containing the hovered port or
+     * is connected to the hovered port by any connection.
      * 
-     * @param hoveredPortInfo The port info string (format: "deviceId:portId"), or null if no port is hovered
+     * @param hoveredPortInfo The information about the hovered port (deviceId:portId), or null if no port is hovered
      * @param layout The current workstation layout containing all devices and connections
      * @return Map of device IDs to a Boolean indicating if they are related to the hovered port
      */
@@ -149,38 +167,44 @@ object DeviceConnectionInfo {
         if (hoveredPortInfo == null) {
             return emptyMap()
         }
-
+        
+        // Parse the device ID and port ID from the hoveredPortInfo string (deviceId:portId)
         val parts = hoveredPortInfo.split(":")
         if (parts.size != 2) {
             return emptyMap()
         }
-
-        val (hoveredDeviceId, hoveredPortId) = parts
-        val relatedDeviceIds = mutableSetOf<String>()
-        relatedDeviceIds.add(hoveredDeviceId) // Include the device that owns the port
-
-        // Find all devices connected to this port
+        
+        val deviceId = parts[0]
+        val portId = parts[1]
+        
+        // Find all devices that are connected to this port
+        val connectedDeviceIds = mutableSetOf<String>()
+        // Add the device containing this port
+        connectedDeviceIds.add(deviceId)
+        
+        // Add any devices connected to this port
         layout.connections.forEach { connection ->
-            if (connection.sourceDeviceId == hoveredDeviceId && connection.sourcePortId == hoveredPortId) {
-                relatedDeviceIds.add(connection.targetDeviceId)
-            } else if (connection.targetDeviceId == hoveredDeviceId && connection.targetPortId == hoveredPortId) {
-                relatedDeviceIds.add(connection.sourceDeviceId)
+            if (connection.sourceDeviceId == deviceId && connection.sourcePortId == portId) {
+                connectedDeviceIds.add(connection.targetDeviceId)
+            } else if (connection.targetDeviceId == deviceId && connection.targetPortId == portId) {
+                connectedDeviceIds.add(connection.sourceDeviceId)
             }
         }
-
+        
+        // Create a map for all devices
         return layout.devices.associate { device ->
-            device.id to (device.id in relatedDeviceIds)
+            device.id to (device.id in connectedDeviceIds)
         }
     }
-
+    
     /**
      * Creates a map of which ports are related to a hovered port.
-     * A port is considered related if it's the hovered port itself or 
+     * A port is considered related if it's the hovered port itself or
      * is connected to the hovered port by any connection.
      * 
-     * @param hoveredPortInfo The port info string (format: "deviceId:portId"), or null if no port is hovered
+     * @param hoveredPortInfo The information about the hovered port (deviceId:portId), or null if no port is hovered
      * @param layout The current workstation layout containing all devices and connections
-     * @return Map of port info strings (format: "deviceId:portId") to a Boolean indicating if they are related
+     * @return Map of port identifiers (deviceId:portId) to a Boolean indicating if they are related
      */
     fun getRelatedPortsForPort(
         hoveredPortInfo: String?,
@@ -189,34 +213,42 @@ object DeviceConnectionInfo {
         if (hoveredPortInfo == null) {
             return emptyMap()
         }
-
+        
+        // Parse the device ID and port ID from the hoveredPortInfo string (deviceId:portId)
         val parts = hoveredPortInfo.split(":")
         if (parts.size != 2) {
             return emptyMap()
         }
-
-        val (hoveredDeviceId, hoveredPortId) = parts
-        val relatedPortInfoSet = mutableSetOf<String>()
-        relatedPortInfoSet.add(hoveredPortInfo) // Include the hovered port itself
-
-        // Find all ports connected to this port
+        
+        val deviceId = parts[0]
+        val portId = parts[1]
+        
+        // Find all ports that are connected to this port
+        val connectedPortMap = mutableMapOf<String, Boolean>()
+        
+        // Add the hovered port itself
+        connectedPortMap[hoveredPortInfo] = true
+        
+        // Add any ports connected to this port
         layout.connections.forEach { connection ->
-            if (connection.sourceDeviceId == hoveredDeviceId && connection.sourcePortId == hoveredPortId) {
-                relatedPortInfoSet.add("${connection.targetDeviceId}:${connection.targetPortId}")
-            } else if (connection.targetDeviceId == hoveredDeviceId && connection.targetPortId == hoveredPortId) {
-                relatedPortInfoSet.add("${connection.sourceDeviceId}:${connection.sourcePortId}")
+            if (connection.sourceDeviceId == deviceId && connection.sourcePortId == portId) {
+                connectedPortMap["${connection.targetDeviceId}:${connection.targetPortId}"] = true
+            } else if (connection.targetDeviceId == deviceId && connection.targetPortId == portId) {
+                connectedPortMap["${connection.sourceDeviceId}:${connection.sourcePortId}"] = true
             }
         }
-
-        val relatedPortsMap = mutableMapOf<String, Boolean>()
+        
+        // Create a complete map for all ports
+        val result = mutableMapOf<String, Boolean>()
+        
+        // Add all known ports (and mark them as related or not)
         layout.devices.forEach { device ->
             device.ports.forEach { port ->
-                val portInfo = "${device.id}:${port.id}"
-                relatedPortsMap[portInfo] = portInfo in relatedPortInfoSet
+                val portKey = "${device.id}:${port.id}"
+                result[portKey] = connectedPortMap.containsKey(portKey)
             }
         }
-
-        return relatedPortsMap
+        
+        return result
     }
 }
-

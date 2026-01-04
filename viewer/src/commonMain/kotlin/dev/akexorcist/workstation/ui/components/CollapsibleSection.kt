@@ -21,7 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.akexorcist.workstation.ui.theme.WorkstationTheme
-import dev.akexorcist.workstation.utils.defaultShadow
+import dev.akexorcist.workstation.ui.utils.defaultShadow
 import kotlin.math.max
 import kotlin.math.min
 
