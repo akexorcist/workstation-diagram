@@ -10,3 +10,4 @@ alwaysApply: true
 * Please keep the docs up-to-date when any changes applied
 * Use compile kotlin Gradle task to verify the code changes
 * For JSON file, don't reformatting or convert any text to unicode
+* Any position calculation, always supports zooming and panning on viewport
