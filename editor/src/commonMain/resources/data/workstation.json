@@ -2640,7 +2640,9 @@
       "maxZoom": 3.5
     },
     "grid": {
-
+      "enabled": true,
+      "size": 20.0,
+      "majorLineInterval": 5
     }
   }
 }
