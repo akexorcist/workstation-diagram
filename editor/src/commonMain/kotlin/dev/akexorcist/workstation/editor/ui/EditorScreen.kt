@@ -158,8 +158,6 @@ fun EditorScreen(
                             viewModel.resetZoom()
                             viewModel.centerViewportOnDevices(canvasSize.width, canvasSize.height)
                         },
-                        connectionAnimationEnabled = uiState.connectionAnimationEnabled,
-                        onConnectionAnimationToggle = { viewModel.toggleConnectionAnimation() },
                         isDarkTheme = uiState.isDarkTheme,
                         onThemeToggle = viewModel::toggleTheme,
                         viewportConfig = uiState.layout?.metadata?.viewport

@@ -39,8 +39,8 @@ import dev.akexorcist.workstation.utils.defaultShadow
  * @param zoom Current zoom level
  * @param onZoomChange Callback when zoom level changes
  * @param onReset Callback to reset zoom and pan to default
- * @param connectionAnimationEnabled Whether connection animations are enabled
- * @param onConnectionAnimationToggle Callback to toggle connection animations
+ * @param connectionAnimationEnabled Whether connection animations are enabled (optional, button hidden if null)
+ * @param onConnectionAnimationToggle Callback to toggle connection animations (optional, button hidden if null)
  * @param isDarkTheme Whether dark theme is enabled
  * @param onThemeToggle Callback to toggle theme
  * @param viewportConfig Configuration from workstation.json that defines zoom constraints
@@ -51,8 +51,8 @@ fun ControlPanel(
     zoom: Float,
     onZoomChange: (Float) -> Unit,
     onReset: () -> Unit,
-    connectionAnimationEnabled: Boolean,
-    onConnectionAnimationToggle: (Boolean) -> Unit,
+    connectionAnimationEnabled: Boolean? = null,
+    onConnectionAnimationToggle: ((Boolean) -> Unit)? = null,
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit,
     viewportConfig: dev.akexorcist.workstation.data.model.ViewportConfig? = null,
@@ -119,26 +119,27 @@ fun ControlPanel(
 
                 Spacer(modifier = Modifier.weight(1f))
 
+                if (connectionAnimationEnabled != null && onConnectionAnimationToggle != null) {
+                    FilledIconToggleButton(
+                        checked = connectionAnimationEnabled,
+                        onCheckedChange = onConnectionAnimationToggle,
+                        modifier = Modifier.size(40.dp),
+                        colors = IconButtonDefaults.filledIconToggleButtonColors(
+                            containerColor = WorkstationTheme.themeColor.surfaceVariant,
+                            checkedContainerColor = WorkstationTheme.themeColor.primary,
+                            contentColor = WorkstationTheme.themeColor.onSurfaceVariant,
+                            checkedContentColor = WorkstationTheme.themeColor.onPrimary
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Animation,
+                            contentDescription = "Toggle Connection Animation",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
 
-                FilledIconToggleButton(
-                    checked = connectionAnimationEnabled,
-                    onCheckedChange = onConnectionAnimationToggle,
-                    modifier = Modifier.size(40.dp),
-                    colors = IconButtonDefaults.filledIconToggleButtonColors(
-                        containerColor = WorkstationTheme.themeColor.surfaceVariant,
-                        checkedContainerColor = WorkstationTheme.themeColor.primary,
-                        contentColor = WorkstationTheme.themeColor.onSurfaceVariant,
-                        checkedContentColor = WorkstationTheme.themeColor.onPrimary
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Animation,
-                        contentDescription = "Toggle Connection Animation",
-                        modifier = Modifier.size(24.dp)
-                    )
+                    Spacer(modifier = Modifier.width(8.dp))
                 }
-
-                Spacer(modifier = Modifier.width(8.dp))
 
 
                 FilledIconToggleButton(
