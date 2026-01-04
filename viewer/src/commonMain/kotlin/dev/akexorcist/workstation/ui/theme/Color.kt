@@ -183,10 +183,10 @@ val darkContentColor = ContentColor(
         inputInactiveColor = ThemeColor.DimIndigo500.copy(alpha = 0.25f),
         outputActiveColor = ThemeColor.DimPink500,
         outputInactiveColor = ThemeColor.DimPink500.copy(alpha = 0.25f),
-        inputBackgroundActiveColor = ThemeColor.DimIndigo600.copy(alpha = 0.5f),
-        inputBackgroundInactiveColor = ThemeColor.DimIndigo600.copy(alpha = 0.2f),
-        outputBackgroundActiveColor = ThemeColor.DimPink600.copy(alpha = 0.5f),
-        outputBackgroundInactiveColor = ThemeColor.DimPink600.copy(alpha = 0.2f),
+        inputBackgroundActiveColor = Color(0xFF25232A),
+        inputBackgroundInactiveColor = Color(0xFF25232A),
+        outputBackgroundActiveColor = Color(0xFF292328),
+        outputBackgroundInactiveColor = Color(0xFF292328),
         spacingColor = ThemeColor.Gray900
     )
 )

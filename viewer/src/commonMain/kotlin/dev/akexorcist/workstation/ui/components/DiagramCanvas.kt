@@ -263,6 +263,7 @@ fun ConnectionCanvas(
         mutableStateOf(0f)
     }
     val connectionTheme = WorkstationTheme.themeColor.connection
+    val viewportBackgroundColor = WorkstationTheme.themeColor.background
     val hoveredConnectionId: String? = null
 
     val deviceMap = layout.devices.associateBy { it.id }
@@ -483,6 +484,7 @@ fun ConnectionCanvas(
                         val adjustedEndBg = endBackgroundColor.copy(alpha = endBackgroundColor.alpha * opacityMultiplier)
                         val adjustedStartFg = startForegroundColor.copy(alpha = startForegroundColor.alpha * opacityMultiplier)
                         val adjustedEndFg = endForegroundColor.copy(alpha = endForegroundColor.alpha * opacityMultiplier)
+                        val adjustedViewportBackground = viewportBackgroundColor.copy(alpha = viewportBackgroundColor.alpha * RenderingConfig.connectionBackgroundBorderOpacity * opacityMultiplier)
 
                         drawGradientConnectionPath(
                             path = path,
@@ -492,6 +494,7 @@ fun ConnectionCanvas(
                             endForegroundColor = adjustedEndFg,
                             zoom = zoom,
                             phase = if (isAnimationEnabled) phase.value else -1f,
+                            viewportBackgroundColor = adjustedViewportBackground,
                         )
                     }
                 }
@@ -641,11 +644,13 @@ private fun DrawScope.drawGradientConnectionPath(
     endForegroundColor: Color,
     zoom: Float,
     phase: Float = 0f,
+    viewportBackgroundColor: Color,
 ) {
     if (path.size < 2) return
 
     val backgroundWidth = RenderingConfig.connectionBackgroundWidth * zoom
     val foregroundWidth = RenderingConfig.connectionForegroundWidth * zoom
+    val borderWidth = RenderingConfig.connectionBackgroundBorderWidth * zoom
 
     var totalPathLength = 0f
     val segmentLengths = mutableListOf<Float>()
@@ -673,6 +678,18 @@ private fun DrawScope.drawGradientConnectionPath(
             }
         }
     }
+
+    val borderStrokeWidth = backgroundWidth + 2 * borderWidth
+    val borderColor = viewportBackgroundColor.copy(alpha = viewportBackgroundColor.alpha * RenderingConfig.connectionBackgroundBorderOpacity)
+    drawPath(
+        path = backgroundPath,
+        color = borderColor,
+        style = Stroke(
+            width = borderStrokeWidth,
+            cap = StrokeCap.Round,
+            join = if (useCurvedCorners) StrokeJoin.Round else StrokeJoin.Miter
+        )
+    )
 
     val backgroundBrush = Brush.linearGradient(
         colors = listOf(startBackgroundColor, endBackgroundColor),

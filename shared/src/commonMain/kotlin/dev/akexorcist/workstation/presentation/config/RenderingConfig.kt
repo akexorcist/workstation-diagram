@@ -11,6 +11,8 @@ object RenderingConfig {
     const val connectionWidth: Float = 4f
     const val connectionBackgroundWidth: Float = 10f
     const val connectionForegroundWidth: Float = 4f
+    const val connectionBackgroundBorderWidth: Float = 2f
+    const val connectionBackgroundBorderOpacity: Float = 0.25f
     const val connectionCornerRadius: Float = 12f
     
     const val connectionAnimationEnabled: Boolean = true
