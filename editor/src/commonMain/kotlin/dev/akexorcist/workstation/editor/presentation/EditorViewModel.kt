@@ -61,9 +61,11 @@ class EditorViewModel(
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.Default) {
             val virtualCanvas = layout.metadata.virtualCanvas ?: layout.metadata.canvasSize
 
+            val layoutWithSyncedPorts = syncPortPositionsWithConnections(layout)
+
             val routedConnections = processConnections(
-                devices = layout.devices,
-                connections = layout.connections,
+                devices = layoutWithSyncedPorts.devices,
+                connections = layoutWithSyncedPorts.connections,
                 virtualCanvasSize = virtualCanvas
             )
 
@@ -71,12 +73,87 @@ class EditorViewModel(
 
             kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
                 _uiState.value = _uiState.value.copy(
-                    layout = layout,
+                    layout = layoutWithSyncedPorts,
                     isLoading = false,
                     errorMessage = errorMessage,
                     routedConnections = routedConnections,
                     routedConnectionMap = routedConnectionMap
                 )
+            }
+        }
+    }
+    
+    private fun syncPortPositionsWithConnections(
+        layout: WorkstationLayout
+    ): WorkstationLayout {
+        val deviceMap = layout.devices.associateBy { it.id }.toMutableMap()
+        var hasChanges = false
+        
+        layout.connections.forEach { connection ->
+            val routingPoints = connection.routingPoints ?: return@forEach
+            if (routingPoints.isEmpty()) return@forEach
+            
+            val sourceDevice = deviceMap[connection.sourceDeviceId] ?: return@forEach
+            val sourcePort = sourceDevice.ports.find { it.id == connection.sourcePortId } ?: return@forEach
+            
+            val firstRoutingPoint = routingPoints.first()
+            val newSourcePortPosition = calculatePortPositionFromRoutingPoint(
+                device = sourceDevice,
+                port = sourcePort,
+                routingPoint = firstRoutingPoint
+            )
+            
+            if (newSourcePortPosition != null && newSourcePortPosition != sourcePort.position.position) {
+                val updatedPort = sourcePort.copy(
+                    position = sourcePort.position.copy(position = newSourcePortPosition)
+                )
+                val updatedPorts = sourceDevice.ports.map { if (it.id == sourcePort.id) updatedPort else it }
+                deviceMap[sourceDevice.id] = sourceDevice.copy(ports = updatedPorts)
+                hasChanges = true
+            }
+            
+            val targetDevice = deviceMap[connection.targetDeviceId] ?: return@forEach
+            val targetPort = targetDevice.ports.find { it.id == connection.targetPortId } ?: return@forEach
+            
+            val lastRoutingPoint = routingPoints.last()
+            val newTargetPortPosition = calculatePortPositionFromRoutingPoint(
+                device = targetDevice,
+                port = targetPort,
+                routingPoint = lastRoutingPoint
+            )
+            
+            if (newTargetPortPosition != null && newTargetPortPosition != targetPort.position.position) {
+                val updatedPort = targetPort.copy(
+                    position = targetPort.position.copy(position = newTargetPortPosition)
+                )
+                val updatedPorts = targetDevice.ports.map { if (it.id == targetPort.id) updatedPort else it }
+                deviceMap[targetDevice.id] = targetDevice.copy(ports = updatedPorts)
+                hasChanges = true
+            }
+        }
+        
+        return if (hasChanges) {
+            layout.copy(devices = deviceMap.values.toList())
+        } else {
+            layout
+        }
+    }
+    
+    private fun calculatePortPositionFromRoutingPoint(
+        device: dev.akexorcist.workstation.data.model.Device,
+        port: dev.akexorcist.workstation.data.model.Port,
+        routingPoint: Point
+    ): Float? {
+        return when (port.position.side) {
+            dev.akexorcist.workstation.data.model.DeviceSide.TOP,
+            dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
+                val newPosition = routingPoint.x - device.position.x
+                newPosition.coerceIn(0f, device.size.width)
+            }
+            dev.akexorcist.workstation.data.model.DeviceSide.LEFT,
+            dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
+                val newPosition = routingPoint.y - device.position.y
+                newPosition.coerceIn(0f, device.size.height)
             }
         }
     }
@@ -137,24 +214,20 @@ class EditorViewModel(
     ): Pair<Float, Float> {
         return when (port.position.side) {
             dev.akexorcist.workstation.data.model.DeviceSide.TOP -> {
-                val halfWidth = device.size.width / 2f
-                val portOffset = port.position.position.coerceIn(-halfWidth, halfWidth)
-                device.position.x + halfWidth + portOffset to device.position.y
+                val positionX = port.position.position.coerceIn(0f, device.size.width)
+                device.position.x + positionX to device.position.y
             }
             dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
-                val halfWidth = device.size.width / 2f
-                val portOffset = port.position.position.coerceIn(-halfWidth, halfWidth)
-                device.position.x + halfWidth + portOffset to device.position.y + device.size.height
+                val positionX = port.position.position.coerceIn(0f, device.size.width)
+                device.position.x + positionX to device.position.y + device.size.height
             }
             dev.akexorcist.workstation.data.model.DeviceSide.LEFT -> {
-                val halfHeight = device.size.height / 2f
-                val portOffset = port.position.position.coerceIn(-halfHeight, halfHeight)
-                device.position.x to device.position.y + halfHeight + portOffset
+                val positionY = port.position.position.coerceIn(0f, device.size.height)
+                device.position.x to device.position.y + positionY
             }
             dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
-                val halfHeight = device.size.height / 2f
-                val portOffset = port.position.position.coerceIn(-halfHeight, halfHeight)
-                device.position.x + device.size.width to device.position.y + halfHeight + portOffset
+                val positionY = port.position.position.coerceIn(0f, device.size.height)
+                device.position.x + device.size.width to device.position.y + positionY
             }
         }
     }
@@ -319,13 +392,11 @@ class EditorViewModel(
         val clampedPosition = when (port.position.side) {
             dev.akexorcist.workstation.data.model.DeviceSide.TOP,
             dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
-                val halfWidth = device.size.width / 2f
-                newPosition.coerceIn(-halfWidth, halfWidth)
+                newPosition.coerceIn(0f, device.size.width)
             }
             dev.akexorcist.workstation.data.model.DeviceSide.LEFT,
             dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
-                val halfHeight = device.size.height / 2f
-                newPosition.coerceIn(-halfHeight, halfHeight)
+                newPosition.coerceIn(0f, device.size.height)
             }
         }
         
@@ -409,9 +480,11 @@ class EditorViewModel(
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.Default) {
             val virtualCanvas = updatedLayout.metadata.virtualCanvas ?: updatedLayout.metadata.canvasSize
 
+            val layoutWithSyncedPorts = syncPortPositionsWithConnections(updatedLayout)
+
             val routedConnections = processConnections(
-                devices = updatedLayout.devices,
-                connections = updatedLayout.connections,
+                devices = layoutWithSyncedPorts.devices,
+                connections = layoutWithSyncedPorts.connections,
                 virtualCanvasSize = virtualCanvas
             )
 
@@ -419,7 +492,7 @@ class EditorViewModel(
 
             kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
                 _uiState.value = _uiState.value.copy(
-                    layout = updatedLayout,
+                    layout = layoutWithSyncedPorts,
                     routedConnections = routedConnections,
                     routedConnectionMap = routedConnectionMap
                 )

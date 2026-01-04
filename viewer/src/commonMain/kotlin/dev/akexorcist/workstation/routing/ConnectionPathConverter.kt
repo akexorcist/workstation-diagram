@@ -86,11 +86,7 @@ object ConnectionPathConverter {
     private fun calculatePortVirtualPosition(device: Device, port: Port): Point {
         return when (port.position.side) {
             DeviceSide.TOP -> {
-                val positionX = when {
-                    port.position.position < 0 -> 0f
-                    port.position.position > device.size.width -> device.size.width
-                    else -> port.position.position
-                }
+                val positionX = port.position.position.coerceIn(0f, device.size.width)
                 Point(
                     x = device.position.x + positionX,
                     y = device.position.y
@@ -98,11 +94,7 @@ object ConnectionPathConverter {
             }
             
             DeviceSide.BOTTOM -> {
-                val positionX = when {
-                    port.position.position < 0 -> 0f
-                    port.position.position > device.size.width -> device.size.width
-                    else -> port.position.position
-                }
+                val positionX = port.position.position.coerceIn(0f, device.size.width)
                 Point(
                     x = device.position.x + positionX,
                     y = device.position.y + device.size.height
@@ -110,11 +102,7 @@ object ConnectionPathConverter {
             }
             
             DeviceSide.LEFT -> {
-                val positionY = when {
-                    port.position.position < 0 -> 0f
-                    port.position.position > device.size.height -> device.size.height
-                    else -> port.position.position
-                }
+                val positionY = port.position.position.coerceIn(0f, device.size.height)
                 Point(
                     x = device.position.x,
                     y = device.position.y + positionY
@@ -122,11 +110,7 @@ object ConnectionPathConverter {
             }
             
             DeviceSide.RIGHT -> {
-                val positionY = when {
-                    port.position.position < 0 -> 0f
-                    port.position.position > device.size.height -> device.size.height
-                    else -> port.position.position
-                }
+                val positionY = port.position.position.coerceIn(0f, device.size.height)
                 Point(
                     x = device.position.x + device.size.width,
                     y = device.position.y + positionY

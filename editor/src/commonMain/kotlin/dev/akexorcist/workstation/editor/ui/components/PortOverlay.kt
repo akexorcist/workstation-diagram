@@ -134,56 +134,30 @@ private fun calculatePortScreenPositionWithGrid(
 
     when (port.position.side) {
         dev.akexorcist.workstation.data.model.DeviceSide.TOP -> {
-            val halfWidth = device.size.width / 2f
-            val portOffset = port.position.position.coerceIn(-halfWidth, halfWidth)
-            virtualPortX = device.position.x + halfWidth + portOffset
+            val positionX = port.position.position.coerceIn(0f, device.size.width)
+            virtualPortX = device.position.x + positionX
             virtualPortY = device.position.y
         }
         dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
-            val halfWidth = device.size.width / 2f
-            val portOffset = port.position.position.coerceIn(-halfWidth, halfWidth)
-            virtualPortX = device.position.x + halfWidth + portOffset
+            val positionX = port.position.position.coerceIn(0f, device.size.width)
+            virtualPortX = device.position.x + positionX
             virtualPortY = device.position.y + device.size.height
         }
         dev.akexorcist.workstation.data.model.DeviceSide.LEFT -> {
-            val halfHeight = device.size.height / 2f
-            val portOffset = port.position.position.coerceIn(-halfHeight, halfHeight)
+            val positionY = port.position.position.coerceIn(0f, device.size.height)
             virtualPortX = device.position.x
-            virtualPortY = device.position.y + halfHeight + portOffset
+            virtualPortY = device.position.y + positionY
         }
         dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
-            val halfHeight = device.size.height / 2f
-            val portOffset = port.position.position.coerceIn(-halfHeight, halfHeight)
+            val positionY = port.position.position.coerceIn(0f, device.size.height)
             virtualPortX = device.position.x + device.size.width
-            virtualPortY = device.position.y + halfHeight + portOffset
+            virtualPortY = device.position.y + positionY
         }
     }
 
-    val gridCellSize = 10f
-    var gridX = (virtualPortX / gridCellSize).toInt()
-    var gridY = (virtualPortY / gridCellSize).toInt()
-
-    val deviceGridLeft = (device.position.x / gridCellSize).toInt()
-    val deviceGridTop = (device.position.y / gridCellSize).toInt()
-
-    when (port.position.side) {
-        dev.akexorcist.workstation.data.model.DeviceSide.TOP -> {
-            if (gridY >= deviceGridTop) gridY = deviceGridTop - 1
-        }
-        dev.akexorcist.workstation.data.model.DeviceSide.LEFT -> {
-            if (gridX >= deviceGridLeft) gridX = deviceGridLeft - 1
-        }
-        dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM,
-        dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
-        }
-    }
-
-    val snappedVirtualX = gridX * gridCellSize + (gridCellSize / 2f)
-    val snappedVirtualY = gridY * gridCellSize + (gridCellSize / 2f)
-
-    val snappedVirtual = Position(snappedVirtualX, snappedVirtualY)
+    val virtualPosition = Position(virtualPortX, virtualPortY)
     val screenPos = CoordinateTransformer.transformPosition(
-        snappedVirtual,
+        virtualPosition,
         metadata,
         canvasSize,
         zoom,

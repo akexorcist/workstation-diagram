@@ -514,62 +514,33 @@ private fun calculatePortScreenPosition(
 
     when (port.position.side) {
         DeviceSide.TOP -> {
-            val halfWidth = device.size.width / 2f
-            val portOffset = port.position.position.coerceIn(-halfWidth, halfWidth)
-            virtualPortX = device.position.x + halfWidth + portOffset
+            val positionX = port.position.position.coerceIn(0f, device.size.width)
+            virtualPortX = device.position.x + positionX
             virtualPortY = device.position.y
         }
 
         DeviceSide.BOTTOM -> {
-            val halfWidth = device.size.width / 2f
-            val portOffset = port.position.position.coerceIn(-halfWidth, halfWidth)
-            virtualPortX = device.position.x + halfWidth + portOffset
+            val positionX = port.position.position.coerceIn(0f, device.size.width)
+            virtualPortX = device.position.x + positionX
             virtualPortY = device.position.y + device.size.height
         }
 
         DeviceSide.LEFT -> {
-            val halfHeight = device.size.height / 2f
-            val portOffset = port.position.position.coerceIn(-halfHeight, halfHeight)
+            val positionY = port.position.position.coerceIn(0f, device.size.height)
             virtualPortX = device.position.x
-            virtualPortY = device.position.y + halfHeight + portOffset
+            virtualPortY = device.position.y + positionY
         }
 
         DeviceSide.RIGHT -> {
-            val halfHeight = device.size.height / 2f
-            val portOffset = port.position.position.coerceIn(-halfHeight, halfHeight)
+            val positionY = port.position.position.coerceIn(0f, device.size.height)
             virtualPortX = device.position.x + device.size.width
-            virtualPortY = device.position.y + halfHeight + portOffset
+            virtualPortY = device.position.y + positionY
         }
     }
 
-    val gridCellSize = 10f
-    var gridX = (virtualPortX / gridCellSize).toInt()
-    var gridY = (virtualPortY / gridCellSize).toInt()
-
-    val deviceGridLeft = (device.position.x / gridCellSize).toInt()
-    val deviceGridTop = (device.position.y / gridCellSize).toInt()
-
-    when (port.position.side) {
-        DeviceSide.TOP -> {
-            if (gridY >= deviceGridTop) gridY = deviceGridTop - 1
-        }
-
-        DeviceSide.LEFT -> {
-            if (gridX >= deviceGridLeft) gridX = deviceGridLeft - 1
-        }
-
-        DeviceSide.BOTTOM,
-        DeviceSide.RIGHT -> {
-        }
-    }
-
-    val snappedVirtualX = gridX * gridCellSize + (gridCellSize / 2f)
-    val snappedVirtualY = gridY * gridCellSize + (gridCellSize / 2f)
-
-    // Transform snapped virtual position to screen space
-    val snappedVirtual = Position(snappedVirtualX, snappedVirtualY)
+    val virtualPosition = Position(virtualPortX, virtualPortY)
     val screenPos = CoordinateTransformer.transformPosition(
-        snappedVirtual,
+        virtualPosition,
         metadata,
         canvasSize,
         zoom,
@@ -584,28 +555,7 @@ private fun adjustPortPositionToCenter(
     port: Port,
     zoom: Float
 ): Offset {
-    val capsuleHeight = RenderingConfig.portCapsuleHeight * zoom
-    val overlap = RenderingConfig.portDeviceOverlap * zoom
-    val capsuleWidth = getEstimatedPortWidth(port, zoom)
-
-    return when (port.position.side) {
-        DeviceSide.TOP -> {
-            Offset(
-                portPosition.x + (capsuleWidth / 4f),
-                portPosition.y - (capsuleHeight / 2f) + overlap
-            )
-        }
-        DeviceSide.BOTTOM -> {
-            Offset(
-                portPosition.x + (capsuleWidth / 4f),
-                portPosition.y + (capsuleHeight / 2f) - overlap
-            )
-        }
-        DeviceSide.LEFT,
-        DeviceSide.RIGHT -> {
-            Offset(portPosition.x, portPosition.y + (capsuleHeight / 4f))
-        }
-    }
+    return portPosition
 }
 
 private fun calculateOrthogonalPath(
