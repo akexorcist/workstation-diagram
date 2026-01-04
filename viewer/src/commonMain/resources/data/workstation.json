@@ -7,7 +7,7 @@
       "label": "Office Laptop",
       "category": "CENTRAL_DEVICE",
       "position": {
-        "x": 100.0,
+        "x": 120.0,
         "y": 800.0
       },
       "size": {
@@ -60,7 +60,7 @@
       "label": "Personal Laptop",
       "category": "CENTRAL_DEVICE",
       "position": {
-        "x": 100.0,
+        "x": 120.0,
         "y": 900.0
       },
       "size": {
@@ -163,7 +163,7 @@
           "direction": "INPUT",
           "position": {
             "side": "RIGHT",
-            "position": 160.0
+            "position": 200.0
           }
         },
         {
@@ -172,7 +172,7 @@
           "direction": "INPUT",
           "position": {
             "side": "RIGHT",
-            "position": 360.0
+            "position": 340.0
           }
         },
         {
@@ -181,7 +181,7 @@
           "direction": "INPUT",
           "position": {
             "side": "RIGHT",
-            "position": 260.0
+            "position": 300.0
           }
         },
         {
@@ -190,7 +190,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "position": 320.0
+            "position": 380.0
           }
         }
       ],
@@ -225,7 +225,7 @@
       "label": "Primary Monitor",
       "category": "HUB",
       "position": {
-        "x": 1500.0,
+        "x": 1420.0,
         "y": 900.0
       },
       "size": {
@@ -248,7 +248,7 @@
           "direction": "INPUT",
           "position": {
             "side": "LEFT",
-            "position": 80.0
+            "position": 120.0
           }
         },
         {
@@ -257,7 +257,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "LEFT",
-            "position": 120.0
+            "position": 80.0
           }
         },
         {
@@ -340,7 +340,7 @@
       "label": "Secondary Monitor",
       "category": "HUB",
       "position": {
-        "x": 1500.0,
+        "x": 1420.0,
         "y": 680.0
       },
       "size": {
@@ -354,7 +354,7 @@
           "direction": "INPUT",
           "position": {
             "side": "LEFT",
-            "position": 40.0
+            "position": 20.0
           }
         },
         {
@@ -372,7 +372,7 @@
           "direction": "INPUT",
           "position": {
             "side": "LEFT",
-            "position": 160.0
+            "position": 140.0
           }
         }
       ],
@@ -415,7 +415,7 @@
       "label": "PC Desktop",
       "category": "CENTRAL_DEVICE",
       "position": {
-        "x": 100.0,
+        "x": 160.0,
         "y": 1400.0
       },
       "size": {
@@ -447,7 +447,7 @@
           "direction": "INPUT",
           "position": {
             "side": "RIGHT",
-            "position": 140.0
+            "position": 120.0
           }
         },
         {
@@ -582,8 +582,8 @@
       "label": "Gaming Console",
       "category": "CENTRAL_DEVICE",
       "position": {
-        "x": 100.0,
-        "y": 1160.0
+        "x": 140.0,
+        "y": 1140.0
       },
       "size": {
         "width": 200.0,
@@ -643,7 +643,7 @@
       "label": "Gaming Console",
       "category": "CENTRAL_DEVICE",
       "position": {
-        "x": 100.0,
+        "x": 140.0,
         "y": 1240.0
       },
       "size": {
@@ -708,7 +708,7 @@
       "label": "USB-C Switcher",
       "category": "HUB",
       "position": {
-        "x": 1000.0,
+        "x": 960.0,
         "y": 1100.0
       },
       "size": {
@@ -740,7 +740,7 @@
           "direction": "INPUT",
           "position": {
             "side": "RIGHT",
-            "position": 40.0
+            "position": 20.0
           }
         },
         {
@@ -801,7 +801,7 @@
       "label": "Digital Camera",
       "category": "PERIPHERAL",
       "position": {
-        "x": 1000.0,
+        "x": 960.0,
         "y": 500.0
       },
       "size": {
@@ -867,7 +867,7 @@
       "label": "HDMI To Webcam",
       "category": "PERIPHERAL",
       "position": {
-        "x": 1000.0,
+        "x": 960.0,
         "y": 600.0
       },
       "size": {
@@ -925,8 +925,8 @@
       "label": "Stream Deck",
       "category": "PERIPHERAL",
       "position": {
-        "x": 1000.0,
-        "y": 820.0
+        "x": 960.0,
+        "y": 860.0
       },
       "size": {
         "width": 200.0,
@@ -978,8 +978,8 @@
       "label": "External SSD",
       "category": "PERIPHERAL",
       "position": {
-        "x": 1000.0,
-        "y": 920.0
+        "x": 960.0,
+        "y": 960.0
       },
       "size": {
         "width": 200.0,
@@ -1031,7 +1031,7 @@
       "label": "USB Hub",
       "category": "HUB",
       "position": {
-        "x": 1000.0,
+        "x": 960.0,
         "y": 1480.0
       },
       "size": {
@@ -1054,7 +1054,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "RIGHT",
-            "position": 40.0
+            "position": 20.0
           }
         },
         {
@@ -1063,7 +1063,7 @@
           "direction": "INPUT",
           "position": {
             "side": "RIGHT",
-            "position": 80.0
+            "position": 60.0
           }
         },
         {
@@ -1115,7 +1115,7 @@
       "label": "USB Power Adapter",
       "category": "HUB",
       "position": {
-        "x": 1500.0,
+        "x": 1420.0,
         "y": 480.0
       },
       "size": {
@@ -1208,7 +1208,7 @@
       "label": "USB DAC",
       "category": "HUB",
       "position": {
-        "x": 1500.0,
+        "x": 1420.0,
         "y": 1320.0
       },
       "size": {
@@ -1231,7 +1231,7 @@
           "direction": "INPUT",
           "position": {
             "side": "LEFT",
-            "position": 100.0
+            "position": 80.0
           }
         },
         {
@@ -1301,7 +1301,7 @@
       "label": "Speaker",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2000.0,
+        "x": 1860.0,
         "y": 680.0
       },
       "size": {
@@ -1315,7 +1315,7 @@
           "direction": "INPUT",
           "position": {
             "side": "LEFT",
-            "position": 40.0
+            "position": 20.0
           }
         },
         {
@@ -1379,7 +1379,7 @@
       "label": "Gaming Headset",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2000.0,
+        "x": 1860.0,
         "y": 1360.0
       },
       "size": {
@@ -1440,7 +1440,7 @@
       "label": "Microphone",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2000.0,
+        "x": 1860.0,
         "y": 840.0
       },
       "size": {
@@ -1513,7 +1513,7 @@
       "label": "HDMI Capture",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2000.0,
+        "x": 1860.0,
         "y": 940.0
       },
       "size": {
@@ -1574,7 +1574,7 @@
       "label": "Android Device",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2000.0,
+        "x": 1860.0,
         "y": 1040.0
       },
       "size": {
@@ -1651,7 +1651,7 @@
       "label": "Microphone",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2000.0,
+        "x": 1860.0,
         "y": 1220.0
       },
       "size": {
@@ -1724,7 +1724,7 @@
       "label": "LED Light Bar",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2000.0,
+        "x": 1860.0,
         "y": 480.0
       },
       "size": {
@@ -1785,7 +1785,7 @@
       "label": "Wireless Charger",
       "category": "PERIPHERAL",
       "position": {
-        "x": 2000.0,
+        "x": 1860.0,
         "y": 580.0
       },
       "size": {
@@ -1838,8 +1838,8 @@
       "label": "USB Dongle",
       "category": "PERIPHERAL",
       "position": {
-        "x": 1500.0,
-        "y": 1520.0
+        "x": 1420.0,
+        "y": 1500.0
       },
       "size": {
         "width": 160.0,
@@ -1852,7 +1852,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "LEFT",
-            "position": 60.0
+            "position": 40.0
           }
         }
       ],
@@ -1911,8 +1911,8 @@
       "label": "USB Dongle",
       "category": "PERIPHERAL",
       "position": {
-        "x": 1500.0,
-        "y": 1640.0
+        "x": 1420.0,
+        "y": 1600.0
       },
       "size": {
         "width": 160.0,
@@ -1975,7 +1975,7 @@
       "targetPortId": "dock-thunderbolt-in-1",
       "routingPoints": [
         {
-          "x": 380.0,
+          "x": 420.0,
           "y": 840.0
         },
         {
@@ -1992,7 +1992,7 @@
       "targetPortId": "dock-thunderbolt-in-2",
       "routingPoints": [
         {
-          "x": 380.0,
+          "x": 420.0,
           "y": 940.0
         },
         {
@@ -2009,15 +2009,11 @@
       "targetPortId": "primary-monitor-dp-in",
       "routingPoints": [
         {
-          "x": 760.0,
+          "x": 1260.0,
           "y": 780.0
         },
         {
-          "x": 1360.0,
-          "y": 780.0
-        },
-        {
-          "x": 1360.0,
+          "x": 1260.0,
           "y": 940.0
         }
       ]
@@ -2030,15 +2026,11 @@
       "targetPortId": "secondary-monitor-usbc-in-2",
       "routingPoints": [
         {
-          "x": 760.0,
+          "x": 1300.0,
           "y": 740.0
         },
         {
-          "x": 1460.0,
-          "y": 740.0
-        },
-        {
-          "x": 1460.0,
+          "x": 1300.0,
           "y": 740.0
         }
       ]
@@ -2051,16 +2043,12 @@
       "targetPortId": "secondary-monitor-mini-hdmi-in",
       "routingPoints": [
         {
-          "x": 360.0,
+          "x": 820.0,
           "y": 1480.0
         },
         {
-          "x": 1380.0,
-          "y": 1480.0
-        },
-        {
-          "x": 1380.0,
-          "y": 840.0
+          "x": 820.0,
+          "y": 820.0
         }
       ]
     },
@@ -2072,19 +2060,11 @@
       "targetPortId": "hdmi-switcher-in-3",
       "routingPoints": [
         {
-          "x": 360.0,
+          "x": 420.0,
           "y": 1440.0
         },
         {
-          "x": 360.0,
-          "y": 1400.0
-        },
-        {
-          "x": 460.0,
-          "y": 1400.0
-        },
-        {
-          "x": 460.0,
+          "x": 420.0,
           "y": 1320.0
         }
       ]
@@ -2097,16 +2077,12 @@
       "targetPortId": "primary-monitor-hdmi-in",
       "routingPoints": [
         {
-          "x": 760.0,
+          "x": 1300.0,
           "y": 1300.0
         },
         {
-          "x": 1480.0,
-          "y": 1300.0
-        },
-        {
-          "x": 1480.0,
-          "y": 980.0
+          "x": 1300.0,
+          "y": 1020.0
         }
       ]
     },
@@ -2118,19 +2094,11 @@
       "targetPortId": "hdmi-switcher-in-1",
       "routingPoints": [
         {
-          "x": 380.0,
-          "y": 1200.0
+          "x": 420.0,
+          "y": 1180.0
         },
         {
-          "x": 380.0,
-          "y": 1260.0
-        },
-        {
-          "x": 440.0,
-          "y": 1260.0
-        },
-        {
-          "x": 440.0,
+          "x": 420.0,
           "y": 1240.0
         }
       ]
@@ -2142,10 +2110,6 @@
       "targetDeviceId": "hdmi-switcher",
       "targetPortId": "hdmi-switcher-in-2",
       "routingPoints": [
-        {
-          "x": 380.0,
-          "y": 1280.0
-        },
         {
           "x": 420.0,
           "y": 1280.0
@@ -2164,15 +2128,11 @@
       "targetPortId": "usb-c-switcher-pc",
       "routingPoints": [
         {
-          "x": 360.0,
-          "y": 1540.0
+          "x": 860.0,
+          "y": 1520.0
         },
         {
-          "x": 920.0,
-          "y": 1540.0
-        },
-        {
-          "x": 920.0,
+          "x": 860.0,
           "y": 1200.0
         }
       ]
@@ -2185,15 +2145,11 @@
       "targetPortId": "usb-c-switcher-dock",
       "routingPoints": [
         {
-          "x": 760.0,
-          "y": 1060.0
+          "x": 860.0,
+          "y": 1040.0
         },
         {
-          "x": 940.0,
-          "y": 1060.0
-        },
-        {
-          "x": 940.0,
+          "x": 860.0,
           "y": 1140.0
         }
       ]
@@ -2206,11 +2162,11 @@
       "targetPortId": "hdmi-to-webcam-in",
       "routingPoints": [
         {
-          "x": 920.0,
+          "x": 880.0,
           "y": 540.0
         },
         {
-          "x": 920.0,
+          "x": 880.0,
           "y": 640.0
         }
       ]
@@ -2223,16 +2179,12 @@
       "targetPortId": "usb-c-switcher-webcam",
       "routingPoints": [
         {
-          "x": 1260.0,
+          "x": 1220.0,
           "y": 640.0
         },
         {
-          "x": 1260.0,
-          "y": 640.0
-        },
-        {
-          "x": 1260.0,
-          "y": 1140.0
+          "x": 1220.0,
+          "y": 1120.0
         }
       ]
     },
@@ -2244,12 +2196,12 @@
       "targetPortId": "dock-usba-in-1",
       "routingPoints": [
         {
-          "x": 920.0,
-          "y": 860.0
+          "x": 780.0,
+          "y": 900.0
         },
         {
-          "x": 760.0,
-          "y": 860.0
+          "x": 780.0,
+          "y": 900.0
         }
       ]
     },
@@ -2261,12 +2213,12 @@
       "targetPortId": "dock-usba-out-1",
       "routingPoints": [
         {
-          "x": 920.0,
-          "y": 960.0
+          "x": 780.0,
+          "y": 1000.0
         },
         {
-          "x": 760.0,
-          "y": 960.0
+          "x": 780.0,
+          "y": 1000.0
         }
       ]
     },
@@ -2278,11 +2230,11 @@
       "targetPortId": "usb-hub-in",
       "routingPoints": [
         {
-          "x": 360.0,
+          "x": 860.0,
           "y": 1560.0
         },
         {
-          "x": 920.0,
+          "x": 860.0,
           "y": 1560.0
         }
       ]
@@ -2295,11 +2247,11 @@
       "targetPortId": "usb-dac-monitor",
       "routingPoints": [
         {
-          "x": 1420.0,
+          "x": 1340.0,
           "y": 1060.0
         },
         {
-          "x": 1420.0,
+          "x": 1340.0,
           "y": 1360.0
         }
       ]
@@ -2312,16 +2264,12 @@
       "targetPortId": "dock-usba-out-2",
       "routingPoints": [
         {
-          "x": 1420.0,
-          "y": 1420.0
+          "x": 780.0,
+          "y": 1400.0
         },
         {
-          "x": 760.0,
-          "y": 1420.0
-        },
-        {
-          "x": 760.0,
-          "y": 1020.0
+          "x": 780.0,
+          "y": 1080.0
         }
       ]
     },
@@ -2333,15 +2281,11 @@
       "targetPortId": "usb-dac-usb-hub",
       "routingPoints": [
         {
-          "x": 1240.0,
-          "y": 1520.0
+          "x": 1340.0,
+          "y": 1500.0
         },
         {
-          "x": 1440.0,
-          "y": 1520.0
-        },
-        {
-          "x": 1440.0,
+          "x": 1340.0,
           "y": 1440.0
         }
       ]
@@ -2354,15 +2298,11 @@
       "targetPortId": "usb-power-adapter-speaker",
       "routingPoints": [
         {
-          "x": 1920.0,
-          "y": 720.0
+          "x": 1720.0,
+          "y": 700.0
         },
         {
-          "x": 1820.0,
-          "y": 720.0
-        },
-        {
-          "x": 1820.0,
+          "x": 1720.0,
           "y": 600.0
         }
       ]
@@ -2375,15 +2315,11 @@
       "targetPortId": "usb-dac-speaker",
       "routingPoints": [
         {
-          "x": 1920.0,
+          "x": 1760.0,
           "y": 740.0
         },
         {
-          "x": 1740.0,
-          "y": 740.0
-        },
-        {
-          "x": 1740.0,
+          "x": 1760.0,
           "y": 1360.0
         }
       ]
@@ -2396,15 +2332,11 @@
       "targetPortId": "usb-dac-headphone",
       "routingPoints": [
         {
-          "x": 1920.0,
+          "x": 1760.0,
           "y": 1400.0
         },
         {
-          "x": 1740.0,
-          "y": 1400.0
-        },
-        {
-          "x": 1740.0,
+          "x": 1760.0,
           "y": 1400.0
         }
       ]
@@ -2417,15 +2349,11 @@
       "targetPortId": "primary-monitor-usba-in-1",
       "routingPoints": [
         {
-          "x": 1920.0,
+          "x": 1720.0,
           "y": 880.0
         },
         {
-          "x": 1780.0,
-          "y": 880.0
-        },
-        {
-          "x": 1780.0,
+          "x": 1720.0,
           "y": 940.0
         }
       ]
@@ -2438,11 +2366,11 @@
       "targetPortId": "primary-monitor-usbc-in",
       "routingPoints": [
         {
-          "x": 1920.0,
+          "x": 1720.0,
           "y": 980.0
         },
         {
-          "x": 1780.0,
+          "x": 1720.0,
           "y": 980.0
         }
       ]
@@ -2455,15 +2383,11 @@
       "targetPortId": "primary-monitor-usba-in-2",
       "routingPoints": [
         {
-          "x": 1920.0,
+          "x": 1720.0,
           "y": 1080.0
         },
         {
-          "x": 1780.0,
-          "y": 1080.0
-        },
-        {
-          "x": 1780.0,
+          "x": 1720.0,
           "y": 1020.0
         }
       ]
@@ -2476,15 +2400,11 @@
       "targetPortId": "usb-c-switcher-microphone",
       "routingPoints": [
         {
-          "x": 1920.0,
+          "x": 1260.0,
           "y": 1260.0
         },
         {
-          "x": 1220.0,
-          "y": 1260.0
-        },
-        {
-          "x": 1220.0,
+          "x": 1260.0,
           "y": 1200.0
         }
       ]
@@ -2497,11 +2417,11 @@
       "targetPortId": "usb-power-adapter-led-lamp",
       "routingPoints": [
         {
-          "x": 1920.0,
+          "x": 1760.0,
           "y": 520.0
         },
         {
-          "x": 1780.0,
+          "x": 1760.0,
           "y": 520.0
         }
       ]
@@ -2514,15 +2434,11 @@
       "targetPortId": "usb-power-adapter-wireless-charger",
       "routingPoints": [
         {
-          "x": 1920.0,
+          "x": 1760.0,
           "y": 620.0
         },
         {
-          "x": 1880.0,
-          "y": 620.0
-        },
-        {
-          "x": 1880.0,
+          "x": 1760.0,
           "y": 560.0
         }
       ]
@@ -2535,16 +2451,12 @@
       "targetPortId": "usb-hub-out-2",
       "routingPoints": [
         {
-          "x": 1420.0,
-          "y": 1580.0
+          "x": 1260.0,
+          "y": 1540.0
         },
         {
-          "x": 1240.0,
-          "y": 1580.0
-        },
-        {
-          "x": 1240.0,
-          "y": 1560.0
+          "x": 1260.0,
+          "y": 1540.0
         }
       ]
     },
@@ -2556,12 +2468,8 @@
       "targetPortId": "usb-hub-out-3",
       "routingPoints": [
         {
-          "x": 1420.0,
-          "y": 1680.0
-        },
-        {
           "x": 1260.0,
-          "y": 1680.0
+          "y": 1640.0
         },
         {
           "x": 1260.0,
@@ -2577,11 +2485,11 @@
       "targetPortId": "usb-power-adapter-camera",
       "routingPoints": [
         {
-          "x": 1260.0,
+          "x": 1340.0,
           "y": 540.0
         },
         {
-          "x": 1420.0,
+          "x": 1340.0,
           "y": 540.0
         }
       ]
@@ -2594,11 +2502,11 @@
       "targetPortId": "usb-power-adapter-monitor",
       "routingPoints": [
         {
-          "x": 1420.0,
-          "y": 720.0
+          "x": 1340.0,
+          "y": 700.0
         },
         {
-          "x": 1420.0,
+          "x": 1340.0,
           "y": 600.0
         }
       ]
@@ -2611,15 +2519,11 @@
       "targetPortId": "usb-c-switcher-monitor",
       "routingPoints": [
         {
-          "x": 1420.0,
-          "y": 1020.0
+          "x": 1260.0,
+          "y": 980.0
         },
         {
-          "x": 1240.0,
-          "y": 1020.0
-        },
-        {
-          "x": 1240.0,
+          "x": 1260.0,
           "y": 1160.0
         }
       ]
