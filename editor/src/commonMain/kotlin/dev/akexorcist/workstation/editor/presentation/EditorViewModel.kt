@@ -65,7 +65,7 @@ class EditorViewModel(
 
             val layoutWithSyncedPorts = syncPortPositionsWithConnections(layout)
 
-            val routedConnections = processConnections(
+            val (routedConnections, updatedConnections) = processConnections(
                 devices = layoutWithSyncedPorts.devices,
                 connections = layoutWithSyncedPorts.connections,
                 virtualCanvasSize = virtualCanvas,
@@ -73,10 +73,11 @@ class EditorViewModel(
             )
 
             val routedConnectionMap = routedConnections.associateBy { it.connectionId }
+            val layoutWithUpdatedConnections = layoutWithSyncedPorts.copy(connections = updatedConnections)
 
             kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
                 _uiState.value = _uiState.value.copy(
-                    layout = layoutWithSyncedPorts,
+                    layout = layoutWithUpdatedConnections,
                     isLoading = false,
                     errorMessage = errorMessage,
                     routedConnections = routedConnections,
@@ -172,7 +173,7 @@ class EditorViewModel(
         connections: List<Connection>,
         virtualCanvasSize: dev.akexorcist.workstation.data.model.Size,
         metadata: dev.akexorcist.workstation.data.model.LayoutMetadata
-    ): List<RoutedConnection> {
+    ): Pair<List<RoutedConnection>, List<Connection>> {
         val connectionsWithRouting = connections.filter { connection ->
             val routingPoints = connection.routingPoints
             routingPoints != null && routingPoints.isNotEmpty()
@@ -189,11 +190,22 @@ class EditorViewModel(
         
         val existingPaths = routedWithManual.map { it.virtualWaypoints }
         
-        val autoRoutedConnections = connectionsWithoutRouting.mapNotNull { connection ->
+        val autoRoutedResults = connectionsWithoutRouting.mapNotNull { connection ->
             autoRouteConnection(connection, devices, existingPaths, metadata)
         }
         
-        return routedWithManual + autoRoutedConnections
+        val autoRoutedConnections = autoRoutedResults.map { it.first }
+        val updatedConnections = autoRoutedResults.map { it.second }
+        
+        val routedConnections = routedWithManual + autoRoutedConnections
+        
+        val connectionMap = connections.associateBy { it.id }.toMutableMap()
+        updatedConnections.forEach { updatedConnection ->
+            connectionMap[updatedConnection.id] = updatedConnection
+        }
+        val allUpdatedConnections = connectionMap.values.toList()
+        
+        return Pair(routedConnections, allUpdatedConnections)
     }
     
     private fun autoRouteConnection(
@@ -201,7 +213,7 @@ class EditorViewModel(
         devices: List<dev.akexorcist.workstation.data.model.Device>,
         existingPaths: List<List<Pair<Float, Float>>>,
         metadata: dev.akexorcist.workstation.data.model.LayoutMetadata
-    ): RoutedConnection? {
+    ): Pair<RoutedConnection, Connection>? {
         val sourceDevice = devices.find { it.id == connection.sourceDeviceId } ?: return null
         val targetDevice = devices.find { it.id == connection.targetDeviceId } ?: return null
         val sourcePort = sourceDevice.ports.find { it.id == connection.sourcePortId } ?: return null
@@ -253,13 +265,18 @@ class EditorViewModel(
         
         val crossings = countPathCrossings(virtualWaypoints, existingPaths)
         
-        return RoutedConnection(
+        val routedConnection = RoutedConnection(
             connectionId = connection.id,
             waypoints = emptyList(),
             virtualWaypoints = virtualWaypoints,
             success = true,
             crossings = crossings
         )
+        
+        val extractedRoutingPoints = extractRoutingPointsFromVirtualWaypoints(virtualWaypoints)
+        val updatedConnection = connection.copy(routingPoints = extractedRoutingPoints)
+        
+        return Pair(routedConnection, updatedConnection)
     }
     
     private fun countPathCrossings(
@@ -471,6 +488,13 @@ class EditorViewModel(
         val isVertical = kotlin.math.abs(x1 - x0) < 0.01f && kotlin.math.abs(x2 - x1) < 0.01f
         
         return isHorizontal || isVertical
+    }
+    
+    private fun extractRoutingPointsFromVirtualWaypoints(virtualWaypoints: List<Pair<Float, Float>>): List<Point> {
+        if (virtualWaypoints.size < 2) return emptyList()
+        return virtualWaypoints.drop(1).dropLast(1).map { waypoint ->
+            Point(x = waypoint.first, y = waypoint.second)
+        }
     }
 
     fun handleZoomChangeAtPoint(newZoom: Float, screenPoint: Offset) {
@@ -750,7 +774,7 @@ class EditorViewModel(
 
             val layoutWithSyncedPorts = syncPortPositionsWithConnections(updatedLayout)
 
-            val routedConnections = processConnections(
+            val (routedConnections, updatedConnections) = processConnections(
                 devices = layoutWithSyncedPorts.devices,
                 connections = layoutWithSyncedPorts.connections,
                 virtualCanvasSize = virtualCanvas,
@@ -758,10 +782,11 @@ class EditorViewModel(
             )
 
             val routedConnectionMap = routedConnections.associateBy { it.connectionId }
+            val layoutWithUpdatedConnections = layoutWithSyncedPorts.copy(connections = updatedConnections)
 
             kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
                 _uiState.value = _uiState.value.copy(
-                    layout = layoutWithSyncedPorts,
+                    layout = layoutWithUpdatedConnections,
                     routedConnections = routedConnections,
                     routedConnectionMap = routedConnectionMap
                 )
