@@ -25,8 +25,10 @@ import dev.akexorcist.workstation.ui.components.PortsOverlay
 import dev.akexorcist.workstation.editor.ui.components.RoutingPointNodes
 import dev.akexorcist.workstation.editor.ui.components.LineSegmentOverlay
 import dev.akexorcist.workstation.editor.ui.components.PortOverlay
+import dev.akexorcist.workstation.editor.ui.components.DeviceOverlay
 import dev.akexorcist.workstation.editor.ui.components.findSegmentAtPoint
 import dev.akexorcist.workstation.editor.ui.components.findPortAtPoint
+import dev.akexorcist.workstation.editor.ui.components.findDeviceAtPoint
 import dev.akexorcist.workstation.editor.ui.components.constrainDragToCrossAxis
 import dev.akexorcist.workstation.editor.ui.components.constrainPortDragToEdge
 import dev.akexorcist.workstation.editor.ui.components.SegmentOrientation
@@ -44,6 +46,8 @@ fun EditorCanvas(
     onDragStartPort: (String, String) -> Unit,
     onDragPort: (String, String, DataOffset, Boolean) -> Unit,
     onDragEndPort: () -> Unit,
+    onDragDevice: (String, DataOffset) -> Unit,
+    onDragEndDevice: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val accumulatedDrag = remember { mutableStateOf(Offset.Zero) }
@@ -80,11 +84,14 @@ fun EditorCanvas(
                 var dragStartPan = Offset.Zero
                 var isDraggingPort = false
                 var isDraggingSegment = false
+                var isDraggingDevice = false
                 var accumulatedPortDrag = Offset.Zero
                 var accumulatedSegmentDrag = Offset.Zero
+                var accumulatedDeviceDrag = Offset.Zero
                 var portDragInfo: Pair<String, String>? = null
                 var portDeviceSide: DeviceSide? = null
                 var segmentDragInfo: Pair<Pair<String, Int>, SegmentOrientation>? = null
+                var deviceDragId: String? = null
                 
                 detectDragGestures(
                     onDragStart = { offset ->
@@ -92,7 +99,7 @@ fun EditorCanvas(
                         val currentSelectedSegment = uiState.selectedLineSegment
                         val currentRoutedConnectionMap = uiState.routedConnectionMap
                         val currentZoom = uiState.zoom
-                        val currentPanOffset = uiState.panOffset
+                        val currentPanOffset = panOffsetRef.value
                         
                         if (currentSelectedPort != null) {
                             val portInfo = findPortAtPoint(
@@ -135,16 +142,39 @@ fun EditorCanvas(
                                 isDraggingPort = false
                                 portDragInfo = null
                                 portDeviceSide = null
+                                isDraggingDevice = false
+                                deviceDragId = null
                                 onDragStartSegment(segmentInfo.first.first, segmentInfo.first.second)
                                 return@detectDragGestures
                             }
                         }
                         
+                        val deviceId = findDeviceAtPoint(
+                            offset,
+                            layout,
+                            canvasSize,
+                            currentZoom,
+                            currentPanOffset
+                        )
+                        
+                        if (deviceId != null) {
+                            isDraggingDevice = true
+                            deviceDragId = deviceId
+                            accumulatedDeviceDrag = Offset.Zero
+                            isDraggingPort = false
+                            portDragInfo = null
+                            portDeviceSide = null
+                            isDraggingSegment = false
+                            segmentDragInfo = null
+                            return@detectDragGestures
+                        }
                         isDraggingPort = false
                         isDraggingSegment = false
+                        isDraggingDevice = false
                         portDragInfo = null
                         portDeviceSide = null
                         segmentDragInfo = null
+                        deviceDragId = null
                         dragStartPan = Offset(panOffsetRef.value.x, panOffsetRef.value.y)
                         accumulatedDrag.value = Offset.Zero
                     },
@@ -197,6 +227,21 @@ fun EditorCanvas(
                                     ),
                                     currentSegmentDragInfo.second == SegmentOrientation.HORIZONTAL
                                 )
+                            } else if (isDraggingDevice && deviceDragId != null) {
+                                change.consume()
+                                
+                                accumulatedDeviceDrag = Offset(
+                                    x = accumulatedDeviceDrag.x + dragAmount.x,
+                                    y = accumulatedDeviceDrag.y + dragAmount.y
+                                )
+                                
+                                onDragDevice(
+                                    deviceDragId!!,
+                                    DataOffset(
+                                        x = accumulatedDeviceDrag.x,
+                                        y = accumulatedDeviceDrag.y
+                                    )
+                                )
                             } else {
                                 change.consume()
                                 accumulatedDrag.value = Offset(
@@ -224,6 +269,11 @@ fun EditorCanvas(
                             accumulatedSegmentDrag = Offset.Zero
                             segmentDragInfo = null
                             onDragEndSegment()
+                        } else if (isDraggingDevice) {
+                            isDraggingDevice = false
+                            accumulatedDeviceDrag = Offset.Zero
+                            deviceDragId = null
+                            onDragEndDevice()
                         } else {
                             accumulatedDrag.value = Offset.Zero
                         }
@@ -240,6 +290,11 @@ fun EditorCanvas(
                             accumulatedSegmentDrag = Offset.Zero
                             segmentDragInfo = null
                             onDragEndSegment()
+                        } else if (isDraggingDevice) {
+                            isDraggingDevice = false
+                            accumulatedDeviceDrag = Offset.Zero
+                            deviceDragId = null
+                            onDragEndDevice()
                         } else {
                             accumulatedDrag.value = Offset.Zero
                         }
@@ -266,6 +321,15 @@ fun EditorCanvas(
             hoveredDeviceId = uiState.hoveredDeviceId,
             hoveredPortInfo = uiState.hoveredPortInfo,
             relatedConnectionsMap = emptyMap()
+        )
+
+        DeviceOverlay(
+            layout = layout,
+            canvasSize = canvasSize,
+            zoom = zoom,
+            panOffset = uiState.panOffset,
+            onHoverDevice = { },
+            modifier = Modifier.fillMaxSize()
         )
 
         PortOverlay(

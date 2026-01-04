@@ -794,6 +794,14 @@ class EditorViewModel(
         dragStartPortId = null
     }
     
+    private var originalDevicePosition: Position? = null
+    private var dragStartDeviceIdForDevice: String? = null
+    
+    fun clearDeviceDragState() {
+        originalDevicePosition = null
+        dragStartDeviceIdForDevice = null
+    }
+    
     fun updatePortPosition(
         deviceId: String,
         portId: String,
@@ -887,6 +895,116 @@ class EditorViewModel(
             }
             
             if (connection.targetDeviceId == deviceId && connection.targetPortId == portId) {
+                val lastIndex = updatedRoutingPoints.size - 1
+                val lastPoint = routingPoints[lastIndex]
+                val newPoint = if (isPortHorizontal) {
+                    Point(x = lastPoint.x + portDeltaX, y = lastPoint.y)
+                } else {
+                    Point(x = lastPoint.x, y = lastPoint.y + portDeltaY)
+                }
+                updatedRoutingPoints[lastIndex] = newPoint
+                needsUpdate = true
+            }
+            
+            if (needsUpdate) {
+                connection.copy(routingPoints = updatedRoutingPoints)
+            } else {
+                connection
+            }
+        }
+        
+        updatedLayout = updatedLayout.copy(connections = updatedConnections)
+        
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.Main.immediate) {
+            updateLayoutWithConnections(updatedLayout)
+        }
+    }
+    
+    fun updateDevicePosition(
+        deviceId: String,
+        screenDragDelta: ComposeOffset,
+        canvasSize: dev.akexorcist.workstation.data.model.Size
+    ) {
+        val layout = _uiState.value.layout ?: return
+        val device = layout.devices.find { it.id == deviceId } ?: return
+        
+        val metadata = layout.metadata
+        val zoom = _uiState.value.zoom
+        val virtualDelta = screenDeltaToVirtualDelta(screenDragDelta, metadata, canvasSize, zoom)
+        
+        if (dragStartDeviceIdForDevice != deviceId) {
+            originalDevicePosition = device.position
+            dragStartDeviceIdForDevice = deviceId
+        }
+        
+        val originalPosition = originalDevicePosition ?: device.position
+        
+        val newPosition = Position(
+            x = originalPosition.x + virtualDelta.x,
+            y = originalPosition.y + virtualDelta.y
+        )
+        
+        val gridConfig = metadata.grid
+        val gridSize = gridConfig?.size ?: 20f
+        val gridEnabled = gridConfig?.enabled ?: true
+        
+        val finalPosition = if (gridEnabled) {
+            Position(
+                x = snapToGrid(newPosition.x, gridSize),
+                y = snapToGrid(newPosition.y, gridSize)
+            )
+        } else {
+            newPosition
+        }
+        
+        val updatedDevice = device.copy(position = finalPosition)
+        val updatedDevices = layout.devices.map { if (it.id == deviceId) updatedDevice else it }
+        var updatedLayout = layout.copy(devices = updatedDevices)
+        
+        val deviceDeltaX = finalPosition.x - device.position.x
+        val deviceDeltaY = finalPosition.y - device.position.y
+        
+        val updatedConnections = updatedLayout.connections.map { connection ->
+            val routingPoints = connection.routingPoints ?: return@map connection
+            if (routingPoints.isEmpty()) return@map connection
+            
+            val updatedRoutingPoints = routingPoints.toMutableList()
+            var needsUpdate = false
+            
+            if (connection.sourceDeviceId == deviceId) {
+                val sourceDevice = updatedDevice
+                val sourcePort = sourceDevice.ports.find { it.id == connection.sourcePortId } ?: return@map connection
+                val isPortHorizontal = sourcePort.position.side == dev.akexorcist.workstation.data.model.DeviceSide.TOP || 
+                                       sourcePort.position.side == dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM
+                
+                val oldPortVirtualPos = calculatePortPosition(device, sourcePort, metadata)
+                val newPortVirtualPos = calculatePortPosition(updatedDevice, sourcePort, metadata)
+                
+                val portDeltaX = newPortVirtualPos.first - oldPortVirtualPos.first
+                val portDeltaY = newPortVirtualPos.second - oldPortVirtualPos.second
+                
+                val firstPoint = routingPoints[0]
+                val newPoint = if (isPortHorizontal) {
+                    Point(x = firstPoint.x + portDeltaX, y = firstPoint.y)
+                } else {
+                    Point(x = firstPoint.x, y = firstPoint.y + portDeltaY)
+                }
+                updatedRoutingPoints[0] = newPoint
+                needsUpdate = true
+            }
+            
+            if (connection.targetDeviceId == deviceId) {
+                val targetDevice = updatedDevice
+                val targetPort = targetDevice.ports.find { it.id == connection.targetPortId } ?: return@map connection
+                val isPortHorizontal = targetPort.position.side == dev.akexorcist.workstation.data.model.DeviceSide.TOP || 
+                                       targetPort.position.side == dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM
+                
+                val oldPortVirtualPos = calculatePortPosition(device, targetPort, metadata)
+                val newPortVirtualPos = calculatePortPosition(updatedDevice, targetPort, metadata)
+                
+                val portDeltaX = newPortVirtualPos.first - oldPortVirtualPos.first
+                val portDeltaY = newPortVirtualPos.second - oldPortVirtualPos.second
+                
                 val lastIndex = updatedRoutingPoints.size - 1
                 val lastPoint = routingPoints[lastIndex]
                 val newPoint = if (isPortHorizontal) {

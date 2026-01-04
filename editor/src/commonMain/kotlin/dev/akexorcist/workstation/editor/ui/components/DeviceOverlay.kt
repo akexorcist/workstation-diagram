@@ -3,6 +3,7 @@ package dev.akexorcist.workstation.editor.ui.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,40 +26,63 @@ fun DeviceOverlay(
     modifier: Modifier = Modifier
 ) {
     var currentHoveredDevice by remember { mutableStateOf<String?>(null) }
+    var lastPointerPosition by remember { mutableStateOf<Offset?>(null) }
     
     val cursorIcon = remember(currentHoveredDevice) {
         if (currentHoveredDevice != null) PointerIcon.Crosshair else PointerIcon.Default
     }
     
+    fun checkHoverAtPosition(position: Offset?) {
+        if (position == null) {
+            if (currentHoveredDevice != null) {
+                currentHoveredDevice = null
+                onHoverDevice(null)
+            }
+            return
+        }
+        
+        val deviceId = findDeviceAtPoint(
+            position,
+            layout,
+            canvasSize,
+            zoom,
+            panOffset
+        )
+        
+        if (deviceId != null) {
+            if (currentHoveredDevice != deviceId) {
+                currentHoveredDevice = deviceId
+                onHoverDevice(deviceId)
+            }
+        } else {
+            if (currentHoveredDevice != null) {
+                currentHoveredDevice = null
+                onHoverDevice(null)
+            }
+        }
+    }
+    
+    LaunchedEffect(panOffset, zoom, layout, canvasSize, lastPointerPosition) {
+        checkHoverAtPosition(lastPointerPosition)
+    }
+    
     Box(
         modifier = modifier
             .fillMaxSize()
-            .pointerInput(layout, canvasSize, zoom, panOffset, onHoverDevice) {
+            .pointerInput(Unit) {
                 awaitPointerEventScope {
                     while (true) {
                         val event = awaitPointerEvent()
-                        if (event.changes.any { it.pressed }) continue
-                        
-                        val pointerPosition = event.changes.firstOrNull()?.position ?: continue
-                        
-                        val deviceId = findDeviceAtPoint(
-                            pointerPosition,
-                            layout,
-                            canvasSize,
-                            zoom,
-                            panOffset
-                        )
-                        
-                        if (deviceId != null) {
-                            if (currentHoveredDevice != deviceId) {
-                                currentHoveredDevice = deviceId
-                                onHoverDevice(deviceId)
+                        if (event.changes.any { it.pressed }) {
+                            val pointerPosition = event.changes.firstOrNull()?.position
+                            if (pointerPosition != null) {
+                                lastPointerPosition = pointerPosition
                             }
-                        } else {
-                            if (currentHoveredDevice != null) {
-                                currentHoveredDevice = null
-                                onHoverDevice(null)
-                            }
+                            continue
+                        }
+                        val pointerPosition = event.changes.firstOrNull()?.position
+                        if (pointerPosition != null) {
+                            lastPointerPosition = pointerPosition
                         }
                     }
                 }
@@ -96,8 +120,10 @@ internal fun findDeviceAtPoint(
             bottom = screenPosition.y + screenSize.height
         )
         
-        if (point.x >= rect.left && point.x <= rect.right &&
-            point.y >= rect.top && point.y <= rect.bottom) {
+        val isInside = point.x >= rect.left && point.x <= rect.right &&
+                       point.y >= rect.top && point.y <= rect.bottom
+        
+        if (isInside) {
             return device.id
         }
     }

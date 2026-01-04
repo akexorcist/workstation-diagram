@@ -132,6 +132,23 @@ fun EditorScreen(
                     onDragEndPort = {
                         viewModel.clearPortDragState()
                     },
+                    onDragDevice = { deviceId, dragDelta ->
+                        val canvasSize = CoordinateTransformer.canvasSize(
+                            width = canvasSize.width,
+                            height = canvasSize.height
+                        )
+                        viewModel.updateDevicePosition(
+                            deviceId = deviceId,
+                            screenDragDelta = androidx.compose.ui.geometry.Offset(
+                                x = dragDelta.x,
+                                y = dragDelta.y
+                            ),
+                            canvasSize = canvasSize
+                        )
+                    },
+                    onDragEndDevice = {
+                        viewModel.clearDeviceDragState()
+                    },
                     modifier = Modifier.fillMaxSize()
                 )
             }
