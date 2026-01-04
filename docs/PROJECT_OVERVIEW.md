@@ -89,9 +89,12 @@ The editor application extends the viewer with editing capabilities:
 
 When a connection in the JSON lacks routing points:
 1. System detects missing routing information
-2. Auto-routing algorithm generates path
+2. Auto-routing algorithm generates path (one-time operation)
 3. Path avoids device obstacles
 4. Path optimizes for minimal crossings and clean layout
+5. Auto-generated routing points are immediately saved to the Connection object
+
+**Important**: Once a connection has routing points (whether auto-generated or manually defined), it will never be auto-routed again. The routing points persist and can be manually edited by the user. All routing points (auto-generated or manual) are included when exporting to JSON.
 
 ---
 
