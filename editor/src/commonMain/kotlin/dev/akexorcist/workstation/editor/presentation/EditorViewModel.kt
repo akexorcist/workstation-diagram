@@ -15,6 +15,8 @@ import dev.akexorcist.workstation.data.serialization.WorkstationLayoutSerializer
 import dev.akexorcist.workstation.routing.RoutedConnection
 import dev.akexorcist.workstation.presentation.config.StateManagementConfig
 import dev.akexorcist.workstation.presentation.config.ViewportConfig
+import dev.akexorcist.workstation.editor.routing.SimpleConnectionRouter
+import dev.akexorcist.workstation.presentation.config.RenderingConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -171,16 +173,169 @@ class EditorViewModel(
         virtualCanvasSize: dev.akexorcist.workstation.data.model.Size,
         metadata: dev.akexorcist.workstation.data.model.LayoutMetadata
     ): List<RoutedConnection> {
-        // Only handle connections with manual routing points
-        // Automatic routing is not available in editor
-        return connections
-            .filter { connection ->
-                val routingPoints = connection.routingPoints
-                routingPoints != null && routingPoints.isNotEmpty()
+        val connectionsWithRouting = connections.filter { connection ->
+            val routingPoints = connection.routingPoints
+            routingPoints != null && routingPoints.isNotEmpty()
+        }
+        
+        val connectionsWithoutRouting = connections.filter { connection ->
+            val routingPoints = connection.routingPoints
+            routingPoints == null || routingPoints.isEmpty()
+        }
+        
+        val routedWithManual = connectionsWithRouting.mapNotNull { connection ->
+            createRoutedConnectionFromManualPoints(connection, devices, virtualCanvasSize, metadata)
+        }
+        
+        val existingPaths = routedWithManual.map { it.virtualWaypoints }
+        
+        val autoRoutedConnections = connectionsWithoutRouting.mapNotNull { connection ->
+            autoRouteConnection(connection, devices, existingPaths, metadata)
+        }
+        
+        return routedWithManual + autoRoutedConnections
+    }
+    
+    private fun autoRouteConnection(
+        connection: Connection,
+        devices: List<dev.akexorcist.workstation.data.model.Device>,
+        existingPaths: List<List<Pair<Float, Float>>>,
+        metadata: dev.akexorcist.workstation.data.model.LayoutMetadata
+    ): RoutedConnection? {
+        val sourceDevice = devices.find { it.id == connection.sourceDeviceId } ?: return null
+        val targetDevice = devices.find { it.id == connection.targetDeviceId } ?: return null
+        val sourcePort = sourceDevice.ports.find { it.id == connection.sourcePortId } ?: return null
+        val targetPort = targetDevice.ports.find { it.id == connection.targetPortId } ?: return null
+        
+        val sourcePortVirtualPos = calculatePortPosition(sourceDevice, sourcePort, metadata)
+        val targetPortVirtualPos = calculatePortPosition(targetDevice, targetPort, metadata)
+        
+        val sourceExtendedPos = calculateExtendedPortPoint(
+            sourcePortVirtualPos,
+            sourcePort,
+            RenderingConfig.portExtension,
+            metadata
+        )
+        val targetExtendedPos = calculateExtendedPortPoint(
+            targetPortVirtualPos,
+            targetPort,
+            RenderingConfig.portExtension,
+            metadata
+        )
+        
+        val routingPoints = SimpleConnectionRouter.routeConnection(
+            sourcePos = sourceExtendedPos,
+            targetPos = targetExtendedPos,
+            devices = devices,
+            existingPaths = existingPaths,
+            clearance = RenderingConfig.simpleRouterDeviceClearance
+        )
+        
+        val waypoints = buildList {
+            add(sourcePortVirtualPos)
+            add(sourceExtendedPos)
+            if (routingPoints.isEmpty()) {
+                val (sx, sy) = sourceExtendedPos
+                val (tx, ty) = targetExtendedPos
+                val midX = (sx + tx) / 2f
+                add(midX to sy)
+                add(midX to ty)
+            } else {
+                routingPoints.forEach { point ->
+                    add(point.x to point.y)
+                }
             }
-            .mapNotNull { connection ->
-                createRoutedConnectionFromManualPoints(connection, devices, virtualCanvasSize, metadata)
+            add(targetExtendedPos)
+            add(targetPortVirtualPos)
+        }
+        
+        val virtualWaypoints = simplifyStraightSegments(waypoints)
+        
+        val crossings = countPathCrossings(virtualWaypoints, existingPaths)
+        
+        return RoutedConnection(
+            connectionId = connection.id,
+            waypoints = emptyList(),
+            virtualWaypoints = virtualWaypoints,
+            success = true,
+            crossings = crossings
+        )
+    }
+    
+    private fun countPathCrossings(
+        path: List<Pair<Float, Float>>,
+        existingPaths: List<List<Pair<Float, Float>>>
+    ): Int {
+        var crossings = 0
+        
+        for (i in 0 until path.size - 1) {
+            val segmentStart = path[i]
+            val segmentEnd = path[i + 1]
+            
+            for (existingPath in existingPaths) {
+                for (j in 0 until existingPath.size - 1) {
+                    val existingStart = existingPath[j]
+                    val existingEnd = existingPath[j + 1]
+                    
+                    if (segmentsCross(
+                        segmentStart.first, segmentStart.second,
+                        segmentEnd.first, segmentEnd.second,
+                        existingStart.first, existingStart.second,
+                        existingEnd.first, existingEnd.second
+                    )) {
+                        crossings++
+                    }
+                }
             }
+        }
+        
+        return crossings
+    }
+    
+    private fun segmentsCross(
+        x1: Float, y1: Float, x2: Float, y2: Float,
+        x3: Float, y3: Float, x4: Float, y4: Float
+    ): Boolean {
+        val isHorizontal1 = kotlin.math.abs(y2 - y1) < 0.01f
+        val isHorizontal2 = kotlin.math.abs(y4 - y3) < 0.01f
+        
+        if (isHorizontal1 && isHorizontal2) {
+            if (kotlin.math.abs(y1 - y3) < 0.01f) {
+                val min1 = kotlin.math.min(x1, x2)
+                val max1 = kotlin.math.max(x1, x2)
+                val min2 = kotlin.math.min(x3, x4)
+                val max2 = kotlin.math.max(x3, x4)
+                return !(max1 < min2 || max2 < min1)
+            }
+            return false
+        }
+        
+        if (!isHorizontal1 && !isHorizontal2) {
+            if (kotlin.math.abs(x1 - x3) < 0.01f) {
+                val min1 = kotlin.math.min(y1, y2)
+                val max1 = kotlin.math.max(y1, y2)
+                val min2 = kotlin.math.min(y3, y4)
+                val max2 = kotlin.math.max(y3, y4)
+                return !(max1 < min2 || max2 < min1)
+            }
+            return false
+        }
+        
+        if (isHorizontal1 && !isHorizontal2) {
+            val y = y1
+            val x = x3
+            return y >= kotlin.math.min(y3, y4) && y <= kotlin.math.max(y3, y4) &&
+                   x >= kotlin.math.min(x1, x2) && x <= kotlin.math.max(x1, x2)
+        }
+        
+        if (!isHorizontal1 && isHorizontal2) {
+            val y = y3
+            val x = x1
+            return y >= kotlin.math.min(y1, y2) && y <= kotlin.math.max(y1, y2) &&
+                   x >= kotlin.math.min(x3, x4) && x <= kotlin.math.max(x3, x4)
+        }
+        
+        return false
     }
     
     private fun createRoutedConnectionFromManualPoints(
@@ -244,6 +399,79 @@ class EditorViewModel(
             }
         }
     }
+    
+    private fun calculateExtendedPortPoint(
+        portPos: Pair<Float, Float>,
+        port: dev.akexorcist.workstation.data.model.Port,
+        extension: Float,
+        metadata: dev.akexorcist.workstation.data.model.LayoutMetadata
+    ): Pair<Float, Float> {
+        val (x, y) = portPos
+        val extendedPoint = when (port.position.side) {
+            dev.akexorcist.workstation.data.model.DeviceSide.LEFT -> {
+                (x - extension) to y
+            }
+            dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
+                (x + extension) to y
+            }
+            dev.akexorcist.workstation.data.model.DeviceSide.TOP -> {
+                x to (y - extension)
+            }
+            dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
+                x to (y + extension)
+            }
+        }
+        
+        val gridConfig = metadata.grid
+        val gridSize = gridConfig?.size ?: 20f
+        val gridEnabled = gridConfig?.enabled ?: true
+        
+        return if (gridEnabled) {
+            snapToGrid(extendedPoint.first, gridSize) to snapToGrid(extendedPoint.second, gridSize)
+        } else {
+            extendedPoint
+        }
+    }
+    
+    private fun simplifyStraightSegments(waypoints: List<Pair<Float, Float>>): List<Pair<Float, Float>> {
+        if (waypoints.size < 3) return waypoints
+        
+        val result = waypoints.toMutableList()
+        
+        if (result.size >= 3) {
+            val p0 = result[0]
+            val p1 = result[1]
+            val p2 = result[2]
+            
+            if (isCollinear(p0, p1, p2)) {
+                result.removeAt(1)
+            }
+        }
+        
+        if (result.size >= 3) {
+            val lastIndex = result.size - 1
+            val p0 = result[lastIndex - 2]
+            val p1 = result[lastIndex - 1]
+            val p2 = result[lastIndex]
+            
+            if (isCollinear(p0, p1, p2)) {
+                result.removeAt(lastIndex - 1)
+            }
+        }
+        
+        return result
+    }
+    
+    private fun isCollinear(p0: Pair<Float, Float>, p1: Pair<Float, Float>, p2: Pair<Float, Float>): Boolean {
+        val (x0, y0) = p0
+        val (x1, y1) = p1
+        val (x2, y2) = p2
+        
+        val isHorizontal = kotlin.math.abs(y1 - y0) < 0.01f && kotlin.math.abs(y2 - y1) < 0.01f
+        val isVertical = kotlin.math.abs(x1 - x0) < 0.01f && kotlin.math.abs(x2 - x1) < 0.01f
+        
+        return isHorizontal || isVertical
+    }
 
     fun handleZoomChangeAtPoint(newZoom: Float, screenPoint: Offset) {
         val oldZoom = _uiState.value.zoom
@@ -286,6 +514,14 @@ class EditorViewModel(
         
         if (segmentIndex <= 0 || segmentIndex >= virtualWaypoints.size - 1) return
         
+        val startWaypoint = virtualWaypoints[segmentIndex]
+        val endWaypoint = virtualWaypoints[segmentIndex + 1]
+        val segmentLength = kotlin.math.sqrt(
+            (endWaypoint.first - startWaypoint.first) * (endWaypoint.first - startWaypoint.first) +
+            (endWaypoint.second - startWaypoint.second) * (endWaypoint.second - startWaypoint.second)
+        )
+        if (segmentLength < 0.1f) return
+        
         val metadata = layout.metadata
         val zoom = _uiState.value.zoom
         val virtualDelta = screenDeltaToVirtualDelta(screenDragDelta, metadata, canvasSize, zoom)
@@ -297,12 +533,29 @@ class EditorViewModel(
         }
         
         if (dragStartConnectionId != connectionId || dragStartSegmentIndex != segmentIndex) {
-            originalRoutingPoints = connection.routingPoints?.toList()
+            val existingRoutingPoints = connection.routingPoints
+            if (existingRoutingPoints != null && existingRoutingPoints.isNotEmpty()) {
+                originalRoutingPoints = existingRoutingPoints.toList()
+            } else {
+                val intermediatePoints = virtualWaypoints.drop(1).dropLast(1).map { waypoint ->
+                    dev.akexorcist.workstation.data.model.Point(x = waypoint.first, y = waypoint.second)
+                }
+                originalRoutingPoints = intermediatePoints
+                
+                val updatedConnectionWithRouting = connection.copy(routingPoints = intermediatePoints)
+                val updatedConnections = layout.connections.map { if (it.id == connectionId) updatedConnectionWithRouting else it }
+                val updatedLayout = layout.copy(connections = updatedConnections)
+                
+                viewModelScope.launch(kotlinx.coroutines.Dispatchers.Main.immediate) {
+                    updateLayoutWithConnections(updatedLayout)
+                }
+                return
+            }
             dragStartConnectionId = connectionId
             dragStartSegmentIndex = segmentIndex
         }
         
-        val originalPoints = originalRoutingPoints ?: connection.routingPoints?.toList() ?: return
+        val originalPoints = originalRoutingPoints ?: return
         val routingPoints = originalPoints.toMutableList()
         
         val gridConfig = metadata.grid
@@ -338,9 +591,11 @@ class EditorViewModel(
             }
         }
         
-        val updatedConnection = connection.copy(routingPoints = routingPoints)
-        val updatedConnections = layout.connections.map { if (it.id == connectionId) updatedConnection else it }
-        val updatedLayout = layout.copy(connections = updatedConnections)
+        val currentLayout = _uiState.value.layout ?: return
+        val currentConnection = currentLayout.connections.find { it.id == connectionId } ?: return
+        val updatedConnection = currentConnection.copy(routingPoints = routingPoints)
+        val updatedConnections = currentLayout.connections.map { if (it.id == connectionId) updatedConnection else it }
+        val updatedLayout = currentLayout.copy(connections = updatedConnections)
         
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.Main.immediate) {
             updateLayoutWithConnections(updatedLayout)

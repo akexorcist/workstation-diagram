@@ -26,7 +26,15 @@
 * No Clustering: Paths should not cluster on one side of available space
 
 # Port Handling
-* Port Extensions: Paths must extend straight from ports 70 units before routing
+* Port Extensions: Paths extend straight from ports 70 units (RenderingConfig.portExtension) before routing starts
+  * Applied to both source and target ports in auto-generated connections
+  * Extension direction is perpendicular to port's device edge:
+    * LEFT ports extend left (negative X)
+    * RIGHT ports extend right (positive X)
+    * TOP ports extend up (negative Y)
+    * BOTTOM ports extend down (positive Y)
+  * Routing algorithm uses extended points as start/end positions
+  * Final path includes: port position → extended point → routing points → extended point → port position
 * 1-to-1 Port Mapping: Each port used by only one connection
 * Port Area Protection: Areas around ports and their extensions are protected
 

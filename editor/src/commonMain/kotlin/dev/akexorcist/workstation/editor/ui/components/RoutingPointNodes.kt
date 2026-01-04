@@ -27,16 +27,15 @@ fun RoutingPointNodes(
     val density = LocalDensity.current
     
     Box(modifier = Modifier.fillMaxSize()) {
-        layout.connections.forEach { connection ->
-            val routedConnection = routedConnectionMap[connection.id] ?: return@forEach
+        routedConnectionMap.forEach { (connectionId, routedConnection) ->
             val virtualWaypoints = routedConnection.virtualWaypoints
             
-            if (virtualWaypoints.size < 2) return@forEach
+            if (virtualWaypoints.size < 3) return@forEach
             
             for (i in 1 until virtualWaypoints.size - 1) {
                 val waypoint = virtualWaypoints[i]
                 val virtualPosition = Position(waypoint.first, waypoint.second)
-                val screenPosition = CoordinateTransformer.transformPosition(
+                val screenPositionData = CoordinateTransformer.transformPosition(
                     virtualPosition,
                     layout.metadata,
                     canvasSize,
@@ -45,12 +44,19 @@ fun RoutingPointNodes(
                 )
                 
                 val nodeSizeDp = 12.dp
-                val nodeSizePx = nodeSizeDp.value * density.density
+                val nodeSizePx = with(density) { nodeSizeDp.toPx() }
+                val offsetX = (screenPositionData.x - nodeSizePx / 2f) / density.density
+                val offsetY = (screenPositionData.y - nodeSizePx / 2f) / density.density
+                
                 RoutingPointNode(
-                    screenPosition = Offset(screenPosition.x, screenPosition.y),
+                    screenPosition = Offset(screenPositionData.x, screenPositionData.y),
                     density = density,
+                    connectionId = connectionId,
+                    waypointIndex = i,
+                    virtualPosition = virtualPosition,
+                    screenPositionData = screenPositionData,
                     modifier = Modifier
-                        .offset(x = (screenPosition.x - nodeSizePx / 2f).dp, y = (screenPosition.y - nodeSizePx / 2f).dp)
+                        .offset(x = offsetX.dp, y = offsetY.dp)
                         .size(nodeSizeDp)
                 )
             }
@@ -62,11 +68,15 @@ fun RoutingPointNodes(
 private fun RoutingPointNode(
     screenPosition: Offset,
     density: androidx.compose.ui.unit.Density,
+    connectionId: String,
+    waypointIndex: Int,
+    virtualPosition: Position,
+    screenPositionData: Offset,
     modifier: Modifier = Modifier
 ) {
     val surfaceColor = WorkstationTheme.themeColor.surface
     val primaryColor = WorkstationTheme.themeColor.primary
-    val borderWidthPx = 1.dp.value * density.density
+    val borderWidthPx = with(density) { 1.dp.toPx() }
     
     Box(modifier = modifier) {
         Canvas(modifier = Modifier.fillMaxSize()) {

@@ -34,5 +34,11 @@ object RenderingConfig {
     // Failed route visualization (moved from RoutingConfig)
     const val failedRouteAlpha: Float = 0.8f
     const val failedRouteWidthMultiplier: Float = 1.5f
+    
+    // Simple router configuration
+    const val simpleRouterDeviceClearance: Float = 15f
+    const val simpleRouterPortClearance: Float = 15f
+    const val simpleRouterGridSnap: Float = 10f
+    const val portExtension: Float = 100f
 }
 

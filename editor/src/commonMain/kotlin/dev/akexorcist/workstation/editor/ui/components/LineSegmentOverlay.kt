@@ -200,6 +200,9 @@ internal fun findSegmentAtPoint(
             val start = Offset(startScreen.x, startScreen.y)
             val end = Offset(endScreen.x, endScreen.y)
             
+            val segmentLength = kotlin.math.sqrt((end.x - start.x) * (end.x - start.x) + (end.y - start.y) * (end.y - start.y))
+            if (segmentLength < 0.1f) continue
+            
             if (!isOrthogonalSegment(start, end)) continue
             
             val currentOrientation = if (start.y == end.y) SegmentOrientation.HORIZONTAL else SegmentOrientation.VERTICAL

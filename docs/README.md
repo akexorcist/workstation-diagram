@@ -4,6 +4,10 @@
 
 The Workstation Diagram is a Kotlin Multiplatform project that provides an interactive visualization tool for workstation hardware configurations. Built with Compose Multiplatform, it supports desktop (JVM) and web (JavaScript) targets from a single codebase.
 
+## Quick Start
+
+**For AI Agents and New Developers**: Start with [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) for a high-level understanding of the project structure, key concepts, and development focus before diving into implementation details.
+
 ## Table of Contents
 
 - [Architecture](#architecture)
@@ -775,9 +779,11 @@ For stack traces:
 
 ## Additional Documentation
 
-- [Architecture Details](ARCHITECTURE.md)
-- [State Management Guide](STATE_MANAGEMENT.md)
-- [Platform Support](PLATFORM_SUPPORT.md)
+- [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) - **Start here**: High-level project overview for AI agents and developers
+- [ARCHITECTURE_SUMMARY.md](ARCHITECTURE_SUMMARY.md) - Architecture patterns and design principles
+- [COORDINATE_SYSTEM.md](COORDINATE_SYSTEM.md) - Coordinate system implementation
+- [MANUAL_PATH_ROUTING_IMPLEMENTATION_PLAN.md](MANUAL_PATH_ROUTING_IMPLEMENTATION_PLAN.md) - Routing implementation details
+- [WORKSTATION_JSON_VALIDATION_RULES.md](WORKSTATION_JSON_VALIDATION_RULES.md) - JSON validation rules
 
 ---
 

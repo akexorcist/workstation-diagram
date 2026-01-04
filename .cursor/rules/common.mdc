@@ -2,6 +2,7 @@
 alwaysApply: true
 ---
 
+* **ALWAYS read `docs/PROJECT_OVERVIEW.md` first** to understand the project structure, key concepts, and current development focus before making any changes
 * no useless code comment for the code that can explain by itself
 * Think twice, review twice
 * Make it most perfect code than ever as a great legendary software engineer in kotlin multiplatform

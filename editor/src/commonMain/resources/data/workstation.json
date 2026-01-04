@@ -1972,657 +1972,231 @@
       "sourceDeviceId": "office-laptop",
       "sourcePortId": "office-laptop-thunderbolt",
       "targetDeviceId": "usb-docking-station",
-      "targetPortId": "dock-thunderbolt-in-1",
-      "routingPoints": [
-        {
-          "x": 380.0,
-          "y": 840.0
-        },
-        {
-          "x": 420.0,
-          "y": 840.0
-        }
-      ]
+      "targetPortId": "dock-thunderbolt-in-1"
     },
     {
       "id": "conn-2",
       "sourceDeviceId": "personal-laptop",
       "sourcePortId": "personal-laptop-thunderbolt",
       "targetDeviceId": "usb-docking-station",
-      "targetPortId": "dock-thunderbolt-in-2",
-      "routingPoints": [
-        {
-          "x": 380.0,
-          "y": 940.0
-        },
-        {
-          "x": 420.0,
-          "y": 940.0
-        }
-      ]
+      "targetPortId": "dock-thunderbolt-in-2"
     },
     {
       "id": "conn-3",
       "sourceDeviceId": "usb-docking-station",
       "sourcePortId": "dock-dp-out-1",
       "targetDeviceId": "primary-monitor",
-      "targetPortId": "primary-monitor-dp-in",
-      "routingPoints": [
-        {
-          "x": 760.0,
-          "y": 780.0
-        },
-        {
-          "x": 1360.0,
-          "y": 780.0
-        },
-        {
-          "x": 1360.0,
-          "y": 940.0
-        }
-      ]
+      "targetPortId": "primary-monitor-dp-in"
     },
     {
       "id": "conn-4",
       "sourceDeviceId": "usb-docking-station",
       "sourcePortId": "dock-usbc-out-1",
       "targetDeviceId": "secondary-monitor",
-      "targetPortId": "secondary-monitor-usbc-in-2",
-      "routingPoints": [
-        {
-          "x": 760.0,
-          "y": 740.0
-        },
-        {
-          "x": 1460.0,
-          "y": 740.0
-        },
-        {
-          "x": 1460.0,
-          "y": 740.0
-        }
-      ]
+      "targetPortId": "secondary-monitor-usbc-in-2"
     },
     {
       "id": "conn-5",
       "sourceDeviceId": "pc-desktop",
       "sourcePortId": "pc-dp-out",
       "targetDeviceId": "secondary-monitor",
-      "targetPortId": "secondary-monitor-mini-hdmi-in",
-      "routingPoints": [
-        {
-          "x": 360.0,
-          "y": 1480.0
-        },
-        {
-          "x": 1380.0,
-          "y": 1480.0
-        },
-        {
-          "x": 1380.0,
-          "y": 840.0
-        }
-      ]
+      "targetPortId": "secondary-monitor-mini-hdmi-in"
     },
     {
       "id": "conn-6",
       "sourceDeviceId": "pc-desktop",
       "sourcePortId": "pc-hdmi-out",
       "targetDeviceId": "hdmi-switcher",
-      "targetPortId": "hdmi-switcher-in-3",
-      "routingPoints": [
-        {
-          "x": 360.0,
-          "y": 1440.0
-        },
-        {
-          "x": 360.0,
-          "y": 1400.0
-        },
-        {
-          "x": 460.0,
-          "y": 1400.0
-        },
-        {
-          "x": 460.0,
-          "y": 1320.0
-        }
-      ]
+      "targetPortId": "hdmi-switcher-in-3"
     },
     {
       "id": "conn-7",
       "sourceDeviceId": "hdmi-switcher",
       "sourcePortId": "hdmi-switcher-out",
       "targetDeviceId": "primary-monitor",
-      "targetPortId": "primary-monitor-hdmi-in",
-      "routingPoints": [
-        {
-          "x": 760.0,
-          "y": 1300.0
-        },
-        {
-          "x": 1480.0,
-          "y": 1300.0
-        },
-        {
-          "x": 1480.0,
-          "y": 980.0
-        }
-      ]
+      "targetPortId": "primary-monitor-hdmi-in"
     },
     {
       "id": "conn-8",
       "sourceDeviceId": "gaming-console-1",
       "sourcePortId": "gaming-console-1-hdmi",
       "targetDeviceId": "hdmi-switcher",
-      "targetPortId": "hdmi-switcher-in-1",
-      "routingPoints": [
-        {
-          "x": 380.0,
-          "y": 1200.0
-        },
-        {
-          "x": 380.0,
-          "y": 1260.0
-        },
-        {
-          "x": 440.0,
-          "y": 1260.0
-        },
-        {
-          "x": 440.0,
-          "y": 1240.0
-        }
-      ]
+      "targetPortId": "hdmi-switcher-in-1"
     },
     {
       "id": "conn-9",
       "sourceDeviceId": "gaming-console-2",
       "sourcePortId": "gaming-console-2-hdmi",
       "targetDeviceId": "hdmi-switcher",
-      "targetPortId": "hdmi-switcher-in-2",
-      "routingPoints": [
-        {
-          "x": 380.0,
-          "y": 1280.0
-        },
-        {
-          "x": 420.0,
-          "y": 1280.0
-        },
-        {
-          "x": 420.0,
-          "y": 1280.0
-        }
-      ]
+      "targetPortId": "hdmi-switcher-in-2"
     },
     {
       "id": "conn-10",
       "sourceDeviceId": "pc-desktop",
       "sourcePortId": "pc-usba-in-1",
       "targetDeviceId": "usb-c-switcher",
-      "targetPortId": "usb-c-switcher-pc",
-      "routingPoints": [
-        {
-          "x": 360.0,
-          "y": 1540.0
-        },
-        {
-          "x": 920.0,
-          "y": 1540.0
-        },
-        {
-          "x": 920.0,
-          "y": 1200.0
-        }
-      ]
+      "targetPortId": "usb-c-switcher-pc"
     },
     {
       "id": "conn-11",
       "sourceDeviceId": "usb-docking-station",
       "sourcePortId": "dock-usba-in-2",
       "targetDeviceId": "usb-c-switcher",
-      "targetPortId": "usb-c-switcher-dock",
-      "routingPoints": [
-        {
-          "x": 760.0,
-          "y": 1060.0
-        },
-        {
-          "x": 940.0,
-          "y": 1060.0
-        },
-        {
-          "x": 940.0,
-          "y": 1140.0
-        }
-      ]
+      "targetPortId": "usb-c-switcher-dock"
     },
     {
       "id": "conn-12",
       "sourceDeviceId": "digital-camera",
       "sourcePortId": "digital-camera-hdmi",
       "targetDeviceId": "hdmi-to-webcam",
-      "targetPortId": "hdmi-to-webcam-in",
-      "routingPoints": [
-        {
-          "x": 920.0,
-          "y": 540.0
-        },
-        {
-          "x": 920.0,
-          "y": 640.0
-        }
-      ]
+      "targetPortId": "hdmi-to-webcam-in"
     },
     {
       "id": "conn-13",
       "sourceDeviceId": "hdmi-to-webcam",
       "sourcePortId": "hdmi-to-webcam-out",
       "targetDeviceId": "usb-c-switcher",
-      "targetPortId": "usb-c-switcher-webcam",
-      "routingPoints": [
-        {
-          "x": 1260.0,
-          "y": 640.0
-        },
-        {
-          "x": 1260.0,
-          "y": 640.0
-        },
-        {
-          "x": 1260.0,
-          "y": 1140.0
-        }
-      ]
+      "targetPortId": "usb-c-switcher-webcam"
     },
     {
       "id": "conn-14",
       "sourceDeviceId": "stream-deck",
       "sourcePortId": "stream-deck-usb",
       "targetDeviceId": "usb-docking-station",
-      "targetPortId": "dock-usba-in-1",
-      "routingPoints": [
-        {
-          "x": 920.0,
-          "y": 860.0
-        },
-        {
-          "x": 760.0,
-          "y": 860.0
-        }
-      ]
+      "targetPortId": "dock-usba-in-1"
     },
     {
       "id": "conn-15",
       "sourceDeviceId": "external-ssd",
       "sourcePortId": "external-ssd-usbc",
       "targetDeviceId": "usb-docking-station",
-      "targetPortId": "dock-usba-out-1",
-      "routingPoints": [
-        {
-          "x": 920.0,
-          "y": 960.0
-        },
-        {
-          "x": 760.0,
-          "y": 960.0
-        }
-      ]
+      "targetPortId": "dock-usba-out-1"
     },
     {
       "id": "conn-16",
       "sourceDeviceId": "pc-desktop",
       "sourcePortId": "pc-usba-in-2",
       "targetDeviceId": "usb-hub",
-      "targetPortId": "usb-hub-in",
-      "routingPoints": [
-        {
-          "x": 360.0,
-          "y": 1560.0
-        },
-        {
-          "x": 920.0,
-          "y": 1560.0
-        }
-      ]
+      "targetPortId": "usb-hub-in"
     },
     {
       "id": "conn-17",
       "sourceDeviceId": "primary-monitor",
       "sourcePortId": "primary-monitor-aux-out",
       "targetDeviceId": "usb-dac",
-      "targetPortId": "usb-dac-monitor",
-      "routingPoints": [
-        {
-          "x": 1420.0,
-          "y": 1060.0
-        },
-        {
-          "x": 1420.0,
-          "y": 1360.0
-        }
-      ]
+      "targetPortId": "usb-dac-monitor"
     },
     {
       "id": "conn-18",
       "sourceDeviceId": "usb-dac",
       "sourcePortId": "usb-dac-dock",
       "targetDeviceId": "usb-docking-station",
-      "targetPortId": "dock-usba-out-2",
-      "routingPoints": [
-        {
-          "x": 1420.0,
-          "y": 1420.0
-        },
-        {
-          "x": 760.0,
-          "y": 1420.0
-        },
-        {
-          "x": 760.0,
-          "y": 1020.0
-        }
-      ]
+      "targetPortId": "dock-usba-out-2"
     },
     {
       "id": "conn-19",
       "sourceDeviceId": "usb-hub",
       "sourcePortId": "usb-hub-out-1",
       "targetDeviceId": "usb-dac",
-      "targetPortId": "usb-dac-usb-hub",
-      "routingPoints": [
-        {
-          "x": 1240.0,
-          "y": 1520.0
-        },
-        {
-          "x": 1440.0,
-          "y": 1520.0
-        },
-        {
-          "x": 1440.0,
-          "y": 1440.0
-        }
-      ]
+      "targetPortId": "usb-dac-usb-hub"
     },
     {
       "id": "conn-20",
       "sourceDeviceId": "speaker",
       "sourcePortId": "speaker-power",
       "targetDeviceId": "usb-power-adapter",
-      "targetPortId": "usb-power-adapter-speaker",
-      "routingPoints": [
-        {
-          "x": 1920.0,
-          "y": 720.0
-        },
-        {
-          "x": 1820.0,
-          "y": 720.0
-        },
-        {
-          "x": 1820.0,
-          "y": 600.0
-        }
-      ]
+      "targetPortId": "usb-power-adapter-speaker"
     },
     {
       "id": "conn-21",
       "sourceDeviceId": "speaker",
       "sourcePortId": "speaker-aux",
       "targetDeviceId": "usb-dac",
-      "targetPortId": "usb-dac-speaker",
-      "routingPoints": [
-        {
-          "x": 1920.0,
-          "y": 740.0
-        },
-        {
-          "x": 1740.0,
-          "y": 740.0
-        },
-        {
-          "x": 1740.0,
-          "y": 1360.0
-        }
-      ]
+      "targetPortId": "usb-dac-speaker"
     },
     {
       "id": "conn-22",
       "sourceDeviceId": "headphone",
       "sourcePortId": "headphone-aux",
       "targetDeviceId": "usb-dac",
-      "targetPortId": "usb-dac-headphone",
-      "routingPoints": [
-        {
-          "x": 1920.0,
-          "y": 1400.0
-        },
-        {
-          "x": 1740.0,
-          "y": 1400.0
-        },
-        {
-          "x": 1740.0,
-          "y": 1400.0
-        }
-      ]
+      "targetPortId": "usb-dac-headphone"
     },
     {
       "id": "conn-23",
       "sourceDeviceId": "microphone-1",
       "sourcePortId": "microphone-1-usb",
       "targetDeviceId": "primary-monitor",
-      "targetPortId": "primary-monitor-usba-in-1",
-      "routingPoints": [
-        {
-          "x": 1920.0,
-          "y": 880.0
-        },
-        {
-          "x": 1780.0,
-          "y": 880.0
-        },
-        {
-          "x": 1780.0,
-          "y": 940.0
-        }
-      ]
+      "targetPortId": "primary-monitor-usba-in-1"
     },
     {
       "id": "conn-24",
       "sourceDeviceId": "hdmi-capture",
       "sourcePortId": "hdmi-capture-usb",
       "targetDeviceId": "primary-monitor",
-      "targetPortId": "primary-monitor-usbc-in",
-      "routingPoints": [
-        {
-          "x": 1920.0,
-          "y": 980.0
-        },
-        {
-          "x": 1780.0,
-          "y": 980.0
-        }
-      ]
+      "targetPortId": "primary-monitor-usbc-in"
     },
     {
       "id": "conn-25",
       "sourceDeviceId": "android-device",
       "sourcePortId": "android-device-usbc",
       "targetDeviceId": "primary-monitor",
-      "targetPortId": "primary-monitor-usba-in-2",
-      "routingPoints": [
-        {
-          "x": 1920.0,
-          "y": 1080.0
-        },
-        {
-          "x": 1780.0,
-          "y": 1080.0
-        },
-        {
-          "x": 1780.0,
-          "y": 1020.0
-        }
-      ]
+      "targetPortId": "primary-monitor-usba-in-2"
     },
     {
       "id": "conn-26",
       "sourceDeviceId": "microphone-2",
       "sourcePortId": "microphone-2-usb",
       "targetDeviceId": "usb-c-switcher",
-      "targetPortId": "usb-c-switcher-microphone",
-      "routingPoints": [
-        {
-          "x": 1920.0,
-          "y": 1260.0
-        },
-        {
-          "x": 1220.0,
-          "y": 1260.0
-        },
-        {
-          "x": 1220.0,
-          "y": 1200.0
-        }
-      ]
+      "targetPortId": "usb-c-switcher-microphone"
     },
     {
       "id": "conn-27",
       "sourceDeviceId": "led-lamp",
       "sourcePortId": "led-lamp-usb",
       "targetDeviceId": "usb-power-adapter",
-      "targetPortId": "usb-power-adapter-led-lamp",
-      "routingPoints": [
-        {
-          "x": 1920.0,
-          "y": 520.0
-        },
-        {
-          "x": 1780.0,
-          "y": 520.0
-        }
-      ]
+      "targetPortId": "usb-power-adapter-led-lamp"
     },
     {
       "id": "conn-28",
       "sourceDeviceId": "wireless-charger",
       "sourcePortId": "wireless-charger-usb",
       "targetDeviceId": "usb-power-adapter",
-      "targetPortId": "usb-power-adapter-wireless-charger",
-      "routingPoints": [
-        {
-          "x": 1920.0,
-          "y": 620.0
-        },
-        {
-          "x": 1880.0,
-          "y": 620.0
-        },
-        {
-          "x": 1880.0,
-          "y": 560.0
-        }
-      ]
+      "targetPortId": "usb-power-adapter-wireless-charger"
     },
     {
       "id": "conn-29",
       "sourceDeviceId": "usb-dongle-1",
       "sourcePortId": "usb-dongle-1-usb",
       "targetDeviceId": "usb-hub",
-      "targetPortId": "usb-hub-out-2",
-      "routingPoints": [
-        {
-          "x": 1420.0,
-          "y": 1580.0
-        },
-        {
-          "x": 1240.0,
-          "y": 1580.0
-        },
-        {
-          "x": 1240.0,
-          "y": 1560.0
-        }
-      ]
+      "targetPortId": "usb-hub-out-2"
     },
     {
       "id": "conn-30",
       "sourceDeviceId": "usb-dongle-2",
       "sourcePortId": "usb-dongle-2-usb",
       "targetDeviceId": "usb-hub",
-      "targetPortId": "usb-hub-out-3",
-      "routingPoints": [
-        {
-          "x": 1420.0,
-          "y": 1680.0
-        },
-        {
-          "x": 1260.0,
-          "y": 1680.0
-        },
-        {
-          "x": 1260.0,
-          "y": 1640.0
-        }
-      ]
+      "targetPortId": "usb-hub-out-3"
     },
     {
       "id": "conn-31",
       "sourceDeviceId": "digital-camera",
       "sourcePortId": "digital-camera-power",
       "targetDeviceId": "usb-power-adapter",
-      "targetPortId": "usb-power-adapter-camera",
-      "routingPoints": [
-        {
-          "x": 1260.0,
-          "y": 540.0
-        },
-        {
-          "x": 1420.0,
-          "y": 540.0
-        }
-      ]
+      "targetPortId": "usb-power-adapter-camera"
     },
     {
       "id": "conn-32",
       "sourceDeviceId": "secondary-monitor",
       "sourcePortId": "secondary-monitor-usbc-in-1",
       "targetDeviceId": "usb-power-adapter",
-      "targetPortId": "usb-power-adapter-monitor",
-      "routingPoints": [
-        {
-          "x": 1420.0,
-          "y": 720.0
-        },
-        {
-          "x": 1420.0,
-          "y": 600.0
-        }
-      ]
+      "targetPortId": "usb-power-adapter-monitor"
     },
     {
       "id": "conn-33",
       "sourceDeviceId": "primary-monitor",
       "sourcePortId": "primary-monitor-usbc-out",
       "targetDeviceId": "usb-c-switcher",
-      "targetPortId": "usb-c-switcher-monitor",
-      "routingPoints": [
-        {
-          "x": 1420.0,
-          "y": 1020.0
-        },
-        {
-          "x": 1240.0,
-          "y": 1020.0
-        },
-        {
-          "x": 1240.0,
-          "y": 1160.0
-        }
-      ]
+      "targetPortId": "usb-c-switcher-monitor"
     }
   ],
   "metadata": {
