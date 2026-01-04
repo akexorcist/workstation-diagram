@@ -273,7 +273,27 @@ class EditorViewModel(
             crossings = crossings
         )
         
-        val extractedRoutingPoints = extractRoutingPointsFromVirtualWaypoints(virtualWaypoints)
+        var extractedRoutingPoints = extractRoutingPointsFromVirtualWaypoints(virtualWaypoints)
+        
+        val sourcePortSide = sourcePort.position.side
+        val targetPortSide = targetPort.position.side
+        val arePortsOnSameAxis = when {
+            (sourcePortSide == dev.akexorcist.workstation.data.model.DeviceSide.TOP || 
+             sourcePortSide == dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM) &&
+            (targetPortSide == dev.akexorcist.workstation.data.model.DeviceSide.TOP || 
+             targetPortSide == dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM) -> true
+            (sourcePortSide == dev.akexorcist.workstation.data.model.DeviceSide.LEFT || 
+             sourcePortSide == dev.akexorcist.workstation.data.model.DeviceSide.RIGHT) &&
+            (targetPortSide == dev.akexorcist.workstation.data.model.DeviceSide.LEFT || 
+             targetPortSide == dev.akexorcist.workstation.data.model.DeviceSide.RIGHT) -> true
+            else -> false
+        }
+        
+        if (arePortsOnSameAxis && extractedRoutingPoints.size == 1) {
+            val point = extractedRoutingPoints[0]
+            extractedRoutingPoints = listOf(point, point)
+        }
+        
         val updatedConnection = connection.copy(routingPoints = extractedRoutingPoints)
         
         return Pair(routedConnection, updatedConnection)
@@ -536,7 +556,27 @@ class EditorViewModel(
         val routedConnection = _uiState.value.routedConnectionMap[connectionId] ?: return
         val virtualWaypoints = routedConnection.virtualWaypoints
         
-        if (segmentIndex <= 0 || segmentIndex >= virtualWaypoints.size - 1) return
+        if (segmentIndex < 0 || segmentIndex >= virtualWaypoints.size - 1) return
+        
+        val metadata = layout.metadata
+        val zoom = _uiState.value.zoom
+        val virtualDelta = screenDeltaToVirtualDelta(screenDragDelta, metadata, canvasSize, zoom)
+        
+        val isSourcePortSegment = segmentIndex == 0
+        val isTargetPortSegment = segmentIndex == virtualWaypoints.size - 2
+        
+        if (isSourcePortSegment || isTargetPortSegment) {
+            handlePortConnectedSegmentDrag(
+                connection = connection,
+                segmentIndex = segmentIndex,
+                virtualDelta = virtualDelta,
+                isSourcePort = isSourcePortSegment,
+                layout = layout,
+                virtualWaypoints = virtualWaypoints,
+                metadata = metadata
+            )
+            return
+        }
         
         val startWaypoint = virtualWaypoints[segmentIndex]
         val endWaypoint = virtualWaypoints[segmentIndex + 1]
@@ -545,10 +585,6 @@ class EditorViewModel(
             (endWaypoint.second - startWaypoint.second) * (endWaypoint.second - startWaypoint.second)
         )
         if (segmentLength < 0.1f) return
-        
-        val metadata = layout.metadata
-        val zoom = _uiState.value.zoom
-        val virtualDelta = screenDeltaToVirtualDelta(screenDragDelta, metadata, canvasSize, zoom)
         
         val constrainedDelta = if (isHorizontal) {
             Offset(0f, virtualDelta.y)
@@ -620,6 +656,118 @@ class EditorViewModel(
         val updatedConnection = currentConnection.copy(routingPoints = routingPoints)
         val updatedConnections = currentLayout.connections.map { if (it.id == connectionId) updatedConnection else it }
         val updatedLayout = currentLayout.copy(connections = updatedConnections)
+        
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.Main.immediate) {
+            updateLayoutWithConnections(updatedLayout)
+        }
+    }
+    
+    private fun handlePortConnectedSegmentDrag(
+        connection: Connection,
+        segmentIndex: Int,
+        virtualDelta: Offset,
+        isSourcePort: Boolean,
+        layout: dev.akexorcist.workstation.data.model.WorkstationLayout,
+        virtualWaypoints: List<Pair<Float, Float>>,
+        metadata: dev.akexorcist.workstation.data.model.LayoutMetadata
+    ) {
+        val deviceId = if (isSourcePort) connection.sourceDeviceId else connection.targetDeviceId
+        val portId = if (isSourcePort) connection.sourcePortId else connection.targetPortId
+        
+        val device = layout.devices.find { it.id == deviceId } ?: return
+        val port = device.ports.find { it.id == portId } ?: return
+        
+        val portSide = port.position.side
+        val isPortHorizontal = portSide == dev.akexorcist.workstation.data.model.DeviceSide.TOP || 
+                              portSide == dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM
+        
+        val constrainedDelta = if (isPortHorizontal) {
+            Offset(virtualDelta.x, 0f)
+        } else {
+            Offset(0f, virtualDelta.y)
+        }
+        
+        if (dragStartDeviceId != deviceId || dragStartPortId != portId) {
+            originalPortPosition = port.position.position
+            dragStartDeviceId = deviceId
+            dragStartPortId = portId
+        }
+        
+        val originalPosition = originalPortPosition ?: port.position.position
+        
+        val newPosition = if (isPortHorizontal) {
+            originalPosition + constrainedDelta.x
+        } else {
+            originalPosition + constrainedDelta.y
+        }
+        
+        val gridConfig = metadata.grid
+        val gridSize = gridConfig?.size ?: 20f
+        val gridEnabled = gridConfig?.enabled ?: true
+        
+        val clampedPosition = when (portSide) {
+            dev.akexorcist.workstation.data.model.DeviceSide.TOP,
+            dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
+                newPosition.coerceIn(gridSize, device.size.width - gridSize)
+            }
+            dev.akexorcist.workstation.data.model.DeviceSide.LEFT,
+            dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
+                newPosition.coerceIn(gridSize, device.size.height - gridSize)
+            }
+        }
+        
+        val finalPosition = if (gridEnabled) {
+            snapToGrid(clampedPosition, gridSize)
+        } else {
+            clampedPosition
+        }
+        
+        val updatedPort = port.copy(
+            position = port.position.copy(position = finalPosition)
+        )
+        
+        val updatedPorts = device.ports.map { if (it.id == portId) updatedPort else it }
+        val updatedDevice = device.copy(ports = updatedPorts)
+        val updatedDevices = layout.devices.map { if (it.id == deviceId) updatedDevice else it }
+        var updatedLayout = layout.copy(devices = updatedDevices)
+        
+        val oldPortVirtualPos = calculatePortPosition(device, port, metadata)
+        val newPortVirtualPos = calculatePortPosition(updatedDevice, updatedPort, metadata)
+        
+        val portDeltaX = newPortVirtualPos.first - oldPortVirtualPos.first
+        val portDeltaY = newPortVirtualPos.second - oldPortVirtualPos.second
+        
+        val updatedConnections = updatedLayout.connections.map { conn ->
+            if (conn.id != connection.id) return@map conn
+            
+            val routingPoints = conn.routingPoints ?: return@map conn
+            if (routingPoints.isEmpty()) return@map conn
+            
+            val updatedRoutingPoints = routingPoints.toMutableList()
+            
+            if (isSourcePort) {
+                val firstPoint = routingPoints[0]
+                val newPoint = if (isPortHorizontal) {
+                    Point(x = firstPoint.x + portDeltaX, y = firstPoint.y)
+                } else {
+                    Point(x = firstPoint.x, y = firstPoint.y + portDeltaY)
+                }
+                updatedRoutingPoints[0] = newPoint
+            } else {
+                val lastIndex = updatedRoutingPoints.size - 1
+                val lastPoint = routingPoints[lastIndex]
+                val newPoint = if (isPortHorizontal) {
+                    Point(x = lastPoint.x + portDeltaX, y = lastPoint.y)
+                } else {
+                    Point(x = lastPoint.x, y = lastPoint.y + portDeltaY)
+                }
+                updatedRoutingPoints[lastIndex] = newPoint
+            }
+            
+            conn.copy(routingPoints = updatedRoutingPoints)
+        }
+        
+        updatedLayout = updatedLayout.copy(connections = updatedConnections)
         
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.Main.immediate) {
             updateLayoutWithConnections(updatedLayout)

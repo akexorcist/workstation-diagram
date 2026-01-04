@@ -177,8 +177,6 @@ internal fun findSegmentAtPoint(
         if (virtualWaypoints.size < 2) return@forEach
         
         for (i in 0 until virtualWaypoints.size - 1) {
-            if (i == 0 || i == virtualWaypoints.size - 2) continue
-            
             val startWaypoint = virtualWaypoints[i]
             val endWaypoint = virtualWaypoints[i + 1]
             
