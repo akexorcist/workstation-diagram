@@ -106,6 +106,19 @@ private fun DeviceListSection(
     onHoverDevice: (String?, Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier
 ) {
+    val sortedDevices = devices.sortedWith(
+        compareBy(
+            {
+                when (it.category) {
+                    DeviceCategory.HOST -> 0
+                    DeviceCategory.HUB -> 1
+                    DeviceCategory.DEVICE -> 2
+                }
+            },
+            { it.label.lowercase() }
+        )
+    )
+
     CollapsibleSection(
         title = "Device List",
         icon = Icons.AutoMirrored.Filled.List,
@@ -120,7 +133,7 @@ private fun DeviceListSection(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 contentPadding = PaddingValues(vertical = 4.dp)
             ) {
-                items(devices) { device ->
+                items(sortedDevices) { device ->
                     DeviceListItem(
                         device = device,
                         isSelected = device.id == selectedDeviceId,
