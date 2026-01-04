@@ -486,6 +486,15 @@ fun ConnectionCanvas(
                         val adjustedEndFg = endForegroundColor.copy(alpha = endForegroundColor.alpha * opacityMultiplier)
                         val adjustedViewportBackground = viewportBackgroundColor.copy(alpha = viewportBackgroundColor.alpha * RenderingConfig.connectionBackgroundBorderOpacity * opacityMultiplier)
 
+                        val adjustedPhase = when {
+                            sourceDirection == PortDirection.INPUT && targetDirection == PortDirection.OUTPUT -> {
+                                if (isAnimationEnabled) 1f - phase.value else -1f
+                            }
+                            else -> {
+                                if (isAnimationEnabled) phase.value else -1f
+                            }
+                        }
+
                         drawGradientConnectionPath(
                             path = path,
                             startBackgroundColor = adjustedStartBg,
@@ -493,7 +502,7 @@ fun ConnectionCanvas(
                             startForegroundColor = adjustedStartFg,
                             endForegroundColor = adjustedEndFg,
                             zoom = zoom,
-                            phase = if (isAnimationEnabled) phase.value else -1f,
+                            phase = adjustedPhase,
                             viewportBackgroundColor = adjustedViewportBackground,
                         )
                     }
