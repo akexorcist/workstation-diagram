@@ -131,11 +131,11 @@ actual fun readResourceFile(path: String): String {
       "label": "USB Docking Station",
       "category": "HUB",
       "position": {
-        "x": 500.0,
+        "x": 520.0,
         "y": 700.0
       },
       "size": {
-        "width": 180.0,
+        "width": 160.0,
         "height": 400.0
       },
       "ports": [
@@ -516,11 +516,11 @@ actual fun readResourceFile(path: String): String {
       "label": "HDMI Switcher",
       "category": "HUB",
       "position": {
-        "x": 500.0,
+        "x": 520.0,
         "y": 1200.0
       },
       "size": {
-        "width": 180.0,
+        "width": 160.0,
         "height": 160.0
       },
       "ports": [
@@ -730,7 +730,7 @@ actual fun readResourceFile(path: String): String {
         "y": 1100.0
       },
       "size": {
-        "width": 150.0,
+        "width": 180.0,
         "height": 120.0
       },
       "ports": [
@@ -1230,7 +1230,7 @@ actual fun readResourceFile(path: String): String {
         "y": 1320.0
       },
       "size": {
-        "width": 150.0,
+        "width": 200.0,
         "height": 160.0
       },
       "ports": [
