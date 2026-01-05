@@ -215,11 +215,13 @@ private fun DeviceListItem(
                     fontWeight = FontWeight.Medium,
                     color = WorkstationTheme.themeColor.text
                 )
-                Text(
-                    text = device.title,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = WorkstationTheme.themeColor.onSurfaceSecondary
-                )
+                if (device.title.isNotBlank()) {
+                    Text(
+                        text = device.title,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = WorkstationTheme.themeColor.onSurfaceSecondary
+                    )
+                }
             }
         }
     }
