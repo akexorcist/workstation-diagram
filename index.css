@@ -14,12 +14,19 @@ body, html {
 
 .message {
     font-size: 1.5rem;
+    color: white;
 }
 
 .message-container {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-color: #333333;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
 }
 
 #WorkstationDiagram {
