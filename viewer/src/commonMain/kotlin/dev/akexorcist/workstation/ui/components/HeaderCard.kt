@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.akexorcist.workstation.ui.theme.WorkstationTheme
@@ -44,6 +45,14 @@ fun HeaderCard(
             .defaultShadow()
             .clip(RoundedCornerShape(12.dp))
             .background(WorkstationTheme.themeColor.surface)
+            .pointerInput(Unit) {
+                awaitPointerEventScope {
+                    while (true) {
+                        val event = awaitPointerEvent()
+                        event.changes.forEach { it.consume() }
+                    }
+                }
+            }
     ) {
         
         Column(
