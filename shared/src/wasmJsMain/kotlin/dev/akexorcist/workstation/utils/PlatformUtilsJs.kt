@@ -23,6 +23,9 @@ private val callText: (JsAny) -> kotlin.js.Promise<JsAny> = js("(response) => re
 @OptIn(ExperimentalWasmJsInterop::class)
 private val toStringJs: (JsAny) -> String = js("(value) => String(value)")
 
+@OptIn(ExperimentalWasmJsInterop::class)
+private val resolvePath: (String) -> String = js("(path) => { const base = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1); return base + path; }")
+
 actual fun openUrl(url: String) {
     try {
         openWindow(url)
@@ -33,10 +36,11 @@ actual fun openUrl(url: String) {
 
 @OptIn(ExperimentalWasmJsInterop::class)
 actual suspend fun readResourceFile(path: String): String {
-    val response = fetchJs(path).await<JsAny>()
+    val resolvedPath = resolvePath(path)
+    val response = fetchJs(resolvedPath).await<JsAny>()
     if (!getOk(response)) {
         val status = getStatus(response)
-        throw IllegalStateException("Failed to load resource: $path ($status)")
+        throw IllegalStateException("Failed to load resource: $resolvedPath ($status)")
     }
     val textPromise = callText(response)
     val textValue = textPromise.await<JsAny>()

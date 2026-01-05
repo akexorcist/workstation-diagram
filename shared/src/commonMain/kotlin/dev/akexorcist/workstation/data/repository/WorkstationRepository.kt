@@ -51,7 +51,7 @@ class WorkstationRepositoryImpl : WorkstationRepository {
     }
 
     private suspend fun readFile(): String {
-        val resourcePath = "/data/workstation.json"
+        val resourcePath = "data/workstation.json"
         return readResourceFile(resourcePath)
     }
 }
