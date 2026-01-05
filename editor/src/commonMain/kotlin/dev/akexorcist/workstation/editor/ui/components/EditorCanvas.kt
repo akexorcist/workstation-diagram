@@ -21,6 +21,7 @@ import dev.akexorcist.workstation.data.model.Offset as DataOffset
 import dev.akexorcist.workstation.editor.presentation.EditorUiState
 import dev.akexorcist.workstation.ui.theme.WorkstationTheme
 import dev.akexorcist.workstation.utils.CoordinateTransformer
+import dev.akexorcist.workstation.ui.components.CanvasBorder
 import dev.akexorcist.workstation.ui.components.ConnectionCanvas
 import dev.akexorcist.workstation.ui.components.DeviceList
 import dev.akexorcist.workstation.ui.components.PortsOverlay
@@ -345,6 +346,13 @@ fun EditorCanvas(
         )
         val viewportSize = actualSize
         val zoom = uiState.zoom
+
+        CanvasBorder(
+            metadata = layout.metadata,
+            canvasSize = canvasSize,
+            zoom = zoom,
+            panOffset = uiState.panOffset
+        )
 
         ConnectionCanvas(
             layout = layout,

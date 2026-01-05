@@ -49,6 +49,76 @@ import dev.akexorcist.workstation.utils.CoordinateTransformer
 import dev.akexorcist.workstation.utils.DeviceConnectionInfo
 
 /**
+ * Renders a border around the canvas area using the theme border color.
+ * The border transforms correctly with zoom and pan operations.
+ */
+@Composable
+fun CanvasBorder(
+    metadata: LayoutMetadata,
+    canvasSize: dev.akexorcist.workstation.data.model.Size,
+    zoom: Float,
+    panOffset: dev.akexorcist.workstation.data.model.Offset,
+    modifier: Modifier = Modifier
+) {
+    val borderColor = WorkstationTheme.themeColor.surface
+    val borderStrokeWidth = 2f
+
+    val definedCanvasSize = if (CoordinateTransformer.isVirtualCoordinates(metadata)) {
+        metadata.virtualCanvas ?: metadata.canvasSize
+    } else {
+        metadata.canvasSize
+    }
+
+    Canvas(modifier = modifier.fillMaxSize()) {
+        val topLeft = CoordinateTransformer.transformPosition(
+            Position(0f, 0f),
+            metadata,
+            canvasSize,
+            zoom,
+            panOffset
+        )
+        
+        val topRight = CoordinateTransformer.transformPosition(
+            Position(definedCanvasSize.width, 0f),
+            metadata,
+            canvasSize,
+            zoom,
+            panOffset
+        )
+        
+        val bottomLeft = CoordinateTransformer.transformPosition(
+            Position(0f, definedCanvasSize.height),
+            metadata,
+            canvasSize,
+            zoom,
+            panOffset
+        )
+        
+        val bottomRight = CoordinateTransformer.transformPosition(
+            Position(definedCanvasSize.width, definedCanvasSize.height),
+            metadata,
+            canvasSize,
+            zoom,
+            panOffset
+        )
+
+        val borderPath = Path().apply {
+            moveTo(topLeft.x, topLeft.y)
+            lineTo(topRight.x, topRight.y)
+            lineTo(bottomRight.x, bottomRight.y)
+            lineTo(bottomLeft.x, bottomLeft.y)
+            close()
+        }
+
+        drawPath(
+            path = borderPath,
+            color = borderColor,
+            style = Stroke(width = borderStrokeWidth)
+        )
+    }
+}
+
+/**
  * Renders connections and ports using Canvas for efficient line drawing.
  */
 @Composable
