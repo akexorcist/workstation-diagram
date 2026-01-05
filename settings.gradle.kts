@@ -1,4 +1,4 @@
-rootProject.name = "workstation"
+rootProject.name = "workstation-diagram"
 
 include(":shared")
 include(":viewer")
