@@ -9,6 +9,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
@@ -32,6 +33,7 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -42,6 +44,7 @@ import dev.akexorcist.workstation.data.model.Port
 import dev.akexorcist.workstation.data.model.PortDirection
 import dev.akexorcist.workstation.data.model.Position
 import dev.akexorcist.workstation.presentation.WorkstationUiState
+import dev.akexorcist.workstation.presentation.config.InteractionConfig
 import dev.akexorcist.workstation.presentation.config.RenderingConfig
 import dev.akexorcist.workstation.routing.RoutedConnection
 import dev.akexorcist.workstation.ui.theme.ThemeColor
@@ -60,6 +63,7 @@ fun DiagramCanvas(
     uiState: WorkstationUiState,
     onDeviceClick: (String) -> Unit,
     onPanChange: (dev.akexorcist.workstation.data.model.Offset) -> Unit,
+    onZoomChange: (Float, Offset) -> Unit,
     onHoverDevice: (String?, Boolean) -> Unit = { _, _ -> },
     onHoverPort: (String?, Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier
@@ -129,8 +133,11 @@ fun DiagramCanvas(
                     coordinates.size.height.toFloat()
                 )
             }
-            .pointerInput(Unit) {
+            .pointerInput(uiState.zoom) {
                 var dragStartPan = Offset.Zero
+                var initialZoom = uiState.zoom
+                var isTransformActive = false
+                
                 detectDragGestures(
                     onDragStart = {
                         dragStartPan = panOffsetRef.value.toComposeOffset()
@@ -156,6 +163,37 @@ fun DiagramCanvas(
                         accumulatedDrag.value = Offset.Zero
                     }
                 )
+                
+                detectTransformGestures { centroid: Offset, pan: Offset, zoom: Float, rotation: Float ->
+                    if (!isTransformActive) {
+                        initialZoom = uiState.zoom
+                        isTransformActive = true
+                    }
+                    
+                    val newZoom = initialZoom * zoom
+                    onZoomChange(newZoom, centroid)
+                }
+            }
+            .pointerInput(uiState.zoom) {
+                awaitPointerEventScope {
+                    while (true) {
+                        val event = awaitPointerEvent(PointerEventPass.Main)
+                        event.changes.forEach { change ->
+                            val scrollDelta = change.scrollDelta
+                            val verticalScroll = if (scrollDelta.y.isNaN()) 0f else scrollDelta.y
+                            val horizontalScroll = if (scrollDelta.x.isNaN()) 0f else scrollDelta.x
+                            
+                            if (kotlin.math.abs(verticalScroll) > 0.01f && kotlin.math.abs(horizontalScroll) < 0.01f) {
+                                val position = change.position
+                                val baseZoomFactor = if (verticalScroll > 0) 1.05f else 0.95f
+                                val zoomFactor = 1f + (baseZoomFactor - 1f) * InteractionConfig.scrollZoomSensitivity
+                                val newZoom = uiState.zoom * zoomFactor
+                                onZoomChange(newZoom, position)
+                                change.consume()
+                            }
+                        }
+                    }
+                }
             }
     ) {
         if (uiState.layout != null) {

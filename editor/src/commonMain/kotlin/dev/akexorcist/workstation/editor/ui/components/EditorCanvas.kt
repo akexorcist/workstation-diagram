@@ -2,6 +2,7 @@ package dev.akexorcist.workstation.editor.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import dev.akexorcist.workstation.data.model.Offset as DataOffset
@@ -33,11 +35,13 @@ import dev.akexorcist.workstation.editor.ui.components.constrainDragToCrossAxis
 import dev.akexorcist.workstation.editor.ui.components.constrainPortDragToEdge
 import dev.akexorcist.workstation.editor.ui.components.SegmentOrientation
 import dev.akexorcist.workstation.data.model.DeviceSide
+import dev.akexorcist.workstation.presentation.config.InteractionConfig
 
 @Composable
 fun EditorCanvas(
     uiState: EditorUiState,
     onPanChange: (DataOffset) -> Unit,
+    onZoomChange: (Float, Offset) -> Unit,
     onHoverSegment: (String?, Int?) -> Unit,
     onDragStartSegment: (String, Int) -> Unit,
     onDragSegment: (String, Int, DataOffset, Boolean) -> Unit,
@@ -92,6 +96,8 @@ fun EditorCanvas(
                 var portDeviceSide: DeviceSide? = null
                 var segmentDragInfo: Pair<Pair<String, Int>, SegmentOrientation>? = null
                 var deviceDragId: String? = null
+                var initialZoom = uiState.zoom
+                var isTransformActive = false
                 
                 detectDragGestures(
                     onDragStart = { offset ->
@@ -300,6 +306,37 @@ fun EditorCanvas(
                         }
                     }
                 )
+                
+                detectTransformGestures { centroid: Offset, pan: Offset, zoom: Float, rotation: Float ->
+                    if (!isTransformActive) {
+                        initialZoom = uiState.zoom
+                        isTransformActive = true
+                    }
+                    
+                    val newZoom = initialZoom * zoom
+                    onZoomChange(newZoom, centroid)
+                }
+            }
+            .pointerInput(uiState.zoom) {
+                awaitPointerEventScope {
+                    while (true) {
+                        val event = awaitPointerEvent(PointerEventPass.Main)
+                        event.changes.forEach { change ->
+                            val scrollDelta = change.scrollDelta
+                            val verticalScroll = if (scrollDelta.y.isNaN()) 0f else scrollDelta.y
+                            val horizontalScroll = if (scrollDelta.x.isNaN()) 0f else scrollDelta.x
+                            
+                            if (kotlin.math.abs(verticalScroll) > 0.01f && kotlin.math.abs(horizontalScroll) < 0.01f) {
+                                val position = change.position
+                                val baseZoomFactor = if (verticalScroll > 0) 1.05f else 0.95f
+                                val zoomFactor = 1f + (baseZoomFactor - 1f) * InteractionConfig.scrollZoomSensitivity
+                                val newZoom = uiState.zoom * zoomFactor
+                                onZoomChange(newZoom, position)
+                                change.consume()
+                            }
+                        }
+                    }
+                }
             }
     ) {
         val canvasSize = CoordinateTransformer.canvasSize(

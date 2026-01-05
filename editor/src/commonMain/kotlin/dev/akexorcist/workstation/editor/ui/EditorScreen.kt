@@ -85,6 +85,15 @@ fun EditorScreen(
                 EditorCanvas(
                     uiState = uiState,
                     onPanChange = viewModel::handlePanChange,
+                    onZoomChange = { newZoom, centerPoint ->
+                        viewModel.handleZoomChangeAtPoint(
+                            newZoom,
+                            dev.akexorcist.workstation.data.model.Offset(
+                                x = centerPoint.x,
+                                y = centerPoint.y
+                            )
+                        )
+                    },
                     onHoverSegment = viewModel::setSelectedLineSegment,
                     onDragStartSegment = { connectionId, segmentIndex ->
                         viewModel.setSelectedLineSegment(connectionId, segmentIndex)

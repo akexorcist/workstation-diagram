@@ -197,6 +197,15 @@ fun WorkstationDiagramScreen(
                     uiState = uiState,
                     onDeviceClick = viewModel::handleDeviceClick,
                     onPanChange = viewModel::handlePanChange,
+                    onZoomChange = { newZoom, centerPoint ->
+                        viewModel.handleZoomChangeAtPoint(
+                            newZoom,
+                            Offset(
+                                x = centerPoint.x,
+                                y = centerPoint.y
+                            )
+                        )
+                    },
                     onHoverDevice = { deviceId, isHovered -> viewModel.handleDeviceHover(deviceId, isHovered) },
                     onHoverPort = { portInfo, isHovered -> viewModel.handlePortHover(portInfo, isHovered) },
                     modifier = Modifier.fillMaxSize()
