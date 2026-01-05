@@ -54,46 +54,45 @@ fun DeviceNode(
         label = "backgroundColor"
     )
 
-    Box(modifier = modifier) {
-        Box(
-            modifier = Modifier
-                .offset {
-                    IntOffset(
-                        screenPosition.x.toInt(),
-                        screenPosition.y.toInt()
-                    )
-                }
-                .size(
-                    width = (screenSize.width / density).dp,
-                    height = (screenSize.height / density).dp
+    Box(
+        modifier = modifier
+            .offset {
+                IntOffset(
+                    screenPosition.x.toInt(),
+                    screenPosition.y.toInt()
                 )
-                .background(
-                    color = backgroundColor,
-                    shape = RoundedCornerShape((RenderingConfig.defaultDeviceBorderRadius / density).dp)
-                )
-                .pointerInput(Unit) {
-                    awaitPointerEventScope {
-                        while (true) {
-                            val event = awaitPointerEvent()
-                            when (event.type) {
-                                PointerEventType.Enter -> {
-                                    onHoverChange(true)
-                                }
+            }
+            .size(
+                width = (screenSize.width / density).dp,
+                height = (screenSize.height / density).dp
+            )
+            .background(
+                color = backgroundColor,
+                shape = RoundedCornerShape((RenderingConfig.defaultDeviceBorderRadius / density).dp)
+            )
+            .pointerInput(Unit) {
+                awaitPointerEventScope {
+                    while (true) {
+                        val event = awaitPointerEvent()
+                        when (event.type) {
+                            PointerEventType.Enter -> {
+                                onHoverChange(true)
+                            }
 
-                                PointerEventType.Exit -> {
-                                    onHoverChange(false)
-                                }
+                            PointerEventType.Exit -> {
+                                onHoverChange(false)
                             }
                         }
                     }
                 }
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = onClick
-                )
-        ) {
-            if (screenSize.width >= RenderingConfig.deviceTextMinWidthToShow * zoom) {
+            }
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            )
+    ) {
+        if (screenSize.width >= RenderingConfig.deviceTextMinWidthToShow * zoom) {
                 val paddingScaled = (RenderingConfig.deviceTextPadding * zoom / density).dp
 
                 Column(
@@ -129,7 +128,6 @@ fun DeviceNode(
                     }
                 }
             }
-        }
     }
 }
 
