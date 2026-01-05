@@ -9,6 +9,11 @@ import androidx.compose.ui.window.ComposeViewport
 import dev.akexorcist.workstation.presentation.WorkstationViewModel
 import dev.akexorcist.workstation.ui.WorkstationDiagramScreen
 import dev.akexorcist.workstation.ui.theme.WorkstationTheme
+import kotlin.js.ExperimentalWasmJsInterop
+import kotlin.js.js
+
+@OptIn(ExperimentalWasmJsInterop::class)
+private val hideLoadingScreen: () -> Unit = js("() => { if (typeof hideLoadingScreen === 'function') hideLoadingScreen(); }")
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
@@ -18,6 +23,7 @@ fun main() {
 
         LaunchedEffect(Unit) {
             viewModel.loadLayout()
+            hideLoadingScreen()
         }
 
         WorkstationTheme(darkTheme = uiState.isDarkTheme) {

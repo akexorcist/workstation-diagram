@@ -30,11 +30,13 @@
 </div>
 <div id="WorkstationDiagram"></div>
 <script defer>
-    window.onload = function(){
-        const element = document.getElementById("loading")
-        element.classList.remove("show");
-        element.classList.add("hide");
-    };
+    function hideLoadingScreen() {
+        const element = document.getElementById("loading");
+        if (element) {
+            element.classList.remove("show");
+            element.classList.add("hide");
+        }
+    }
 </script>
 <script defer>
     function isSupportedBrowser() {
