@@ -12,7 +12,7 @@ actual fun openUrl(url: String) {
     }
 }
 
-actual fun readResourceFile(path: String): String {
+actual suspend fun readResourceFile(path: String): String {
     // Remove leading slash if present, as ClassLoader.getResourceAsStream doesn't expect it
     val resourcePath = path.removePrefix("/")
     val inputStream = Thread.currentThread().contextClassLoader.getResourceAsStream(resourcePath)

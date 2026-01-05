@@ -50,7 +50,7 @@ class WorkstationRepositoryImpl : WorkstationRepository {
         return DataValidator.validateLayout(layout)
     }
 
-    private fun readFile(): String {
+    private suspend fun readFile(): String {
         val resourcePath = "/data/workstation.json"
         return readResourceFile(resourcePath)
     }
