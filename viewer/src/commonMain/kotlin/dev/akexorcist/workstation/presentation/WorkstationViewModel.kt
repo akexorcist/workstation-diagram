@@ -81,13 +81,17 @@ class WorkstationViewModel(
             
             val routedConnectionMap = routedConnections.associateBy { it.connectionId }
             
+            // Read theme from metadata if available
+            val initialTheme = layout.metadata.theme?.isDark ?: _uiState.value.isDarkTheme
+            
             kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
                 _uiState.value = _uiState.value.copy(
                     layout = layout,
                     isLoading = false,
                     errorMessage = errorMessage,
                     routedConnections = routedConnections,
-                    routedConnectionMap = routedConnectionMap
+                    routedConnectionMap = routedConnectionMap,
+                    isDarkTheme = initialTheme
                 )
                 updateDiagramState()
             }
