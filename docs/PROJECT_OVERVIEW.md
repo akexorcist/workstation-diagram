@@ -2,132 +2,118 @@
 
 ## Purpose
 
-Workstation Diagram is a Kotlin Multiplatform application for visualizing and editing workstation hardware configurations. It allows users to view and create interactive diagrams showing how devices (laptops, monitors, hubs, peripherals) are connected via ports and cables.
+Workstation Diagram is a Kotlin Multiplatform application for visualizing and editing workstation hardware configurations. It provides interactive diagrams showing how devices (laptops, monitors, hubs, peripherals) are connected via ports and cables.
+
+The application supports both read-only viewing and interactive editing of workstation configurations, with automatic pathfinding for connection routing and a resolution-independent coordinate system for cross-platform compatibility.
 
 ---
 
 ## Project Structure
 
-The project consists of three main modules:
+The project consists of three main modules, each serving a distinct purpose:
 
-### 1. **shared** Module
-- **Purpose**: Common code shared across all applications
-- **Contains**: Data models, serialization, validation, UI components, utilities
-- **Used by**: Both viewer and editor modules
+### Shared Module
 
-### 2. **viewer** Module
-- **Purpose**: Read-only visualization application
-- **Targets**: Desktop (JVM) and Web (WASM/JS)
+**Purpose**: Common code shared across all applications
 
-### 3. **editor** Module
-- **Purpose**: Interactive editing application
-- **Targets**: Desktop (JVM) and Web (WASM/JS)
+**Responsibilities**:
+- Data models and structures (devices, ports, connections, layout metadata)
+- JSON serialization and deserialization
+- Data validation rules and validation logic
+- Shared UI components (device rendering, port rendering, canvas components)
+- Coordinate transformation utilities
+- Configuration classes (rendering, viewport, state management)
+- Platform-agnostic utilities
+
+**Design Principle**: Contains only platform-independent code that can be used by both viewer and editor applications.
+
+### Viewer Module
+
+**Purpose**: Read-only visualization application
+
+**Responsibilities**:
+- Display workstation diagrams from JSON data
+- Viewport navigation (zoom, pan, centering)
+- Device interaction (selection, hover, details)
+- Connection visualization with routing paths
+- UI controls and sidebars (device list, legend, header)
+- Theme management
+
+**Target Platforms**: Desktop (JVM) and Web (WASM/JS)
+
+**Design Principle**: Focuses on visualization and exploration without modification capabilities.
+
+### Editor Module
+
+**Purpose**: Interactive editing application
+
+**Responsibilities**:
+- All viewer capabilities (inherits visualization features)
+- Port position editing on device edges
+- Connection path editing (manual routing point manipulation)
+- Auto-routing generation for connections without routing points
+- Export functionality to JSON format
+- Editing state management (selection, dragging, hover states)
+
+**Target Platforms**: Desktop (JVM) and Web (WASM/JS)
+
+**Design Principle**: Extends viewer functionality with full editing capabilities while maintaining the same visualization foundation.
 
 ---
 
-## Viewer Application
+## Key Features
 
-### Purpose
-
-Read-only visualization application for displaying workstation diagrams. Users can view and explore hardware configurations without modifying them.
-
-### Features
+### Viewer Application Features
 
 #### Core Visualization
-- Display workstation diagrams from JSON data
-- Render devices (laptops, monitors, hubs, peripherals) with visual representations
-- Render connections between devices with routing paths
-- Auto-routing display for connections (uses routing points from JSON or calculated paths)
+- Renders devices with visual representations based on device categories
+- Displays connections between devices with intelligent routing paths
+- Supports both manual routing (from JSON) and automatic path calculation
+- Responsive rendering that adapts to different screen sizes
 
 #### Viewport Navigation
-- Zoom in/out (mouse wheel, keyboard shortcuts, control panel)
-- Pan (mouse drag, arrow keys)
-- Zoom to specific points (maintains point position during zoom)
-- Center viewport on all devices (auto-centering on load)
-- Reset zoom to default value
-- Keyboard shortcuts:
-  - Ctrl/Cmd + Plus/Equals: Zoom in
-  - Ctrl/Cmd + Minus: Zoom out
-  - Arrow keys: Pan viewport
+- Point-based zooming (zooms towards viewport center for intuitive interaction)
+- Smooth panning with drag gestures
+- Automatic centering on diagram content
+- Keyboard shortcuts for navigation
+- Zoom level management with configurable limits
 
 #### Device Interaction
-- Device selection (click to select)
-- Device hover states (visual feedback on hover)
-- Device details dialog (shows device information when selected)
-- Device list sidebar (navigable list of all devices with filtering support)
-- Device search/filter (state support for filtering devices)
+- Device selection and highlighting
+- Hover states for visual feedback
+- Device details display
+- Device list sidebar with search and filtering
+- Visual distinction between device categories
 
-#### UI Features
-- Instruction legend (color-coded device categories and connector types)
-- Header card (diagram title, date, external links)
-- Collapsible sections (instruction legend, device list)
-- UI panel visibility toggle (hide/show sidebar for focused viewing)
+#### User Interface
+- Collapsible UI panels for focused viewing
 - Theme switching (light/dark mode)
-- Connection animation toggle (enable/disable animated connections)
-
-### Data Handling
-- Loads `workstation.json` files
-- Read-only access (no save/export functionality)
-- Displays routing points from JSON
-- Calculates straight paths for connections without routing points
-
----
-
-## Editor Application
-
-### Purpose
-
-Interactive editing application for creating and modifying workstation diagrams. Extends viewer capabilities with full editing functionality.
-
-### Features
-
-#### All Viewer Features
-- All visualization capabilities from the viewer
-- All viewport navigation features
-- Theme switching
 - Connection animation toggle
+- Instruction legend for device categories and connection types
+- Header information (title, date, external links)
+
+### Editor Application Features
 
 #### Editing Capabilities
-- **Port Position Editing**: Adjust port positions on device edges interactively
-- **Connection Path Editing**: Manually edit connection routing points/waypoints
-- **Routing Point Management**: Select, drag, and modify routing points
-- **Line Segment Editing**: Select and edit connection line segments
+- **Port Position Editing**: Interactive adjustment of port positions along device edges
+- **Connection Path Editing**: Manual manipulation of routing waypoints
+- **Routing Point Management**: Select, drag, and modify individual routing points
+- **Line Segment Editing**: Direct editing of connection line segments
 - **Device Selection**: Select devices for editing operations
 
 #### Auto-Generation
-- **Auto-routing**: Automatically generates routing points for connections when missing from JSON
-- **One-time Generation**: Auto-routed paths are saved and persist in the connection data
-- **Path Optimization**: Generated paths avoid device obstacles and optimize layout
+- **Automatic Routing**: Generates routing paths for connections missing routing information
+- **One-time Generation**: Auto-routed paths are saved immediately and persist
+- **Path Optimization**: Generated paths avoid device obstacles and minimize crossings
+- **Smart Detection**: Only generates paths when routing points are absent
 
-**Auto-Generation Behavior**:
-When a connection in the JSON lacks routing points:
-1. System detects missing routing information
-2. Auto-routing algorithm generates path (one-time operation)
-3. Path avoids device obstacles
-4. Path optimizes for minimal crossings and clean layout
-5. Auto-generated routing points are immediately saved to the Connection object
-
-**Important**: Once a connection has routing points (whether auto-generated or manually defined), it will never be auto-routed again. The routing points persist and can be manually edited by the user. All routing points (auto-generated or manual) are included when exporting to JSON.
+**Auto-Generation Behavior**: When a connection lacks routing points, the system automatically generates an optimized path. Once generated (or manually defined), routing points persist and can be manually edited. The system never regenerates paths for connections that already have routing points.
 
 #### Export Functionality
-- Export edited diagrams to JSON format
-- Saves all routing points (manual and auto-generated)
-- Preserves device positions, port positions, and connection paths
-
-#### Editing State Management
-- Selected routing points
-- Dragging routing points
-- Hovered routing points
-- Selected line segments
-- Selected ports
-- Connection selection for editing
-
-### Data Handling
-- Loads `workstation.json` files
-- Reads and writes JSON data
-- Auto-generates routing points when missing
-- Syncs port positions with connections
-- Exports complete diagram data
+- Exports complete diagram data to JSON format
+- Preserves all routing points (both manual and auto-generated)
+- Maintains device positions, port positions, and connection paths
+- Ensures data integrity and backward compatibility
 
 ---
 
@@ -135,61 +121,89 @@ When a connection in the JSON lacks routing points:
 
 ### Data Model
 
-The application uses a JSON-based data format (`workstation.json`) with the following structure:
+The application uses a JSON-based data format with a hierarchical structure:
 
-- **Devices**: Hardware components (laptops, monitors, hubs, peripherals)
-  - Each device has a position, size, and list of ports
-  - Ports have positions on device edges (TOP, BOTTOM, LEFT, RIGHT)
-  - Ports have directions (INPUT, OUTPUT, BIDIRECTIONAL)
+- **Devices**: Represent hardware components with positions, sizes, and ports
+  - Ports are positioned along device edges (top, bottom, left, right)
+  - Ports have directions (input, output, bidirectional)
+  - Devices belong to categories (laptop, monitor, hub, peripheral)
 
-- **Connections**: Links between device ports
-  - References source and target devices/ports
-  - Optional routing points for manual path definition
-  - Auto-generated if routing points not provided (editor only)
+- **Connections**: Link device ports together
+  - Reference source and target devices and ports
+  - May include optional routing points for manual path definition
+  - Support automatic path generation when routing points are absent
 
-- **Metadata**: Canvas configuration, viewport settings, grid settings
+- **Metadata**: Contains canvas configuration, viewport settings, and coordinate system specification
 
 ### Coordinate System
 
-- Uses virtual coordinate system for resolution independence
-- Devices and connections positioned in virtual space
-- Automatically scales to screen size
-- Supports zoom and pan operations
+The application uses a virtual coordinate system for resolution independence:
+
+- Fixed virtual canvas (typically 10000×10000 units)
+- Automatic scaling to any screen size
+- Maintains aspect ratios across different displays
+- Supports both virtual and absolute coordinate modes (backward compatible)
+- Grid alignment for consistent routing behavior
+
+See [COORDINATE_SYSTEM.md](COORDINATE_SYSTEM.md) for detailed information.
 
 ### Routing System
 
-Connections between devices can be:
-- **Manual Routing**: User-defined waypoints stored in JSON
-- **Auto Routing**: Automatically generated paths when manual routing not available (editor only)
-- Routes avoid device obstacles and optimize pathfinding
+Connections between devices use intelligent routing:
+
+- **Manual Routing**: User-defined waypoints stored in JSON data
+- **Automatic Routing**: Algorithm-generated paths when manual routing is unavailable
+- **Obstacle Avoidance**: Paths avoid device boundaries and other obstacles
+- **Path Optimization**: Minimizes turns, crossings, and path length
+- **Grid-Based**: Uses grid alignment for consistent pathfinding
+
+See [ROUTING_SYSTEM.md](ROUTING_SYSTEM.md) for detailed information.
 
 ### State Management
 
-- Uses MVVM (Model-View-ViewModel) architecture
-- Reactive state with StateFlow
-- ViewModels manage UI state and business logic
-- State persists across viewport operations
+The application uses MVVM (Model-View-ViewModel) architecture:
+
+- **Reactive State**: StateFlow-based state management for automatic UI updates
+- **Unidirectional Data Flow**: State flows from ViewModel to UI, events flow from UI to ViewModel
+- **Lifecycle Awareness**: Automatic resource cleanup and state preservation
+- **State Validation**: All state changes validated before application
+- **Derived State**: Render-optimized state computed from primary state
+
+See [STATE_MANAGEMENT.md](STATE_MANAGEMENT.md) for detailed information.
 
 ---
 
 ## Architecture Patterns
 
 ### Multiplatform Strategy
-- Common code in `commonMain`
-- Platform-specific code in `jvmMain` (desktop) and `wasmJsMain` (web)
-- Uses expect/actual pattern for platform abstractions
+
+The project uses Kotlin Multiplatform to share code across platforms:
+
+- **Common Code**: Platform-agnostic code in `commonMain` source sets
+- **Platform-Specific Code**: Isolated in `jvmMain` (desktop) and `wasmJsMain` (web)
+- **Expect/Actual Pattern**: Platform abstractions for platform-specific implementations
+- **Single Codebase**: Shared business logic, data models, and UI components
 
 ### Layered Architecture
-- **UI Layer**: Compose UI components
-- **Presentation Layer**: ViewModels and state management
-- **Data Layer**: Models, repositories, serialization
-- **Platform Layer**: Platform-specific utilities
+
+The application follows a clean layered architecture:
+
+- **UI Layer**: Compose UI components, screens, and themes
+- **Presentation Layer**: ViewModels, state management, and business logic
+- **Data Layer**: Models, repositories, serialization, and validation
+- **Platform Layer**: Platform-specific utilities and implementations
 
 ### Design Patterns
-- **Repository Pattern**: Abstracts data access
-- **MVVM Pattern**: Separates UI from business logic
-- **Observer Pattern**: Reactive state updates
-- **Strategy Pattern**: Configurable algorithms (routing, rendering)
+
+The application employs several design patterns:
+
+- **Repository Pattern**: Abstracts data access for the presentation layer
+- **MVVM Pattern**: Separates UI from business logic and state management
+- **Observer Pattern**: Enables reactive state updates via StateFlow
+- **Strategy Pattern**: Configurable algorithms for routing and rendering
+- **Factory Pattern**: Object creation without specifying concrete types
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed information.
 
 ---
 
@@ -204,84 +218,35 @@ Connections between devices can be:
 
 ---
 
-## Development Workflow
-
-### Build System
-- Gradle with Kotlin DSL
-- Multi-platform build configuration
-- Shared dependency versions via `libs.versions.toml`
-
-### Code Organization
-- Modules organized by feature/application
-- Shared code in `shared` module
-- Application-specific code in respective modules
-- Documentation in `docs/` directory
-
-### Key Principles
-- Keep common code platform-agnostic
-- Use expect/actual for platform-specific implementations
-- Maintain separation of concerns (UI, presentation, data)
-- Follow Kotlin best practices
-- Keep documentation up-to-date
-
----
-
-## Current Development Focus
-
-The editor module is currently being enhanced with:
-1. **Port Position Editing**: Interactive editing of port positions on device edges
-2. **Connection Path Editing**: Manual editing of connection routing waypoints
-3. **Auto-routing Enhancement**: Improved automatic connection path generation
-
-These features allow users to:
-- Fine-tune port positions for better layout
-- Manually adjust connection paths when auto-routing isn't ideal
-- Have connections automatically generated when JSON lacks routing data
-
----
-
 ## Data Format
 
-The application reads/writes `workstation.json` files with:
-- Device definitions with positions, sizes, ports
+The application uses a JSON-based data format (`workstation.json`) that is:
+
+- **Human-readable**: Easy to read and edit manually
+- **Extensible**: Supports optional fields for future enhancements
+- **Backward Compatible**: Works with existing data files
+- **Validation-Friendly**: Structured for comprehensive validation
+- **Versioned**: Includes version information for migration support
+
+The format includes:
+- Device definitions with positions, sizes, and ports
 - Connection definitions linking device ports
 - Optional routing points for manual path control
 - Metadata for canvas and viewport configuration
 
-The JSON format is designed to be:
-- Human-readable and editable
-- Extensible (optional fields)
-- Backward compatible
-- Validation-friendly
-
----
-
-## For AI Agents
-
-When working on this project:
-
-1. **Understand the Structure**: Know which module you're working in (shared/viewer/editor)
-2. **Respect Boundaries**: Don't duplicate code that should be in `shared`
-3. **Follow Patterns**: Match existing architecture patterns
-4. **Check Documentation**: Review relevant docs before implementing
-5. **Consider Multiplatform**: Ensure code works on both JVM and WASM/JS targets
-6. **Maintain Compatibility**: Changes should work with existing JSON format
-7. **Update Documentation**: Keep docs current when making changes
-
-Key files to understand:
-- Data models: `shared/src/commonMain/kotlin/.../data/model/`
-- Viewer state: `viewer/src/commonMain/kotlin/.../presentation/WorkstationViewModel.kt`
-- Editor state: `editor/src/commonMain/kotlin/.../presentation/EditorViewModel.kt`
-- JSON structure: `viewer/src/commonMain/resources/data/workstation.json` or `editor/src/commonMain/resources/data/workstation.json`
-- Documentation: `docs/` directory
+See [DATA_MODEL.md](DATA_MODEL.md) for detailed information about the data structure.
 
 ---
 
 ## Related Documentation
 
-For more detailed information:
-- [README.md](README.md) - Technical documentation and setup
-- [ARCHITECTURE_SUMMARY.md](ARCHITECTURE_SUMMARY.md) - Architecture patterns
-- [COORDINATE_SYSTEM.md](COORDINATE_SYSTEM.md) - Coordinate system details
-- [MANUAL_PATH_ROUTING_IMPLEMENTATION_PLAN.md](MANUAL_PATH_ROUTING_IMPLEMENTATION_PLAN.md) - Routing implementation
-- [WORKSTATION_JSON_VALIDATION_RULES.md](WORKSTATION_JSON_VALIDATION_RULES.md) - JSON validation rules
+- [README.md](README.md) - Documentation navigation hub
+- [ARCHITECTURE.md](ARCHITECTURE.md) - System architecture and design patterns
+- [STATE_MANAGEMENT.md](STATE_MANAGEMENT.md) - State management concepts
+- [COORDINATE_SYSTEM.md](COORDINATE_SYSTEM.md) - Coordinate system design
+- [VIEWPORT_SYSTEM.md](VIEWPORT_SYSTEM.md) - Viewport navigation
+- [ROUTING_SYSTEM.md](ROUTING_SYSTEM.md) - Connection routing
+- [RENDERING_SYSTEM.md](RENDERING_SYSTEM.md) - Visual rendering
+- [DATA_MODEL.md](DATA_MODEL.md) - Data structure concepts
+- [VALIDATION.md](VALIDATION.md) - Validation concepts
+- [EDITING_SYSTEM.md](EDITING_SYSTEM.md) - Editor capabilities
