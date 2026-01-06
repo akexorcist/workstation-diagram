@@ -3,9 +3,13 @@ package dev.akexorcist.workstation.ui.components
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -17,6 +21,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -352,19 +357,44 @@ fun ConnectionCanvas(
     hoveredPortInfo: String? = null,
     relatedConnectionsMap: Map<String, Boolean> = emptyMap()
 ) {
-    val opacityTargets = remember { mutableMapOf<String, Float>() }
-    val currentOpacities = remember { mutableMapOf<String, Float>() }
+    val deviceMap = layout.devices.associateBy { it.id }
+    val isHoverHighlightActive = hoveredDeviceId != null || hoveredPortInfo != null
+
+    val targetOpacities = remember(layout.connections, isHoverHighlightActive, relatedConnectionsMap) {
+        layout.connections.associate { connection ->
+            val connectionKey = "connection-${connection.id}"
+            val isRelated = !isHoverHighlightActive || relatedConnectionsMap[connection.id] == true
+            val targetOpacity = if (isRelated) 1f else RenderingConfig.unrelatedConnectionOpacity
+            connectionKey to targetOpacity
+        }
+    }
+
+    val animatedOpacities = remember { mutableStateMapOf<String, Float>() }
+
+    LaunchedEffect(targetOpacities) {
+        targetOpacities.forEach { (key, targetValue) ->
+            val currentValue = animatedOpacities[key]
+            if (currentValue == null) {
+                animatedOpacities[key] = targetValue
+            } else if (kotlin.math.abs(currentValue - targetValue) > 0.001f) {
+                launch {
+                    val duration = 200L
+                    val steps = 20
+                    val stepDuration = duration / steps
+                    val stepSize = (targetValue - currentValue) / steps
+                    
+                    for (i in 1..steps) {
+                        delay(stepDuration)
+                        animatedOpacities[key] = currentValue + stepSize * i
+                    }
+                    animatedOpacities[key] = targetValue
+                }
+            }
+        }
+    }
 
     fun getAnimatedOpacity(key: String, targetValue: Float): Float {
-        opacityTargets[key] = targetValue
-        val current = currentOpacities[key] ?: 1f
-        val newValue = if (current == targetValue) {
-            current
-        } else {
-            current + (targetValue - current) * 0.1f
-        }
-        currentOpacities[key] = newValue
-        return newValue
+        return animatedOpacities[key] ?: targetValue
     }
 
     val phase = if (isAnimationEnabled) {
@@ -386,10 +416,6 @@ fun ConnectionCanvas(
     val connectionTheme = WorkstationTheme.themeColor.connection
     val viewportBackgroundColor = WorkstationTheme.themeColor.background
     val hoveredConnectionId: String? = null
-
-    val deviceMap = layout.devices.associateBy { it.id }
-
-    val isHoverHighlightActive = hoveredDeviceId != null || hoveredPortInfo != null
 
     Canvas(modifier = Modifier.fillMaxSize()) {
         val visibleConnections = layout.connections.filter { connection ->
@@ -794,20 +820,7 @@ private fun DrawScope.drawGradientConnectionPath(
         totalPathLength += length
     }
 
-    val useCurvedCorners = phase >= 0f
-    
-    val backgroundPath = if (useCurvedCorners) {
-        createCurvedPath(path, RenderingConfig.connectionCornerRadius * zoom)
-    } else {
-        Path().apply {
-            if (path.isNotEmpty()) {
-                moveTo(path[0].x, path[0].y)
-                for (i in 1 until path.size) {
-                    lineTo(path[i].x, path[i].y)
-                }
-            }
-        }
-    }
+    val backgroundPath = createCurvedPath(path, RenderingConfig.connectionCornerRadius * zoom)
 
     val borderStrokeWidth = backgroundWidth + 2 * borderWidth
     val borderColor = viewportBackgroundColor.copy(alpha = viewportBackgroundColor.alpha * RenderingConfig.connectionBackgroundBorderOpacity)
@@ -817,7 +830,7 @@ private fun DrawScope.drawGradientConnectionPath(
         style = Stroke(
             width = borderStrokeWidth,
             cap = StrokeCap.Round,
-            join = if (useCurvedCorners) StrokeJoin.Round else StrokeJoin.Miter
+            join = StrokeJoin.Round
         )
     )
 
@@ -832,22 +845,11 @@ private fun DrawScope.drawGradientConnectionPath(
         style = Stroke(
             width = backgroundWidth,
             cap = StrokeCap.Round,
-            join = if (useCurvedCorners) StrokeJoin.Round else StrokeJoin.Miter
+            join = StrokeJoin.Round
         )
     )
 
-    val foregroundPath = if (useCurvedCorners) {
-        createCurvedPath(path, RenderingConfig.connectionCornerRadius * zoom)
-    } else {
-        Path().apply {
-            if (path.isNotEmpty()) {
-                moveTo(path[0].x, path[0].y)
-                for (i in 1 until path.size) {
-                    lineTo(path[i].x, path[i].y)
-                }
-            }
-        }
-    }
+    val foregroundPath = createCurvedPath(path, RenderingConfig.connectionCornerRadius * zoom)
 
     // Create oval path for stamped effect
     val ovalWidth = foregroundWidth * 0.9f
@@ -883,7 +885,7 @@ private fun DrawScope.drawGradientConnectionPath(
             inner = PathEffect.cornerPathEffect(lineCornerRadius),
         )
     } else {
-        null
+        PathEffect.cornerPathEffect(lineCornerRadius)
     }
     
     drawPath(
@@ -893,7 +895,7 @@ private fun DrawScope.drawGradientConnectionPath(
             width = foregroundWidth,
             pathEffect = pathEffect,
             cap = StrokeCap.Round,
-            join = if (useCurvedCorners) StrokeJoin.Round else StrokeJoin.Miter
+            join = StrokeJoin.Round
         )
     )
 }
