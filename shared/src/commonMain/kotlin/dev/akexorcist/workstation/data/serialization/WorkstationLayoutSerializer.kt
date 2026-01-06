@@ -2,7 +2,6 @@ package dev.akexorcist.workstation.data.serialization
 
 import dev.akexorcist.workstation.data.model.WorkstationLayout
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonClassDiscriminator
 
 object WorkstationLayoutSerializer {
     private val json = Json {

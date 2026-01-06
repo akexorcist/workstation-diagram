@@ -3,13 +3,9 @@ package dev.akexorcist.workstation.ui.components
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.runtime.LaunchedEffect
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -20,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -38,8 +35,8 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -57,6 +54,8 @@ import dev.akexorcist.workstation.ui.theme.ThemeColor
 import dev.akexorcist.workstation.ui.theme.WorkstationTheme
 import dev.akexorcist.workstation.utils.CoordinateTransformer
 import dev.akexorcist.workstation.utils.DeviceConnectionInfo
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * Hybrid Compose-First Diagram Canvas
@@ -79,7 +78,6 @@ fun DiagramCanvas(
     val panOffsetRef = remember { mutableStateOf(uiState.panOffset) }
     panOffsetRef.value = uiState.panOffset
 
-    val routedConnections = uiState.routedConnections
     val routedConnectionMap = uiState.routedConnectionMap
 
     val relatedDevicesMap = remember(uiState.hoveredDeviceId, uiState.hoveredPortInfo, uiState.layout) {
@@ -170,7 +168,7 @@ fun DiagramCanvas(
                     }
                 )
                 
-                detectTransformGestures { centroid: Offset, pan: Offset, zoom: Float, rotation: Float ->
+                detectTransformGestures { centroid: Offset, _: Offset, zoom: Float, _: Float ->
                     if (!isTransformActive) {
                         initialZoom = uiState.zoom
                         isTransformActive = true

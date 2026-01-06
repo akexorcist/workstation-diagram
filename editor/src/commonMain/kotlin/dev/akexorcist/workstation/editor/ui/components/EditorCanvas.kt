@@ -13,30 +13,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import dev.akexorcist.workstation.data.model.Offset as DataOffset
+import dev.akexorcist.workstation.data.model.DeviceSide
 import dev.akexorcist.workstation.editor.presentation.EditorUiState
-import dev.akexorcist.workstation.ui.theme.WorkstationTheme
-import dev.akexorcist.workstation.utils.CoordinateTransformer
+import dev.akexorcist.workstation.presentation.config.InteractionConfig
 import dev.akexorcist.workstation.ui.components.CanvasBorder
 import dev.akexorcist.workstation.ui.components.ConnectionCanvas
 import dev.akexorcist.workstation.ui.components.DeviceList
 import dev.akexorcist.workstation.ui.components.PortsOverlay
-import dev.akexorcist.workstation.editor.ui.components.RoutingPointNodes
-import dev.akexorcist.workstation.editor.ui.components.LineSegmentOverlay
-import dev.akexorcist.workstation.editor.ui.components.PortOverlay
-import dev.akexorcist.workstation.editor.ui.components.DeviceOverlay
-import dev.akexorcist.workstation.editor.ui.components.findSegmentAtPoint
-import dev.akexorcist.workstation.editor.ui.components.findPortAtPoint
-import dev.akexorcist.workstation.editor.ui.components.findDeviceAtPoint
-import dev.akexorcist.workstation.editor.ui.components.constrainDragToCrossAxis
-import dev.akexorcist.workstation.editor.ui.components.constrainPortDragToEdge
-import dev.akexorcist.workstation.editor.ui.components.SegmentOrientation
-import dev.akexorcist.workstation.data.model.DeviceSide
-import dev.akexorcist.workstation.presentation.config.InteractionConfig
+import dev.akexorcist.workstation.ui.theme.WorkstationTheme
+import dev.akexorcist.workstation.utils.CoordinateTransformer
+import dev.akexorcist.workstation.data.model.Offset as DataOffset
 
 @Composable
 fun EditorCanvas(

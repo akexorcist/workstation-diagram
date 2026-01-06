@@ -88,7 +88,7 @@ fun EditorScreen(
                     onZoomChange = { newZoom, centerPoint ->
                         viewModel.handleZoomChangeAtPoint(
                             newZoom,
-                            dev.akexorcist.workstation.data.model.Offset(
+                            Offset(
                                 x = centerPoint.x,
                                 y = centerPoint.y
                             )

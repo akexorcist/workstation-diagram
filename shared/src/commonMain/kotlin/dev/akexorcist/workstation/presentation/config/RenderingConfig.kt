@@ -39,8 +39,6 @@ object RenderingConfig {
     
     // Simple router configuration
     const val simpleRouterDeviceClearance: Float = 15f
-    const val simpleRouterPortClearance: Float = 15f
-    const val simpleRouterGridSnap: Float = 10f
     const val portExtension: Float = 100f
 }
 

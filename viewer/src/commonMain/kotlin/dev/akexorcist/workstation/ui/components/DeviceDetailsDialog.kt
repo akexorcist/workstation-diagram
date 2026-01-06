@@ -45,7 +45,6 @@ import androidx.compose.ui.window.DialogProperties
 import dev.akexorcist.workstation.data.model.Device
 import dev.akexorcist.workstation.data.model.DeviceCategory
 import dev.akexorcist.workstation.presentation.config.DialogConfig
-import dev.akexorcist.workstation.ui.theme.ThemeColor
 import dev.akexorcist.workstation.ui.theme.WorkstationTheme
 import dev.akexorcist.workstation.utils.openUrl
 

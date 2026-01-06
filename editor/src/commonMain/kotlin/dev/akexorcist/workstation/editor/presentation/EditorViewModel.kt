@@ -1,6 +1,5 @@
 package dev.akexorcist.workstation.editor.presentation
 
-import androidx.compose.ui.geometry.Offset as ComposeOffset
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.akexorcist.workstation.data.model.Connection
@@ -17,16 +16,17 @@ import dev.akexorcist.workstation.data.repository.LoadResult
 import dev.akexorcist.workstation.data.repository.WorkstationRepository
 import dev.akexorcist.workstation.data.repository.WorkstationRepositoryImpl
 import dev.akexorcist.workstation.data.serialization.WorkstationLayoutSerializer
-import dev.akexorcist.workstation.routing.RoutedConnection
-import dev.akexorcist.workstation.presentation.config.StateManagementConfig
-import dev.akexorcist.workstation.presentation.config.ViewportConfig
 import dev.akexorcist.workstation.editor.routing.SimpleConnectionRouter
 import dev.akexorcist.workstation.presentation.config.RenderingConfig
+import dev.akexorcist.workstation.presentation.config.StateManagementConfig
+import dev.akexorcist.workstation.presentation.config.ViewportConfig
+import dev.akexorcist.workstation.routing.RoutedConnection
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import androidx.compose.ui.geometry.Offset as ComposeOffset
 
 class EditorViewModel(
     private val repository: WorkstationRepository = WorkstationRepositoryImpl()
@@ -970,9 +970,6 @@ class EditorViewModel(
         val updatedDevices = layout.devices.map { if (it.id == deviceId) updatedDevice else it }
         var updatedLayout = layout.copy(devices = updatedDevices)
         
-        val deviceDeltaX = finalPosition.x - device.position.x
-        val deviceDeltaY = finalPosition.y - device.position.y
-        
         val updatedConnections = updatedLayout.connections.map { connection ->
             val routingPoints = connection.routingPoints ?: return@map connection
             if (routingPoints.isEmpty()) return@map connection
@@ -1069,39 +1066,6 @@ class EditorViewModel(
         }
     }
 
-    fun updateRoutingPoint(
-        connectionId: String,
-        pointIndex: Int,
-        screenDelta: Offset,
-        canvasSize: Size
-    ) {
-    }
-
-    private fun screenToVirtual(
-        screenPosition: ComposeOffset,
-        metadata: LayoutMetadata,
-        canvasSize: Size,
-        zoom: Float,
-        panOffset: Offset
-    ): Position {
-        val worldX = (screenPosition.x - panOffset.x) / zoom
-        val worldY = (screenPosition.y - panOffset.y) / zoom
-
-        val isVirtual = metadata.coordinateSystem == "virtual" && metadata.virtualCanvas != null
-
-        return if (isVirtual) {
-            val virtualCanvas = metadata.virtualCanvas!!
-            val scaleX = virtualCanvas.width / canvasSize.width
-            val scaleY = virtualCanvas.height / canvasSize.height
-            Position(
-                x = worldX * scaleX,
-                y = worldY * scaleY
-            )
-        } else {
-            Position(worldX, worldY)
-        }
-    }
-
     private fun screenDeltaToVirtualDelta(
         screenDelta: ComposeOffset,
         metadata: LayoutMetadata,
@@ -1124,22 +1088,6 @@ class EditorViewModel(
                 y = screenDelta.y / zoom
             )
         }
-    }
-
-    fun setDraggingRoutingPoint(connectionId: String?, segmentIndex: Int?) {
-        _uiState.value = _uiState.value.copy(
-            draggingRoutingPoint = if (connectionId != null && segmentIndex != null) {
-                Pair(connectionId, segmentIndex)
-            } else null
-        )
-    }
-
-    fun setHoveredRoutingPoint(connectionId: String?, segmentIndex: Int?) {
-        _uiState.value = _uiState.value.copy(
-            hoveredRoutingPoint = if (connectionId != null && segmentIndex != null) {
-                Pair(connectionId, segmentIndex)
-            } else null
-        )
     }
 
     fun setSelectedLineSegment(connectionId: String?, segmentIndex: Int?) {
@@ -1193,12 +1141,6 @@ class EditorViewModel(
 
     fun toggleTheme() {
         _uiState.value = _uiState.value.copy(isDarkTheme = !_uiState.value.isDarkTheme)
-    }
-
-    fun toggleConnectionAnimation() {
-        _uiState.value = _uiState.value.copy(
-            connectionAnimationEnabled = !_uiState.value.connectionAnimationEnabled
-        )
     }
 
     fun exportToJson(prettyPrint: Boolean = true): String {

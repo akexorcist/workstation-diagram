@@ -35,9 +35,7 @@ class WorkstationRepositoryImpl : WorkstationRepository {
             val layout = WorkstationLayoutSerializer.fromJson(jsonString)
                 .getOrElse { error -> return@withContext LoadResult.Error("Failed to parse JSON: ${error.message}", error) }
 
-            val validationResult = DataValidator.validateLayout(layout)
-
-            when (validationResult) {
+            when (val validationResult = DataValidator.validateLayout(layout)) {
                 is ValidationResult.Success -> LoadResult.Success(layout)
                 is ValidationResult.Error -> LoadResult.PartialSuccess(layout, listOf(validationResult.message))
             }

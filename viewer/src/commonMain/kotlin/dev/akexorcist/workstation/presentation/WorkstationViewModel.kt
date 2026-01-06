@@ -17,7 +17,6 @@ import dev.akexorcist.workstation.data.repository.WorkstationRepositoryImpl
 import dev.akexorcist.workstation.presentation.config.StateManagementConfig
 import dev.akexorcist.workstation.presentation.config.ViewportConfig
 import dev.akexorcist.workstation.routing.ConnectionPathConverter
-import dev.akexorcist.workstation.routing.RoutedConnection
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

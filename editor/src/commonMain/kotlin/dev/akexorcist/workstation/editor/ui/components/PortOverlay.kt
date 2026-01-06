@@ -133,22 +133,22 @@ private fun calculatePortScreenPositionWithGrid(
     val virtualPortY: Float
 
     when (port.position.side) {
-        dev.akexorcist.workstation.data.model.DeviceSide.TOP -> {
+        DeviceSide.TOP -> {
             val positionX = port.position.position.coerceIn(0f, device.size.width)
             virtualPortX = device.position.x + positionX
             virtualPortY = device.position.y
         }
-        dev.akexorcist.workstation.data.model.DeviceSide.BOTTOM -> {
+        DeviceSide.BOTTOM -> {
             val positionX = port.position.position.coerceIn(0f, device.size.width)
             virtualPortX = device.position.x + positionX
             virtualPortY = device.position.y + device.size.height
         }
-        dev.akexorcist.workstation.data.model.DeviceSide.LEFT -> {
+        DeviceSide.LEFT -> {
             val positionY = port.position.position.coerceIn(0f, device.size.height)
             virtualPortX = device.position.x
             virtualPortY = device.position.y + positionY
         }
-        dev.akexorcist.workstation.data.model.DeviceSide.RIGHT -> {
+        DeviceSide.RIGHT -> {
             val positionY = port.position.position.coerceIn(0f, device.size.height)
             virtualPortX = device.position.x + device.size.width
             virtualPortY = device.position.y + positionY

@@ -783,10 +783,6 @@ private fun lineIntersectsHorizontalLine(
     return false
 }
 
-private fun dev.akexorcist.workstation.data.model.Offset.toComposeOffset(): Offset {
-    return Offset(x = this.x, y = this.y)
-}
-
 private fun virtualToScreen(
     virtualX: Float,
     virtualY: Float,

@@ -4,7 +4,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,12 +15,12 @@ import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import dev.akexorcist.workstation.data.model.Offset as DataOffset
 import dev.akexorcist.workstation.data.model.Position
 import dev.akexorcist.workstation.editor.presentation.EditorUiState
 import dev.akexorcist.workstation.routing.RoutedConnection
 import dev.akexorcist.workstation.ui.theme.WorkstationTheme
 import dev.akexorcist.workstation.utils.CoordinateTransformer
+import dev.akexorcist.workstation.data.model.Offset as DataOffset
 
 @Composable
 fun LineSegmentOverlay(
@@ -224,62 +223,6 @@ internal fun findSegmentAtPoint(
     }
     
     return closestSegment
-}
-
-private fun hasAdjacentSegmentInSameDirection(
-    virtualWaypoints: List<Pair<Float, Float>>,
-    segmentIndex: Int,
-    currentOrientation: SegmentOrientation,
-    layout: dev.akexorcist.workstation.data.model.WorkstationLayout,
-    canvasSize: dev.akexorcist.workstation.data.model.Size,
-    zoom: Float,
-    panOffset: DataOffset
-): Boolean {
-    // Check previous segment
-    if (segmentIndex > 0) {
-        val prevStart = virtualWaypoints[segmentIndex - 1]
-        val prevEnd = virtualWaypoints[segmentIndex]
-        val prevStartScreen = CoordinateTransformer.transformPosition(
-            Position(prevStart.first, prevStart.second),
-            layout.metadata,
-            canvasSize,
-            zoom,
-            panOffset
-        )
-        val prevEndScreen = CoordinateTransformer.transformPosition(
-            Position(prevEnd.first, prevEnd.second),
-            layout.metadata,
-            canvasSize,
-            zoom,
-            panOffset
-        )
-        val prevOrientation = if (prevStartScreen.y == prevEndScreen.y) SegmentOrientation.HORIZONTAL else SegmentOrientation.VERTICAL
-        if (prevOrientation == currentOrientation) return true
-    }
-    
-    // Check next segment
-    if (segmentIndex < virtualWaypoints.size - 2) {
-        val nextStart = virtualWaypoints[segmentIndex + 1]
-        val nextEnd = virtualWaypoints[segmentIndex + 2]
-        val nextStartScreen = CoordinateTransformer.transformPosition(
-            Position(nextStart.first, nextStart.second),
-            layout.metadata,
-            canvasSize,
-            zoom,
-            panOffset
-        )
-        val nextEndScreen = CoordinateTransformer.transformPosition(
-            Position(nextEnd.first, nextEnd.second),
-            layout.metadata,
-            canvasSize,
-            zoom,
-            panOffset
-        )
-        val nextOrientation = if (nextStartScreen.y == nextEndScreen.y) SegmentOrientation.HORIZONTAL else SegmentOrientation.VERTICAL
-        if (nextOrientation == currentOrientation) return true
-    }
-    
-    return false
 }
 
 private fun isOrthogonalSegment(start: Offset, end: Offset): Boolean {
