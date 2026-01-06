@@ -47,14 +47,7 @@ fun CollapsibleSection(
     Box(
         modifier = modifier
             .defaultShadow()
-            .pointerInput(Unit) {
-                awaitPointerEventScope {
-                    while (true) {
-                        val event = awaitPointerEvent()
-                        event.changes.forEach { it.consume() }
-                    }
-                }
-            }
+            .clickable(interactionSource = null, indication = null) {}
     ) {
         Column {
             // Header row

@@ -1,6 +1,7 @@
 package dev.akexorcist.workstation.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import dev.akexorcist.workstation.presentation.config.InteractionConfig
@@ -65,14 +67,7 @@ fun ControlPanel(
             .defaultShadow()
             .clip(RoundedCornerShape(12.dp))
             .background(WorkstationTheme.themeColor.surface)
-            .pointerInput(Unit) {
-                awaitPointerEventScope {
-                    while (true) {
-                        val event = awaitPointerEvent()
-                        event.changes.forEach { it.consume() }
-                    }
-                }
-            }
+            .clickable(interactionSource = null, indication = null) {}
     ) {
         Column(
             modifier = Modifier
