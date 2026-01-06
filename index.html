@@ -27,9 +27,6 @@
 <div id="loading" class="message-container show">
     <div id="loading_message" class="message">Loading...</div>
 </div>
-<div id="not_supported" class="message-container hide">
-    <div id="not_supported_message" class="message">This webpage have limited functionality in your browsers.</div>
-</div>
 <div id="WorkstationDiagram"></div>
 <script defer>
     function hideLoadingScreen() {
@@ -41,37 +38,6 @@
     }
 </script>
 <script defer>
-    function isSupportedBrowser() {
-        const userAgent = navigator.userAgent;
-
-        // Chrome on non-macOS or non-iOS
-        if (/Chrome\/\d+/.test(userAgent) && !/(Mac|iPhone|iPad|iPod)/.test(userAgent)) {
-            return true;
-        }
-
-        // Firefox
-        if (/Firefox\/\d+/.test(userAgent)) {
-            return true;
-        }
-
-        // Safari or WebKit 18.2 or higher (updated for modern Safari)
-        if (/Version\/(\d+)\.(\d+)/.test(userAgent)) {
-            // Modern Safari
-            const versionMajor = parseInt(RegExp.$1, 10);
-            const versionMinor = parseInt(RegExp.$2, 10);
-            if (versionMajor > 18 || (versionMajor === 18 && versionMinor >= 2)) {
-                return true;
-            }
-        } else if (/Safari\/(\d+)\.(\d+)/.test(userAgent) || /AppleWebKit\/(\d+)\.(\d+)/.test(userAgent)) {
-            // Older Safari
-            const versionMajor = parseInt(RegExp.$1 || RegExp.$2, 10);
-            if (versionMajor >= 18) { // Less restrictive for older Safari detection
-                return true;
-            }
-        }
-
-        return false;
-    }
     function loadScript(url, callback) {
         var script = document.createElement("script");
         script.src = url;
@@ -85,14 +51,7 @@
         }
         document.body.appendChild(script);
     }
-    if (isSupportedBrowser()) {
-        loadScript("skiko.js", function() {});
-        loadScript("workstation.js", function() {});
-    } else {
-        const element = document.getElementById("not_supported");
-        element.classList.remove("hide");
-        element.classList.add("show");
-    }
+    loadScript("workstation.js", function() {});
 </script>
 </body>
 </html>
