@@ -1,3 +1,4 @@
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.compose.resources.ResourcesExtension
 
 plugins {
@@ -70,6 +71,18 @@ compose {
     desktop {
         application {
             mainClass = "dev.akexorcist.workstation.MainKt"
+            nativeDistributions {
+                targetFormats(
+                    TargetFormat.Dmg,
+                )
+                macOS {
+                    bundleID = "dev.akexorcist.workstation"
+                    iconFile.set(project.file("icons/AppIcon.icns"))
+                }
+                packageName = "Workstation Diagram"
+                packageVersion = "2.1.0"
+                description = "My workstation's interactive diagram"
+            }
         }
     }
     resources {
