@@ -22,6 +22,21 @@
     <meta property="twitter:title" content="Workstation Diagram"/>
     <meta property="twitter:description" content="My workstation's interactive diagram"/>
     <meta property="twitter:image" content="https://workstation.akexorcist.dev/image/preview.jpg"/>
+
+    <!-- Google Analytics 4 - Cookie-free configuration -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TGVNPVJP9T"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        
+        // Configure GA4 for cookie-free tracking (no cookies, no localStorage)
+        gtag('config', 'G-TGVNPVJP9T', {
+            'anonymize_ip': true,
+            'allow_ad_personalization_signals': false,
+            'storage': 'none'
+        });
+    </script>
 </head>
 <body>
 <div id="loading" class="message-container show">
