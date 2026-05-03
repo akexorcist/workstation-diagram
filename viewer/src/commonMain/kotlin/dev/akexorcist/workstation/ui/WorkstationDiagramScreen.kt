@@ -178,7 +178,7 @@ fun WorkstationDiagramScreen(
                     message = errorMessage,
                     onRetry = {
                         coroutineScope.launch {
-                            viewModel.loadLayout()
+                            viewModel.loadRevisions()
                         }
                     },
                     modifier = Modifier.fillMaxSize()
@@ -260,7 +260,12 @@ fun WorkstationDiagramScreen(
                         onConnectionAnimationToggle = { viewModel.toggleConnectionAnimation() },
                         isDarkTheme = uiState.isDarkTheme,
                         onThemeToggle = viewModel::toggleTheme,
-                        viewportConfig = uiState.layout?.metadata?.viewport
+                        viewportConfig = uiState.layout?.metadata?.viewport,
+                        revisionDate = if (uiState.isMultiRevision) uiState.currentRevisionDate else null,
+                        hasPreviousRevision = uiState.hasPreviousRevision,
+                        hasNextRevision = uiState.hasNextRevision,
+                        onPreviousRevision = viewModel::navigateToPreviousRevision,
+                        onNextRevision = viewModel::navigateToNextRevision,
                     )
                 }
     

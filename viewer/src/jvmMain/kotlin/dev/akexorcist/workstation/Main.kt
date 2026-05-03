@@ -22,7 +22,7 @@ fun main() = application {
         state = WindowState(width = 1280.dp, height = 720.dp)
     ) {
         LaunchedEffect(Unit) {
-            viewModel.loadLayout()
+            viewModel.loadRevisions()
         }
 
         WorkstationTheme(darkTheme = uiState.isDarkTheme) {
