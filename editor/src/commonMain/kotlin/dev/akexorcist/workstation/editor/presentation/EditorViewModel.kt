@@ -17,6 +17,7 @@ import dev.akexorcist.workstation.data.repository.WorkstationRepository
 import dev.akexorcist.workstation.data.repository.WorkstationRepositoryImpl
 import dev.akexorcist.workstation.data.serialization.WorkstationLayoutSerializer
 import dev.akexorcist.workstation.editor.routing.SimpleConnectionRouter
+import dev.akexorcist.workstation.editor.utils.GridUtils
 import dev.akexorcist.workstation.presentation.config.RenderingConfig
 import dev.akexorcist.workstation.presentation.config.StateManagementConfig
 import dev.akexorcist.workstation.presentation.config.ViewportConfig
@@ -473,7 +474,7 @@ class EditorViewModel(
         val gridEnabled = gridConfig?.enabled ?: true
         
         return if (gridEnabled) {
-            snapToGrid(extendedPoint.first, gridSize) to snapToGrid(extendedPoint.second, gridSize)
+            GridUtils.snapToGrid(extendedPoint.first, gridSize) to GridUtils.snapToGrid(extendedPoint.second, gridSize)
         } else {
             extendedPoint
         }
@@ -638,8 +639,8 @@ class EditorViewModel(
             
             routingPoints[startPointIndex] = if (gridEnabled) {
                 Point(
-                    x = snapToGrid(newX, gridSize),
-                    y = snapToGrid(newY, gridSize)
+                    x = GridUtils.snapToGrid(newX, gridSize),
+                    y = GridUtils.snapToGrid(newY, gridSize)
                 )
             } else {
                 Point(x = newX, y = newY)
@@ -652,8 +653,8 @@ class EditorViewModel(
             
             routingPoints[segmentIndex] = if (gridEnabled) {
                 Point(
-                    x = snapToGrid(newX, gridSize),
-                    y = snapToGrid(newY, gridSize)
+                    x = GridUtils.snapToGrid(newX, gridSize),
+                    y = GridUtils.snapToGrid(newY, gridSize)
                 )
             } else {
                 Point(x = newX, y = newY)
@@ -726,7 +727,7 @@ class EditorViewModel(
         }
         
         val finalPosition = if (gridEnabled) {
-            snapToGrid(clampedPosition, gridSize)
+            GridUtils.snapToGrid(clampedPosition, gridSize)
         } else {
             clampedPosition
         }
@@ -862,7 +863,7 @@ class EditorViewModel(
         }
         
         val finalPosition = if (gridEnabled) {
-            snapToGrid(clampedPosition, gridSize)
+            GridUtils.snapToGrid(clampedPosition, gridSize)
         } else {
             clampedPosition
         }
@@ -959,8 +960,8 @@ class EditorViewModel(
         
         val finalPosition = if (gridEnabled) {
             Position(
-                x = snapToGrid(newPosition.x, gridSize),
-                y = snapToGrid(newPosition.y, gridSize)
+                x = GridUtils.snapToGrid(newPosition.x, gridSize),
+                y = GridUtils.snapToGrid(newPosition.y, gridSize)
             )
         } else {
             newPosition
@@ -1034,10 +1035,6 @@ class EditorViewModel(
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.Main.immediate) {
             updateLayoutWithConnections(updatedLayout)
         }
-    }
-    
-    private fun snapToGrid(value: Float, gridSize: Float): Float {
-        return kotlin.math.round(value / gridSize) * gridSize
     }
     
     private fun updateLayoutWithConnections(updatedLayout: WorkstationLayout) {
