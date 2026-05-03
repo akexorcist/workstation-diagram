@@ -9,11 +9,18 @@ sealed class ValidationResult {
 
 object DataValidator {
     fun validateLayout(layout: WorkstationLayout): ValidationResult {
-        val deviceIds = layout.devices.map { it.id }.toSet()
         val errors = mutableListOf<String>()
 
+        val seenDeviceIds = mutableSetOf<String>()
         layout.devices.forEach { device ->
-            validateDevice(device, deviceIds, layout.metadata.canvasSize)?.let { errors.add(it) }
+            if (!seenDeviceIds.add(device.id)) {
+                errors.add("Duplicate device ID: ${device.id}")
+            }
+        }
+
+        val deviceIds = seenDeviceIds.toSet()
+        layout.devices.forEach { device ->
+            validateDevice(device, layout.metadata.canvasSize)?.let { errors.add(it) }
         }
 
         layout.connections.forEach { connection ->
@@ -28,11 +35,7 @@ object DataValidator {
         return if (errors.isEmpty()) ValidationResult.Success else ValidationResult.Error(errors.joinToString("\n"))
     }
 
-    private fun validateDevice(device: Device, allDeviceIds: Set<String>, canvasSize: Size): String? {
-        if (device.id in allDeviceIds && allDeviceIds.count { it == device.id } > 1) {
-            return "Duplicate device ID: ${device.id}"
-        }
-
+    private fun validateDevice(device: Device, canvasSize: Size): String? {
         if (device.position.x < 0 || device.position.x > canvasSize.width ||
             device.position.y < 0 || device.position.y > canvasSize.height) {
             return "Device '${device.description}' position is outside canvas bounds"
@@ -47,15 +50,11 @@ object DataValidator {
             return "Device '${device.id}' has empty specifications"
         }
 
-        val portIds = device.ports.map { it.id }.toSet()
+        val seenPortIds = mutableSetOf<String>()
         device.ports.forEach { port ->
-            if (port.id in portIds && portIds.count { it == port.id } > 1) {
+            if (!seenPortIds.add(port.id)) {
                 return "Device '${device.id}' has duplicate port ID: ${port.id}"
             }
-
-            // Port position validation is not strict in the validator
-            // as the UI will handle boundary checking at runtime
-            // We only validate that the position is not negative
             if (port.position.position < 0f) {
                 return "Port '${port.id}' position must be non-negative"
             }
