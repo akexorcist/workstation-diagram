@@ -1,5 +1,7 @@
 package dev.akexorcist.workstation.data.repository
 
+import dev.akexorcist.workstation.data.model.ManifestResult
+import dev.akexorcist.workstation.data.model.RevisionManifest
 import dev.akexorcist.workstation.data.model.WorkstationLayout
 import dev.akexorcist.workstation.data.serialization.WorkstationLayoutSerializer
 import dev.akexorcist.workstation.data.validation.DataValidator
@@ -7,6 +9,7 @@ import dev.akexorcist.workstation.data.validation.ValidationResult
 import dev.akexorcist.workstation.utils.readResourceFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 
 sealed class LoadResult {
     data class Success(val layout: WorkstationLayout) : LoadResult()
@@ -15,18 +18,41 @@ sealed class LoadResult {
 }
 
 interface WorkstationRepository {
+    suspend fun loadManifest(): ManifestResult
     suspend fun loadLayout(): LoadResult
+    suspend fun loadLayoutFromFile(path: String): LoadResult
     suspend fun loadLayoutFromJson(jsonString: String): LoadResult
     fun validateLayout(layout: WorkstationLayout): ValidationResult
 }
 
 class WorkstationRepositoryImpl : WorkstationRepository {
+    private val manifestJson = Json { ignoreUnknownKeys = true }
+
+    override suspend fun loadManifest(): ManifestResult = withContext(Dispatchers.Default) {
+        try {
+            val jsonString = readResourceFile("data/manifest.json")
+            val manifest = manifestJson.decodeFromString<RevisionManifest>(jsonString)
+            ManifestResult.Success(manifest)
+        } catch (e: Exception) {
+            ManifestResult.Error("Failed to load manifest: ${e.message}", e)
+        }
+    }
+
     override suspend fun loadLayout(): LoadResult = withContext(Dispatchers.Default) {
         try {
-            val jsonString = readFile()
+            val jsonString = readResourceFile("data/workstation.json")
             loadLayoutFromJson(jsonString)
         } catch (e: Exception) {
             LoadResult.Error("Failed to load workstation data: ${e.message}", e)
+        }
+    }
+
+    override suspend fun loadLayoutFromFile(path: String): LoadResult = withContext(Dispatchers.Default) {
+        try {
+            val jsonString = readResourceFile(path)
+            loadLayoutFromJson(jsonString)
+        } catch (e: Exception) {
+            LoadResult.Error("Failed to load layout from $path: ${e.message}", e)
         }
     }
 
@@ -46,10 +72,5 @@ class WorkstationRepositoryImpl : WorkstationRepository {
 
     override fun validateLayout(layout: WorkstationLayout): ValidationResult {
         return DataValidator.validateLayout(layout)
-    }
-
-    private suspend fun readFile(): String {
-        val resourcePath = "data/workstation.json"
-        return readResourceFile(resourcePath)
     }
 }
