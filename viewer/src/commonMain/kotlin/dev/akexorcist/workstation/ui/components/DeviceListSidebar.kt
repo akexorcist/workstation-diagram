@@ -47,6 +47,10 @@ fun DeviceListSidebar(
     onDeviceListExpandChange: (Boolean) -> Unit,
     showUiPanel: Boolean = true,
     onToggleUiPanelClick: () -> Unit = {},
+    hasPreviousRevision: Boolean = false,
+    hasNextRevision: Boolean = false,
+    onPreviousRevision: (() -> Unit)? = null,
+    onNextRevision: (() -> Unit)? = null,
 ) {
     Column(
         modifier = Modifier
@@ -61,6 +65,10 @@ fun DeviceListSidebar(
                     date = metadata.date,
                     onHomeClick = onHomeClick,
                     onGithubClick = onGithubClick,
+                    hasPreviousRevision = hasPreviousRevision,
+                    hasNextRevision = hasNextRevision,
+                    onPreviousRevision = onPreviousRevision,
+                    onNextRevision = onNextRevision,
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 HudToggleButton(

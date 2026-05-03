@@ -261,11 +261,6 @@ fun WorkstationDiagramScreen(
                         isDarkTheme = uiState.isDarkTheme,
                         onThemeToggle = viewModel::toggleTheme,
                         viewportConfig = uiState.layout?.metadata?.viewport,
-                        revisionDate = if (uiState.isMultiRevision) uiState.currentRevisionDate else null,
-                        hasPreviousRevision = uiState.hasPreviousRevision,
-                        hasNextRevision = uiState.hasNextRevision,
-                        onPreviousRevision = viewModel::navigateToPreviousRevision,
-                        onNextRevision = viewModel::navigateToNextRevision,
                     )
                 }
     
@@ -281,7 +276,11 @@ fun WorkstationDiagramScreen(
                         isDeviceListExpanded = uiState.isDeviceListExpanded,
                         onDeviceListExpandChange = { viewModel.toggleDeviceListExpanded() },
                         showUiPanel = showUiPanel,
-                        onToggleUiPanelClick = { showUiPanel = !showUiPanel }
+                        onToggleUiPanelClick = { showUiPanel = !showUiPanel },
+                        hasPreviousRevision = uiState.hasPreviousRevision,
+                        hasNextRevision = uiState.hasNextRevision,
+                        onPreviousRevision = if (uiState.isMultiRevision) viewModel::navigateToPreviousRevision else null,
+                        onNextRevision = if (uiState.isMultiRevision) viewModel::navigateToNextRevision else null,
                     )
                 }
             }

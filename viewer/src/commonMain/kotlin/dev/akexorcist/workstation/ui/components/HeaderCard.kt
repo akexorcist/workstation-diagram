@@ -15,9 +15,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -38,6 +42,10 @@ fun HeaderCard(
     date: String,
     onHomeClick: () -> Unit,
     onGithubClick: () -> Unit,
+    hasPreviousRevision: Boolean = false,
+    hasNextRevision: Boolean = false,
+    onPreviousRevision: (() -> Unit)? = null,
+    onNextRevision: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -65,12 +73,60 @@ fun HeaderCard(
                 )
             }
 
-            SelectionContainer {
-                Text(
-                    text = date.toDateString(),
-                    fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                    color = WorkstationTheme.themeColor.text,
-                )
+            if (onPreviousRevision != null || onNextRevision != null) {
+                Row(
+                    modifier = Modifier.padding(vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    FilledIconButton(
+                        onClick = { onPreviousRevision?.invoke() },
+                        enabled = hasPreviousRevision,
+                        modifier = Modifier.size(36.dp),
+                        colors = IconButtonDefaults.filledIconButtonColors(
+                            containerColor = WorkstationTheme.themeColor.surfaceVariant,
+                            contentColor = WorkstationTheme.themeColor.onSurfaceVariant,
+                            disabledContainerColor = WorkstationTheme.themeColor.surfaceVariant.copy(alpha = 0.4f),
+                            disabledContentColor = WorkstationTheme.themeColor.onSurfaceVariant.copy(alpha = 0.3f),
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ChevronLeft,
+                            contentDescription = "Previous revision",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                    Text(
+                        text = date.toDateString(),
+                        fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                        color = WorkstationTheme.themeColor.text,
+                    )
+                    FilledIconButton(
+                        onClick = { onNextRevision?.invoke() },
+                        enabled = hasNextRevision,
+                        modifier = Modifier.size(36.dp),
+                        colors = IconButtonDefaults.filledIconButtonColors(
+                            containerColor = WorkstationTheme.themeColor.surfaceVariant,
+                            contentColor = WorkstationTheme.themeColor.onSurfaceVariant,
+                            disabledContainerColor = WorkstationTheme.themeColor.surfaceVariant.copy(alpha = 0.4f),
+                            disabledContentColor = WorkstationTheme.themeColor.onSurfaceVariant.copy(alpha = 0.3f),
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ChevronRight,
+                            contentDescription = "Next revision",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                }
+            } else {
+                SelectionContainer {
+                    Text(
+                        text = date.toDateString(),
+                        fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                        color = WorkstationTheme.themeColor.text,
+                    )
+                }
             }
 
             Row(
@@ -134,7 +190,6 @@ private fun String.toDateString(): String {
     return runCatching {
         val date = LocalDate.parse(this)
         val month = date.month.name.lowercase().replaceFirstChar { it.uppercase() }
-        val year = date.year
-        "$month $year"
+        "${date.day} $month ${date.year}"
     }.getOrNull() ?: this
 }

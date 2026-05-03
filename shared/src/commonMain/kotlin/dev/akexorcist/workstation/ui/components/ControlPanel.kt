@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Animation
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.FilledIconButton
@@ -61,11 +59,6 @@ fun ControlPanel(
     isDarkTheme: Boolean,
     onThemeToggle: () -> Unit,
     viewportConfig: dev.akexorcist.workstation.data.model.ViewportConfig? = null,
-    revisionDate: String? = null,
-    hasPreviousRevision: Boolean = false,
-    hasNextRevision: Boolean = false,
-    onPreviousRevision: (() -> Unit)? = null,
-    onNextRevision: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -82,16 +75,6 @@ fun ControlPanel(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            if (revisionDate != null) {
-                RevisionNavigator(
-                    date = revisionDate,
-                    hasPrevious = hasPreviousRevision,
-                    hasNext = hasNextRevision,
-                    onPrevious = onPreviousRevision ?: {},
-                    onNext = onNextRevision ?: {},
-                )
-            }
-
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -185,59 +168,3 @@ fun ControlPanel(
     }
 }
 
-@Composable
-private fun RevisionNavigator(
-    date: String,
-    hasPrevious: Boolean,
-    hasNext: Boolean,
-    onPrevious: () -> Unit,
-    onNext: () -> Unit,
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        FilledIconButton(
-            onClick = onPrevious,
-            enabled = hasPrevious,
-            modifier = Modifier.size(32.dp),
-            colors = IconButtonDefaults.filledIconButtonColors(
-                containerColor = WorkstationTheme.themeColor.surfaceVariant,
-                contentColor = WorkstationTheme.themeColor.onSurfaceVariant,
-                disabledContainerColor = WorkstationTheme.themeColor.surfaceVariant.copy(alpha = 0.4f),
-                disabledContentColor = WorkstationTheme.themeColor.onSurfaceVariant.copy(alpha = 0.3f),
-            )
-        ) {
-            Icon(
-                imageVector = Icons.Default.ChevronLeft,
-                contentDescription = "Previous revision",
-                modifier = Modifier.size(20.dp)
-            )
-        }
-
-        Text(
-            text = date,
-            style = MaterialTheme.typography.bodySmall,
-            color = WorkstationTheme.themeColor.text,
-        )
-
-        FilledIconButton(
-            onClick = onNext,
-            enabled = hasNext,
-            modifier = Modifier.size(32.dp),
-            colors = IconButtonDefaults.filledIconButtonColors(
-                containerColor = WorkstationTheme.themeColor.surfaceVariant,
-                contentColor = WorkstationTheme.themeColor.onSurfaceVariant,
-                disabledContainerColor = WorkstationTheme.themeColor.surfaceVariant.copy(alpha = 0.4f),
-                disabledContentColor = WorkstationTheme.themeColor.onSurfaceVariant.copy(alpha = 0.3f),
-            )
-        ) {
-            Icon(
-                imageVector = Icons.Default.ChevronRight,
-                contentDescription = "Next revision",
-                modifier = Modifier.size(20.dp)
-            )
-        }
-    }
-}
