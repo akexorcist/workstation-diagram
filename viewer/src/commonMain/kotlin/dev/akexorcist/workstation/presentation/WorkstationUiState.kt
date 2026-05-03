@@ -22,8 +22,15 @@ data class WorkstationUiState(
     val isDeviceListExpanded: Boolean = true,
     val connectionAnimationEnabled: Boolean = true,
     val routedConnections: List<RoutedConnection> = emptyList(),
-    val routedConnectionMap: Map<String, RoutedConnection> = emptyMap()
-)
+    val routedConnectionMap: Map<String, RoutedConnection> = emptyMap(),
+    val revisionPaths: List<String> = emptyList(),
+    val currentRevisionIndex: Int = 0,
+) {
+    val currentRevisionDate: String get() = layout?.metadata?.date ?: ""
+    val hasPreviousRevision: Boolean get() = currentRevisionIndex > 0
+    val hasNextRevision: Boolean get() = currentRevisionIndex < revisionPaths.size - 1
+    val isMultiRevision: Boolean get() = revisionPaths.size > 1
+}
 
 data class DiagramState(
     val viewportBounds: Rect = Rect(0f, 0f, 1920f, 1080f),

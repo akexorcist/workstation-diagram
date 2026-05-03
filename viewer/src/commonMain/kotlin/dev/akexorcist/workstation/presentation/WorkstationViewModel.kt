@@ -11,6 +11,7 @@ import dev.akexorcist.workstation.data.model.Port
 import dev.akexorcist.workstation.data.model.Position
 import dev.akexorcist.workstation.data.model.Size
 import dev.akexorcist.workstation.data.model.WorkstationLayout
+import dev.akexorcist.workstation.data.model.ManifestResult
 import dev.akexorcist.workstation.data.repository.LoadResult
 import dev.akexorcist.workstation.data.repository.WorkstationRepository
 import dev.akexorcist.workstation.data.repository.WorkstationRepositoryImpl
@@ -40,31 +41,73 @@ class WorkstationViewModel(
         DiagramState()
     )
 
+    fun loadRevisions() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+            when (val manifestResult = repository.loadManifest()) {
+                is ManifestResult.Success -> {
+                    val paths = manifestResult.manifest.revisions
+                    if (paths.isEmpty()) {
+                        loadLayoutFromRepository()
+                        return@launch
+                    }
+                    val lastIndex = paths.size - 1
+                    _uiState.value = _uiState.value.copy(
+                        revisionPaths = paths,
+                        currentRevisionIndex = lastIndex
+                    )
+                    loadRevisionFile(paths[lastIndex])
+                }
+                is ManifestResult.Error -> loadLayoutFromRepository()
+            }
+        }
+    }
+
+    fun navigateToPreviousRevision() {
+        val newIndex = _uiState.value.currentRevisionIndex - 1
+        if (newIndex >= 0) navigateToRevisionAt(newIndex)
+    }
+
+    fun navigateToNextRevision() {
+        val newIndex = _uiState.value.currentRevisionIndex + 1
+        if (newIndex < _uiState.value.revisionPaths.size) navigateToRevisionAt(newIndex)
+    }
+
+    private fun navigateToRevisionAt(index: Int) {
+        val path = _uiState.value.revisionPaths.getOrNull(index) ?: return
+        _uiState.value = _uiState.value.copy(currentRevisionIndex = index)
+        viewModelScope.launch {
+            loadRevisionFile(path)
+        }
+    }
+
+    private suspend fun loadRevisionFile(path: String) {
+        _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+        applyLoadResult(repository.loadLayoutFromFile(path))
+    }
+
+    private suspend fun loadLayoutFromRepository() {
+        applyLoadResult(repository.loadLayout())
+    }
+
+    private fun applyLoadResult(result: LoadResult) {
+        when (result) {
+            is LoadResult.Success -> processLayoutWithConnections(result.layout, null)
+            is LoadResult.PartialSuccess -> processLayoutWithConnections(
+                result.layout,
+                "Loaded with warnings: ${result.errors.joinToString(", ")}"
+            )
+            is LoadResult.Error -> _uiState.value = _uiState.value.copy(
+                isLoading = false,
+                errorMessage = result.message
+            )
+        }
+    }
+
     fun loadLayout() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
-            when (val result = repository.loadLayout()) {
-                is LoadResult.Success -> {
-                    processLayoutWithConnections(
-                        result.layout, 
-                        null
-                    )
-                }
-
-                is LoadResult.PartialSuccess -> {
-                    processLayoutWithConnections(
-                        result.layout, 
-                        "Loaded with warnings: ${result.errors.joinToString(", ")}"
-                    )
-                }
-
-                is LoadResult.Error -> {
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        errorMessage = result.message
-                    )
-                }
-            }
+            loadLayoutFromRepository()
         }
     }
     
