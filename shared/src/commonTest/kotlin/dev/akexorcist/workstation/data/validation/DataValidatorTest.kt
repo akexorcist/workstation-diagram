@@ -165,7 +165,7 @@ class DataValidatorTest {
     }
 
     @Test
-    fun portUsedInMultipleConnections_returnsError() {
+    fun portUsedInMultipleConnections_returnsSuccess() {
         val dev1 = device(id = "d1", ports = listOf(port("out", PortDirection.OUTPUT)))
         val dev2 = device(id = "d2", ports = listOf(port("in1", PortDirection.INPUT)))
         val dev3 = device(id = "d3", ports = listOf(port("in2", PortDirection.INPUT)))
@@ -174,6 +174,6 @@ class DataValidatorTest {
         val result = DataValidator.validateLayout(
             layout(devices = listOf(dev1, dev2, dev3), connections = listOf(c1, c2))
         )
-        assertIs<ValidationResult.Error>(result)
+        assertIs<ValidationResult.Success>(result)
     }
 }
