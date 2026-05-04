@@ -40,7 +40,7 @@ class WorkstationRepositoryImpl : WorkstationRepository {
 
     override suspend fun loadLayout(): LoadResult = withContext(Dispatchers.Default) {
         try {
-            val jsonString = readResourceFile("data/workstation.json")
+            val jsonString = readResourceFile("data/workstation_1.json")
             loadLayoutFromJson(jsonString)
         } catch (e: Exception) {
             LoadResult.Error("Failed to load workstation data: ${e.message}", e)

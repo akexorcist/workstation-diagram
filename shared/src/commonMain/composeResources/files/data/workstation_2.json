@@ -1,0 +1,2716 @@
+{
+  "devices": [
+    {
+      "id": "office-laptop",
+      "description": "MacBook Pro 14\" 2021",
+      "title": "MacBook Pro",
+      "label": "Office Laptop",
+      "category": "HOST",
+      "position": {
+        "x": 60.0,
+        "y": 420.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 70.0
+      },
+      "ports": [
+        {
+          "id": "office-laptop-thunderbolt",
+          "name": "Thunderbolt 3",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Chip",
+          "value": "Apple M1 Pro\n10-core CPU with 8 performance cores and 2 efficiency cores\n14-core GPU\n16-core Neural Engine\n200GB/s memory bandwidth"
+        },
+        {
+          "key": "Memory",
+          "value": "32GB"
+        },
+        {
+          "key": "Storage",
+          "value": "512GB"
+        },
+        {
+          "key": "Display",
+          "value": "14.2\" Liquid Retina XDR"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Apple"
+        },
+        {
+          "key": "Model Number",
+          "value": "MacBook Pro 14\" 2021"
+        }
+      ],
+      "url": "https://support.apple.com/kb/SP854"
+    },
+    {
+      "id": "personal-laptop",
+      "description": "MacBook Pro 14\" 2023",
+      "title": "MacBook Pro",
+      "label": "Personal Laptop",
+      "category": "HOST",
+      "position": {
+        "x": 60.0,
+        "y": 540.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 70.0
+      },
+      "ports": [
+        {
+          "id": "personal-laptop-thunderbolt",
+          "name": "Thunderbolt 3",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Chip",
+          "value": "Apple M2 Pro\n12-core CPU with 8 performance cores and 4 efficiency cores\n19-core GPU\n16-core Neural Engine\n200GB/s memory bandwidth"
+        },
+        {
+          "key": "Memory",
+          "value": "32GB"
+        },
+        {
+          "key": "Storage",
+          "value": "512GB"
+        },
+        {
+          "key": "Display",
+          "value": "14.2\" Liquid Retina XDR"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Apple"
+        },
+        {
+          "key": "Model Number",
+          "value": "MacBook Pro 14\" 2023"
+        }
+      ],
+      "url": "https://support.apple.com/kb/SP889"
+    },
+    {
+      "id": "usb-docking-station",
+      "description": "Docking Station with Thunderbolt",
+      "title": "Dell WD19TBS",
+      "label": "USB Docking Station",
+      "category": "HUB",
+      "position": {
+        "x": 500.0,
+        "y": 320.0
+      },
+      "size": {
+        "width": 160.0,
+        "height": 400.0
+      },
+      "ports": [
+        {
+          "id": "dock-thunderbolt-in-1",
+          "name": "",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 200.0
+          }
+        },
+        {
+          "id": "dock-usbc-out-1",
+          "name": "USB-C 3.2 Gen2",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40.0
+          }
+        },
+        {
+          "id": "dock-dp-out-1",
+          "name": "DisplayPort",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 80.0
+          }
+        },
+        {
+          "id": "dock-usba-in-1",
+          "name": "USB-A 2.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 220.0
+          }
+        },
+        {
+          "id": "dock-usba-in-2",
+          "name": "USB-C 3.2 Gen 2",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 340.0
+          }
+        },
+        {
+          "id": "dock-usba-out-1",
+          "name": "USB-A 3.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 300.0
+          }
+        },
+        {
+          "id": "dock-usba-out-2",
+          "name": "USB-A 3.0",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 380.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Display Support with Thunderbolt input",
+          "value": "For a HBR2* PC, 3 x FHD @ 60Hz, 3 x QHD @ 60Hz, 2 x 4K @ 30Hz\nFor a HBR3 PC, 4 x FHD @ 60Hz, 4 x QHD @ 60Hz, 2 x 4K @ 60Hz"
+        },
+        {
+          "key": "Max Resolution",
+          "value": "5K @ 60Hz with HBR2/HBR3, Thunderbolt systems\n8K @ 60Hz with HBR3,Thunderbolt systems supporting Display Stream Compression"
+        },
+        {
+          "key": "Power",
+          "value": "Up to 130W power delivery"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Dell"
+        },
+        {
+          "key": "Model Number",
+          "value": "WD19TBS"
+        }
+      ],
+      "url": "https://www.dell.com/support/manuals/en-us/dell-wd19tbs-dock/wd19tbs_user_guide/docking-specifications"
+    },
+    {
+      "id": "primary-monitor",
+      "description": "27\" QHD 120Hz IPS Monitor",
+      "title": "Dell UltraSharp U2724D",
+      "label": "Primary Monitor",
+      "category": "HUB",
+      "position": {
+        "x": 1460.0,
+        "y": 520.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 300.0
+      },
+      "ports": [
+        {
+          "id": "primary-monitor-dp-in",
+          "name": "DisplayPort",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        },
+        {
+          "id": "primary-monitor-hdmi-in",
+          "name": "HDMI 2.1",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 120.0
+          }
+        },
+        {
+          "id": "primary-monitor-usbc-out",
+          "name": "USB-C 3.2 Gen2",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 80.0
+          }
+        },
+        {
+          "id": "primary-monitor-aux-out",
+          "name": "AUX",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 160.0
+          }
+        },
+        {
+          "id": "primary-monitor-usba-in-1",
+          "name": "USB-A 2.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40.0
+          }
+        },
+        {
+          "id": "primary-monitor-usbc-in",
+          "name": "USB-C 3.2 Gen2",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 80.0
+          }
+        },
+        {
+          "id": "primary-monitor-usba-in-2",
+          "name": "USB-C 3.2 Gen2",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 120.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Screen Size",
+          "value": "27\""
+        },
+        {
+          "key": "Maximum Resolution",
+          "value": "2,560 x 1,440 @ 120Hz"
+        },
+        {
+          "key": "Panel Technology",
+          "value": "IPS Black Technology"
+        },
+        {
+          "key": "Brightness",
+          "value": "350 cd/m² (typical)"
+        },
+        {
+          "key": "Color Gamut",
+          "value": "100% sRGB, 100% BT.709, 98% Display P3, 98% DCI-P3, Delta E < 2 (average)"
+        },
+        {
+          "key": "Response Time",
+          "value": "8 ms (Normal), 5 ms (Fast)"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Dell"
+        },
+        {
+          "key": "Model Number",
+          "value": "U2724D"
+        }
+      ],
+      "url": "https://www.dell.com/support/home/en-us/product-support/product/u2724d-monitor/overview"
+    },
+    {
+      "id": "secondary-monitor",
+      "description": "16.1\" 2.5K 180Hz Portable Gaming Monitor",
+      "title": "ARZOPA Z3FC",
+      "label": "Secondary Monitor",
+      "category": "DEVICE",
+      "position": {
+        "x": 1460.0,
+        "y": 300.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 200.0
+      },
+      "ports": [
+        {
+          "id": "secondary-monitor-usbc-in-1",
+          "name": "USB-C",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 20.0
+          }
+        },
+        {
+          "id": "secondary-monitor-usbc-in-2",
+          "name": "USB-C",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 60.0
+          }
+        },
+        {
+          "id": "secondary-monitor-mini-hdmi-in",
+          "name": "Mini HDMI",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 140.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Screen Size",
+          "value": "16.1\""
+        },
+        {
+          "key": "Panel Type",
+          "value": "IPS"
+        },
+        {
+          "key": "Resolution",
+          "value": "2,560 x 1,440 px"
+        },
+        {
+          "key": "Refresh Rate",
+          "value": "180Hz"
+        },
+        {
+          "key": "Display Color",
+          "value": "8-bit"
+        },
+        {
+          "key": "Color Gamut",
+          "value": "107% sRGB"
+        },
+        {
+          "key": "HDR",
+          "value": "HDR10"
+        },
+        {
+          "key": "Brightness",
+          "value": "400 cd/m²"
+        },
+        {
+          "key": "Contrast Ratio",
+          "value": "1000:1"
+        },
+        {
+          "key": "Interface",
+          "value": "TYPE-C（USB 3.1）x2\nminiHDMI（2.0）x1"
+        },
+        {
+          "key": "Rated Power",
+          "value": "12.9W"
+        },
+        {
+          "key": "Dimensions",
+          "value": "366 x 228 x 9.3 mm"
+        },
+        {
+          "key": "Weight",
+          "value": "780g"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "ARZOPA"
+        },
+        {
+          "key": "Model Number",
+          "value": "Z3FC"
+        }
+      ],
+      "url": "https://www.arzopa.com/products/arzopa-z3fc-16-1-180hz-2560x1440-qhd-portable-gaming-monitor"
+    },
+    {
+      "id": "pc-desktop",
+      "description": "Custom Gaming PC",
+      "title": "",
+      "label": "PC Desktop",
+      "category": "HOST",
+      "position": {
+        "x": 60.0,
+        "y": 1040.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 240.0
+      },
+      "ports": [
+        {
+          "id": "pc-lan",
+          "name": "RJ45",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 80.0
+          }
+        },
+        {
+          "id": "pc-hdmi-out",
+          "name": "HDMI 2.1",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40.0
+          }
+        },
+        {
+          "id": "pc-dp-out",
+          "name": "DisplayPort",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 120.0
+          }
+        },
+        {
+          "id": "pc-usba-in-1",
+          "name": "USB-A 3.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 160.0
+          }
+        },
+        {
+          "id": "pc-usba-in-2",
+          "name": "USB-A 3.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 200.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "OS",
+          "value": "Windows 11 Pro 64-bit"
+        },
+        {
+          "key": "CPU",
+          "value": "Intel Core i5-11400F @ 2.60GHz (12 CPUs)"
+        },
+        {
+          "key": "GPU",
+          "value": "Gigabyte GeForce RTX 3070 8GB GDDR6"
+        },
+        {
+          "key": "Memory",
+          "value": "32 GB, G.SKILL Trident Z RGB DDR4 3,200MHz 8GB x 4"
+        },
+        {
+          "key": "Storage",
+          "value": "WD BLACK SN750 500GB SSD PCIe NVMe M.2 2280 x 2"
+        }
+      ]
+    },
+    {
+      "id": "hdmi-switcher",
+      "description": "HDMI 2.1 Switch, 2 In 1 Out",
+      "title": "UGREEN CM561",
+      "label": "HDMI Switcher",
+      "category": "HUB",
+      "position": {
+        "x": 500.0,
+        "y": 940.0
+      },
+      "size": {
+        "width": 160.0,
+        "height": 180.0
+      },
+      "ports": [
+        {
+          "id": "hdmi-switcher-in-1",
+          "name": "HDMI 2.1",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        },
+        {
+          "id": "hdmi-switcher-in-3",
+          "name": "HDMI 2.1",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 140.0
+          }
+        },
+        {
+          "id": "hdmi-switcher-out",
+          "name": "HDMI 2.1",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Chipset",
+          "value": "PI3HDX12221 + EN8F156S14"
+        },
+        {
+          "key": "HDMI Input",
+          "value": "2 x HDMI 2.1"
+        },
+        {
+          "key": "HDMI Output",
+          "value": "1 x HDMI 2.1"
+        },
+        {
+          "key": "Supported Resolutions",
+          "value": "8K@60, 4K@144, 2K@240, 1080P@240"
+        },
+        {
+          "key": "Power Input",
+          "value": "USB-C"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "UGREEN"
+        },
+        {
+          "key": "Model Number",
+          "value": "CM561"
+        }
+      ],
+      "url": "https://eu.ugreen.com/products/usb-c-hdmi-2-in-1-out-switch-4k-60hz"
+    },
+    {
+      "id": "gaming-console-1",
+      "description": "Nintendo Switch 2 Standard Edition",
+      "title": "Nintendo Switch 2",
+      "label": "Gaming Console",
+      "category": "HOST",
+      "position": {
+        "x": 60.0,
+        "y": 660.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 120.0
+      },
+      "ports": [
+        {
+          "id": "gaming-console-1-lan",
+          "name": "RJ45",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40.0
+          }
+        },
+        {
+          "id": "gaming-console-1-hdmi",
+          "name": "HDMI 2.1",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 80.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Display",
+          "value": "7.9-inch wide color gamut LCD screen\n1,920 x 1,080 pixels\nHDR10 support\nVRR up to 120 Hz"
+        },
+        {
+          "key": "CPU/GPU",
+          "value": "Custom processor made by NVIDIA"
+        },
+        {
+          "key": "Storage",
+          "value": "256 GB (UFS)"
+        },
+        {
+          "key": "Video Output",
+          "value": "Maximum of 3840x2160 (4K) resolution at 60 fps (TV mode)\nSupports 120 fps when 1920x1080/2560x1440 resolutions are selected\nSupports HDR10"
+        },
+        {
+          "key": "Connectors",
+          "value": "USB-C x2"
+        },
+        {
+          "key": "Battery",
+          "value": "Lithium-ion battery/5220mAh"
+        },
+        {
+          "key": "Dimensions",
+          "value": "Approximately 11.43 cm tall x 27.18 cm wide x 1.40 cm thick (with Joy-Con 2 controllers attached)"
+        },
+        {
+          "key": "Weight",
+          "value": "Approximately 535 g with Joy-Con 2 controllers attached"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Nintendo"
+        },
+        {
+          "key": "Model Number",
+          "value": "BEE-001"
+        }
+      ],
+      "url": "https://www.nintendo.com/us/gaming-systems/switch-2/tech-specs/"
+    },
+    {
+      "id": "gaming-console-2",
+      "description": "PlayStation 5 Disk Edition with Final Fantasy XVI Limited Cover",
+      "title": "PlayStation 5",
+      "label": "Gaming Console",
+      "category": "HOST",
+      "position": {
+        "x": 60.0,
+        "y": 800.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 120.0
+      },
+      "ports": [
+        {
+          "id": "gaming-console-2-lan",
+          "name": "RJ45",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40.0
+          }
+        },
+        {
+          "id": "gaming-console-2-hdmi",
+          "name": "HDMI 2.1",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 80.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Model",
+          "value": "CFI-1118A (2021 Revision)"
+        },
+        {
+          "key": "CPU",
+          "value": "x86-64-AMD Ryzen™ Zen2, 8 cores/16 threads"
+        },
+        {
+          "key": "GPU",
+          "value": "AMD Radeon™ RDNA-based graphics engine"
+        },
+        {
+          "key": "Memory",
+          "value": "GDDR6 16 GB"
+        },
+        {
+          "key": "Storage",
+          "value": "825 GB SSD"
+        },
+        {
+          "key": "Blu-Ray Disc Drive",
+          "value": "Yes"
+        },
+        {
+          "key": "AV output",
+          "value": "HDMI Out Port, Support of 4K 120Hz TVs, 8K TVs"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Sony"
+        },
+        {
+          "key": "Model Number",
+          "value": "CFI-1118A"
+        }
+      ],
+      "url": "https://www.playstation.com/en-th/ps5/"
+    },
+    {
+      "id": "usb-c-switcher",
+      "description": "2-Port USB-C Gen 2 Sharing Switch with Power Pass-through",
+      "title": "ATEN US3342",
+      "label": "USB-C Switcher",
+      "category": "HUB",
+      "position": {
+        "x": 980.0,
+        "y": 700.0
+      },
+      "size": {
+        "width": 180.0,
+        "height": 120.0
+      },
+      "ports": [
+        {
+          "id": "usb-c-switcher-dock",
+          "name": "USB-C 3.2 Gen2",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        },
+        {
+          "id": "usb-c-switcher-pc",
+          "name": "USB-C",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 100.0
+          }
+        },
+        {
+          "id": "usb-c-switcher-webcam",
+          "name": "USB-C 3.2 Gen2",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 20.0
+          }
+        },
+        {
+          "id": "usb-c-switcher-monitor",
+          "name": "USB-C 3.2 Gen2",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 60.0
+          }
+        },
+        {
+          "id": "usb-c-switcher-microphone",
+          "name": "USB-A 2.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 100.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Computer Connections",
+          "value": "2"
+        },
+        {
+          "key": "Computer Interface",
+          "value": "USB 3.2 Gen 2 Type-C Female (Black) x 2"
+        },
+        {
+          "key": "Device Interface",
+          "value": "USB 3.2 Gen 2 Type-A Female (Blue) × 3\nUSB 3.2 Gen 2 Type-C Female (black) x 1"
+        },
+        {
+          "key": "Power Interface",
+          "value": "USB Type-C Female x 1, supports USB PD3.0"
+        },
+        {
+          "key": "Housing",
+          "value": "Aluminum"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "ATEN"
+        },
+        {
+          "key": "Model Number",
+          "value": "US3342"
+        }
+      ],
+      "url": "https://www.aten.com/global/en/products/usb-solutions/docks-and-switches/us3342/"
+    },
+    {
+      "id": "digital-camera",
+      "description": "APS-C Interchangeable Lens Hybrid Camera",
+      "title": "Sony α6700",
+      "label": "Digital Camera",
+      "category": "DEVICE",
+      "position": {
+        "x": 980.0,
+        "y": 120.0
+      },
+      "size": {
+        "width": 180.0,
+        "height": 80.0
+      },
+      "ports": [
+        {
+          "id": "digital-camera-power",
+          "name": "Battery",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 20.0
+          }
+        },
+        {
+          "id": "digital-camera-usbc",
+          "name": "USB-C 3.2",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 60.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Camera Type",
+          "value": "Interchangeable lens digital camera"
+        },
+        {
+          "key": "Lens Mount",
+          "value": "Sony E-mount"
+        },
+        {
+          "key": "Sensor",
+          "value": "APS-C type (23.3 x 15.5 mm), Exmor R CMOS sensor"
+        },
+        {
+          "key": "Number of pixels (Effective)",
+          "value": "Still images: Approx. 26.0 megapixels max\nMovies: Approx. 19.9 megapixels max"
+        },
+        {
+          "key": "Recording (Still Images)",
+          "value": "APS-C L: 6192 x 4128 (26 M)\nM: 4384 x 2920 (13 M)\nS: 3104 x 2064 (6.4 M)"
+        },
+        {
+          "key": "Recording (Movies)",
+          "value": "XAVC S: MPEG-4 AVC/H.264\nXAVC HS: MPEG-H HEVC/H.265"
+        },
+        {
+          "key": "Viewfinder",
+          "value": "0.39-inch (1.0 cm) type electronic viewfinder (XGA OLED)"
+        },
+        {
+          "key": "LCD Screen",
+          "value": "2.95 inch (3.0-type) wide type TFT"
+        },
+        {
+          "key": "Battery",
+          "value": "NP-FZ100"
+        },
+        {
+          "key": "Dimensions",
+          "value": "Approx. 122.0 x 69.0 x 75.1 mm, Approx. 122.0 x 69.0 x 63.6 mm (from grip to monitor)"
+        },
+        {
+          "key": "Weight",
+          "value": "Approx. 493 g (with battery and memory card)"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Sony"
+        },
+        {
+          "key": "Model Number",
+          "value": "ILCE-6700"
+        }
+      ],
+      "url": "https://www.sony.com/electronics/support/e-mount-body-ilce-6000-series/ilce-6700/specifications"
+    },
+    {
+      "id": "stream-deck",
+      "description": "15 customizable LCD keys to control apps and platforms",
+      "title": "Elgato Stream Deck MK.2",
+      "label": "Stream Deck",
+      "category": "DEVICE",
+      "position": {
+        "x": 980.0,
+        "y": 500.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 80.0
+      },
+      "ports": [
+        {
+          "id": "stream-deck-usb",
+          "name": "USB-C",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Keys",
+          "value": "15 customizable LCD keys"
+        },
+        {
+          "key": "Interface",
+          "value": "USB 2.0"
+        },
+        {
+          "key": "Dimensions",
+          "value": "118 x 84 x 25 mm"
+        },
+        {
+          "key": "Weight",
+          "value": "145 g without stand"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Elgato"
+        },
+        {
+          "key": "Model Number",
+          "value": "Stream Deck MK.2"
+        }
+      ],
+      "url": "https://www.elgato.com/ww/en/p/stream-deck-mk2-black"
+    },
+    {
+      "id": "external-ssd",
+      "description": "High-speed storage in a portable",
+      "title": "Kingston XS2000 External SSD",
+      "label": "External SSD",
+      "category": "DEVICE",
+      "position": {
+        "x": 980.0,
+        "y": 600.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 80.0
+      },
+      "ports": [
+        {
+          "id": "external-ssd-usbc",
+          "name": "USB-C",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 20.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Capacity",
+          "value": "1TB"
+        },
+        {
+          "key": "Interface",
+          "value": "USB 3.2 Gen 2x2"
+        },
+        {
+          "key": "NAND",
+          "value": "3D"
+        },
+        {
+          "key": "Read/Write Speed",
+          "value": "Up to 2,000/2,000 MB/s"
+        },
+        {
+          "key": "Dimensions",
+          "value": "69.54 x 32.58 x 13.5mm"
+        },
+        {
+          "key": "Weight",
+          "value": "28.9g"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Kingston"
+        }
+      ],
+      "url": "https://www.kingston.com/en/external-ssd/xs2000-external-usb-c-solid-state-drive"
+    },
+    {
+      "id": "usb-hub",
+      "description": "Mini 3-in-1 USB Hub",
+      "title": "ORICO MINI-U32",
+      "label": "USB Hub",
+      "category": "HUB",
+      "position": {
+        "x": 980.0,
+        "y": 1100.0
+      },
+      "size": {
+        "width": 160.0,
+        "height": 200.0
+      },
+      "ports": [
+        {
+          "id": "usb-hub-in",
+          "name": "USB-A 3.0",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 140.0
+          }
+        },
+        {
+          "id": "usb-hub-out-1",
+          "name": "USB-A 2.0",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 20.0
+          }
+        },
+        {
+          "id": "usb-hub-out-2",
+          "name": "USB-A 2.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 60.0
+          }
+        },
+        {
+          "id": "usb-hub-out-3",
+          "name": "USB-A 2.0",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 160.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Material",
+          "value": "ABS"
+        },
+        {
+          "key": "Input Interface",
+          "value": "USB 3.0"
+        },
+        {
+          "key": "Output Interface",
+          "value": "USB 3.0 x 1, USB 2.0 x 2"
+        },
+        {
+          "key": "Transmission Rate",
+          "value": "5Gbps (USB 3.0), 480Mbps (USB 2.0)"
+        },
+        {
+          "key": "Power",
+          "value": "5V 0.5A"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "ORICO"
+        },
+        {
+          "key": "Model Number",
+          "value": "MINI-U32"
+        }
+      ],
+      "url": "https://www.orico.cc/usmobile/product/detail/id/7415"
+    },
+    {
+      "id": "usb-power-adapter",
+      "description": "100W 6-Port GaN Desktop Fast Charger",
+      "title": "UGREEN Desktop Charger",
+      "label": "USB Power Adapter",
+      "category": "HUB",
+      "position": {
+        "x": 1460.0,
+        "y": 100.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 160.0
+      },
+      "ports": [
+        {
+          "id": "usb-power-adapter-camera",
+          "name": "USB-C",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        },
+        {
+          "id": "usb-power-adapter-monitor",
+          "name": "USB-C",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 120.0
+          }
+        },
+        {
+          "id": "usb-power-adapter-fan",
+          "name": "USB-A",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40.0
+          }
+        },
+        {
+          "id": "usb-power-adapter-lan",
+          "name": "USB-A",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 80.0
+          }
+        },
+        {
+          "id": "usb-power-adapter-speaker",
+          "name": "USB-C",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 120.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Technology",
+          "value": "GaNInfinity, Next-Gen GaN Technology"
+        },
+        {
+          "key": "USB Ports",
+          "value": "USB-C x4\nUSB-A ports x2"
+        },
+        {
+          "key": "Input",
+          "value": "100-240V, 2.3A Max"
+        },
+        {
+          "key": "Output (USB-C, C1/C2)",
+          "value": "Up to 65W"
+        },
+        {
+          "key": "Output (USB-C, C3/C4)",
+          "value": "Up to 35W"
+        },
+        {
+          "key": "Output (USB-A, A1/A2)",
+          "value": "Up to 22.5W"
+        },
+        {
+          "key": "Dimensions",
+          "value": "88 x 81 x 32 mm"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "UGREEN"
+        },
+        {
+          "key": "Model Number",
+          "value": "X765"
+        }
+      ],
+      "url": "https://us.ugreen.com/products/100w-6port-desktop-charger"
+    },
+    {
+      "id": "usb-dac",
+      "description": "Hi-Res Certified DAC for PC and PlayStation",
+      "title": "SteelSeries GameDAC Gen2",
+      "label": "USB DAC",
+      "category": "HUB",
+      "position": {
+        "x": 1460.0,
+        "y": 940.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 160.0
+      },
+      "ports": [
+        {
+          "id": "usb-dac-monitor",
+          "name": "AUX",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        },
+        {
+          "id": "usb-dac-dock",
+          "name": "USB-C",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 80.0
+          }
+        },
+        {
+          "id": "usb-dac-usb-hub",
+          "name": "USB-C",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 120.0
+          }
+        },
+        {
+          "id": "usb-dac-speaker",
+          "name": "AUX",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40.0
+          }
+        },
+        {
+          "id": "usb-dac-headphone",
+          "name": "AUX",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 80.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Connections",
+          "value": "2x USB-C System Connections, 1x Line-in, 1x Line-out"
+        },
+        {
+          "key": "Digital-to-analog converter",
+          "value": "ESS Sabre 9218PQ40"
+        },
+        {
+          "key": "Max Audio Format",
+          "value": "96 kHz, 24 bit"
+        },
+        {
+          "key": "Frequency Response",
+          "value": "5-40,000 Hz"
+        },
+        {
+          "key": "Signal-to-noise ratio",
+          "value": "111 dB"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "SteelSeries"
+        },
+        {
+          "key": "Model Number",
+          "value": "GameDAC Gen 2"
+        }
+      ],
+      "url": "https://steelseries.com/gaming-accessories/gamedac-gen-2"
+    },
+    {
+      "id": "muji-fan",
+      "description": "Low Noise USB Desk Fan",
+      "title": "Muji USB Desk Fan",
+      "label": "Desk Fan",
+      "category": "DEVICE",
+      "position": {
+        "x": 1900.0,
+        "y": 100.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 80.0
+      },
+      "ports": [
+        {
+          "id": "muji-fan-power",
+          "name": "Power",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Color",
+          "value": "Black"
+        },
+        {
+          "key": "Wind Speed",
+          "value": "Setting 1: 110 m/min\nSetting 2: 90 m/min"
+        },
+        {
+          "key": "Dimensions",
+          "value": "W 9.7cm x H 13cm x D 7cm"
+        },
+        {
+          "key": "Weight",
+          "value": "280g"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Muji"
+        }
+      ],
+      "url": "https://www.muji.eu/products/low-noise-usb-desk-fan-9365"
+    },
+    {
+      "id": "speaker",
+      "description": "Bluetooth Speaker",
+      "title": "Bose SoundLink Mini SE",
+      "label": "Speaker",
+      "category": "DEVICE",
+      "position": {
+        "x": 1900.0,
+        "y": 200.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 80.0
+      },
+      "ports": [
+        {
+          "id": "speaker-power",
+          "name": "USB-C",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 20.0
+          }
+        },
+        {
+          "id": "speaker-aux",
+          "name": "AUX",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 60.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Material",
+          "value": "Aluminum, Plastic, Steel, Metal, Silicone"
+        },
+        {
+          "key": "Microphones",
+          "value": "Built-in Microphone"
+        },
+        {
+          "key": "Battery Life",
+          "value": "12 hours"
+        },
+        {
+          "key": "Battery Charge Time",
+          "value": "4 hours"
+        },
+        {
+          "key": "Charging Interface",
+          "value": "USB C"
+        },
+        {
+          "key": "Wireless Connectivity",
+          "value": "Bluetooth 3.0 up to 30 ft (9 m)"
+        },
+        {
+          "key": "Dimension",
+          "value": "2 x 7.06 x 2.31 in"
+        },
+        {
+          "key": "Weight",
+          "value": "1.44 lb"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Bose"
+        },
+        {
+          "key": "Model Number",
+          "value": "SoundLink Mini II SE"
+        }
+      ],
+      "url": "https://www.bose.com/p/speakers/bose-soundlink-mini-ii-special-edition/SLMINIISE-SPEAKERWIRELESS.html"
+    },
+    {
+      "id": "headphone",
+      "description": "Wired High-Fidelity Gaming Audio",
+      "title": "SteelSeries Arctis Nova Pro",
+      "label": "Gaming Headset",
+      "category": "DEVICE",
+      "position": {
+        "x": 1900.0,
+        "y": 980.0
+      },
+      "size": {
+        "width": 220.0,
+        "height": 80.0
+      },
+      "ports": [
+        {
+          "id": "headphone-aux",
+          "name": "AUX",
+          "direction": "INPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Neodymium Drivers",
+          "value": "40 mm"
+        },
+        {
+          "key": "Headphone Frequency Response",
+          "value": "10–40,000 Hz"
+        },
+        {
+          "key": "Headphone Sensitivity",
+          "value": "93 dBSPL"
+        },
+        {
+          "key": "Headphone Impedance",
+          "value": "38 Ohm"
+        },
+        {
+          "key": "Microphone Type",
+          "value": "ClearCast Gen 2 - Fully Retractable Boom"
+        },
+        {
+          "key": "Microphone Polar Pattern",
+          "value": "Bidirectional Noise-Canceling"
+        },
+        {
+          "key": "Dimensions",
+          "value": "7.58 x 7.37 x 3.44 in"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "SteelSeries"
+        }
+      ],
+      "url": "https://steelseries.com/gaming-headsets/arctis-nova-pro"
+    },
+    {
+      "id": "microphone-1",
+      "description": "Cardioid USB Gaming Microphone",
+      "title": "NZXT Capsule",
+      "label": "Microphone",
+      "category": "DEVICE",
+      "position": {
+        "x": 1900.0,
+        "y": 460.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 80.0
+      },
+      "ports": [
+        {
+          "id": "microphone-1-usb",
+          "name": "USB-C",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Element",
+          "value": "Condenser"
+        },
+        {
+          "key": "Polar Pattern",
+          "value": "Cardioid"
+        },
+        {
+          "key": "Frequency Response",
+          "value": "20Hz - 20kHz"
+        },
+        {
+          "key": "Maximum Sound Pressure Level",
+          "value": "120dB"
+        },
+        {
+          "key": "Bit Depth",
+          "value": "24-bit"
+        },
+        {
+          "key": "Sample Rate",
+          "value": "96kHz"
+        },
+        {
+          "key": "Output Connector",
+          "value": "USB-C"
+        },
+        {
+          "key": "Dimensions",
+          "value": "115 x 131.3 x 252.8mm"
+        },
+        {
+          "key": "Weight",
+          "value": "883g (Total)"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "NZXT"
+        },
+        {
+          "key": "Model Number",
+          "value": "Capsule"
+        }
+      ],
+      "url": "https://nzxt.com/product/capsule"
+    },
+    {
+      "id": "hdmi-capture",
+      "description": "Video Capture Device",
+      "title": "Elgato HD60 X",
+      "label": "HDMI Capture",
+      "category": "DEVICE",
+      "position": {
+        "x": 1900.0,
+        "y": 560.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 80.0
+      },
+      "ports": [
+        {
+          "id": "hdmi-capture-usb",
+          "name": "USB-C",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Input",
+          "value": "HDMI (unencrypted)"
+        },
+        {
+          "key": "Output",
+          "value": "HDMI (lag-free passthrough) up to 2160p60, 1440p120, 1080p240"
+        },
+        {
+          "key": "Capture Resolutions",
+          "value": "2160p30, 1440p60, 1080p60, 1080p30"
+        },
+        {
+          "key": "HDR",
+          "value": "HDR10 passthrough & capture"
+        },
+        {
+          "key": "Dimensions",
+          "value": "112 x 72 x 18 mm"
+        },
+        {
+          "key": "Weight",
+          "value": "91 g"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Elgato"
+        },
+        {
+          "key": "Model Number",
+          "value": "HD60 X"
+        }
+      ],
+      "url": "https://www.elgato.com/us/en/p/game-capture-hd60-x"
+    },
+    {
+      "id": "android-device",
+      "description": "Test device for app development",
+      "title": "Google Pixel 7",
+      "label": "Android Device",
+      "category": "DEVICE",
+      "position": {
+        "x": 1900.0,
+        "y": 660.0
+      },
+      "size": {
+        "width": 200.0,
+        "height": 80.0
+      },
+      "ports": [
+        {
+          "id": "android-device-usbc",
+          "name": "USB-C 3.2 Gen2",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Processors",
+          "value": "Google Tensor G2"
+        },
+        {
+          "key": "Display",
+          "value": "OLED, 90Hz, 6.3\" (20:9) 1080 x 2400 px"
+        },
+        {
+          "key": "OS",
+          "value": "Android 13, upgradable to Android 17"
+        },
+        {
+          "key": "Memory",
+          "value": "8 GB LPDDR5 RAM"
+        },
+        {
+          "key": "Storage",
+          "value": "128 GB / 256 GB UFS 3.1 storage"
+        },
+        {
+          "key": "Rear Camera",
+          "value": "50 MP Octa PD Quad Bayer wide camera and 12 MP ultrawide camera"
+        },
+        {
+          "key": "Front Camera",
+          "value": "10.8 MP"
+        },
+        {
+          "key": "SIMs",
+          "value": "Dual SIM (Single Nano SIM and eSIM)"
+        },
+        {
+          "key": "USB",
+          "value": "USB Type-C 3.2 Gen 2"
+        },
+        {
+          "key": "Battery",
+          "value": "Li-Ion 4355 mAh"
+        },
+        {
+          "key": "Charging",
+          "value": "USB-PD 3.0 (PPS), Qi-certified fast wireless charging, Battery Share"
+        },
+        {
+          "key": "Dimensions",
+          "value": "155.6 x 73.2 x 8.7 mm"
+        },
+        {
+          "key": "Weight",
+          "value": "197 g"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Google"
+        },
+        {
+          "key": "Model Number",
+          "value": "G03Z5"
+        }
+      ],
+      "url": "https://support.google.com/pixelphone/answer/7158570"
+    },
+    {
+      "id": "microphone-2",
+      "description": "Professional-quality USB dynamic microphone",
+      "title": "Shure MV7",
+      "label": "Microphone",
+      "category": "DEVICE",
+      "position": {
+        "x": 1900.0,
+        "y": 840.0
+      },
+      "size": {
+        "width": 180.0,
+        "height": 80.0
+      },
+      "ports": [
+        {
+          "id": "microphone-2-usb",
+          "name": "Micro USB",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Type",
+          "value": "Dynamic (moving coil)"
+        },
+        {
+          "key": "Polar Pattern",
+          "value": "Unidirectional (cardioid)"
+        },
+        {
+          "key": "A/D Converter",
+          "value": "16 or 24-bit, 44.1 or 48 kHz"
+        },
+        {
+          "key": "Frequency Response",
+          "value": "50 Hz to 16,000 Hz"
+        },
+        {
+          "key": "Microphone Sensitivity",
+          "value": "-38 dBV/Pa"
+        },
+        {
+          "key": "Connector Type",
+          "value": "Micro-B USB and XLR"
+        },
+        {
+          "key": "Housing",
+          "value": "All-metal construction"
+        },
+        {
+          "key": "Dimensions",
+          "value": "Length 53.6 mm; Diameter 66.5 mm"
+        },
+        {
+          "key": "Weight",
+          "value": "0.55 kg"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Shure"
+        },
+        {
+          "key": "Model Number",
+          "value": "MV7"
+        }
+      ],
+      "url": "https://www.shure.com/en-US/products/microphones/mv7"
+    },
+    {
+      "id": "usb-dongle-1",
+      "description": "LIGHTSPEED Wireless Gaming Mouse",
+      "title": "Logitech G PRO X SUPERLIGHT 2 DEX",
+      "label": "USB Dongle",
+      "category": "DEVICE",
+      "position": {
+        "x": 1460.0,
+        "y": 1120.0
+      },
+      "size": {
+        "width": 160.0,
+        "height": 80.0
+      },
+      "ports": [
+        {
+          "id": "usb-dongle-1-usb",
+          "name": "",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Sensor",
+          "value": "HERO 2"
+        },
+        {
+          "key": "Resolution",
+          "value": "100 – 44,000 DPI"
+        },
+        {
+          "key": "Max. acceleration",
+          "value": ">88 G"
+        },
+        {
+          "key": "Max. speed",
+          "value": "888 IPS"
+        },
+        {
+          "key": "USB report rate",
+          "value": "1 ms (1000 Hz)"
+        },
+        {
+          "key": "Battery Life",
+          "value": "Constant motion: 95 h"
+        },
+        {
+          "key": "Dimensions",
+          "value": "125.8 x 67.7 x 43.9 mm"
+        },
+        {
+          "key": "Weight",
+          "value": "60 g"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Logitech"
+        },
+        {
+          "key": "Model Number",
+          "value": "PRO X SUPERLIGHT 2 DEX"
+        }
+      ],
+      "url": "https://www.logitechg.com/en-us/shop/p/pro-x-superlight-2-dex.910-007363"
+    },
+    {
+      "id": "usb-dongle-2",
+      "description": "USB wireless receiver for Logi Bolt",
+      "title": "Logi Bolt",
+      "label": "USB Dongle",
+      "category": "DEVICE",
+      "position": {
+        "x": 1460.0,
+        "y": 1220.0
+      },
+      "size": {
+        "width": 160.0,
+        "height": 80.0
+      },
+      "ports": [
+        {
+          "id": "usb-dongle-2-usb",
+          "name": "",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Dimensions",
+          "value": "6.11 x 14.4 x 18.65 mm"
+        },
+        {
+          "key": "Weight",
+          "value": "1.68 g"
+        },
+        {
+          "key": "Connectivity",
+          "value": "USB Type-A"
+        },
+        {
+          "key": "Wireless Protocol",
+          "value": "Bluetooth Low Energy"
+        },
+        {
+          "key": "Range",
+          "value": "Up to 10 meters"
+        },
+        {
+          "key": "Compatibility",
+          "value": "Logi Bolt enabled devices"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Logitech"
+        },
+        {
+          "key": "Model Number",
+          "value": "Logi Bolt"
+        }
+      ],
+      "url": "https://www.logitech.com/en-us/products/mice/logi-bolt-usb-receiver.956-000007.html"
+    },
+    {
+      "id": "google-wifi",
+      "description": "Mesh WiFi System - Wifi Router",
+      "title": "Google Wifi",
+      "label": "Wifi Point",
+      "category": "HUB",
+      "position": {
+        "x": 980.0,
+        "y": 840.0
+      },
+      "size": {
+        "width": 180.0,
+        "height": 80.0
+      },
+      "ports": [
+        {
+          "id": "google-wifi-lan",
+          "name": "RJ45",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Processor",
+          "value": "Quad-core ARM"
+        },
+        {
+          "key": "Memory",
+          "value": "512 MB RAM\n4 GB eMMC flash"
+        },
+        {
+          "key": "Wi-Fi Standard",
+          "value": "AC1200 MU-MIMO Wi-Fi\nDual-band (2.4 GHz or 5 GHz) Wi-Fi supporting IEEE 802.11a/b/g/n/ac"
+        },
+        {
+          "key": "Ports and connectors",
+          "value": "Dual Gigabit Ethernet ports"
+        },
+        {
+          "key": "Dimensions",
+          "value": "Diameter: 106.12 mm, Height: 68.75 mm"
+        },
+        {
+          "key": "Dimensions",
+          "value": "340 g"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "Google"
+        },
+        {
+          "key": "Model Number",
+          "value": "NLS-1304-25"
+        }
+      ],
+      "url": "https://support.google.com/googlenest/answer/6280668"
+    },
+    {
+      "id": "lan-splitter",
+      "description": "Ethernet Splitter 1 to 2",
+      "title": "UGREEN NW301",
+      "label": "Ethernet Splitter",
+      "category": "HUB",
+      "position": {
+        "x": 500.0,
+        "y": 760.0
+      },
+      "size": {
+        "width": 160.0,
+        "height": 160.0
+      },
+      "ports": [
+        {
+          "id": "lan-splitter-wan",
+          "name": "RJ45",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 120.0
+          }
+        },
+        {
+          "id": "lan-splitter-gc1",
+          "name": "RJ45",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 40.0
+          }
+        },
+        {
+          "id": "lan-splitter-pc",
+          "name": "RJ45",
+          "direction": "OUTPUT",
+          "position": {
+            "side": "LEFT",
+            "position": 120.0
+          }
+        },
+        {
+          "id": "lan-splitter-power",
+          "name": "USB-C",
+          "direction": "INPUT",
+          "position": {
+            "side": "RIGHT",
+            "position": 40.0
+          }
+        }
+      ],
+      "specifications": [
+        {
+          "key": "Interface",
+          "value": "3× RJ45 (1 in, 2 out)"
+        },
+        {
+          "key": "Transmission Speed",
+          "value": "Up to 1,000 Mbps"
+        },
+        {
+          "key": "Power Input",
+          "value": "5V/1A (USB-C)"
+        },
+        {
+          "key": "Dimensions",
+          "value": "62 x 42 x 18 mm"
+        },
+        {
+          "key": "Weight",
+          "value": "78g"
+        },
+        {
+          "key": "Manufacturer",
+          "value": "UGREEN"
+        },
+        {
+          "key": "Model Number",
+          "value": "45311"
+        }
+      ],
+      "url": "https://ugreen.com/products/ugreen-ethernet-splitter-1-to-2"
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn-1",
+      "sourceDeviceId": "office-laptop",
+      "sourcePortId": "office-laptop-thunderbolt",
+      "targetDeviceId": "usb-docking-station",
+      "targetPortId": "dock-thunderbolt-in-1",
+      "routingPoints": [
+        {
+          "x": 420.0,
+          "y": 460.0
+        },
+        {
+          "x": 420.0,
+          "y": 520.0
+        }
+      ]
+    },
+    {
+      "id": "conn-2",
+      "sourceDeviceId": "personal-laptop",
+      "sourcePortId": "personal-laptop-thunderbolt",
+      "targetDeviceId": "usb-docking-station",
+      "targetPortId": "dock-thunderbolt-in-1",
+      "routingPoints": [
+        {
+          "x": 420.0,
+          "y": 580.0
+        },
+        {
+          "x": 420.0,
+          "y": 520.0
+        }
+      ]
+    },
+    {
+      "id": "conn-3",
+      "sourceDeviceId": "usb-docking-station",
+      "sourcePortId": "dock-dp-out-1",
+      "targetDeviceId": "primary-monitor",
+      "targetPortId": "primary-monitor-dp-in",
+      "routingPoints": [
+        {
+          "x": 1300.0,
+          "y": 400.0
+        },
+        {
+          "x": 1300.0,
+          "y": 560.0
+        }
+      ]
+    },
+    {
+      "id": "conn-4",
+      "sourceDeviceId": "usb-docking-station",
+      "sourcePortId": "dock-usbc-out-1",
+      "targetDeviceId": "secondary-monitor",
+      "targetPortId": "secondary-monitor-usbc-in-2",
+      "routingPoints": [
+        {
+          "x": 1300.0,
+          "y": 360.0
+        },
+        {
+          "x": 1300.0,
+          "y": 360.0
+        }
+      ]
+    },
+    {
+      "id": "conn-5",
+      "sourceDeviceId": "pc-desktop",
+      "sourcePortId": "pc-dp-out",
+      "targetDeviceId": "secondary-monitor",
+      "targetPortId": "secondary-monitor-mini-hdmi-in",
+      "routingPoints": [
+        {
+          "x": 840.0,
+          "y": 1160.0
+        },
+        {
+          "x": 840.0,
+          "y": 440.0
+        }
+      ]
+    },
+    {
+      "id": "conn-6",
+      "sourceDeviceId": "pc-desktop",
+      "sourcePortId": "pc-hdmi-out",
+      "targetDeviceId": "hdmi-switcher",
+      "targetPortId": "hdmi-switcher-in-3",
+      "routingPoints": [
+        {
+          "x": 380.0,
+          "y": 1080.0
+        },
+        {
+          "x": 380.0,
+          "y": 1080.0
+        }
+      ]
+    },
+    {
+      "id": "conn-7",
+      "sourceDeviceId": "hdmi-switcher",
+      "sourcePortId": "hdmi-switcher-out",
+      "targetDeviceId": "primary-monitor",
+      "targetPortId": "primary-monitor-hdmi-in",
+      "routingPoints": [
+        {
+          "x": 1340.0,
+          "y": 980.0
+        },
+        {
+          "x": 1340.0,
+          "y": 640.0
+        }
+      ]
+    },
+    {
+      "id": "conn-8",
+      "sourceDeviceId": "gaming-console-1",
+      "sourcePortId": "gaming-console-1-hdmi",
+      "targetDeviceId": "hdmi-switcher",
+      "targetPortId": "hdmi-switcher-in-1",
+      "routingPoints": [
+        {
+          "x": 380.0,
+          "y": 740.0
+        },
+        {
+          "x": 380.0,
+          "y": 980.0
+        }
+      ]
+    },
+    {
+      "id": "conn-9",
+      "sourceDeviceId": "gaming-console-2",
+      "sourcePortId": "gaming-console-2-hdmi",
+      "targetDeviceId": "hdmi-switcher",
+      "targetPortId": "hdmi-switcher-in-1",
+      "routingPoints": [
+        {
+          "x": 340.0,
+          "y": 880.0
+        },
+        {
+          "x": 340.0,
+          "y": 980.0
+        }
+      ]
+    },
+    {
+      "id": "conn-10",
+      "sourceDeviceId": "pc-desktop",
+      "sourcePortId": "pc-usba-in-1",
+      "targetDeviceId": "usb-c-switcher",
+      "targetPortId": "usb-c-switcher-pc",
+      "routingPoints": [
+        {
+          "x": 880.0,
+          "y": 1200.0
+        },
+        {
+          "x": 880.0,
+          "y": 800.0
+        }
+      ]
+    },
+    {
+      "id": "conn-11",
+      "sourceDeviceId": "usb-docking-station",
+      "sourcePortId": "dock-usba-in-2",
+      "targetDeviceId": "usb-c-switcher",
+      "targetPortId": "usb-c-switcher-dock",
+      "routingPoints": [
+        {
+          "x": 880.0,
+          "y": 660.0
+        },
+        {
+          "x": 880.0,
+          "y": 740.0
+        }
+      ]
+    },
+    {
+      "id": "conn-12",
+      "sourceDeviceId": "digital-camera",
+      "sourcePortId": "digital-camera-usbc",
+      "targetDeviceId": "usb-c-switcher",
+      "targetPortId": "usb-c-switcher-webcam",
+      "routingPoints": [
+        {
+          "x": 1260.0,
+          "y": 180.0
+        },
+        {
+          "x": 1260.0,
+          "y": 720.0
+        }
+      ]
+    },
+    {
+      "id": "conn-14",
+      "sourceDeviceId": "stream-deck",
+      "sourcePortId": "stream-deck-usb",
+      "targetDeviceId": "usb-docking-station",
+      "targetPortId": "dock-usba-in-1",
+      "routingPoints": [
+        {
+          "x": 880.0,
+          "y": 540.0
+        },
+        {
+          "x": 880.0,
+          "y": 540.0
+        }
+      ]
+    },
+    {
+      "id": "conn-15",
+      "sourceDeviceId": "external-ssd",
+      "sourcePortId": "external-ssd-usbc",
+      "targetDeviceId": "usb-docking-station",
+      "targetPortId": "dock-usba-out-1",
+      "routingPoints": [
+        {
+          "x": 880.0,
+          "y": 620.0
+        },
+        {
+          "x": 880.0,
+          "y": 620.0
+        }
+      ]
+    },
+    {
+      "id": "conn-16",
+      "sourceDeviceId": "pc-desktop",
+      "sourcePortId": "pc-usba-in-2",
+      "targetDeviceId": "usb-hub",
+      "targetPortId": "usb-hub-in",
+      "routingPoints": [
+        {
+          "x": 840.0,
+          "y": 1240.0
+        },
+        {
+          "x": 840.0,
+          "y": 1240.0
+        }
+      ]
+    },
+    {
+      "id": "conn-17",
+      "sourceDeviceId": "primary-monitor",
+      "sourcePortId": "primary-monitor-aux-out",
+      "targetDeviceId": "usb-dac",
+      "targetPortId": "usb-dac-monitor",
+      "routingPoints": [
+        {
+          "x": 1380.0,
+          "y": 680.0
+        },
+        {
+          "x": 1380.0,
+          "y": 980.0
+        }
+      ]
+    },
+    {
+      "id": "conn-18",
+      "sourceDeviceId": "usb-dac",
+      "sourcePortId": "usb-dac-dock",
+      "targetDeviceId": "usb-docking-station",
+      "targetPortId": "dock-usba-out-2",
+      "routingPoints": [
+        {
+          "x": 760.0,
+          "y": 1020.0
+        },
+        {
+          "x": 760.0,
+          "y": 700.0
+        }
+      ]
+    },
+    {
+      "id": "conn-19",
+      "sourceDeviceId": "usb-hub",
+      "sourcePortId": "usb-hub-out-1",
+      "targetDeviceId": "usb-dac",
+      "targetPortId": "usb-dac-usb-hub",
+      "routingPoints": [
+        {
+          "x": 1340.0,
+          "y": 1120.0
+        },
+        {
+          "x": 1340.0,
+          "y": 1060.0
+        }
+      ]
+    },
+    {
+      "id": "conn-20",
+      "sourceDeviceId": "speaker",
+      "sourcePortId": "speaker-power",
+      "targetDeviceId": "usb-power-adapter",
+      "targetPortId": "usb-power-adapter-speaker",
+      "routingPoints": [
+        {
+          "x": 1800.0,
+          "y": 220.0
+        },
+        {
+          "x": 1800.0,
+          "y": 220.0
+        }
+      ]
+    },
+    {
+      "id": "conn-21",
+      "sourceDeviceId": "speaker",
+      "sourcePortId": "speaker-aux",
+      "targetDeviceId": "usb-dac",
+      "targetPortId": "usb-dac-speaker",
+      "routingPoints": [
+        {
+          "x": 1800.0,
+          "y": 260.0
+        },
+        {
+          "x": 1800.0,
+          "y": 980.0
+        }
+      ]
+    },
+    {
+      "id": "conn-22",
+      "sourceDeviceId": "headphone",
+      "sourcePortId": "headphone-aux",
+      "targetDeviceId": "usb-dac",
+      "targetPortId": "usb-dac-headphone",
+      "routingPoints": [
+        {
+          "x": 1800.0,
+          "y": 1020.0
+        },
+        {
+          "x": 1800.0,
+          "y": 1020.0
+        }
+      ]
+    },
+    {
+      "id": "conn-23",
+      "sourceDeviceId": "microphone-1",
+      "sourcePortId": "microphone-1-usb",
+      "targetDeviceId": "primary-monitor",
+      "targetPortId": "primary-monitor-usba-in-1",
+      "routingPoints": [
+        {
+          "x": 1760.0,
+          "y": 500.0
+        },
+        {
+          "x": 1760.0,
+          "y": 560.0
+        }
+      ]
+    },
+    {
+      "id": "conn-24",
+      "sourceDeviceId": "hdmi-capture",
+      "sourcePortId": "hdmi-capture-usb",
+      "targetDeviceId": "primary-monitor",
+      "targetPortId": "primary-monitor-usbc-in",
+      "routingPoints": [
+        {
+          "x": 1760.0,
+          "y": 600.0
+        },
+        {
+          "x": 1760.0,
+          "y": 600.0
+        }
+      ]
+    },
+    {
+      "id": "conn-25",
+      "sourceDeviceId": "android-device",
+      "sourcePortId": "android-device-usbc",
+      "targetDeviceId": "primary-monitor",
+      "targetPortId": "primary-monitor-usba-in-2",
+      "routingPoints": [
+        {
+          "x": 1760.0,
+          "y": 700.0
+        },
+        {
+          "x": 1760.0,
+          "y": 640.0
+        }
+      ]
+    },
+    {
+      "id": "conn-26",
+      "sourceDeviceId": "microphone-2",
+      "sourcePortId": "microphone-2-usb",
+      "targetDeviceId": "usb-c-switcher",
+      "targetPortId": "usb-c-switcher-microphone",
+      "routingPoints": [
+        {
+          "x": 1300.0,
+          "y": 880.0
+        },
+        {
+          "x": 1300.0,
+          "y": 800.0
+        }
+      ]
+    },
+    {
+      "id": "conn-29",
+      "sourceDeviceId": "usb-dongle-1",
+      "sourcePortId": "usb-dongle-1-usb",
+      "targetDeviceId": "usb-hub",
+      "targetPortId": "usb-hub-out-2",
+      "routingPoints": [
+        {
+          "x": 1340.0,
+          "y": 1160.0
+        },
+        {
+          "x": 1340.0,
+          "y": 1160.0
+        }
+      ]
+    },
+    {
+      "id": "conn-30",
+      "sourceDeviceId": "usb-dongle-2",
+      "sourcePortId": "usb-dongle-2-usb",
+      "targetDeviceId": "usb-hub",
+      "targetPortId": "usb-hub-out-3",
+      "routingPoints": [
+        {
+          "x": 1340.0,
+          "y": 1260.0
+        },
+        {
+          "x": 1340.0,
+          "y": 1260.0
+        }
+      ]
+    },
+    {
+      "id": "conn-31",
+      "sourceDeviceId": "digital-camera",
+      "sourcePortId": "digital-camera-power",
+      "targetDeviceId": "usb-power-adapter",
+      "targetPortId": "usb-power-adapter-camera",
+      "routingPoints": [
+        {
+          "x": 1300.0,
+          "y": 140.0
+        },
+        {
+          "x": 1300.0,
+          "y": 140.0
+        }
+      ]
+    },
+    {
+      "id": "conn-32",
+      "sourceDeviceId": "secondary-monitor",
+      "sourcePortId": "secondary-monitor-usbc-in-1",
+      "targetDeviceId": "usb-power-adapter",
+      "targetPortId": "usb-power-adapter-monitor",
+      "routingPoints": [
+        {
+          "x": 1380.0,
+          "y": 320.0
+        },
+        {
+          "x": 1380.0,
+          "y": 220.0
+        }
+      ]
+    },
+    {
+      "id": "conn-33",
+      "sourceDeviceId": "primary-monitor",
+      "sourcePortId": "primary-monitor-usbc-out",
+      "targetDeviceId": "usb-c-switcher",
+      "targetPortId": "usb-c-switcher-monitor",
+      "routingPoints": [
+        {
+          "x": 1300.0,
+          "y": 600.0
+        },
+        {
+          "x": 1300.0,
+          "y": 760.0
+        }
+      ]
+    },
+    {
+      "id": "conn-35",
+      "sourceDeviceId": "google-wifi",
+      "sourcePortId": "google-wifi-lan",
+      "targetDeviceId": "lan-splitter",
+      "targetPortId": "lan-splitter-wan",
+      "routingPoints": [
+        {
+          "x": 920.0,
+          "y": 880.0
+        },
+        {
+          "x": 920.0,
+          "y": 880.0
+        }
+      ]
+    },
+    {
+      "id": "conn-36",
+      "sourceDeviceId": "lan-splitter",
+      "sourcePortId": "lan-splitter-gc1",
+      "targetDeviceId": "gaming-console-1",
+      "targetPortId": "gaming-console-1-lan",
+      "routingPoints": [
+        {
+          "x": 420.0,
+          "y": 800.0
+        },
+        {
+          "x": 420.0,
+          "y": 700.0
+        }
+      ]
+    },
+    {
+      "id": "conn-37",
+      "sourceDeviceId": "lan-splitter",
+      "sourcePortId": "lan-splitter-gc1",
+      "targetDeviceId": "gaming-console-2",
+      "targetPortId": "gaming-console-2-lan",
+      "routingPoints": [
+        {
+          "x": 420.0,
+          "y": 800.0
+        },
+        {
+          "x": 420.0,
+          "y": 840.0
+        }
+      ]
+    },
+    {
+      "id": "conn-38",
+      "sourceDeviceId": "lan-splitter",
+      "sourcePortId": "lan-splitter-pc",
+      "targetDeviceId": "pc-desktop",
+      "targetPortId": "pc-lan",
+      "routingPoints": [
+        {
+          "x": 420.0,
+          "y": 880.0
+        },
+        {
+          "x": 420.0,
+          "y": 1120.0
+        }
+      ]
+    },
+    {
+      "id": "conn-39",
+      "sourceDeviceId": "usb-power-adapter",
+      "sourcePortId": "usb-power-adapter-lan",
+      "targetDeviceId": "lan-splitter",
+      "targetPortId": "lan-splitter-power",
+      "routingPoints": [
+        {
+          "x": 1340.0,
+          "y": 180.0
+        },
+        {
+          "x": 1340.0,
+          "y": 320.0
+        },
+        {
+          "x": 800.0,
+          "y": 320.0
+        },
+        {
+          "x": 800.0,
+          "y": 800.0
+        }
+      ]
+    },
+    {
+      "id": "conn-34",
+      "sourceDeviceId": "muji-fan",
+      "sourcePortId": "muji-fan-power",
+      "targetDeviceId": "usb-power-adapter",
+      "targetPortId": "usb-power-adapter-fan",
+      "routingPoints": [
+        {
+          "x": 1800.0,
+          "y": 140.0
+        },
+        {
+          "x": 1800.0,
+          "y": 140.0
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "title": "Akexorcist Workstation",
+    "date": "2026-05-04",
+    "canvasSize": {
+      "width": 2160.0,
+      "height": 1400.0
+    },
+    "theme": {
+
+    },
+    "viewport": {
+      "minZoom": 0.5,
+      "maxZoom": 3.5
+    },
+    "grid": {
+
+    }
+  }
+}

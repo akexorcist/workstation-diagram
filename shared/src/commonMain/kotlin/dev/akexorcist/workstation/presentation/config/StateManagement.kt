@@ -13,7 +13,7 @@ object StateManagementConfig {
      * Validates and constrains zoom level based on provided viewport config or fallback values.
      * 
      * @param zoom The desired zoom level
-     * @param viewportConfig Optional viewport config from workstation.json with min/max zoom constraints
+     * @param viewportConfig Optional viewport config from workstation JSON file with min/max zoom constraints
      * @return Validated zoom level constrained between minimum and maximum allowed values
      */
     fun validateZoom(zoom: Float, viewportConfig: dev.akexorcist.workstation.data.model.ViewportConfig? = null): Float {

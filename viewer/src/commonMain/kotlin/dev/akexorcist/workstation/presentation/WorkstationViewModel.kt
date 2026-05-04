@@ -143,7 +143,7 @@ class WorkstationViewModel(
     /**
      * Zoom towards a specific point on screen (typically viewport center)
      * This keeps the point under the cursor/center fixed during zoom
-     * while respecting zoom constraints from workstation.json configuration.
+     * while respecting zoom constraints from workstation JSON file configuration.
      *
      * @param newZoom The desired new zoom level
      * @param screenPoint The screen point to maintain position during zoom
@@ -203,7 +203,7 @@ class WorkstationViewModel(
     }
 
     /**
-     * Resets the zoom level to the default zoom value from the workstation.json configuration
+     * Resets the zoom level to the default zoom value from the workstation JSON file configuration
      * or to the application default if no configuration is available.
      */
     fun resetZoom() {

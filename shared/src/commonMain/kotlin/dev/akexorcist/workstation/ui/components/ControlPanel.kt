@@ -46,7 +46,7 @@ import dev.akexorcist.workstation.ui.utils.defaultShadow
  * @param onConnectionAnimationToggle Callback to toggle connection animations (optional, button hidden if null)
  * @param isDarkTheme Whether dark theme is enabled
  * @param onThemeToggle Callback to toggle theme
- * @param viewportConfig Configuration from workstation.json that defines zoom constraints
+ * @param viewportConfig Configuration from workstation JSON file that defines zoom constraints
  * @param modifier Modifier for styling
  */
 @Composable

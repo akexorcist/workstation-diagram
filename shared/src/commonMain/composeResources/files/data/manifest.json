@@ -1,5 +1,6 @@
 {
   "revisions": [
-    "data/workstation.json"
+    "data/workstation_1.json",
+    "data/workstation_2.json"
   ]
 }
