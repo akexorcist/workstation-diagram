@@ -12,7 +12,6 @@ import dev.akexorcist.workstation.data.model.Port
 import dev.akexorcist.workstation.data.model.Position
 import dev.akexorcist.workstation.data.model.Size
 import dev.akexorcist.workstation.data.model.WorkstationLayout
-import dev.akexorcist.workstation.data.model.ManifestResult
 import dev.akexorcist.workstation.data.repository.LoadResult
 import dev.akexorcist.workstation.data.repository.WorkstationRepository
 import dev.akexorcist.workstation.data.repository.WorkstationRepositoryImpl
@@ -43,14 +42,7 @@ class EditorViewModel(
     fun loadLayout() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
-            val result = when (val manifestResult = repository.loadManifest()) {
-                is ManifestResult.Success -> {
-                    val lastPath = manifestResult.manifest.revisions.lastOrNull()
-                    if (lastPath != null) repository.loadLayoutFromFile(lastPath)
-                    else repository.loadLayout()
-                }
-                is ManifestResult.Error -> repository.loadLayout()
-            }
+            val result = repository.loadLayout()
             when (result) {
                 is LoadResult.Success -> processLayoutWithConnections(result.layout, null)
                 is LoadResult.PartialSuccess -> processLayoutWithConnections(

@@ -39,12 +39,10 @@ class WorkstationRepositoryImpl : WorkstationRepository {
     }
 
     override suspend fun loadLayout(): LoadResult = withContext(Dispatchers.Default) {
-        try {
-            val jsonString = readResourceFile("data/workstation_1.json")
-            loadLayoutFromJson(jsonString)
-        } catch (e: Exception) {
-            LoadResult.Error("Failed to load workstation data: ${e.message}", e)
-        }
+        resolveLayoutPath(loadManifest()).fold(
+            onSuccess = { path -> loadLayoutFromFile(path) },
+            onFailure = { e -> LoadResult.Error(e.message ?: "Failed to resolve layout path") }
+        )
     }
 
     override suspend fun loadLayoutFromFile(path: String): LoadResult = withContext(Dispatchers.Default) {
@@ -73,4 +71,11 @@ class WorkstationRepositoryImpl : WorkstationRepository {
     override fun validateLayout(layout: WorkstationLayout): ValidationResult {
         return DataValidator.validateLayout(layout)
     }
+}
+
+internal fun resolveLayoutPath(manifestResult: ManifestResult): Result<String> = when (manifestResult) {
+    is ManifestResult.Success -> manifestResult.manifest.revisions.lastOrNull()
+        ?.let { Result.success(it) }
+        ?: Result.failure(Exception("No revisions found in manifest"))
+    is ManifestResult.Error -> Result.failure(Exception("Failed to load manifest: ${manifestResult.message}"))
 }
