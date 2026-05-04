@@ -61,7 +61,7 @@
       "category": "HOST",
       "position": {
         "x": 100.0,
-        "y": 520.0
+        "y": 540.0
       },
       "size": {
         "width": 200.0,
@@ -127,16 +127,7 @@
           "direction": "OUTPUT",
           "position": {
             "side": "LEFT",
-            "position": 140.0
-          }
-        },
-        {
-          "id": "dock-thunderbolt-in-2",
-          "name": "",
-          "direction": "OUTPUT",
-          "position": {
-            "side": "LEFT",
-            "position": 240.0
+            "position": 200.0
           }
         },
         {
@@ -312,7 +303,7 @@
         },
         {
           "key": "Brightness",
-          "value": "350 cd/m\u00b2 (typical)"
+          "value": "350 cd/m² (typical)"
         },
         {
           "key": "Color Gamut",
@@ -395,7 +386,7 @@
         },
         {
           "key": "Brightness",
-          "value": "250 cd/m\u00b2"
+          "value": "250 cd/m²"
         },
         {
           "key": "Manufacturer",
@@ -516,15 +507,6 @@
           }
         },
         {
-          "id": "hdmi-switcher-in-2",
-          "name": "HDMI 2.1",
-          "direction": "INPUT",
-          "position": {
-            "side": "LEFT",
-            "position": 80.0
-          }
-        },
-        {
           "id": "hdmi-switcher-in-3",
           "name": "HDMI 2.1",
           "direction": "INPUT",
@@ -583,7 +565,7 @@
       "category": "HOST",
       "position": {
         "x": 120.0,
-        "y": 760.0
+        "y": 780.0
       },
       "size": {
         "width": 200.0,
@@ -668,11 +650,11 @@
         },
         {
           "key": "CPU",
-          "value": "x86-64-AMD Ryzen\u2122 Zen2, 8 cores/16 threads"
+          "value": "x86-64-AMD Ryzen™ Zen2, 8 cores/16 threads"
         },
         {
           "key": "GPU",
-          "value": "AMD Radeon\u2122 RDNA-based graphics engine"
+          "value": "AMD Radeon™ RDNA-based graphics engine"
         },
         {
           "key": "Memory",
@@ -773,7 +755,7 @@
         },
         {
           "key": "Device Interface",
-          "value": "USB 3.2 Gen 2 Type-A Female (Blue) \u00d7 3\nUSB 3.2 Gen 2 Type-C Female (black) x 1"
+          "value": "USB 3.2 Gen 2 Type-A Female (Blue) × 3\nUSB 3.2 Gen 2 Type-C Female (black) x 1"
         },
         {
           "key": "Power Interface",
@@ -797,7 +779,7 @@
     {
       "id": "digital-camera",
       "description": "E-mount camera with APS-C Sensor",
-      "title": "Sony \u03b16000",
+      "title": "Sony α6000",
       "label": "Digital Camera",
       "category": "DEVICE",
       "position": {
@@ -1404,7 +1386,7 @@
         },
         {
           "key": "Headphone Frequency Response",
-          "value": "10\u201340,000 Hz"
+          "value": "10–40,000 Hz"
         },
         {
           "key": "Headphone Sensitivity",
@@ -1781,7 +1763,7 @@
     {
       "id": "wireless-charger",
       "description": "Charging pad",
-      "title": "IKEA NORDM\u00c4RKE",
+      "title": "IKEA NORDMÄRKE",
       "label": "Wireless Charger",
       "category": "DEVICE",
       "position": {
@@ -1810,11 +1792,11 @@
         },
         {
           "key": "Output power",
-          "value": "36 dB\u00b5A/m at 3m"
+          "value": "36 dBµA/m at 3m"
         },
         {
           "key": "Operating frequency",
-          "value": "110.3KHz \u2013 148 KHz"
+          "value": "110.3KHz – 148 KHz"
         },
         {
           "key": "Compatibility",
@@ -1826,7 +1808,7 @@
         },
         {
           "key": "Model Number",
-          "value": "NORDM\u00c4RKE"
+          "value": "NORDMÄRKE"
         }
       ],
       "url": "https://www.ikea.com/us/en/p/nordmaerke-wireless-charger-textile-gray-10491658/"
@@ -1867,7 +1849,7 @@
         },
         {
           "key": "Resolution",
-          "value": "100 \u2013 25,600 dpi"
+          "value": "100 – 25,600 dpi"
         },
         {
           "key": "Max. acceleration",
@@ -1975,12 +1957,12 @@
       "targetPortId": "dock-thunderbolt-in-1",
       "routingPoints": [
         {
-          "x": 400.0,
+          "x": 420.0,
           "y": 460.0
         },
         {
-          "x": 400.0,
-          "y": 460.0
+          "x": 420.0,
+          "y": 520.0
         }
       ]
     },
@@ -1989,15 +1971,15 @@
       "sourceDeviceId": "personal-laptop",
       "sourcePortId": "personal-laptop-thunderbolt",
       "targetDeviceId": "usb-docking-station",
-      "targetPortId": "dock-thunderbolt-in-2",
+      "targetPortId": "dock-thunderbolt-in-1",
       "routingPoints": [
         {
-          "x": 400.0,
-          "y": 560.0
+          "x": 420.0,
+          "y": 580.0
         },
         {
-          "x": 400.0,
-          "y": 560.0
+          "x": 420.0,
+          "y": 520.0
         }
       ]
     },
@@ -2095,7 +2077,7 @@
       "routingPoints": [
         {
           "x": 400.0,
-          "y": 800.0
+          "y": 820.0
         },
         {
           "x": 400.0,
@@ -2108,7 +2090,7 @@
       "sourceDeviceId": "gaming-console-2",
       "sourcePortId": "gaming-console-2-hdmi",
       "targetDeviceId": "hdmi-switcher",
-      "targetPortId": "hdmi-switcher-in-2",
+      "targetPortId": "hdmi-switcher-in-1",
       "routingPoints": [
         {
           "x": 400.0,
@@ -2116,7 +2098,7 @@
         },
         {
           "x": 400.0,
-          "y": 900.0
+          "y": 860.0
         }
       ]
     },
@@ -2537,16 +2519,14 @@
       "height": 1400.0
     },
     "theme": {
-      "isDark": true
+
     },
     "viewport": {
       "minZoom": 0.5,
       "maxZoom": 3.5
     },
     "grid": {
-      "enabled": true,
-      "size": 20.0,
-      "majorLineInterval": 5
+
     }
   }
 }
