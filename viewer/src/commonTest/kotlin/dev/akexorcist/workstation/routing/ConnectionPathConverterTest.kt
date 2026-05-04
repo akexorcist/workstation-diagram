@@ -186,4 +186,94 @@ class ConnectionPathConverterTest {
     }
 
     // endregion
+
+    // region shared port convergence
+
+    @Test
+    fun twoConnectionsSharingTargetPort_bothHaveSameConvergenceWaypointBeforePort() {
+        // d1 and d3 both connect to d2's LEFT port at position 40
+        // d2 LEFT port at position 40 → world pos = (300, 40)
+        // Convergence point (LEFT side) = (300 - 40, 40) = (260, 40)
+        val d1 = device("d1", 0f, 0f, 100f, 80f, listOf(port("out1", DeviceSide.RIGHT, 40f)))
+        val d2 = device("d2", 300f, 0f, 100f, 80f, listOf(port("in", DeviceSide.LEFT, 40f, PortDirection.INPUT)))
+        val d3 = device("d3", 0f, 200f, 100f, 80f, listOf(port("out2", DeviceSide.RIGHT, 40f)))
+
+        val c1 = connection("c1", "d1", "out1", "d2", "in", routingPoints = listOf(Point(200f, 40f)))
+        val c2 = connection("c2", "d3", "out2", "d2", "in", routingPoints = listOf(Point(200f, 240f)))
+
+        val result = ConnectionPathConverter.convertConnections(listOf(d1, d2, d3), listOf(c1, c2))
+
+        val w1 = result[0].virtualWaypoints
+        val w2 = result[1].virtualWaypoints
+
+        val expectedConvergence = Pair(260f, 40f)
+        val expectedPort = Pair(300f, 40f)
+
+        assertEquals(expectedConvergence, w1[w1.size - 2])
+        assertEquals(expectedConvergence, w2[w2.size - 2])
+        assertEquals(expectedPort, w1.last())
+        assertEquals(expectedPort, w2.last())
+    }
+
+    @Test
+    fun twoConnectionsSharingSourcePort_bothHaveSameDivergenceWaypointAfterPort() {
+        // d1's RIGHT port at position 40 → world pos = (100, 40)
+        // Divergence point (RIGHT side) = (100 + 40, 40) = (140, 40)
+        val d1 = device("d1", 0f, 0f, 100f, 80f, listOf(port("out", DeviceSide.RIGHT, 40f)))
+        val d2 = device("d2", 300f, 0f, 100f, 80f, listOf(port("in1", DeviceSide.LEFT, 40f, PortDirection.INPUT)))
+        val d3 = device("d3", 300f, 200f, 100f, 80f, listOf(port("in2", DeviceSide.LEFT, 40f, PortDirection.INPUT)))
+
+        val c1 = connection("c1", "d1", "out", "d2", "in1", routingPoints = listOf(Point(200f, 40f)))
+        val c2 = connection("c2", "d1", "out", "d3", "in2", routingPoints = listOf(Point(200f, 240f)))
+
+        val result = ConnectionPathConverter.convertConnections(listOf(d1, d2, d3), listOf(c1, c2))
+
+        val w1 = result[0].virtualWaypoints
+        val w2 = result[1].virtualWaypoints
+
+        val expectedDivergence = Pair(140f, 40f)
+        val expectedPort = Pair(100f, 40f)
+
+        assertEquals(expectedDivergence, w1[1])
+        assertEquals(expectedDivergence, w2[1])
+        assertEquals(expectedPort, w1.first())
+        assertEquals(expectedPort, w2.first())
+    }
+
+    @Test
+    fun singleConnectionPerPort_noConvergenceWaypointInjected() {
+        val d1 = device("d1", 100f, 100f, 200f, 80f, listOf(port("p-out", DeviceSide.RIGHT, 40f)))
+        val d2 = device("d2", 500f, 100f, 200f, 80f, listOf(port("p-in", DeviceSide.LEFT, 40f, PortDirection.INPUT)))
+
+        val result = ConnectionPathConverter.convertConnections(
+            listOf(d1, d2), listOf(connection(routingPoints = listOf(Point(350f, 140f))))
+        )
+
+        // Source + 1 routing point + target = 3 waypoints, no extra convergence injected
+        assertEquals(3, result.first().virtualWaypoints.size)
+    }
+
+    @Test
+    fun twoConnectionsWithDifferentPorts_noConvergenceWaypointInjected() {
+        // Each connection uses a unique source and target port — no sharing, no injection
+        val d1 = device("d1", 0f, 0f, 100f, 80f, listOf(
+            port("out1", DeviceSide.RIGHT, 20f),
+            port("out2", DeviceSide.RIGHT, 60f)
+        ))
+        val d2 = device("d2", 300f, 0f, 100f, 80f, listOf(
+            port("in1", DeviceSide.LEFT, 20f, PortDirection.INPUT),
+            port("in2", DeviceSide.LEFT, 60f, PortDirection.INPUT)
+        ))
+
+        val c1 = connection("c1", "d1", "out1", "d2", "in1", routingPoints = listOf(Point(200f, 20f)))
+        val c2 = connection("c2", "d1", "out2", "d2", "in2", routingPoints = listOf(Point(200f, 60f)))
+
+        val result = ConnectionPathConverter.convertConnections(listOf(d1, d2), listOf(c1, c2))
+
+        // Each: source + 1 routing point + target = 3 waypoints, nothing extra
+        assertEquals(3, result[0].virtualWaypoints.size)
+        assertEquals(3, result[1].virtualWaypoints.size)
+    }
+
+    // endregion
 }
