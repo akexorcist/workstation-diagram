@@ -8,13 +8,13 @@
 ## Two Layers of Knowledge
 
 ### Layer 1 — Team Knowledge (permanent, cross-project)
-**Location:** `/Users/akexorcist/Documents/Agent/Knowledge/`
+**Location:** `{TEAM_KNOWLEDGE_ROOT}/`
 
 Accumulated wisdom that grows smarter with every project, organized by tech stack.
 Contains patterns, gotchas, fix playbooks, and process improvements discovered in practice.
 
 **Read:** Before starting any work — read files relevant to your role from the stack folder declared in `PROJECT_CONFIG.md` (`TECH_STACK_KEY`), plus `cross-project/`.
-**Write:** After completing work — when you discover something reusable and non-obvious. See `/Users/akexorcist/Documents/Agent/Knowledge/WRITING_GUIDE.md` for when and how to write.
+**Write:** After completing work — when you discover something reusable and non-obvious. See `{TEAM_KNOWLEDGE_ROOT}/WRITING_GUIDE.md` for when and how to write.
 
 ### Layer 2 — Project Knowledge (current project only)
 **Location:** `{PROJECT_ROOT}/.agents/output/shared_context.md`
@@ -29,8 +29,8 @@ Live memory for the current project: phase state, class locations, decisions, is
 ## Before Starting Work (Every Agent, Every Time)
 
 1. Read `PROJECT_CONFIG.md` → get `PROJECT_ROOT` and `TECH_STACK_KEY`
-2. Read `/Users/akexorcist/Documents/Agent/Knowledge/team_knowledge.md` → understand what knowledge exists
-3. Read relevant stack files from `/Users/akexorcist/Documents/Agent/Knowledge/{TECH_STACK_KEY}/` based on your role:
+2. Read `{TEAM_KNOWLEDGE_ROOT}/team_knowledge.md` → understand what knowledge exists
+3. Read relevant stack files from `{TEAM_KNOWLEDGE_ROOT}/{TECH_STACK_KEY}/` based on your role:
 
 | Agent Role | Files to Read |
 |---|---|
@@ -41,8 +41,8 @@ Live memory for the current project: phase state, class locations, decisions, is
 | Reviewer | `effective_patterns.md` |
 | QA Agents | `effective_patterns.md`, `lessons_learned.md` |
 
-4. Read `/Users/akexorcist/Documents/Agent/Knowledge/cross-project/testing_principles.md` — applies to all roles, always
-5. Read other `/Users/akexorcist/Documents/Agent/Knowledge/cross-project/` files if they exist
+4. Read `{TEAM_KNOWLEDGE_ROOT}/cross-project/testing_principles.md` — applies to all roles, always
+5. Read other `{TEAM_KNOWLEDGE_ROOT}/cross-project/` files if they exist
 6. Read `{PROJECT_ROOT}/.agents/output/shared_context.md`
 
 ---
