@@ -1,13 +1,11 @@
 package dev.akexorcist.workstation.utils
 
-/**
- * Opens a URL in the default browser.
- * Platform-specific implementation required.
- */
+import dev.akexorcist.workstation.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+
 expect fun openUrl(url: String)
 
-/**
- * Reads a resource file from the classpath.
- * Platform-specific implementation required.
- */
-expect suspend fun readResourceFile(path: String): String
+@OptIn(ExperimentalResourceApi::class)
+suspend fun readResourceFile(path: String): String {
+    return Res.readBytes("files/$path").decodeToString()
+}

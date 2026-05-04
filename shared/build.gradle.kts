@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.compose.resources.ResourcesExtension
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -28,6 +29,7 @@ kotlin {
                 implementation(compose.foundation)
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
+                implementation(compose.components.resources)
             }
         }
 
@@ -36,5 +38,13 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
+    }
+}
+
+compose {
+    resources {
+        publicResClass = true
+        packageOfResClass = "dev.akexorcist.workstation.resources"
+        generateResClass = ResourcesExtension.ResourceClassGeneration.Auto
     }
 }
